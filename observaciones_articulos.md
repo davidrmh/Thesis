@@ -1,3 +1,4 @@
+
 # **Using genetic algorithms to find technical trading rules** - Franklin Allen, Risto Karjalainen (1999)
 
 * Genetic programming approach.
@@ -26,7 +27,9 @@
 
 ### Fitness function
 The fitness function is based on the excess return over the buy-and-hold strategy.
-#### Derivation
+
+**Derivation**
+
 The **simple return** from a single trade (buy at date $b$ and sell at $s$) is given by
 
 $$\pi = \dfrac{P_{s}}{P_{b}} \times \dfrac{1-c}{1+c} -1 = exp\left[\sum_{t=b+1}^{s} r_{t} + log \dfrac{1-c}{1+1}\right]-1$$
@@ -56,6 +59,7 @@ $$\Delta r = r - r_{bh}$$
 * Maximum of 100 nodes and 10 levels.
 
 * 50 generations.
+
 ~~~
 1. Create randomly a population
 with 500 individuals
