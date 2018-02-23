@@ -25,7 +25,7 @@ To find a PIP the time series is divided into segments and then each segment is 
 
 ## Observations
 
-* Paper has bad redaction which makes the reading complicated and confusing (for read the description of pattern description language  for figure figure 7).
+* Paper has bad redaction which makes the reading complicated and confusing (for example read the description of pattern description language  for figure figure 7).
 
 * Patter definition language seems a good idea, unfortunately is not well documented.
 
