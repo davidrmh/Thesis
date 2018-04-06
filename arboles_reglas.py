@@ -42,6 +42,21 @@ def splitData(data,ptrain=0.80):
 
     return dataTrain,testIndiceInicio
 
+##===================================================
+## Crea las observaciones para probar el modelo
+##===================================================
+def creaTest(data,indiceInicio,hback=7):
+    n=data.shape[0]-1 #Numero de indices validos
+    atributos=[]
+    for i in range(indiceInicio,n+1):
+        renglon=[]
+        #Los atributos son los cambios entre el precio en t y t-1,
+        # t y t-2,...,t y t-hback
+        for j in range(1,hback+1):
+            renglon.append(data["Close"][i]/data["Close"][i-j]-1)
+        atributos.append(renglon)
+    return atributos
+    
 ##============================================
 ## Crea el dataset para el arbol de decision
 ##============================================
