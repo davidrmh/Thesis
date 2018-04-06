@@ -36,7 +36,7 @@ def splitData(data,ptrain=0.80):
     trainIndiceFin=int(np.floor(ptrain*n))
     #En que indice del conjunto de datos completo
     #inician las observaciones para validacion
-    testIndiceInicio=testIndiceFin+1
+    testIndiceInicio=trainIndiceFin+1
     dataTrain=data.iloc[0:(trainIndiceFin+1),]
     dataTrain=dataTrain.reset_index()
     dataTest=data.iloc[(trainIndiceFin+1):n,]
