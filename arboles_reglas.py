@@ -56,7 +56,7 @@ def creaTest(data,indiceInicio,hback=7):
             renglon.append(data["Close"][i]/data["Close"][i-j]-1)
         atributos.append(renglon)
     return atributos
-    
+
 ##============================================
 ## Crea el dataset para el arbol de decision
 ##============================================
@@ -102,4 +102,13 @@ def creaDataSet(data,hforw=15,hback=7,umbral=0.01):
             clases.append(0) #hold
             contHold=contHold+1
             indicesHold.append(i)
+            atributos.append(renglon)
     return atributos,clases,contBuy,contSell,contHold,indicesBuy,indicesSell,indicesHold
+
+##==============================================
+## Aprende el árbol
+##==============================================
+def aprendeArbol(atributos,clases):
+    arbol=tree.DecisionTreeClassifier()
+    arbol=arbol.fit(atributos,clases)
+    return arbol
