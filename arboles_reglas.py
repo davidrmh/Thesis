@@ -27,6 +27,25 @@ def leeTabla(ruta="naftrac.csv"):
     data=data.reset_index()
     return data
 
+##============================================
+## Separa los datos en entrenamiento y prueba
+##============================================
+def splitData(data,ptrain=0.80):
+    n=data.shape[0]-1 #Numero de indices validos
+    trainIndiceFin=int(np.floor(ptrain*n))
+    #En que indice del conjunto de datos completo
+    #inician las observaciones para validacion
+    testIndiceInicio=testIndiceFin+1
+    dataTrain=data.iloc[0:(trainIndiceFin+1),]
+    dataTrain=dataTrain.reset_index()
+    dataTest=data.iloc[(trainIndiceFin+1):n,]
+    dataTest=dataTest.reset_index()
+
+    return dataTrain,dataTest,testIndiceInicio
+
+
+
+
 
 ##============================================
 ## Crea el dataset para el arbol de decision
