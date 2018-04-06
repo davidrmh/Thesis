@@ -112,3 +112,34 @@ def aprendeArbol(atributos,clases):
     arbol=tree.DecisionTreeClassifier()
     arbol=arbol.fit(atributos,clases)
     return arbol
+
+##===============================================
+## Obtiene las predicciones
+##===============================================
+def predicciones(arbol,data,atributos,indiceInicio):
+    predicciones=arbol.predict(atributos)
+    n=data.shape[0]-1 #Numero de indices validos
+    indicesBuy=[]
+    indicesHold=[]
+    indicesSell=[]
+    aux=0
+
+    for i in range(indiceInicio,n+1):
+        if predicciones[aux]==1:
+            indicesBuy.append(i)
+        elif predicciones[aux]==0:
+            indicesHold.append(i)
+        elif predicciones[aux]==-1:
+            indicesSell.append(i)
+        aux=aux+1
+    return predicciones,indicesBuy,indicesSell,indicesHold
+
+##===================================================
+## Grafica estrategia
+##===================================================
+def graficaEstrategia(data,indiceInicio,indicesBuy,indicesSell,indicesHold):
+    plt.plot(data["Close"][indiceInicio:],'-',color="blue")
+    plt.plot(data["Close"][indicesBuy],'o',color="green",ms=5)
+    plt.plot(data["Close"][indicesHold],'o',color="black",ms=5)
+    plt.plot(data["Close"][indicesSell],'o',color="red",ms=5)
+    plt.show()    
