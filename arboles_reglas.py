@@ -4,14 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import tree
 
-#Necesito una función para crear el testSet
-#Funciones para graficar
-#plt.plot(data2["Close"],'-b')
-#plt.plot(data2["Close"][indicesBuy],'.g')
-#plt.plot(data2["Close"][indicesSell],'.r')
-#plt.plot(data2["Close"][indicesHold],'.m')
-#plt.show()
-
 ##=====================================
 ## Lee datos, quita los null
 ## transforma a float
@@ -142,4 +134,14 @@ def graficaEstrategia(data,indiceInicio,indicesBuy,indicesSell,indicesHold):
     plt.plot(data["Close"][indicesBuy],'o',color="green",ms=5)
     plt.plot(data["Close"][indicesHold],'o',color="black",ms=5)
     plt.plot(data["Close"][indicesSell],'o',color="red",ms=5)
-    plt.show()    
+    plt.show()
+
+##===================================================
+def main(ruta="naftrac.csv",ptrain=0.8,hforw=15,hback=7,umbral=0.01):
+    data=leeTabla(ruta)
+    dataTrain,testIndiceInicio=splitData(data,ptrain)
+    atributosTrain,clasesTrain,contBuyTrain,contSellTrain,contHoldTrain,indicesBuyTrain,indicesSellTrain,indicesHoldTrain=creaDataSet(dataTrain,hforw,hback,umbral)
+    arbol=aprendeArbol(atributosTrain,clasesTrain)
+    atributosTest=creaTest(data,testIndiceInicio,hback)
+    prediccionesTest,indicesBuyTest,indicesSellTest,indicesHoldTest=predicciones(arbol,data,atributosTest,testIndiceInicio)
+    graficaEstrategia(data,testIndiceInicio,indicesBuyTest,indicesSellTest,indicesHoldTest)
