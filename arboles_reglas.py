@@ -106,15 +106,15 @@ def aprendeArbol(atributos,clases):
 ##===============================================
 ## Obtiene las predicciones
 ##===============================================
-def predicciones(arbol,data,atributos,indiceInicio):
+def predicciones(arbol,data,atributos,indiceInicio,indiceFin):
     predicciones=arbol.predict(atributos)
-    n=data.shape[0]-1 #Numero de indices validos
     indicesBuy=[]
     indicesHold=[]
     indicesSell=[]
     aux=0
 
-    for i in range(indiceInicio,n+1):
+    for i in range(indiceInicio,indiceFin+1):
+        if aux>=len(predicciones): break
         if predicciones[aux]==1:
             indicesBuy.append(i)
         elif predicciones[aux]==0:
@@ -135,11 +135,74 @@ def graficaEstrategia(data,indiceInicio,indicesBuy,indicesSell,indicesHold):
     plt.show()
 
 ##===================================================
-def main(ruta="naftrac.csv",ptrain=0.8,hforw=15,hback=7,umbral=0.01):
-    data=leeTabla(ruta)
+## Main
+## main(data,0.8,15,12,0.05) vence B&H !!!!!!
+## main(data,0.8,15,11,0.05) vence B&H !!!!!!
+##===================================================
+def main(data,ptrain=0.8,hforw=15,hback=7,umbral=0.01):
+    #data=leeTabla(ruta)
     dataTrain,testIndiceInicio=splitData(data,ptrain)
     atributosTrain,clasesTrain,contBuyTrain,contSellTrain,contHoldTrain,indicesBuyTrain,indicesSellTrain,indicesHoldTrain=creaDataSet(dataTrain,hforw,hback,umbral)
     arbol=aprendeArbol(atributosTrain,clasesTrain)
     atributosTest=creaTest(data,testIndiceInicio,hback)
-    prediccionesTest,indicesBuyTest,indicesSellTest,indicesHoldTest=predicciones(arbol,data,atributosTest,testIndiceInicio)
-    graficaEstrategia(data,testIndiceInicio,indicesBuyTest,indicesSellTest,indicesHoldTest)
+    prediccionesTrain,indicesBuyTrain,indicesSellTrain,indicesHoldTrain=predicciones(arbol,data,atributosTrain,hforw,testIndiceInicio-1)
+    prediccionesTest,indicesBuyTest,indicesSellTest,indicesHoldTest=predicciones(arbol,data,atributosTest,testIndiceInicio,data.shape[0]-1)
+    gananciaTrain=gananciaExceso(data,hforw,testIndiceInicio-1,indicesBuyTrain,indicesSellTrain,indicesHoldTrain)
+    gananciaTest=gananciaExceso(data,testIndiceInicio,data.shape[0]-1,indicesBuyTest,indicesSellTest,indicesHoldTest)
+    return gananciaTrain,gananciaTest
+    #graficaEstrategia(data,testIndiceInicio,indicesBuyTest,indicesSellTest,indicesHoldTest)
+
+
+##======================================================================
+## Fitness
+## Es la ganancia en exceso sobre Buy and Hold obtenida siguiendo la estrategia
+## Recibe los índices de compra,venta,hold, la tabla completa, índice de inicio
+##  índice final y costo de transacción
+## La primer señal generada es el primer índice con una señal de compra
+## No se permiten ventas en corto
+## No se ejecutan señales contiguas semejantes
+## El precio de ejecución es el precio de cierre del siguiente día
+## El último momento en que se puede hacer una transacción es en fin-1
+## Si en fin-1 la posición fue de compra, se cierra con los precios de fin
+##======================================================================
+def gananciaExceso(data,inicio,fin,indicesBuy,indicesSell,indicesHold,costo=0.02):
+    indices=[] #Guarda todos los indices
+    indices.extend(indicesBuy)
+    indices.extend(indicesSell)
+    indices.extend(indicesHold)
+    if indices==[]: return 0
+    indices.sort() #Ordena de menor a mayor
+    #Buy and hold
+    buyHold=data["Close"][inicio]*(1+costo) - data["Close"][fin]*(1+costo)
+    inicio=min(indicesBuy) #En que momento se hace la primer compra
+    if inicio==fin: return -1*buyHold
+
+    gananciaAcumulada=0
+    precioCompra=0
+    precioVenta=0
+    flagUltimaSen=""
+
+    #En range fin implica fin-1
+    for i in range(inicio,fin):
+        if flagUltimaSen!="BUY" and i in indicesBuy:
+            precioCompra=data["Close"][i+1]*(1+costo)
+            flagUltimaSen="BUY"
+        elif flagUltimaSen!="SELL" and i in indicesSell:
+            precioVenta=data["Close"][i+1]*(1+costo)
+            flagUltimaSen="SELL"
+            gananciaAcumulada=gananciaAcumulada+(precioVenta-precioCompra)
+
+    #Al final cierra la última posición abierta
+    if flagUltimaSen=="BUY":
+        precioVenta=data["Close"][fin]*(1+costo)
+        gananciaAcumulada=gananciaAcumulada+(precioVenta-precioCompra)
+
+    #Exceso de ganancia sobre buy and hold
+    exceso=gananciaAcumulada-buyHold
+    return exceso
+
+
+##=====================================================
+## Algoritmo genético
+##=====================================================
+#def algoritmoGenetico(ruta="naftrac.csv",ptrain=0.8,pmuta=0.01,popSize=10,numGen=100,kBest=3):
