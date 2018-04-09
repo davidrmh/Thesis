@@ -54,9 +54,7 @@ def creaTest(data,indiceInicio,hback=7):
 ##============================================
 def creaDataSet(data,hforw=15,hback=7,umbral=0.01):
     n=data.shape[0]-1 #Numero de indices validos
-    hforw=15 #Forward look
     fin=data.shape[0]-hforw-1 #Ultimo indice valido considerando forward look
-    hback=7 #Backward look (tambien es el indice de inicio)
     inicio=hback
     umbral=0.01 #cambio minimo para que se considere una senial (podria considerar dos umbrales)
     contBuy=0 #Contador de seniales de compra generadas
