@@ -10,7 +10,7 @@ from sklearn import tree
 ## reinicia los indices
 ##=====================================
 def leeTabla(ruta="naftrac.csv"):
-    data=pd.read_csv(ruta)
+    data=pd.read_csv(ruta,dtype=str)
     data=data[data.iloc[:,2]!="null"]
     data["Open"]=data["Open"].astype('float')
     data["High"]=data["High"].astype('float')
@@ -139,6 +139,7 @@ def graficaEstrategia(data,indiceInicio,indicesBuy,indicesSell,indicesHold):
 ## main(data,0.8,15,12,0.05) vence B&H !!!!!! para naftrac con gini
 ## main(data,0.8,15,11,0.05) vence B&H !!!!!! para naftrac con gini
 ## main(data,0.8,15,14,0.03) vence B&H !!!!!! para naftrac con entropy
+## main(data,0.8,15,14,0.10,True) vence B&H !!!! para amxl
 ##===================================================
 def main(data,ptrain=0.8,hforw=15,hback=11,umbral=0.05,graf=True):
     #data=leeTabla(ruta)
