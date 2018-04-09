@@ -69,18 +69,18 @@ def creaDataSet(data,hforw=15,hback=7,umbral=0.01):
     for i in range(inicio,fin+1):
         renglon=[]
         #Si se rebasa el umbral
-        if abs(data["Close"][i+hforw]/data["Close"][i]-1)>umbral:
+        if abs(data["Adj Close"][i+hforw]/data["Adj Close"][i]-1)>umbral:
             #Los atributos son los cambios entre el precio en t y t-1,
             # t y t-2,...,t y t-hback
             for j in range(1,hback+1):
-                renglon.append(data["Close"][i]/data["Close"][i-j]-1)
+                renglon.append(data["Adj Close"][i]/data["Adj Close"][i-j]-1)
 
             atributos.append(renglon)
-            if (data["Close"][i+hforw]/data["Close"][i]-1)>0:
+            if (data["Adj Close"][i+hforw]/data["Adj Close"][i]-1)>0:
                 clases.append(1) #Compra
                 contBuy=contBuy+1
                 indicesBuy.append(i)
-            elif (data["Close"][i+hforw]/data["Close"][i]-1)<0:
+            elif (data["Adj Close"][i+hforw]/data["Adj Close"][i]-1)<0:
                 clases.append(-1) #venta
                 contSell=contSell+1
                 indicesSell.append(i)
@@ -88,7 +88,7 @@ def creaDataSet(data,hforw=15,hback=7,umbral=0.01):
             #Los atributos son los cambios entre el precio en t y t-1,
             # t y t-2,...,t y t-hback
             for j in range(1,hback+1):
-                renglon.append(data["Close"][i]/data["Close"][i-j]-1)
+                renglon.append(data["Adj Close"][i]/data["Adj Close"][i-j]-1)
             clases.append(0) #hold
             contHold=contHold+1
             indicesHold.append(i)
@@ -128,10 +128,10 @@ def predicciones(arbol,data,atributos,indiceInicio,indiceFin):
 ## Grafica estrategia
 ##===================================================
 def graficaEstrategia(data,indiceInicio,indicesBuy,indicesSell,indicesHold):
-    plt.plot(data["Close"][indiceInicio:],'-',color="blue")
-    plt.plot(data["Close"][indicesBuy],'o',color="green",ms=5)
-    plt.plot(data["Close"][indicesHold],'o',color="black",ms=5)
-    plt.plot(data["Close"][indicesSell],'o',color="red",ms=5)
+    plt.plot(data["Adj Close"][indiceInicio:],'-',color="blue")
+    plt.plot(data["Adj Close"][indicesBuy],'o',color="green",ms=5)
+    plt.plot(data["Adj Close"][indicesHold],'o',color="black",ms=5)
+    plt.plot(data["Adj Close"][indicesSell],'o',color="red",ms=5)
     plt.show()
 
 ##===================================================
@@ -177,7 +177,7 @@ def gananciaExceso(data,inicio,fin,indicesBuy,indicesSell,indicesHold,costo=0.02
     if indices==[]: return 0
     indices.sort() #Ordena de menor a mayor
     #Buy and hold
-    buyHold=round(data["Close"][inicio]*(1+costo)/data["Close"][fin]*(1+costo)-1,6)
+    buyHold=round(data["Adj Close"][inicio]*(1+costo)/data["Adj Close"][fin]*(1+costo)-1,6)
     inicio=min(indicesBuy) #En que momento se hace la primer compra
     if inicio==fin: return -1*buyHold
 
@@ -189,18 +189,18 @@ def gananciaExceso(data,inicio,fin,indicesBuy,indicesSell,indicesHold,costo=0.02
     #En range fin implica fin-1
     for i in range(inicio,fin):
         if flagUltimaSen!="BUY" and i in indicesBuy:
-            precioCompra=data["Close"][i+1]*(1+costo)
+            precioCompra=data["Adj Close"][i+1]*(1+costo)
             indicesBuyEfectivas.append(i+1)
             flagUltimaSen="BUY"
         elif flagUltimaSen!="SELL" and i in indicesSell:
-            precioVenta=data["Close"][i+1]*(1+costo)
+            precioVenta=data["Adj Close"][i+1]*(1+costo)
             flagUltimaSen="SELL"
             indicesSellEfectivas.append(i+1)
             gananciaAcumulada=round(gananciaAcumulada+(precioVenta/precioCompra-1),6)
 
     #Al final cierra la última posición abierta
     if flagUltimaSen=="BUY":
-        precioVenta=data["Close"][fin]*(1+costo)
+        precioVenta=data["Adj Close"][fin]*(1+costo)
         indicesSellEfectivas.append(fin)
         gananciaAcumulada=round(gananciaAcumulada+(precioVenta/precioCompra-1),6)
 
