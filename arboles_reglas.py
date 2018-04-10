@@ -136,22 +136,35 @@ def graficaEstrategia(data,indiceInicio,indicesBuy,indicesSell,indicesHold):
 
 ##===================================================
 ## Main
-## main(data,0.8,15,12,0.05) vence B&H !!!!!! para naftrac con gini
-## main(data,0.8,15,11,0.05) vence B&H !!!!!! para naftrac con gini
-## main(data,0.8,15,14,0.03) vence B&H !!!!!! para naftrac con entropy
-## main(data,0.8,15,14,0.10,True) vence B&H !!!! para amxl
+## main(data2,0.80,15,11,0.05,False) para naftrac
 ##===================================================
 def main(data,ptrain=0.8,hforw=15,hback=11,umbral=0.05,graf=True):
     #data=leeTabla(ruta)
     dataTrain,testIndiceInicio=splitData(data,ptrain) #entrenamiento
+
+    #Crea el conjunto de entrenamiento etiquetando de acuerdo a los parámetros
     atributosTrain,clasesTrain,contBuyTrain,contSellTrain,contHoldTrain,indicesBuyTrain,indicesSellTrain,indicesHoldTrain=creaDataSet(dataTrain,hforw,hback,umbral)
+
+    #Ajusta un árbol de clasificación utilizando entropía como criterio de información
     arbol=aprendeArbol(atributosTrain,clasesTrain)
+
+    #Obtiene los atributos para el conjunto de prueba
     atributosTest=creaTest(data,testIndiceInicio,hback)
+
+    #Obtiene las predicciones para el conjunto de entrenamiento
     prediccionesTrain,indicesBuyTrain,indicesSellTrain,indicesHoldTrain=predicciones(arbol,data,atributosTrain,hforw,testIndiceInicio-1)
+
+    #Obtiene las predicciones para el conjunto de prueba
     prediccionesTest,indicesBuyTest,indicesSellTest,indicesHoldTest=predicciones(arbol,data,atributosTest,testIndiceInicio,data.shape[0]-1)
+
+    #Obtiene el exceso sobre buy and hold para el conjunto de entrenamiento
     gananciaTrain,indicesBuyTrain,indicesSellTrain=gananciaExceso(data,hforw,testIndiceInicio-1,indicesBuyTrain,indicesSellTrain,indicesHoldTrain)
+
+    #Obtiene el exceso sobre buy and hold para el conjunto de prueba
     gananciaTest,indicesBuyTest,indicesSellTest=gananciaExceso(data,testIndiceInicio,data.shape[0]-1,indicesBuyTest,indicesSellTest,indicesHoldTest)
-    if graf: graficaEstrategia(data,testIndiceInicio,indicesBuyTest,indicesSellTest,[])
+
+    if graf:
+        graficaEstrategia(data,testIndiceInicio,indicesBuyTest,indicesSellTest,[])
     return gananciaTrain,gananciaTest
 
 
@@ -177,7 +190,7 @@ def gananciaExceso(data,inicio,fin,indicesBuy,indicesSell,indicesHold,costo=0.02
     if indices==[]: return 0
     indices.sort() #Ordena de menor a mayor
     #Buy and hold
-    buyHold=round(data["Adj Close"][inicio]*(1+costo)/data["Adj Close"][fin]*(1+costo)-1,6)
+    buyHold=round(data["Adj Close"][fin]*(1+costo)/data["Adj Close"][inicio]*(1+costo)-1,6)
     inicio=min(indicesBuy) #En que momento se hace la primer compra
     if inicio==fin: return -1*buyHold
 
