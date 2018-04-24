@@ -120,7 +120,6 @@ def creaDataSet(data,hforw=15,hback=7,umbral=0.01):
     n=data.shape[0]-1 #Numero de indices validos
     fin=data.shape[0]-hforw-1 #Ultimo indice valido considerando forward look
     inicio=hback
-    umbral=0.01 #cambio minimo para que se considere una senial (podria considerar dos umbrales)
     contBuy=0 #Contador de seniales de compra generadas
     contSell=0 #Contador de seniales de venta generadas
     contHold=0
@@ -237,8 +236,8 @@ def graficaEstrategia(data,indiceInicio,indicesBuy,indicesSell,indicesHold):
 ##===================================================
 ## Main
 ## Datos de Yahoo Finance
-## main(data,0.80,15,11,0.05,False) para naftrac
-# main("amxl.csv",0.80,15,23,0.05,False) para amxl
+## main(data,0.80,15,11,0.03,False) para naftrac
+# main(data,0.80,15,23,0.0101,False) para amxl
 ##===================================================
 def main(data,ptrain=0.8,hforw=15,hback=11,umbral=0.05,graf=True):
     #data=leeTabla(ruta)
@@ -267,6 +266,8 @@ def main(data,ptrain=0.8,hforw=15,hback=11,umbral=0.05,graf=True):
 
     if graf:
         graficaEstrategia(data,testIndiceInicio,indicesBuyTest,indicesSellTest,[])
+    print "La ganancia (exceso sobre B&H) para el conjunto de entrenamiento fue " + str(round(gananciaTrain,4))
+    print "La ganancia (exceso sobre B&H) para el conjunto de prueba fue " + str(round(gananciaTest,4))
     return gananciaTrain,gananciaTest
 
 
