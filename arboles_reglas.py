@@ -227,10 +227,11 @@ def predicciones(arbol,data,atributos,indiceInicio,indiceFin):
 ## Grafica estrategia
 ##===================================================
 def graficaEstrategia(data,indiceInicio,indicesBuy,indicesSell,indicesHold):
-    plt.plot(data["Adj Close"][indiceInicio:],'-',color="blue")
-    plt.plot(data["Adj Close"][indicesBuy],'o',color="green",ms=5)
-    plt.plot(data["Adj Close"][indicesHold],'o',color="black",ms=5)
-    plt.plot(data["Adj Close"][indicesSell],'o',color="red",ms=5)
+    plt.plot(data["Adj Close"][indiceInicio:],'-',color="blue",label="Precio cierre")
+    plt.plot(data["Adj Close"][indicesBuy],'o',color="green",ms=5,label="Compra")
+    #plt.plot(data["Adj Close"][indicesHold],'o',color="black",ms=5,label="Espera")
+    plt.plot(data["Adj Close"][indicesSell],'o',color="red",ms=5,label="Vende")
+    plt.legend(loc="best")
     plt.show()
 
 ##===================================================
