@@ -164,7 +164,7 @@ def creaDataSet(data,hforw=15,hback=7,umbral=0.01):
 ##==============================================
 def aprendeArbol(atributos,clases):
     '''
-    Ajusta un árbol de clasificación utilizando como criterio para dividir
+    Ajusta un árbol de clasificación (CART) utilizando como criterio para dividir
     la entropía en el conjunto de datos.
 
     ENTRADA:
@@ -236,8 +236,9 @@ def graficaEstrategia(data,indiceInicio,indicesBuy,indicesSell,indicesHold):
 
 ##===================================================
 ## Main
+## Datos de Yahoo Finance
 ## main(data,0.80,15,11,0.05,False) para naftrac
-# main(data,0.80,15,23,0.05,False) para amxl
+# main("amxl.csv",0.80,15,23,0.05,False) para amxl
 ##===================================================
 def main(data,ptrain=0.8,hforw=15,hback=11,umbral=0.05,graf=True):
     #data=leeTabla(ruta)
@@ -336,11 +337,11 @@ def gananciaExceso(data,inicio,fin,indicesBuy,indicesSell,indicesHold,costo=0.02
 
     #En range fin implica fin-1
     for i in range(inicio,fin):
-        if flagUltimaSen!="BUY" and i in indicesBuy:
+        if flagUltimaSen!="BUY" and i in indicesBuy: #No se repiten seniales
             precioCompra=data["Adj Close"][i+1]*(1+costo)
             indicesBuyEfectivas.append(i+1)
             flagUltimaSen="BUY"
-        elif flagUltimaSen!="SELL" and i in indicesSell:
+        elif flagUltimaSen!="SELL" and i in indicesSell: #No se repiten seniales
             precioVenta=data["Adj Close"][i+1]*(1+costo)
             flagUltimaSen="SELL"
             indicesSellEfectivas.append(i+1)
