@@ -157,6 +157,34 @@ def movingAverage(data,fechaInicio,window,tipoPrecio='Close'):
     return resultado
 
 ##==============================================================================
+## Señales bandas de Bollinger
+## Identifica las señales de operación de acuerdo a las bandas de Bollinger
+##==============================================================================
+def signalBollinger(precioActual,precioAnterior,bandaUpActual,bandaUpAnterior,bandaLowActual,bandaLowAnterior):
+    '''
+    ENTRADA
+    precioActual: Número que representa el precio en el tiempo t
+    precioAnterior: Número que representa el precio en el tiempo t-1
+    bandaUpActual: Número que representa el valor de la banda superior en t
+    bandaUpAnterior: Número que representa el valor de la banda superior en t-1
+    bandaLowActual: Número que representa el valor de la banda inferior en t
+    bandaLowAnterior: Número que representa el valor de la banda inferior en t-1
+
+    SALIDA
+    1=compra, 0=hold, -1=venta.
+    '''
+    if precioActual > bandaUpActual and precioAnterior > bandaUpAnterior:
+        return 1
+    elif precioActual > bandaLowActual and precioAnterior < bandaLowAnterior:
+        return 1
+    elif precioActual < bandaLowActual and precioAnterior < bandaLowAnterior:
+        return -1
+    elif precioActual < bandaUpActual and precioAnterior > bandaUpAnterior:
+        return -1
+    else:
+        return 0
+
+##==============================================================================
 ## Calcula bandas de Bollinger
 ## utiliza un promedio movil simple para ser consistentes con el cálculo
 ## de la desviación estándar
@@ -172,7 +200,7 @@ def bollinger(data,fechaInicio,window,k=2,tipoPrecio='Close'):
     tipoPrecio: Precio a utilizar, por ejemplo Cierre
 
     SALIDA
-    resultado: Pandas DataFrame con columnas Date, MA, LowB,UpB
+    resultado: Pandas DataFrame con columnas Date, MA, LowB,UpB y Signal
     Regresa 0 si no hay suficiente información
     '''
 
@@ -195,8 +223,16 @@ def bollinger(data,fechaInicio,window,k=2,tipoPrecio='Close'):
     up=[]
 
     #auxiliares
+    precioActual=0
+    precioAnterior=0
+    bandaUpActual=0
+    bandaUpAnterior=0
+    bandaLowActual=0
+    bandaLowAnterior=0
+    flagPrimera=True
     media=0
     desviacion=0
+    signal=[]
 
     #Aquí guardo las fechas
     fechas=[]
@@ -204,25 +240,64 @@ def bollinger(data,fechaInicio,window,k=2,tipoPrecio='Close'):
     for t in range(0,ultimoIndice - inicio+1):
         media=np.nanmean(serie.iloc[inicio-window+1+t:inicio + t+1])
         desviacion=np.nanstd(serie.iloc[inicio-window+1+t:inicio + t+1],ddof=1)
+        bandaUpActual=media + k*desviacion
+        bandaLowActual=media - k*desviacion
+
+        if not flagPrimera:
+            precioActual=serie.iloc[inicio+t]
+            precioAnterior=serie.iloc[inicio+t-1]
+            signal.append(signalBollinger(precioActual,precioAnterior,bandaUpActual,bandaUpAnterior,bandaLowActual,bandaLowAnterior))
+        else:
+            signal.append(0)
+            flagPrimera=False
+
         MA.append(media)
-        low.append(media - k*desviacion)
-        up.append(media + k*desviacion)
+        low.append(bandaLowActual)
+        up.append(bandaUpActual)
+
         fechas.append(data['Date'].iloc[inicio+t])
+        bandaUpAnterior=bandaUpActual
+        bandaLowAnterior=bandaLowActual
 
     #Agrega en un dataframe
     MA=pd.Series(MA)
     low=pd.Series(low)
     up=pd.Series(up)
+    signal=pd.Series(signal)
     fechas=pd.Series(fechas)
-    resultado=pd.DataFrame(data={"Date":fechas,"MA":MA,"UpBand":up,"LowBand":low})
+    resultado=pd.DataFrame(data={"Date":fechas,"MA":MA,"UpBand":up,"LowBand":low,"Signal":signal})
 
     return resultado
 
 ##==============================================================================
-## Moving Average Crossover
+## Señales para Moving Averages Crossover
+##==============================================================================
+def signalMACross(diferencias):
+    '''
+    ENTRADA
+    diferencias: pandas Series que se calcula como ShortMA - LongMA
+
+    SALIDA
+    signal: lista con las señales correspondientes
+    signal[0]==0 siempre
+    '''
+
+    signal=[0]
+    n=len(diferencias)
+
+    for t in range(1,n):
+        if diferencias.iloc[t] > 0 and diferencias.iloc[t-1]<0:
+            signal.append(1)
+        elif diferencias.iloc[t] < 0 and diferencias.iloc[t-1]>0:
+            signal.append(-1)
+        else:
+            signal.append(0)
+    return signal
+##==============================================================================
+## Moving Averages Crossover
 ## Calcula dos promedios móviles (simples)
 ##==============================================================================
-def movingAverageCross(data,fechaInicio,windowShort,windowLong,tipoPrecio='Close'):
+def movingAveragesCross(data,fechaInicio,windowShort,windowLong,tipoPrecio='Close'):
     '''
     Calcula dos promedios móviles
     ENTRADA
@@ -247,6 +322,8 @@ def movingAverageCross(data,fechaInicio,windowShort,windowLong,tipoPrecio='Close
     fechas=MAshort['Date']
     MAshort=MAshort['MA']
     MAlong=MAlong['MA']
-    resultado=pd.DataFrame(data={"Date":fechas,"shortMa":MAshort, "longMA":MAlong})
+    diferencias=MAshort - MAlong
+    signal=signalMACross(diferencias)
+    resultado=pd.DataFrame(data={"Date":fechas,"shortMa":MAshort, "longMA":MAlong, "Diferencia":diferencias, "Signal":signal})
 
     return resultado
