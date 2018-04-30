@@ -52,6 +52,8 @@ def selectCategorical(kinds):
     return np.random.choice(kinds,1)[0]
 ##==============================================================================
 ## Moving average quitando NA
+## La columna Signal corresponde a la señal de operación
+## 1=Compra, 0=Hold, -1=Venta
 ##==============================================================================
 def movingAverage(data,fechaInicio,window,tipoPrecio='Close'):
     '''
@@ -64,7 +66,7 @@ def movingAverage(data,fechaInicio,window,tipoPrecio='Close'):
     tipoPrecio: Precio a utilizar, por ejemplo Cierre
 
     SALIDA:
-    resultado: pandas data frame con columnas Date y MA
+    resultado: pandas data frame con columnas Date, MA y Signal
     Regresa 0 si no hay suficiente información
     '''
 
@@ -87,14 +89,47 @@ def movingAverage(data,fechaInicio,window,tipoPrecio='Close'):
     #Aquí guardo las fechas
     fechas=[]
 
+    #Señales
+    #1: compra
+    #0: hold
+    #-1: venta
+    signal=[]
+
+    #auxiliares
+    mediaActual=0
+    mediaAnterior=0
+    flagPrimera=True
+
     for t in range(0,ultimoIndice - inicio+1):
-        MA.append(np.nanmean(serie.iloc[inicio-window+1+t:inicio + t+1]))
+        mediaActual=np.nanmean(serie.iloc[inicio-window+1+t:inicio + t+1])
+        MA.append(mediaActual)
+
+        #identifica señales
+        if not flagPrimera: #si no es la primera señal
+
+            #es señal de compra?
+            if serie.iloc[inicio+t-1] < mediaAnterior and serie.iloc[inicio+t]>mediaActual:
+                signal.append(1)
+
+            #es señal de venta?
+            elif serie.iloc[inicio+t-1] > mediaAnterior and serie.iloc[inicio+t]<mediaActual:
+                signal.append(-1)
+
+            #se señal de espera?
+            else:
+                signal.append(0)
+        else:
+            flagPrimera=False
+            signal.append(0)
+
         fechas.append(data['Date'].iloc[inicio+t])
+        mediaAnterior=mediaActual
 
     #Agrega en un dataframe
     MA=pd.Series(MA)
     fechas=pd.Series(fechas)
-    resultado=pd.DataFrame(data={"Date":fechas,"MA":MA})
+    signal=pd.Series(signal)
+    resultado=pd.DataFrame(data={"Date":fechas,"MA":MA,"Signal":signal})
 
     return resultado
 
