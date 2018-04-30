@@ -50,6 +50,34 @@ def selectCategorical(kinds):
     Selecciona una categoría de una lista
     '''
     return np.random.choice(kinds,1)[0]
+
+##==============================================================================
+## Señales Moving Average
+## identifica las señales de acuerdo a un indicador MA
+##==============================================================================
+def signalMA(precioActual,precioAnterior,mediaActual,mediaAnterior):
+    '''
+    ENTRADA
+    precioActual: Número que representa el precio en el tiempo t
+    precioAnterior: Número que representa el precio en el tiempo t-1
+    mediaActual: Número que representa el promedio móvil en el tiempo t
+    mediaAnterior: Número que representa el promedio móvil en el tiempo t-1
+
+    SALIDA:
+    signal: 1=compra, 0=hold, -1=venta.
+    '''
+    #es señal de compra?
+    if precioAnterior < mediaAnterior and precioActual>mediaActual:
+        return 1
+
+    #es señal de venta?
+    elif precioAnterior > mediaAnterior and precioActual<mediaActual:
+        return -1
+
+    #se señal de espera?
+    else:
+        return 0
+
 ##==============================================================================
 ## Moving average quitando NA
 ## La columna Signal corresponde a la señal de operación
@@ -96,6 +124,8 @@ def movingAverage(data,fechaInicio,window,tipoPrecio='Close'):
     signal=[]
 
     #auxiliares
+    precioActual=0
+    precioAnterior=0
     mediaActual=0
     mediaAnterior=0
     flagPrimera=True
@@ -105,19 +135,12 @@ def movingAverage(data,fechaInicio,window,tipoPrecio='Close'):
         MA.append(mediaActual)
 
         #identifica señales
+        #El primer tiempo siempre es hold
         if not flagPrimera: #si no es la primera señal
+            precioActual=serie.iloc[inicio+t]
+            precioAnterior=serie.iloc[inicio+t-1]
+            signal.append(signalMA(precioActual,precioAnterior,mediaActual,mediaAnterior))
 
-            #es señal de compra?
-            if serie.iloc[inicio+t-1] < mediaAnterior and serie.iloc[inicio+t]>mediaActual:
-                signal.append(1)
-
-            #es señal de venta?
-            elif serie.iloc[inicio+t-1] > mediaAnterior and serie.iloc[inicio+t]<mediaActual:
-                signal.append(-1)
-
-            #se señal de espera?
-            else:
-                signal.append(0)
         else:
             flagPrimera=False
             signal.append(0)
