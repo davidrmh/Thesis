@@ -56,8 +56,7 @@ def movingAverage(data,window,tipoPrecio='Close'):
     tipoPrecio: Precio a utilizar, por ejemplo Cierre
 
     SALIDA:
-    MA: pandas data series con el promedio móvil en t
-    t inicia en el índice window-1
+    resultado: pandas data frame con columnas Date y MA
     '''
 
     #Obtiene la serie de acuerdo al tipo de precio
@@ -88,5 +87,66 @@ def movingAverage(data,window,tipoPrecio='Close'):
     MA=pd.Series(MA)
     fechas=pd.Series(fechas)
     resultado=pd.DataFrame(data={"Date":fechas,"MA":MA})
+
+    return resultado
+
+##==============================================================================
+## Calcula bandas de Bollinger
+## utiliza un promedio movil simple para ser consistentes con el cálculo
+## de la desviación estándar
+## La desviación estándar se calcula dividiendo entre N-1
+##==============================================================================
+def bollinger(data,window,k=2,tipoPrecio='Close'):
+    '''
+    ENTRADA
+    data: pandas dataframe que se obtiene con la función leeTabla
+    window: window: ventana de tiempo
+    k: número de desviaciones estándar
+    tipoPrecio: Precio a utilizar, por ejemplo Cierre
+
+    SALIDA
+    resultado: Pandas DataFrame con columnas Date, MA, LowB,UpB
+    '''
+
+    #Obtiene la serie de acuerdo al tipo de precio
+    serie=data[tipoPrecio]
+
+    #último índice
+    ultimoIndice=len(serie)-1
+
+    #Valida que la ventana de tiempo sea correcta
+    #(no necesite más datos de los que tiene)
+    if window>ultimoIndice:
+        return 0
+
+    #índice de inicio
+    inicio=window-1
+
+    #MA y bandas
+    MA=[]
+    low=[]
+    up=[]
+
+    #auxiliares
+    media=0
+    desviacion=0
+
+    #Aquí guardo las fechas
+    fechas=[]
+
+    for t in range(0,ultimoIndice-window+2):
+        media=np.nanmean(serie.iloc[t:window+t])
+        desviacion=np.nanstd(serie.iloc[t:window+t],ddof=1)
+        MA.append(media)
+        low.append(media - k*desviacion)
+        up.append(media + k*desviacion)
+        fechas.append(data['Date'].iloc[window-1+t])
+
+    #Agrega en un dataframe
+    MA=pd.Series(MA)
+    low=pd.Series(low)
+    up=pd.Series(up)
+    fechas=pd.Series(fechas)
+    resultado=pd.DataFrame(data={"Date":fechas,"MA":MA,"UpBand":up,"LowBand":low})
 
     return resultado
