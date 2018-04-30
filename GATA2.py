@@ -4,6 +4,12 @@ import pandas as pd
 import numpy as np
 
 ##==============================================================================
+## Variables globales
+## Ventanas de tiempo mayores o iguales a dos
+##==============================================================================
+
+
+##==============================================================================
 ## Datos de Yaho Finance
 ## Lee datos, quita los null
 ## transforma a float
@@ -12,6 +18,7 @@ import numpy as np
 def leeTabla(ruta="naftrac.csv"):
     data=pd.read_csv(ruta)
     data=data[data.iloc[:,2]!="null"]
+    data['Date']=pd.to_datetime(data['Date'])
     data["Open"]=data["Open"].astype('float')
     data["High"]=data["High"].astype('float')
     data["Close"]=data["Close"].astype('float')
@@ -46,17 +53,19 @@ def selectCategorical(kinds):
 ##==============================================================================
 ## Moving average quitando NA
 ##==============================================================================
-def movingAverage(data,window,tipoPrecio='Close'):
+def movingAverage(data,fechaInicio,window,tipoPrecio='Close'):
     '''
     Calcula un promedio móvil
 
     ENTRADA:
     data: pandas dataframe que se obtiene con la función leeTabla
+    fechaInicio: string de la forma 'YYYY-MM-DD'
     window: ventana de tiempo
     tipoPrecio: Precio a utilizar, por ejemplo Cierre
 
     SALIDA:
     resultado: pandas data frame con columnas Date y MA
+    Regresa 0 si no hay suficiente información
     '''
 
     #Obtiene la serie de acuerdo al tipo de precio
@@ -65,13 +74,12 @@ def movingAverage(data,window,tipoPrecio='Close'):
     #último índice
     ultimoIndice=len(serie)-1
 
-    #Valida que la ventana de tiempo sea correcta
-    #(no necesite más datos de los que tiene)
-    if window>ultimoIndice:
-        return 0
-
     #índice de inicio
-    inicio=window-1
+    inicio=data[data['Date']==fechaInicio].index[0]
+
+    #Valida que exista historia suficiente para calcular el indicador
+    if window>inicio+1:
+        return 0
 
     #Aquí guardo el MA
     MA=[]
@@ -79,9 +87,9 @@ def movingAverage(data,window,tipoPrecio='Close'):
     #Aquí guardo las fechas
     fechas=[]
 
-    for t in range(0,ultimoIndice-window+2):
-        MA.append(np.nanmean(serie.iloc[t:window+t]))
-        fechas.append(data['Date'].iloc[window-1+t])
+    for t in range(0,ultimoIndice - inicio+1):
+        MA.append(np.nanmean(serie.iloc[inicio-window+1+t:inicio + t+1]))
+        fechas.append(data['Date'].iloc[inicio+t])
 
     #Agrega en un dataframe
     MA=pd.Series(MA)
@@ -96,16 +104,18 @@ def movingAverage(data,window,tipoPrecio='Close'):
 ## de la desviación estándar
 ## La desviación estándar se calcula dividiendo entre N-1
 ##==============================================================================
-def bollinger(data,window,k=2,tipoPrecio='Close'):
+def bollinger(data,fechaInicio,window,k=2,tipoPrecio='Close'):
     '''
     ENTRADA
     data: pandas dataframe que se obtiene con la función leeTabla
+    fechaInicio: string de la forma 'YYYY-MM-DD'
     window: window: ventana de tiempo
     k: número de desviaciones estándar
     tipoPrecio: Precio a utilizar, por ejemplo Cierre
 
     SALIDA
     resultado: Pandas DataFrame con columnas Date, MA, LowB,UpB
+    Regresa 0 si no hay suficiente información
     '''
 
     #Obtiene la serie de acuerdo al tipo de precio
@@ -114,13 +124,12 @@ def bollinger(data,window,k=2,tipoPrecio='Close'):
     #último índice
     ultimoIndice=len(serie)-1
 
-    #Valida que la ventana de tiempo sea correcta
-    #(no necesite más datos de los que tiene)
-    if window>ultimoIndice:
-        return 0
-
     #índice de inicio
-    inicio=window-1
+    inicio=data[data['Date']==fechaInicio].index[0]
+
+    #Valida que exista historia suficiente para calcular el indicador
+    if window>inicio+1:
+        return 0
 
     #MA y bandas
     MA=[]
@@ -134,13 +143,13 @@ def bollinger(data,window,k=2,tipoPrecio='Close'):
     #Aquí guardo las fechas
     fechas=[]
 
-    for t in range(0,ultimoIndice-window+2):
-        media=np.nanmean(serie.iloc[t:window+t])
-        desviacion=np.nanstd(serie.iloc[t:window+t],ddof=1)
+    for t in range(0,ultimoIndice - inicio+1):
+        media=np.nanmean(serie.iloc[inicio-window+1+t:inicio + t+1])
+        desviacion=np.nanstd(serie.iloc[inicio-window+1+t:inicio + t+1],ddof=1)
         MA.append(media)
         low.append(media - k*desviacion)
         up.append(media + k*desviacion)
-        fechas.append(data['Date'].iloc[window-1+t])
+        fechas.append(data['Date'].iloc[inicio+t])
 
     #Agrega en un dataframe
     MA=pd.Series(MA)
@@ -148,5 +157,38 @@ def bollinger(data,window,k=2,tipoPrecio='Close'):
     up=pd.Series(up)
     fechas=pd.Series(fechas)
     resultado=pd.DataFrame(data={"Date":fechas,"MA":MA,"UpBand":up,"LowBand":low})
+
+    return resultado
+
+##==============================================================================
+## Moving Average Crossover
+## Calcula dos promedios móviles (simples)
+##==============================================================================
+def movingAverageCross(data,fechaInicio,windowShort,windowLong,tipoPrecio='Close'):
+    '''
+    Calcula dos promedios móviles
+    ENTRADA
+    data: pandas DataFrame creado con leeTabla
+    fechaInicio: string de la forma 'YYYY-MM-DD'
+    windowShort: ventana de tiempo más pequeña
+    windowLong: ventana de tiempo más grande
+    tipoPrecio: tipo de precio a utilizar
+
+    SALIDA
+    resultado: Pandas DataFrame con columnas Date, shortMA, longMA
+    Regresa 0 si no hay suficiente información
+    '''
+
+    MAshort=movingAverage(data,fechaInicio,windowShort,tipoPrecio)
+    MAlong=movingAverage(data,fechaInicio,windowLong,tipoPrecio)
+
+    #Revisa si fue posible calcular ambos indicadores
+    if len(MAshort)==1 or len(MAlong)==0:
+        return 0
+
+    fechas=MAshort['Date']
+    MAshort=MAshort['MA']
+    MAlong=MAlong['MA']
+    resultado=pd.DataFrame(data={"Date":fechas,"shortMa":MAshort, "longMA":MAlong})
 
     return resultado
