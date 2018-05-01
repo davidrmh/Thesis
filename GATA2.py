@@ -474,3 +474,30 @@ def votoMayoria(individuo):
     resultado=pd.DataFrame(data={'Date':fechas,'Signal':finalSignal})
 
     return resultado
+
+##==============================================================================
+## Función de aptitud
+## 1. Crear un subconjunto que inicie en la fecha de inicio
+## 2. Calcular B&H (considerando intereses y comisiones)
+## 3. Obtener voto de mayoría
+## Si se compra y se tiene efectivo
+##   efectivo se reduce y acciones aumentan
+## Si se vende y se tienen acciones
+##   efectivo aumenta y acciones se reducen
+## Si se espera y se tiene efectivo
+##   efectivo gana intereses
+## Precio de ejecución = (Low + High)/2 en t+1 (t el día de la señal)
+## Ganacia de intereses = (t-tUltima)/252 * r_{tUltima} * efectivo_{tUltima}
+## La tasa de interés añade una dificultad adicional (de momento fijarla a 1%)
+## Acciones = int(efectivo/precio de ejecución)
+## Comisión 0.25% del total de la transacción
+## Nuevo balance si se compra
+## efectivo = efectivo - precio ejecución * acciones *(1+comision)
+## Acciones=Acciones antes + Acciones adquiridas
+## Nuevo balance si se vende
+## Nuevo efectivo = efectivo + precio ejecución * acciones *(1-comision)
+## Acciones = Acciones antes - acciones vendidas
+## Cerrar posiciones abiertas en la última fecha, es decir, se deben de
+## vender todas las acciones y sólo quedarse con el efectivo
+## Ganancia estrategia = (capital final - capital inicial)/cap inicial
+##==============================================================================
