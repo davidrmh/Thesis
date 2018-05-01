@@ -33,8 +33,7 @@ fechaInicio='2015-01-02'
 ventanasTiempoBollinger=[20,30,40,50,100,150]
 ventanasTiempoMA=[5,10,50,100,200]
 numeroMaximoDesviaciones=2.0 #El parámetro k en bandas de Bollinger
-ruta="~/Documents/naftrac.csv"
-datos=leeTabla(ruta)
+datos=leeTabla()
 
 ##==============================================================================
 ## Funciones para obtener parámetros de los indicadores
@@ -417,5 +416,61 @@ def creaIndividuo(datos,fechaInicio,numeroMaximoIndicadores=5):
     resultado=[]
     for i in range(0,n):
         resultado.append(indicador(datos,fechaInicio))
+
+    return resultado
+
+##==============================================================================
+## Función para obtener la señal de operación
+## utilizando el voto mayoritario para los indicadores de un individuo
+##==============================================================================
+def votoMayoria(individuo):
+    '''
+    ENTRADA
+    individuo: objeto creado con la función creaIndividuo
+
+    SALIDA
+    resultado: pandas DataFrame con columnas Date y Signal
+    '''
+    #Aquí guardo la decisión final
+    finalSignal=[]
+
+    #Auxiliar para crear la el DataFrame con las señales
+    signals=[]
+
+    for indicador in individuo:
+        signals.append(indicador.datos['Signal'])
+
+    #Dataframe cuya i-ésima columna corresponde
+    #a las señales del i-ésimo indicador
+    signals=pd.concat(signals,axis=1)
+
+    #auxiliares
+    cuentaBuy=0
+    cuentaSell=0
+    cuentaHold=0
+    n=len(signals)
+
+    for t in range(0,n):
+        renglon=list(signals.iloc[t])
+        cuentaBuy=renglon.count(1)
+        cuentaSell=renglon.count(-1)
+        cuentaHold=renglon.count(0)
+
+        if cuentaBuy==cuentaHold==cuentaSell:
+            #Si no hay mayoría entonces hold
+            finalSignal.append(0)
+        if cuentaBuy>cuentaHold and cuentaBuy > cuentaSell:
+            #Hay mayoría de señales buy
+            finalSignal.append(1)
+        if cuentaHold>cuentaBuy and cuentaHold>cuentaSell:
+            #Hay mayoría de señales hold
+            finalSignal.append(0)
+        if cuentaSell>cuentaBuy and cuentaSell>cuentaHold:
+            #Hay mayoría de señales sell
+            finalSignal.append(-1)
+
+    fechas=individuo[0].datos['Date']
+    finalSignal=pd.Series(finalSignal)
+    resultado=pd.DataFrame(data={'Date':fechas,'Signal':finalSignal})
 
     return resultado
