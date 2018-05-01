@@ -339,6 +339,8 @@ def movingAveragesCross(data,fechaInicio,windowShort,windowLong,tipoPrecio='Adj 
 
 ##==============================================================================
 ## Clase indicador
+## podría cambiar el 200 por una variable goblal, pero en la práctica
+## este número es el horizonte más amplio utilizado.
 ##==============================================================================
 class indicador:
     '''
@@ -347,8 +349,9 @@ class indicador:
 
     def __init__(self,datos,fechaInicio):
         '''
-        Inicializa el individuo
+        Inicializa el indicador
         datos: pandas DataFrame creado con la función leeTabla
+        fechaInicio: string con la fecha de inicio 'YYYY-MM-DD'
         '''
         #Tipo de indicador (string)
         self.tipo=selectCategorical(tiposIndicadores)
@@ -356,7 +359,7 @@ class indicador:
         #bandas de Bollinger
         if self.tipo=="BB":
             #Ventana de tiempo (entero)
-            self.ventanaTiempo=selectNumericalInteger([1,200])
+            self.ventanaTiempo=selectNumericalInteger([2,200])
 
             #Parámetro k (real)
             self.k=selectNumericalReal([0.01,numeroMaximoDesviaciones])
@@ -372,7 +375,7 @@ class indicador:
         if self.tipo=="MA":
 
             #Ventana de tiempo (entero)
-            self.ventanaTiempo=selectNumericalInteger([1,200])
+            self.ventanaTiempo=selectNumericalInteger([2,200])
 
             #Tipo de precio (string)
             self.tipoPrecio=selectCategorical(tiposPrecios)
@@ -381,9 +384,38 @@ class indicador:
 
         #Moving averages crossover
         if self.tipo=="MACross":
-            self.ventana1=selectNumericalInteger([1,200])
-            self.ventana2=selectNumericalInteger([1,200])
+            self.ventana1=selectNumericalInteger([2,200])
+            self.ventana2=selectNumericalInteger([2,200])
             self.ventanaTiempoCorto=min(self.ventana1,self.ventana2)
             self.ventanaTiempoLargo=max(self.ventana1,self.ventana2)
 
+            #Tipo de precio (string)
+            self.tipoPrecio=selectCategorical(tiposPrecios)
+
             self.datos=movingAveragesCross(datos,fechaInicio,self.ventanaTiempoCorto,self.ventanaTiempoLargo,tipoPrecio=self.tipoPrecio)
+
+##==============================================================================
+## Función para crear un individuo
+## la longitud es aleatoria entre 1 y numeroMaximoIndicadores
+##==============================================================================
+def creaIndividuo(datos,fechaInicio,numeroMaximoIndicadores=5):
+    '''
+    Crea un individuo, el cual estará representado por una lista
+    con un número aleatorio de indicadores
+
+    ENTRADA
+    datos: pandas DataFrame creado con la función leeTabla
+    fechaInicio: string con la fecha de inicio 'YYYY-MM-DD'
+    numeroMaximoIndicadores: Entero que representa la longitud máxima del
+    individuo
+
+    SALIDA
+    resultado: lista cuya i-ésima entrada es un objeto de la clase indicador
+    '''
+
+    n=selectNumericalInteger([1,numeroMaximoIndicadores])
+    resultado=[]
+    for i in range(0,n):
+        resultado.append(indicador(datos,fechaInicio))
+
+    return resultado
