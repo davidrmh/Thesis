@@ -4,12 +4,6 @@ import pandas as pd
 import numpy as np
 
 ##==============================================================================
-## Variables globales
-## Ventanas de tiempo mayores o iguales a dos
-##==============================================================================
-
-
-##==============================================================================
 ## Datos de Yaho Finance
 ## Lee datos, quita los null
 ## transforma a float
@@ -26,6 +20,21 @@ def leeTabla(ruta="naftrac.csv"):
     data["Volume"]=data["Volume"].astype('int')
     data=data.reset_index()
     return data
+
+
+##==============================================================================
+## Variables globales
+## Ventanas de tiempo mayores o iguales a dos
+##==============================================================================
+tiposIndicadores=["BB","MA","MACross"]
+tiposPrecios=["Adj Close"] #Por el momento utilizaré cierres ajustados
+numeroMaximoIndicadores=5 #Máximo de indicadores por individuo
+fechaInicio='2015-01-02'
+ventanasTiempoBollinger=[20,30,40,50,100,150]
+ventanasTiempoMA=[5,10,50,100,200]
+numeroMaximoDesviaciones=2.0 #El parámetro k en bandas de Bollinger
+ruta="~/Documents/naftrac.csv"
+datos=leeTabla(ruta)
 
 ##==============================================================================
 ## Funciones para obtener parámetros de los indicadores
@@ -83,7 +92,7 @@ def signalMA(precioActual,precioAnterior,mediaActual,mediaAnterior):
 ## La columna Signal corresponde a la señal de operación
 ## 1=Compra, 0=Hold, -1=Venta
 ##==============================================================================
-def movingAverage(data,fechaInicio,window,tipoPrecio='Close'):
+def movingAverage(data,fechaInicio,window,tipoPrecio='Adj Close'):
     '''
     Calcula un promedio móvil
 
@@ -190,7 +199,7 @@ def signalBollinger(precioActual,precioAnterior,bandaUpActual,bandaUpAnterior,ba
 ## de la desviación estándar
 ## La desviación estándar se calcula dividiendo entre N-1
 ##==============================================================================
-def bollinger(data,fechaInicio,window,k=2,tipoPrecio='Close'):
+def bollinger(data,fechaInicio,window,k=2,tipoPrecio='Adj Close'):
     '''
     ENTRADA
     data: pandas dataframe que se obtiene con la función leeTabla
@@ -297,7 +306,7 @@ def signalMACross(diferencias):
 ## Moving Averages Crossover
 ## Calcula dos promedios móviles (simples)
 ##==============================================================================
-def movingAveragesCross(data,fechaInicio,windowShort,windowLong,tipoPrecio='Close'):
+def movingAveragesCross(data,fechaInicio,windowShort,windowLong,tipoPrecio='Adj Close'):
     '''
     Calcula dos promedios móviles
     ENTRADA
@@ -327,3 +336,54 @@ def movingAveragesCross(data,fechaInicio,windowShort,windowLong,tipoPrecio='Clos
     resultado=pd.DataFrame(data={"Date":fechas,"shortMa":MAshort, "longMA":MAlong, "Diferencia":diferencias, "Signal":signal})
 
     return resultado
+
+##==============================================================================
+## Clase indicador
+##==============================================================================
+class indicador:
+    '''
+    Crea de manera aleatoria un indicador técnico
+    '''
+
+    def __init__(self,datos,fechaInicio):
+        '''
+        Inicializa el individuo
+        datos: pandas DataFrame creado con la función leeTabla
+        '''
+        #Tipo de indicador (string)
+        self.tipo=selectCategorical(tiposIndicadores)
+
+        #bandas de Bollinger
+        if self.tipo=="BB":
+            #Ventana de tiempo (entero)
+            self.ventanaTiempo=selectNumericalInteger([1,200])
+
+            #Parámetro k (real)
+            self.k=selectNumericalReal([0.01,numeroMaximoDesviaciones])
+
+            #Tipo de precio (string)
+            self.tipoPrecio=selectCategorical(tiposPrecios)
+
+            #Datos relativos al indicador (DataFrame)
+            #Aquí se guardarán las señales
+            self.datos=bollinger(datos,fechaInicio,self.ventanaTiempo,k=self.k,tipoPrecio=self.tipoPrecio)
+
+        #Moving Average
+        if self.tipo=="MA":
+
+            #Ventana de tiempo (entero)
+            self.ventanaTiempo=selectNumericalInteger([1,200])
+
+            #Tipo de precio (string)
+            self.tipoPrecio=selectCategorical(tiposPrecios)
+
+            self.datos=movingAverage(datos,fechaInicio,self.ventanaTiempo,tipoPrecio=self.tipoPrecio)
+
+        #Moving averages crossover
+        if self.tipo=="MACross":
+            self.ventana1=selectNumericalInteger([1,200])
+            self.ventana2=selectNumericalInteger([1,200])
+            self.ventanaTiempoCorto=min(self.ventana1,self.ventana2)
+            self.ventanaTiempoLargo=max(self.ventana1,self.ventana2)
+
+            self.datos=movingAveragesCross(datos,fechaInicio,self.ventanaTiempoCorto,self.ventanaTiempoLargo,tipoPrecio=self.tipoPrecio)
