@@ -36,6 +36,7 @@ numeroMaximoDesviaciones=2.0 #El parámetro k en bandas de Bollinger
 datos=leeTabla()
 capitalInicial=100000 #cien mil pesos (mínimo solicitado por las casas de bolsa)
 tasaBanco=0.01 #tasa que te da el banco 1% (idea: Promedio CETES - X BP)
+comision=0.25/100 #Comisión del 25% sobre el monto total negociado
 
 ##==============================================================================
 ## Funciones para obtener parámetros de los indicadores
@@ -478,7 +479,7 @@ def votoMayoria(individuo):
             finalSignal.append(np.random.choice([0,1],1)[0])
         elif cuentaSell==cuentaHold and cuentaSell > cuentaBuy:
             finalSignal.append(np.random.choice([-1,0],1)[0])
-        
+
 
     fechas=individuo[0].datos['Date']
     finalSignal=pd.Series(finalSignal)
@@ -500,7 +501,9 @@ def votoMayoria(individuo):
 ## Precio de ejecución = (Low + High)/2 en t+1 (t el día de la señal)
 ## Ganacia de intereses = (t-tUltima)/252 * r_{tUltima} * efectivo_{tUltima}
 ## La tasa de interés añade una dificultad adicional (de momento fijarla a 1%)
-## Acciones = int(efectivo/precio de ejecución)
+## Al momento de comprar, para evitar quedar con dinero en saldo negativo
+## se necesitan comprar Acciones = np.floor(efectivo / precio*(1+comision))
+## de esta forma no nos quedamos con dinero
 ## Comisión 0.25% del total de la transacción
 ## Nuevo balance si se compra
 ## efectivo = efectivo - precio ejecución * acciones *(1+comision)
@@ -526,3 +529,34 @@ def fitness(datos,individuo,fechaInicio):
     gananciaInd: Ganancia del individuo
     exceso: Diferencia entre gananciaInd y gananciaBH
     '''
+
+    #Primero se calcula la ganancia de Buy and Hold
+    efectivo=float(capitalInicial)
+    indiceInicio=datos[datos['Date']==fechaInicio].index[0]
+    indiceFin=datos['Date'].shape[0]-1
+
+    #Precio de ejecución al inicio del periodo
+    #es el promedio entre el máximo y el mínimo del día
+    precioInicioLow=float(datos['Low'].iloc[indiceInicio])
+    precioInicioHigh=float(datos['High'].iloc[indiceInicio])
+    precioInicioMid=(precioInicioLow+precioInicioHigh)/2
+
+    #Precio de ejecución al final del periodo
+    #es el promedio entre el máximo y el mínimo del día
+    precioFinLow=float(datos['Low'].iloc[indiceFin])
+    precioFinHigh=float(datos['High'].iloc[indiceFin])
+    precioFinMid=(precioFinLow+precioFinHigh)/2
+
+    #Calculamos las acciones para comprar de tal forma que no
+    #quedemos debiendo dinero.
+    accionesCompra=np.floor(efectivo/(precioInicioMid*(1+comision)))
+    efectivo=efectivo-precioInicioMid*accionesCompra*(1+comision)
+
+    #Ganancia de intereses
+    #Como es en corto plazo se suponen intereses simples
+    #intereses=efectivo*tasa*(fechaFin-fechaInicio)/252
+
+    #Vendemos las acciones compradas en el pasado
+    #y calculamos el efectivo final asi como la ganancia de Buy and Hold
+    efectivo=efectivo + intereses +accionesCompra*precioFinMid*(1-comision)
+    gananciaBH=(efectivo - capitalInicial)/capitalInicial
