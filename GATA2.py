@@ -18,7 +18,7 @@ def leeTabla(ruta="naftrac.csv"):
     data["Close"]=data["Close"].astype('float')
     data["Adj Close"]=data["Adj Close"].astype('float')
     data["Volume"]=data["Volume"].astype('int')
-    data=data.reset_index()
+    data=data.reset_index(drop=True)
     return data
 
 
@@ -35,7 +35,7 @@ ventanasTiempoMA=[5,10,50,100,200]
 numeroMaximoDesviaciones=2.0 #El parámetro k en bandas de Bollinger
 datos=leeTabla()
 capitalInicial=100000 #cien mil pesos (mínimo solicitado por las casas de bolsa)
-tasaBanco=0.01 #tasa que te da el banco 1% (idea: Promedio CETES - X BP)
+tasa=0.00 #tasa que te da el banco 1% (idea: Promedio CETES - X BP)
 comision=0.25/100 #Comisión del 25% sobre el monto total negociado
 
 ##==============================================================================
@@ -488,6 +488,26 @@ def votoMayoria(individuo):
     return resultado
 
 ##==============================================================================
+## Función para determinar si una compra es posible
+## se basa en np.floor(efectivo/(precio*(1+comision)))>0
+##==============================================================================
+def compraPosible(efectivo,precioEjecucion):
+    '''
+    ENTRADA
+    efectivo: Número que representa el dinero disponible
+    precioEjecucion: Número que representa el precio en el que se comprará
+
+    SALIDA
+    bool: True si es posible comprar False en otro caso
+    '''
+    if np.floor(efectivo/(precioEjecucion*(1+comision)))>0:
+        return True
+    else:
+        return False
+
+
+
+##==============================================================================
 ## Función de aptitud
 ## 1. Crear un subconjunto que inicie en la fecha de inicio
 ## 2. Calcular B&H (considerando intereses y comisiones)
@@ -530,7 +550,9 @@ def fitness(datos,individuo,fechaInicio):
     exceso: Diferencia entre gananciaInd y gananciaBH
     '''
 
-    #Primero se calcula la ganancia de Buy and Hold
+    ##################################################################
+    ##Cálculo de la ganancia siguiendo la estrategia de Buy and Hold##
+    ##################################################################
     efectivo=float(capitalInicial)
     indiceInicio=datos[datos['Date']==fechaInicio].index[0]
     indiceFin=datos['Date'].shape[0]-1
@@ -553,10 +575,119 @@ def fitness(datos,individuo,fechaInicio):
     efectivo=efectivo-precioInicioMid*accionesCompra*(1+comision)
 
     #Ganancia de intereses
-    #Como es en corto plazo se suponen intereses simples
-    #intereses=efectivo*tasa*(fechaFin-fechaInicio)/252
+    #Como es una persona invirtiendo se suponen intereses simples
+    fechaFin=datos['Date'].iloc[indiceFin] #fechaFin como string
+    fInicio=pd.to_datetime(fechaInicio,format='%Y-%m-%d')
+    fFin=pd.to_datetime(fechaFin,format='%Y-%m-%d')
+    deltaDias=(fFin-fInicio)/np.timedelta64(1,'D') #Diferencia en días
+    #Para los intereses se consideran fines de semana
+    intereses=efectivo*tasa*deltaDias/365
 
     #Vendemos las acciones compradas en el pasado
     #y calculamos el efectivo final asi como la ganancia de Buy and Hold
     efectivo=efectivo + intereses +accionesCompra*precioFinMid*(1-comision)
     gananciaBH=(efectivo - capitalInicial)/capitalInicial
+
+    ##################################################################
+    ###Cálculo de la ganancia siguiendo la estrategia del individuo###
+    ##################################################################
+    #Señales considerar el voto de la mayoría
+    signals=votoMayoria(individuo)
+
+    #efectivo
+    efectivo=capitalInicial
+
+    #fecha última operación (auxiliar para el cálculo de los intereses)
+    #fecha actual (auxiliar para el cálculo de los intereses)
+    fUltimaOperacion=pd.to_datetime(fechaInicio,format='%Y-%m-%d')
+    fActual=pd.to_datetime(fechaInicio,format='%Y-%m-%d')
+
+    #auxiliar para cerrar posiciones abiertas al final del periodo
+    flagPosicionAbierta=False
+
+    #auxiliar para tener coincidencia entre los índices de los datos y
+    #los índices de signals
+    datosFiltrados=datos.iloc[indiceInicio:].reset_index(drop=True)
+
+    #Número de índices válidos
+    n=datosFiltrados.shape[0]-1
+
+    #Acciones compradas
+    accionesCompra=0
+
+    #intereses
+    intereses=0
+
+    #flag ultima señal
+    #Se podría utilizar para evitar repetir señales del mismo tipo
+    #Por el momento no la utilizaré
+    flagUltimaSignal=''
+
+    #Se inicia en 1 ya que el primer día no hay señales
+    #se hace menos 1 ya que el último día se cierran las posiciones abiertas
+    for t in range(1,n-1):
+
+        #cálculo del precio de ejecución
+        precioLow=float(datosFiltrados['Low'].iloc[t+1])
+        precioHigh=float(datosFiltrados['High'].iloc[t+1])
+        precioEjecucion=(precioLow + precioHigh)/2.0
+
+        #Cálculo los intereses acumulados hasta el momento
+        #NOTA: La señal se recibe al final del día por eso se aplican
+        #los intereses en este momento
+        fecha=datosFiltrados['Date'].iloc[t]
+        fActual=pd.to_datetime(fecha,format="%Y-%m-%d")
+        deltaDias=(fActual-fUltimaOperacion)/np.timedelta64(1,'D')
+        intereses=efectivo*tasa*deltaDias/365
+        efectivo=efectivo+intereses
+
+        #Si es posible comprar
+        if signals['Signal'].iloc[0]==1 and compraPosible(efectivo,precioEjecucion):
+
+            #Se compran más acciones
+            accionesCompra=accionesCompra + np.floor(efectivo/(precioEjecucion*(1+comision)))
+
+            #Se reduce el efectivo
+            efectivo=efectivo-precioEjecucion*accionesCompra*(1+comision)
+
+            #Se registra una posición abierta
+            flagPosicionAbierta=True
+
+
+        #Si es posible vender
+        #No se permiten ventas en corto por eso accionesCompra > 0
+        #Se venden todas las acciones en un sólo momento
+        elif signals['Signal'].iloc[0]==-1 and accionesCompra>0:
+
+            #Aumenta el efectivo
+            efectivo=efectivo + accionesCompra*precioEjecucion*(1-comision)
+
+            #Disminuyen acciones
+            accionesCompra=0
+
+            #Se cierra una posición abierta
+            flagPosicionAbierta=False
+
+        fUltimaOperacion=fActual
+
+    #Se cierra posición abierta
+    if flagPosicionAbierta:
+        #cálculo del precio de ejecución
+        precioLow=float(datosFiltrados['Low'].iloc[n])
+        precioHigh=float(datosFiltrados['High'].iloc[n])
+        precioEjecucion=(precioLow + precioHigh)/2.0
+
+        #Aumenta el efectivo
+        efectivo=efectivo + accionesCompra*precioEjecucion*(1-comision)
+
+        #Disminuyen acciones
+        accionesCompra=0
+
+    #Se calcula ganancia final
+    gananciaInd=(efectivo-capitalInicial)/capitalInicial
+
+    #Exceso de ganancia
+    exceso=gananciaInd-gananciaBH
+
+
+    return [exceso,gananciaInd,gananciaBH]
