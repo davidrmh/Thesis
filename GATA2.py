@@ -34,6 +34,8 @@ ventanasTiempoBollinger=[20,30,40,50,100,150]
 ventanasTiempoMA=[5,10,50,100,200]
 numeroMaximoDesviaciones=2.0 #El parámetro k en bandas de Bollinger
 datos=leeTabla()
+capitalInicial=100000 #cien mil pesos (mínimo solicitado por las casas de bolsa)
+tasaBanco=0.01 #tasa que te da el banco 1% (idea: Promedio CETES - X BP)
 
 ##==============================================================================
 ## Funciones para obtener parámetros de los indicadores
@@ -448,7 +450,7 @@ def votoMayoria(individuo):
     cuentaBuy=0
     cuentaSell=0
     cuentaHold=0
-    n=len(signals)
+    n=signals.shape[0]
 
     for t in range(0,n):
         renglon=list(signals.iloc[t])
@@ -459,15 +461,24 @@ def votoMayoria(individuo):
         if cuentaBuy==cuentaHold==cuentaSell:
             #Si no hay mayoría entonces hold
             finalSignal.append(0)
-        if cuentaBuy>cuentaHold and cuentaBuy > cuentaSell:
+        elif cuentaBuy>cuentaHold and cuentaBuy > cuentaSell:
             #Hay mayoría de señales buy
             finalSignal.append(1)
-        if cuentaHold>cuentaBuy and cuentaHold>cuentaSell:
+        elif cuentaHold>cuentaBuy and cuentaHold>cuentaSell:
             #Hay mayoría de señales hold
             finalSignal.append(0)
-        if cuentaSell>cuentaBuy and cuentaSell>cuentaHold:
+        elif cuentaSell>cuentaBuy and cuentaSell>cuentaHold:
             #Hay mayoría de señales sell
             finalSignal.append(-1)
+        #Los casos de siguientes es para considerar empate entre dos señales
+        #Se selecciona al azar alguna de las mayoritarias
+        elif cuentaBuy==cuentaSell and cuentaBuy > cuentaHold:
+            finalSignal.append(np.random.choice([-1,1],1)[0])
+        elif cuentaBuy==cuentaHold and cuentaBuy > cuentaSell:
+            finalSignal.append(np.random.choice([0,1],1)[0])
+        elif cuentaSell==cuentaHold and cuentaSell > cuentaBuy:
+            finalSignal.append(np.random.choice([-1,0],1)[0])
+        
 
     fechas=individuo[0].datos['Date']
     finalSignal=pd.Series(finalSignal)
@@ -501,3 +512,17 @@ def votoMayoria(individuo):
 ## vender todas las acciones y sólo quedarse con el efectivo
 ## Ganancia estrategia = (capital final - capital inicial)/cap inicial
 ##==============================================================================
+def fitness(datos,individuo,fechaInicio):
+    '''
+    Función para calcular la aptitud de un individuo
+
+    ENTRADA
+    datos: Pandas DataFrame creado con leeTabla
+    individuo: lista creada con creaIndividuo
+    fechaInicio: string de la forma 'YYYY-MM-DD'
+
+    SALIDA
+    gananciaBH: Ganancia de la estrategia Buy and Hold
+    gananciaInd: Ganancia del individuo
+    exceso: Diferencia entre gananciaInd y gananciaBH
+    '''
