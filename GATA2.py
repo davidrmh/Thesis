@@ -691,3 +691,50 @@ def fitness(datos,individuo,fechaInicio):
 
 
     return [exceso,gananciaInd,gananciaBH]
+
+##==============================================================================
+## Función para realizar la cruza de dos individuos
+## regresa sólo el hijo más apto
+##==============================================================================
+
+def cruza(individuo1,individuo2,datos,fechaInicio):
+    '''
+    ENTRADA
+    individuo: Objetos creados con la función creaIndividuo
+    datos: pandas DataFrame creado con leeTabla
+    fechaInicio: string en formato 'YYYY-MM-DD'
+
+    SALIDA
+    hijo: hijo más apto
+    '''
+
+    n1=len(individuo1)
+    n2=len(individuo2)
+
+    if n1==n2:
+        #corta en el punto medio
+        n3=int(n1/2)
+
+        hijo1=individuo1[0:(n3+1)] + individuo2[n3+1:]
+        hijo2=individuo2[0:(n3+1)] + individuo1[n3+1:]
+
+    elif n1>n2:
+        #El individuo1 tiene más indicadores que el individuo2
+        hijo1=individuo1[0:(n2+1)]
+        hijo2=individuo2[:] + individuo1[n2+1:]
+
+    elif n2>n1:
+        #El individuo2 tiene más indicadores que el individuo2
+        hijo1=individuo2[0:(n1+1)]
+        hijo2=individuo1[:] + individuo2[n1+1:]
+
+    #Calcula la aptitud de cada hijo
+    aptitudHijo1=fitness(datos,hijo1,fechaInicio)
+    aptitudHijo2=fitness(datos,hijo2,fechaInicio)
+
+    if aptitudHijo1==aptitudHijo2:
+        return hijo1
+    elif aptitudHijo1<aptitudHijo2:
+        return hijo2
+    else:
+        return hijo1        
