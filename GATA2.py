@@ -642,7 +642,7 @@ def fitness(datos,individuo,fechaInicio):
         efectivo=efectivo+intereses
 
         #Si es posible comprar
-        if signals['Signal'].iloc[0]==1 and compraPosible(efectivo,precioEjecucion):
+        if signals['Signal'].iloc[t]==1 and compraPosible(efectivo,precioEjecucion):
 
             #Se compran más acciones
             accionesCompra=accionesCompra + np.floor(efectivo/(precioEjecucion*(1+comision)))
@@ -657,7 +657,7 @@ def fitness(datos,individuo,fechaInicio):
         #Si es posible vender
         #No se permiten ventas en corto por eso accionesCompra > 0
         #Se venden todas las acciones en un sólo momento
-        elif signals['Signal'].iloc[0]==-1 and accionesCompra>0:
+        elif signals['Signal'].iloc[t]==-1 and accionesCompra>0:
 
             #Aumenta el efectivo
             efectivo=efectivo + accionesCompra*precioEjecucion*(1-comision)
