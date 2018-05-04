@@ -2,6 +2,7 @@
 
 import pandas as pd
 import numpy as np
+from copy import deepcopy
 
 ##==============================================================================
 ## Datos de Yaho Finance
@@ -37,6 +38,7 @@ datos=leeTabla()
 capitalInicial=100000 #cien mil pesos (mínimo solicitado por las casas de bolsa)
 tasa=0.00 #tasa que te da el banco 1% (idea: Promedio CETES - X BP)
 comision=0.25/100 #Comisión del 25% sobre el monto total negociado
+semilla=0 #Para obtener resultados reproducibles
 
 ##==============================================================================
 ## Funciones para obtener parámetros de los indicadores
@@ -46,6 +48,7 @@ def selectNumericalReal(limits):
     '''
     Selecciona un número real entre dos límites
     '''
+    #np.random.seed(semilla)
     return np.random.uniform(limits[0],limits[1],1)[0]
 
 #Número entero
@@ -53,6 +56,7 @@ def selectNumericalInteger(limits):
     '''
     Selecciona un número entero entre dos límites
     '''
+    #np.random.seed(semilla)
     return np.random.choice(range(limits[0],limits[1]+1),1)[0]
 
 #Categoría
@@ -60,6 +64,7 @@ def selectCategorical(kinds):
     '''
     Selecciona una categoría de una lista
     '''
+    #np.random.seed(semilla)
     return np.random.choice(kinds,1)[0]
 
 ##==============================================================================
@@ -737,4 +742,113 @@ def cruza(individuo1,individuo2,datos,fechaInicio):
     elif aptitudHijo1<aptitudHijo2:
         return hijo2
     else:
-        return hijo1        
+        return hijo1
+
+##==============================================================================
+## Función para ejecutar el algoritmo genético
+## 1. Crea población
+## 2. Calcula el fitness
+## 3. Registra los k-mejores (k-elitismo)
+## 4. Normaliza fitness para que todos sean positivos (sumar a cada uno max-min)
+## 5. Calcular las probabilidades de selección (método de la ruleta)
+## 6. De acuerdo a las probabilidades seleccionar dos padres y cruzar
+## 7. Generar nueva generación
+## 8. Mutar (sobre parámetros de cada indicador)
+## 9. Despliegue del mejor/peor fitness hasta el momento y el número de generación
+##==============================================================================
+def genetico(datos,fechaInicio,numGen=500,sizePoblacion=20,maxIndicadores=15,objetivo=0.05,kMejores=3):
+    '''
+    ENTRADA
+    datos: pandas DataFrame creado con leeTabla
+    fechaInicio: string en formato 'YYYY-MM-DD'
+    numGen: entero que representa el número de generaciones máximas
+    sizePoblacion: entero que representa el tamaño de la población
+    maxIndicadores: entero que representa el número máximo de indicadores por individuo
+    objetivo: flotante que representa el objetivo en exceso de ganancia
+    kMejores: entero que representa el parámetro de elitismo
+
+    SALIDA
+    resultado: lista con primer elemento el fitness del mejor individuo y
+    segundo elemento el individuo de dicho fitness
+    '''
+
+    #aquí guardo los individuos
+    poblacion=[]
+    nuevaPoblacion=list(np.zeros(sizePoblacion))
+
+    #aptitud de cada individuo
+    aptitudes=np.zeros(sizePoblacion)
+    aptitudesNormalizadas=np.zeros(sizePoblacion)
+
+    #Probabilidades de selección
+    probabilidades=np.zeros(sizePoblacion)
+
+    #para registrar la mejor y peor aptitud
+    maxFit=-100
+    minFit=100
+
+    #Mejor individuo
+    mejorInd=[]
+
+    #contador generación
+    conteoGen=1
+
+    #inicializa población
+    print "Creando primer poblacion"
+    for i in range(0,sizePoblacion):
+        poblacion.append(creaIndividuo(datos,fechaInicio,maxIndicadores))
+    print "Inicia proceso de evolucion"
+
+    #proceso de evolución
+    #Se ejecuta mientras no se llegue al máximo de generaciones
+    #o no se tenga la aptitud objetivo
+    while conteoGen<numGen and maxFit<objetivo:
+
+        #Calcula aptitudes
+        for i in range(0,sizePoblacion):
+            aptitudes[i]=fitness(datos,poblacion[i],fechaInicio)[0]
+
+        #Normaliza las aptitudes (para que sean positivas)
+        #y calcula las probabilidades de selección
+        aptitudesNormalizadas=aptitudes+200 #OJO (En teoría lo más que se puede perder es el 100% del capital inicial)
+        probabilidades=aptitudesNormalizadas/np.sum(aptitudesNormalizadas)
+
+        #Registra la mejor aptitud
+        indice=aptitudes.argsort()[len(aptitudes)-1]
+        if maxFit<aptitudes[indice]:
+            maxFit=aptitudes[indice]
+            mejorInd=deepcopy(poblacion[indice])
+
+        #registra la peor aptitud
+        indice=aptitudes.argsort()[0]
+        if minFit>aptitudes[indice]:
+            minFit=aptitudes[indice]
+
+        #Elitismo, conserva los k mejores
+        for i in range(0,kMejores):
+            #argsort ordena de menor a mayor
+            indice=aptitudes.argsort()[len(aptitudes)-1-i]
+            nuevaPoblacion[i]=deepcopy(poblacion[indice])
+
+        #Comienza la cruza
+        aux=kMejores
+        while aux<sizePoblacion:
+            indices=np.random.choice(range(0,len(poblacion)),p=probabilidades,size=2,replace=False)
+            padre1=poblacion[indices[0]]
+            padre2=poblacion[indices[1]]
+            nuevaPoblacion[aux]=cruza(padre1,padre2,datos,fechaInicio)
+            aux=aux+1
+
+
+        #Mutación(PENDIENTE)
+
+        #Imprime progreso
+        print "Mejor aptitud= " + str(round(maxFit,6)) + " Peor= " + str(round(minFit,6)) + " Generacion= " + str(conteoGen)
+
+        #Reinicia para la siguiente iteración
+        poblacion=deepcopy(nuevaPoblacion)
+        nuevaPoblacion=list(np.zeros(sizePoblacion))
+        conteoGen=conteoGen+1
+
+    resultado=[maxFit,mejorInd]
+    return resultado
