@@ -39,6 +39,8 @@ capitalInicial=100000 #cien mil pesos (mínimo solicitado por las casas de bolsa
 tasa=0.00 #tasa que te da el banco 1% (idea: Promedio CETES - X BP)
 comision=0.25/100 #Comisión del 25% sobre el monto total negociado
 semilla=0 #Para obtener resultados reproducibles
+np.random.seed(semilla)
+probMutacion=0.07 #Probabilidad de mutación
 
 ##==============================================================================
 ## Funciones para obtener parámetros de los indicadores
@@ -745,6 +747,60 @@ def cruza(individuo1,individuo2,datos,fechaInicio):
         return hijo1
 
 ##==============================================================================
+## Función para mutar un individuo
+## la mutación se realiza sobre los parámetros de cada indicador
+##==============================================================================
+def mutacion(individuo):
+    '''
+    ENTRADA
+    individuo: objeto creado con la función creaIndividuo
+
+    SALIDA
+    objeto individuo posiblemente con alguno de sus componentes modificado
+    '''
+
+    #Número de indicadores
+    n=len(individuo)
+
+    for i in range(0,n):
+        #genera un número uniforme(0,1)
+        u=np.random.uniform(size=1)[0]
+
+        #Se realizará una mutación?
+        if u<probMutacion:
+            tipo=individuo[i].tipo
+
+            if tipo=="MA":
+                #Si es MA se modifica ventana de tiempo
+                individuo[i].ventanaTiempo=selectNumericalInteger([2,200])
+
+            elif tipo=="MACross":
+                #Si es MA Crossover se selecciona al azar una ventana de tiempo
+                #y esta es la que se modifica
+                ventanaLargo=individuo[i].ventanaTiempoLargo
+                ventanaCorto=individuo[i].ventanaTiempoCorto
+                u2=np.random.uniform(size=1)[0]
+                if  u2 > 0.5 and ventanaLargo > 3:
+                    #Se modifica ventana de tiempo corto
+                    individuo[i].ventanaTiempoCorto=selectNumericalInteger([2,ventanaLargo-1])
+                elif u2 <= 0.5 and ventanaCorto<200:
+                    #Se modifica ventana de tiempo largo
+                    individuo[i].ventanaTiempoLargo=selectNumericalInteger([ventanaCorto+1,200])
+
+            elif tipo=="BB":
+                #Si es BB se selecciona al azar la ventana de tiempo o el
+                #parámetro k y se muta alguno
+                u2=np.random.uniform(size=1)[0]
+
+                if u>0.5:
+                    individuo[i].k=individuo[i].k + np.random.normal(size=1)[0]
+                else:
+                    individuo[i].ventanaTiempo=selectNumericalInteger([2,200])
+
+    return individuo
+
+
+##==============================================================================
 ## Función para ejecutar el algoritmo genético
 ## 1. Crea población
 ## 2. Calcula el fitness
@@ -756,7 +812,7 @@ def cruza(individuo1,individuo2,datos,fechaInicio):
 ## 8. Mutar (sobre parámetros de cada indicador)
 ## 9. Despliegue del mejor/peor fitness hasta el momento y el número de generación
 ##==============================================================================
-def genetico(datos,fechaInicio,numGen=500,sizePoblacion=20,maxIndicadores=15,objetivo=0.05,kMejores=3):
+def genetico(datos,fechaInicio,numGen=20,sizePoblacion=20,maxIndicadores=10,objetivo=0.05,kMejores=2):
     '''
     ENTRADA
     datos: pandas DataFrame creado con leeTabla
@@ -840,7 +896,9 @@ def genetico(datos,fechaInicio,numGen=500,sizePoblacion=20,maxIndicadores=15,obj
             aux=aux+1
 
 
-        #Mutación(PENDIENTE)
+        #Mutación
+        for i in range(0,len(nuevaPoblacion)):
+            nuevaPoblacion[i]=mutacion(nuevaPoblacion[i])
 
         #Imprime progreso
         print "Mejor aptitud= " + str(round(maxFit,6)) + " Peor= " + str(round(minFit,6)) + " Generacion= " + str(conteoGen)
