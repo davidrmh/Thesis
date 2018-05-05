@@ -849,7 +849,7 @@ def genetico(datos,fechaInicio,numGen=20,sizePoblacion=20,maxIndicadores=10,obje
     mejorInd=[]
 
     #contador generación
-    conteoGen=1
+    conteoGen=0
 
     #inicializa población
     print "Creando primer poblacion"
@@ -861,6 +861,7 @@ def genetico(datos,fechaInicio,numGen=20,sizePoblacion=20,maxIndicadores=10,obje
     #Se ejecuta mientras no se llegue al máximo de generaciones
     #o no se tenga la aptitud objetivo
     while conteoGen<numGen and maxFit<objetivo:
+        conteoGen=conteoGen+1
 
         #Calcula aptitudes
         for i in range(0,sizePoblacion):
@@ -908,7 +909,7 @@ def genetico(datos,fechaInicio,numGen=20,sizePoblacion=20,maxIndicadores=10,obje
         #Reinicia para la siguiente iteración
         poblacion=deepcopy(nuevaPoblacion)
         nuevaPoblacion=list(np.zeros(sizePoblacion))
-        conteoGen=conteoGen+1
+
 
     resultado=[maxFit,mejorInd]
     return resultado
@@ -974,3 +975,44 @@ def creaLog(datos,individuo,fechaInicio):
     print '======================================================='
 
     f.close()
+
+
+##==============================================================================
+## Función para simular un número determinado de veces y así encontrar
+## la aptitud promedio del mejor individuo
+##==============================================================================
+def simula(numSim,datos,fechaInicio,numGen=20,sizePoblacion=20,maxIndicadores=10,objetivo=0.05,kMejores=2):
+
+    '''
+    ENTRADA
+    numSim: entero que representa el número de simulaciones
+    datos: pandas DataFrame creado con leeTabla
+    fechaInicio: string en formato 'YYYY-MM-DD'
+    numGen: entero que representa el número de generaciones máximas
+    sizePoblacion: entero que representa el tamaño de la población
+    maxIndicadores: entero que representa el número máximo de indicadores por individuo
+    objetivo: flotante que representa el objetivo en exceso de ganancia
+    kMejores: entero que representa el parámetro de elitismo
+
+    SALIDA
+    aptitudMejor: lista con las mejores aptitudes de cada simulacón
+    mejoresInd: lista con los mejores individuos
+    '''
+
+    #aptitudes del mejor individuo
+    aptitudMejor=[]
+
+    #Mejores Individuos
+    mejoresInd=[]
+
+    #Comienza las simulaciones
+    for i in range(0,numSim):
+        x=genetico(datos,fechaInicio,numGen,sizePoblacion,maxIndicadores,objetivo,kMejores)
+        aptitudMejor.append(x[0])
+        mejoresInd.append(x[1])
+
+    #crea el archivo de log
+    for ind in mejoresInd:
+        creaLog(datos,ind,fechaInicio)
+
+    return aptitudMejor,mejoresInd
