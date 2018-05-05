@@ -41,6 +41,8 @@ comision=0.25/100 #Comisión del 25% sobre el monto total negociado
 semilla=0 #Para obtener resultados reproducibles
 np.random.seed(semilla)
 probMutacion=0.07 #Probabilidad de mutación
+archivoLog="logIndividuos.txt"
+
 
 ##==============================================================================
 ## Funciones para obtener parámetros de los indicadores
@@ -910,3 +912,65 @@ def genetico(datos,fechaInicio,numGen=20,sizePoblacion=20,maxIndicadores=10,obje
 
     resultado=[maxFit,mejorInd]
     return resultado
+
+##==============================================================================
+## Función para crear un archivo log con la información de un individuo
+##==============================================================================
+def creaLog(datos,individuo,fechaInicio):
+    '''
+    ENTRADA
+    individuo: objeto creado con la función creaIndividuo
+    '''
+    #Abre el archivo en modo append
+    f=open(archivoLog,"a")
+
+    #calcula la aptitud del individuo
+    aptitud=fitness(datos,individuo,fechaInicio)[0]
+
+    f.write('============ Ganancia en exceso ' + str(round(aptitud,6)) + '===========\n')
+    print '============ Ganancia en exceso ' + str(round(aptitud,6)) + '==========='
+
+    for indicador in individuo:
+        tipo=indicador.tipo
+        if tipo=="MA":
+            f.write('**********************************\n')
+            print '**********************************'
+            f.write("Tipo de indicador= " + tipo + "\n")
+            print "Tipo de indicador= " + tipo
+
+            ventanaTiempo=indicador.ventanaTiempo
+            f.write("\nVentana de tiempo= " + str(ventanaTiempo) + "\n")
+            print "Ventana de tiempo= " + str(ventanaTiempo)
+
+        elif tipo=="MACross":
+            f.write('**********************************\n')
+            print '**********************************'
+            f.write("Tipo de indicador= " + tipo + "\n")
+            print "Tipo de indicador= " + tipo
+
+            ventanaCorto=indicador.ventanaTiempoCorto
+            ventanaLargo=indicador.ventanaTiempoLargo
+
+            f.write("\nVentana de tiempo corto plazo= " + str(ventanaCorto) + "\n")
+            print "Ventana de tiempo corto plazo= " + str(ventanaCorto)
+
+            f.write("\nVentana de tiempo largo plazo= " + str(ventanaLargo) + "\n")
+            print "Ventana de tiempo largo plazo= " + str(ventanaLargo)
+
+        elif tipo=="BB":
+            f.write('**********************************\n')
+            print '**********************************'
+            f.write("Tipo de indicador= " + tipo + "\n")
+            print "Tipo de indicador= " + tipo
+
+            ventanaTiempo=indicador.ventanaTiempo
+            f.write("\nVentana de tiempo= " + str(ventanaTiempo) + "\n")
+            print "Ventana de tiempo= " + str(ventanaTiempo)
+
+            k=indicador.k
+            f.write("\nParametro k= " + str(k) + '\n')
+            print "Parametro k= " + str(k)
+    f.write('===============================================================\n')
+    print '======================================================='
+
+    f.close()
