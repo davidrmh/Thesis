@@ -2,6 +2,7 @@
 
 import pandas as pd
 import numpy as np
+import json
 from copy import deepcopy
 
 ##==============================================================================
@@ -987,51 +988,57 @@ def creaLog(datos,individuo,fechaInicio):
     #calcula la aptitud del individuo
     aptitud=fitness(datos,individuo,fechaInicio)[0]
 
-    f.write('============ Ganancia en exceso ' + str(round(aptitud,6)) + '===========\n')
+    #aquí guardo la información de los indicadores
+    datos={}
+    datos['indicadores']=[]
+    datos['aptitud']=aptitud
+
     print '============ Ganancia en exceso ' + str(round(aptitud,6)) + '==========='
 
     for indicador in individuo:
+        dic={}
+
         tipo=indicador.tipo
         if tipo=="MA":
-            f.write('**********************************\n')
             print '**********************************'
-            f.write("Tipo de indicador= " + tipo + "\n")
             print "Tipo de indicador= " + tipo
 
             ventanaTiempo=indicador.ventanaTiempo
-            f.write("\nVentana de tiempo= " + str(ventanaTiempo) + "\n")
             print "Ventana de tiempo= " + str(ventanaTiempo)
 
+            dic={'tipo':tipo,'ventanaTiempo':ventanaTiempo,'tipoPrecio':indicador.tipoPrecio}
+            datos['indicadores'].append(dic)
+
         elif tipo=="MACross":
-            f.write('**********************************\n')
+
             print '**********************************'
-            f.write("Tipo de indicador= " + tipo + "\n")
             print "Tipo de indicador= " + tipo
 
             ventanaCorto=indicador.ventanaTiempoCorto
             ventanaLargo=indicador.ventanaTiempoLargo
 
-            f.write("\nVentana de tiempo corto plazo= " + str(ventanaCorto) + "\n")
             print "Ventana de tiempo corto plazo= " + str(ventanaCorto)
-
-            f.write("\nVentana de tiempo largo plazo= " + str(ventanaLargo) + "\n")
             print "Ventana de tiempo largo plazo= " + str(ventanaLargo)
+            dic={'tipo':tipo,'ventanaTiempoCorto':ventanaCorto,'ventanaTiempoLargo':ventanaLargo,'tipoPrecio':indicador.tipoPrecio}
+            datos['indicadores'].append(dic)
 
         elif tipo=="BB":
-            f.write('**********************************\n')
             print '**********************************'
-            f.write("Tipo de indicador= " + tipo + "\n")
             print "Tipo de indicador= " + tipo
 
             ventanaTiempo=indicador.ventanaTiempo
-            f.write("\nVentana de tiempo= " + str(ventanaTiempo) + "\n")
             print "Ventana de tiempo= " + str(ventanaTiempo)
 
             k=indicador.k
-            f.write("\nParametro k= " + str(k) + '\n')
             print "Parametro k= " + str(k)
-    f.write('===============================================================\n')
+
+            dic={'tipo':tipo,'ventanaTiempo':ventanaTiempo,'k':k,'tipoPrecio':indicador.tipoPrecio}
+            datos['indicadores'].append(dic)
     print '======================================================='
+
+
+    json.dump(datos,f)
+    f.write('\n')
 
     f.close()
 
