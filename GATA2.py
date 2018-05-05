@@ -406,6 +406,63 @@ class indicador:
             self.datos=movingAveragesCross(datos,fechaInicio,self.ventanaTiempoCorto,self.ventanaTiempoLargo,tipoPrecio=self.tipoPrecio)
 
 ##==============================================================================
+## Clase indicadorManual de forma "manual"
+## con esta clase es posible crear un individuo (conjunto de indicadores)
+## de forma manual
+##==============================================================================
+class indicadorManual:
+    '''
+    Crea de manera manual un indicador técnico
+    '''
+
+    def __init__(self,datos,fechaInicio,dic):
+        '''
+        Inicializa el indicador
+        datos: pandas DataFrame creado con la función leeTabla
+        fechaInicio: string con la fecha de inicio 'YYYY-MM-DD'
+        dic: diccionario con los parámetros del indicador
+        '''
+        #Tipo de indicador (string)
+        self.tipo=dic['tipo']
+
+        #bandas de Bollinger
+        if self.tipo=="BB":
+            #Ventana de tiempo (entero)
+            self.ventanaTiempo=dic['ventanaTiempo']
+
+            #Parámetro k (real)
+            self.k=dic['k']
+
+            #Tipo de precio (string)
+            self.tipoPrecio=dic['tipoPrecio']
+
+            #Datos relativos al indicador (DataFrame)
+            #Aquí se guardarán las señales
+            self.datos=bollinger(datos,fechaInicio,self.ventanaTiempo,k=self.k,tipoPrecio=self.tipoPrecio)
+
+        #Moving Average
+        if self.tipo=="MA":
+
+            #Ventana de tiempo (entero)
+            self.ventanaTiempo=dic['ventanaTiempo']
+
+            #Tipo de precio (string)
+            self.tipoPrecio=dic['tipoPrecio']
+
+            self.datos=movingAverage(datos,fechaInicio,self.ventanaTiempo,tipoPrecio=self.tipoPrecio)
+
+        #Moving averages crossover
+        if self.tipo=="MACross":
+            self.ventanaTiempoCorto=dic['ventanaTiempoCorto']
+            self.ventanaTiempoLargo=dic['ventanaTiempoLargo']
+
+            #Tipo de precio (string)
+            self.tipoPrecio=dic['tipoPrecio']
+
+            self.datos=movingAveragesCross(datos,fechaInicio,self.ventanaTiempoCorto,self.ventanaTiempoLargo,tipoPrecio=self.tipoPrecio)
+
+
+##==============================================================================
 ## Función para crear un individuo
 ## la longitud es aleatoria entre 1 y numeroMaximoIndicadores
 ##==============================================================================
@@ -430,6 +487,8 @@ def creaIndividuo(datos,fechaInicio,numeroMaximoIndicadores=5):
         resultado.append(indicador(datos,fechaInicio))
 
     return resultado
+
+
 
 ##==============================================================================
 ## Función para obtener la señal de operación
