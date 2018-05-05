@@ -993,49 +993,28 @@ def creaLog(datos,individuo,fechaInicio):
     datos['indicadores']=[]
     datos['aptitud']=aptitud
 
-    print '============ Ganancia en exceso ' + str(round(aptitud,6)) + '==========='
-
     for indicador in individuo:
         dic={}
 
         tipo=indicador.tipo
         if tipo=="MA":
-            print '**********************************'
-            print "Tipo de indicador= " + tipo
 
             ventanaTiempo=indicador.ventanaTiempo
-            print "Ventana de tiempo= " + str(ventanaTiempo)
-
             dic={'tipo':tipo,'ventanaTiempo':ventanaTiempo,'tipoPrecio':indicador.tipoPrecio}
             datos['indicadores'].append(dic)
 
         elif tipo=="MACross":
 
-            print '**********************************'
-            print "Tipo de indicador= " + tipo
-
             ventanaCorto=indicador.ventanaTiempoCorto
             ventanaLargo=indicador.ventanaTiempoLargo
-
-            print "Ventana de tiempo corto plazo= " + str(ventanaCorto)
-            print "Ventana de tiempo largo plazo= " + str(ventanaLargo)
             dic={'tipo':tipo,'ventanaTiempoCorto':ventanaCorto,'ventanaTiempoLargo':ventanaLargo,'tipoPrecio':indicador.tipoPrecio}
             datos['indicadores'].append(dic)
 
         elif tipo=="BB":
-            print '**********************************'
-            print "Tipo de indicador= " + tipo
-
             ventanaTiempo=indicador.ventanaTiempo
-            print "Ventana de tiempo= " + str(ventanaTiempo)
-
             k=indicador.k
-            print "Parametro k= " + str(k)
-
             dic={'tipo':tipo,'ventanaTiempo':ventanaTiempo,'k':k,'tipoPrecio':indicador.tipoPrecio}
             datos['indicadores'].append(dic)
-    print '======================================================='
-
 
     json.dump(datos,f)
     f.write('\n')
