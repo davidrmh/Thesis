@@ -1082,3 +1082,47 @@ def simula(numSim,datos,fechaInicio,numGen=20,sizePoblacion=20,maxIndicadores=10
         creaLog(datos,ind,fechaInicio)
 
     return aptitudMejor,mejoresInd
+
+##==============================================================================
+## Función para cargar individuos a partir de un archivo
+## creado con la función creaLog
+##==============================================================================
+
+def cargaLog(datos,fechaInicio,archivo='logIndividuos.txt'):
+    '''
+    ENTRADA
+    datos: pandas DataFrame creado con la función leeTabla
+    fechaInicio: string con formato 'YYYY-MM-DD'
+    archivo: string, nombre del archivo creado con creaLog
+
+    SALIDA:
+    resultado: lista de listas cuyo i-ésima entrada es un conjunto de
+    indicadores (un individuo)
+    '''
+
+    #aquí guardaré a los individuos
+    resultado=[]
+
+    #abre el archivo
+    f=open(archivo)
+
+    #lee cada línea del archivo
+    lineas=f.readlines()
+    f.close()
+
+    for linea in lineas:
+
+        #aux va a contener los indicadores de un individuo
+        #es decir aux es un individuo
+        individuo=[]
+
+        #indicadores es una lista de diccionarios
+        #cada diccionario contiene la información de un indicador
+        indicadores=json.loads(linea.strip())['indicadores']
+
+        for diccionario in indicadores:
+            individuo.append(indicadorManual(datos,fechaInicio,diccionario))
+
+        resultado.append(individuo)
+
+    return resultado
