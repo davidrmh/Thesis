@@ -540,14 +540,16 @@ def votoMayoria(individuo):
         elif cuentaSell>cuentaBuy and cuentaSell>cuentaHold:
             #Hay mayoría de señales sell
             finalSignal.append(-1)
-        #Los casos de siguientes es para considerar empate entre dos señales
+
+        #Los casos de siguientes son para considerar empate entre dos señales
         #Se selecciona al azar alguna de las mayoritarias
+        #antes lo tenía aleatorio
         elif cuentaBuy==cuentaSell and cuentaBuy > cuentaHold:
-            finalSignal.append(np.random.choice([-1,1],1)[0])
+            finalSignal.append(0)
         elif cuentaBuy==cuentaHold and cuentaBuy > cuentaSell:
-            finalSignal.append(np.random.choice([0,1],1)[0])
+            finalSignal.append(0)
         elif cuentaSell==cuentaHold and cuentaSell > cuentaBuy:
-            finalSignal.append(np.random.choice([-1,0],1)[0])
+            finalSignal.append(0)
 
 
     fechas=individuo[0].datos['Date']
