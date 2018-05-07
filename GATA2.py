@@ -616,9 +616,9 @@ def fitness(datos,individuo,fechaInicio):
     fechaInicio: string de la forma 'YYYY-MM-DD'
 
     SALIDA
-    gananciaBH: Ganancia de la estrategia Buy and Hold
-    gananciaInd: Ganancia del individuo
     exceso: Diferencia entre gananciaInd y gananciaBH
+    gananciaInd: Ganancia del individuo
+    gananciaBH: Ganancia de la estrategia Buy and Hold
     '''
 
     ##################################################################
@@ -758,7 +758,12 @@ def fitness(datos,individuo,fechaInicio):
     gananciaInd=(efectivo-capitalInicial)/capitalInicial
 
     #Exceso de ganancia
-    exceso=gananciaInd-gananciaBH
+    #Se penaliza por no realizar alguna transacción
+    #a pesar de que esto genere ganancias cuando gananciaBH < 0
+    if gananciaInd==0 and gananciaBH < 0:
+        exceso=gananciaBH
+    else:    
+        exceso=gananciaInd-gananciaBH
 
 
     return [exceso,gananciaInd,gananciaBH]
@@ -1107,3 +1112,8 @@ def cargaLog(datos,fechaInicio,archivo='logIndividuos.txt'):
         resultado.append(individuo)
 
     return resultado
+
+##==============================================================================
+## Función para graficar la estrategia de un individuo
+##==============================================================================
+def grafica (individuo,datos,fechaInicio):
