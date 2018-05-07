@@ -2,6 +2,7 @@
 
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 import json
 from copy import deepcopy
 
@@ -762,7 +763,7 @@ def fitness(datos,individuo,fechaInicio):
     #a pesar de que esto genere ganancias cuando gananciaBH < 0
     if gananciaInd==0 and gananciaBH < 0:
         exceso=gananciaBH
-    else:    
+    else:
         exceso=gananciaInd-gananciaBH
 
 
@@ -1117,3 +1118,44 @@ def cargaLog(datos,fechaInicio,archivo='logIndividuos.txt'):
 ## Función para graficar la estrategia de un individuo
 ##==============================================================================
 def grafica (individuo,datos,fechaInicio):
+    '''
+    ENTRADA
+    individuo: lista con indicadores
+    datos: data frame creado con leeTabla
+    fechaInicio: string en formato 'YYYY-MM-DD'
+
+    SALIDA
+    gráfica
+    '''
+
+    #Obtiene el ínndice de inicio para filtrar los datos
+    #de acuerdo a la fechaInicio
+    indiceInicio=datos[datos['Date']==fechaInicio].index[0]
+    datosFiltrados=datos.iloc[indiceInicio:]
+    datosFiltrados=datosFiltrados.reset_index(drop=True)
+    ultimoIndice=datosFiltrados.shape[0]-1
+
+    #Obtiene las señales
+    signals=votoMayoria(individuo)
+
+    #Obtiene los índices de compra
+    indicesBuy=signals[signals['Signal']==1].index
+
+    #Obtiene los índices de venta
+    indicesSell=signals[signals['Signal']==-1].index
+
+    #Obtiene los índices de espera
+    indicesHold=signals[signals['Signal']==0].index
+
+    plt.plot(datosFiltrados['Adj Close'],'-',color="blue",label="Precio Cierre")
+
+    if len(indicesBuy)>0:
+        plt.plot(datosFiltrados['Adj Close'].iloc[indicesBuy],'.',color="green",ms=20,label="Compra")
+    if len(indicesSell)>0:
+        plt.plot(datosFiltrados['Adj Close'].iloc[indicesSell],'.',color="red",ms=20,label="Venta")
+    if len(indicesHold)>0:
+        plt.plot(datosFiltrados['Adj Close'].iloc[indicesHold],'.',color="black",ms=20,label="Hold")
+
+    plt.plot(ultimoIndice,datosFiltrados['Adj Close'].iloc[ultimoIndice],'*',color="gold",ms=20,label="Cierre Pos Abierta")
+    plt.legend(loc="best")
+    plt.show()
