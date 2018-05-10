@@ -15,6 +15,7 @@ from copy import deepcopy
 def leeTabla(ruta="naftrac.csv"):
     data=pd.read_csv(ruta)
     data=data[data.iloc[:,2]!="null"]
+    data=data[data.iloc[:,6]!=0]
     data['Date']=pd.to_datetime(data['Date'])
     data["Open"]=data["Open"].astype('float')
     data["High"]=data["High"].astype('float')
@@ -44,6 +45,45 @@ semilla=0 #Para obtener resultados reproducibles
 np.random.seed(semilla)
 probMutacion=0.07 #Probabilidad de mutación
 archivoLog="logIndividuos.txt"
+
+##==============================================================================
+## Función para crear el conjunto de prueba y el conjunto de entrenamiento
+##==============================================================================
+def split(datos,inicioPrueba,finPrueba):
+    '''
+
+    ENTRADA
+    datos: DataFrame creado con leeTabla
+
+    inicioPrueba: string con format 'yyyy-mm-dd' representa la fecha de inicio
+    del conjunto de prueba
+
+    finPrueba: string con format 'yyyy-mm-dd' representa la fecha final
+    del conjunto de entrenamiento
+
+    SALIDA
+    entrenamiento: DataFrame
+
+    prueba: DataFrame
+
+    '''
+
+    #índice de la fecha de inicio del conjunto de prueba
+    #esta fecha es la fecha final del conjunto de entrenamiento
+    indiceInicio=datos[datos['Date']==inicioPrueba].index[0]
+
+    #índice de la fecha final del conjunto de prueba
+    indiceFinal=datos[datos['Date']==finPrueba].index[0]
+
+    entrenamiento=datos.iloc[:(indiceInicio+1),]
+    entrenamiento=entrenamiento.reset_index(drop=True)
+    prueba=datos.iloc[:(indiceFinal+1),]
+    prueba=prueba.reset_index(drop=True)
+
+    return entrenamiento,prueba
+
+
+
 
 
 ##==============================================================================
@@ -718,6 +758,7 @@ def fitness(datos,individuo,fechaInicio):
 
             #Se compran más acciones
             accionesCompra=accionesCompra + np.floor(efectivo/(precioEjecucion*(1+comision)))
+            #accionesCompra=np.random.uniform(size=1)[0]*accionesCompra
 
             #Se reduce el efectivo
             efectivo=efectivo-precioEjecucion*accionesCompra*(1+comision)
@@ -762,7 +803,8 @@ def fitness(datos,individuo,fechaInicio):
     #Se penaliza por no realizar alguna transacción
     #a pesar de que esto genere ganancias cuando gananciaBH < 0
     if gananciaInd==0 and gananciaBH < 0:
-        exceso=gananciaBH
+        #exceso=gananciaBH
+        exceso=-100
     else:
         exceso=gananciaInd-gananciaBH
 
