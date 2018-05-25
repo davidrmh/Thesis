@@ -119,14 +119,16 @@ def etiquetaEntrenamiento(datos,fechaInicio,hforw=15,hback=7,umbral=0.00):
 
     #Crea el DataFrame
     fechas=datos['Date'].iloc[indiceInicio:]
+    precios=datos['Adj Close'].iloc[indiceInicio:]
     etiquetas=pd.DataFrame(atributos)
     etiquetas['Clase']=clases
     etiquetas=etiquetas.iloc[indiceInicio:]
     etiquetas['Date']=fechas
+    etiquetas['Adj Close']=precios
     etiquetas=etiquetas.reset_index(drop=True)
 
     #Etiqueta de acuerdo a los percentiles 25 50 75
-    numAtributos=etiquetas.shape[1]-2 #No considera columnas Clase y Date
+    numAtributos=etiquetas.shape[1]-3 #No considera columnas Clase, Date y Adj Close
 
     #Aquí guardo los percentiles 25,50 y 75 de cada columna
     #Es una lista de numpy arrays
