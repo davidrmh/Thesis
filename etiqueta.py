@@ -31,7 +31,7 @@ def leeTabla(ruta="naftrac.csv"):
 def entrenamientoDataSet(datos,fechaFin):
     '''
     ## ENTRADA
-    ## datos: Pqandas DataFrame creado con leeTabla
+    ## datos: Pandas DataFrame creado con leeTabla
     ##
     ## fechaFin: String en formato 'YYYY-MM-DD' que representa la última fecha
     ## del conjunto de entrenamiento
@@ -56,9 +56,9 @@ def entrenamientoDataSet(datos,fechaFin):
 ##==============================================================================
 ##                           MÉTODO 1
 ##==============================================================================
-def etiquetaEntrenamiento(datos,fechaInicio,hforw=15,hback=7,umbral=0.00):
+def etiquetaMetodo1(datos,fechaInicio,fechaFin,hforw=15,hback=7,umbral=0.015):
     '''
-    Crea las etiquetas del conjunto de ENTRENAMIENTO
+    Crea las etiquetas de los datos de entrenamiento
     La idea es mirar hacia adelante hforw periodos, si la variación entre
     el precio en t y el precio en t+hforw rebasa un umbral, recolectar
     las variaciones entre el precio en t y los precios en t-1,t-2,..,t-hback
@@ -68,9 +68,11 @@ def etiquetaEntrenamiento(datos,fechaInicio,hforw=15,hback=7,umbral=0.00):
     (sell), si no rebasa el umbral, etiqueta 0 (hold)
 
     ENTRADA
-    data: El conjunto de ENTRENAMIENTO creado con entrenamientoDataSet
+    data: Pandas DataFrame. Tabla con los datos del csv
 
     fechaInicio: String en formato 'YYYY-MM-DD' que representa la fecha de inicio
+
+    fechaFin: String en formato 'YYYY-MM-DD' que representa la fecha fin
 
     hforw: Periodos hacia adelante
 
@@ -86,6 +88,7 @@ def etiquetaEntrenamiento(datos,fechaInicio,hforw=15,hback=7,umbral=0.00):
     fin=datos.shape[0]-hforw-1 #Ultimo indice valido considerando forward look
     inicio=hback
     indiceInicio=datos[datos['Date']==fechaInicio].index[0]
+    indiceFin=datos[datos['Date']==fechaFin].index[0]
 
     #valida compatilibidad entre fecha inicio entre fechaInicio y hback
     if indiceInicio < inicio:
@@ -95,19 +98,27 @@ def etiquetaEntrenamiento(datos,fechaInicio,hforw=15,hback=7,umbral=0.00):
     atributos=[]
     clases=[]
 
-    for i in range(inicio,fin+1):
+    #Calcula las variaciones para el conjunto de datos completo
+    #Después se filtrará de acuerdo a los parámetros de fecha
+    for i in range(indiceInicio,indiceFin+1):
         renglon=[]
+        variacion_futuro=datos["Adj Close"][i+hforw-1]/datos["Adj Close"][i]-1
+        fecha_aux=datos['Date'].iloc[i]
         #Si se rebasa el umbral
-        if abs(datos["Adj Close"][i+hforw]/datos["Adj Close"][i]-1)>umbral:
+        if variacion_futuro>umbral or variacion_futuro < -1*umbral:
             #Los atributos son los cambios entre el precio en t y t-1,
             # t y t-2,...,t y t-hback
             for j in range(1,hback+1):
                 renglon.append(datos["Adj Close"][i]/datos["Adj Close"][i-j]-1)
 
             atributos.append(renglon)
-            if (datos["Adj Close"][i+hforw]/datos["Adj Close"][i]-1)>0:
+            if variacion_futuro>0:
                 clases.append(1) #Compra
-            elif (datos["Adj Close"][i+hforw]/datos["Adj Close"][i]-1)<0:
+                #print "El dia " + str(fecha_aux) + " se compra"
+                #print "Variacion = " + str(variacion_futuro)
+            elif variacion_futuro<0:
+                #print "El dia " + str(fecha_aux) + " se vende"
+                #print "Variacion = " + str(variacion_futuro)
                 clases.append(-1) #venta
         else:
             #Los atributos son los cambios entre el precio en t y t-1,
@@ -118,11 +129,11 @@ def etiquetaEntrenamiento(datos,fechaInicio,hforw=15,hback=7,umbral=0.00):
             atributos.append(renglon)
 
     #Crea el DataFrame
-    fechas=datos['Date'].iloc[indiceInicio:]
-    precios=datos['Adj Close'].iloc[indiceInicio:]
     etiquetas=pd.DataFrame(atributos)
-    etiquetas['Clase']=clases
-    etiquetas=etiquetas.iloc[indiceInicio:]
+    fechas=datos['Date'].iloc[indiceInicio : (indiceFin +1) ].reset_index(drop=True)
+    precios=datos['Adj Close'].iloc[indiceInicio : (indiceFin + 1) ].reset_index(drop=True)
+    etiquetas['Clase']=clases #Clase de cada renglón del csv
+    #etiquetas=etiquetas.iloc[indiceInicio : (indiceFin + 1 ) ] #filtrado
     etiquetas['Date']=fechas
     etiquetas['Adj Close']=precios
     etiquetas=etiquetas.reset_index(drop=True)
@@ -155,3 +166,78 @@ def etiquetaEntrenamiento(datos,fechaInicio,hforw=15,hback=7,umbral=0.00):
 
 
     return etiquetas,percentiles
+
+##==============================================================================
+## Función para crear el conjunto de prueba
+##==============================================================================
+def conjuntoPruebaMetodo1 (datos,fechaInicio,fechaFin,percentiles,hback=7):
+    '''
+    Crea las etiquetas de los datos de prueba
+    Se calculan las variaciones entre P_t y P_{t-1}; P_t y P_{t-2}...
+    hasta P_t y P_{t-hback}
+
+    Después se utilizan los percentiles calculados con la función etiquetaMetodo1
+    para discretizar las variaciones.
+
+    ENTRADA
+    data: Pandas DataFrame. Tabla con los datos del csv
+
+    fechaInicio: String en formato 'YYYY-MM-DD' que representa la fecha de inicio
+
+    fechaInicio: String en formato 'YYYY-MM-DD' que representa la fecha final
+
+    percentiles: Lista. Lista de numpy.ndarray con los percentiles
+
+    hback: periodos hacia atrás
+
+    SALIDA:
+
+    '''
+    n=datos.shape[0]-1 #Numero de indices validos
+    inicio=hback
+    indiceInicio=datos[datos['Date']==fechaInicio].index[0]
+    indiceFin=datos[datos['Date']==fechaFin].index[0]
+
+    #valida compatilibidad entre fecha inicio entre fechaInicio y hback
+    if indiceInicio < inicio:
+        print "Revisa la fecha de inicio o el parámetro hback"
+        return 0
+
+    atributos=[]
+
+    for i in range(indiceInicio,indiceFin+1):
+        renglon=[]
+        #Los atributos son los cambios entre el precio en t y t-1,
+        # t y t-2,...,t y t-hback
+        for j in range(1,hback+1):
+            renglon.append(datos["Adj Close"][i]/datos["Adj Close"][i-j]-1)
+        atributos.append(renglon)
+
+    #Crea el DataFrame
+    fechas=datos['Date'].iloc[indiceInicio:(indiceFin+1)].reset_index(drop=True)
+    precios=datos['Adj Close'].iloc[indiceInicio:(indiceFin+1)].reset_index(drop=True)
+    datosPrueba=pd.DataFrame(atributos)
+    datosPrueba['Date']=fechas
+    datosPrueba['Adj Close']=precios
+    datosPrueba=datosPrueba.reset_index(drop=True)
+
+    #Etiqueta de acuerdo a los percentiles 25 50 75
+    numAtributos=datosPrueba.shape[1]-2 #No considera columnas Date y Adj Close
+
+    #Actualiza la tabla etiquetas de acuerdo
+    #a los percentiles
+
+    for i in range(0,numAtributos):
+        #indices a modificar
+        indicesPercentil25=datosPrueba[datosPrueba[i]<=percentiles[i][0]].index
+        indicesPercentil50=datosPrueba[ (datosPrueba[i]>percentiles[i][0]) & (datosPrueba[i]<=percentiles[i][1]) ].index
+        indicesPercentil75=datosPrueba[ (datosPrueba[i]>percentiles[i][1]) & (datosPrueba[i]<=percentiles[i][2]) ].index
+        indicesPercentil100=datosPrueba[datosPrueba[i]>percentiles[i][2]].index
+
+        #Utilizo loc para evitar el warning que genera iloc
+        datosPrueba[i].loc[indicesPercentil25]=1
+        datosPrueba[i].loc[indicesPercentil50]=2
+        datosPrueba[i].loc[indicesPercentil75]=3
+        datosPrueba[i].loc[indicesPercentil100]=4
+
+    return datosPrueba
