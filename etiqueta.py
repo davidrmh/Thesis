@@ -1,6 +1,7 @@
 # coding: utf-8
 import pandas as pd
 import numpy as np
+import copy as cp
 import matplotlib.pyplot as plt
 
 ##==============================================================================
@@ -82,6 +83,12 @@ def etiquetaMetodo1(datos,fechaInicio,fechaFin,hforw=15,hback=7,umbral=0.015):
     un cambio significativo
 
     SALIDA:
+    etiquetas: Pandas DataFrame con los atributos discretizados
+
+    continuos: Pandas DataFrame con los atributos continuos
+
+    percentiles: Lista. Lista con np arrays representando los percentiles
+    de cada atributo
 
     '''
     n=datos.shape[0]-1 #Numero de indices validos
@@ -137,6 +144,7 @@ def etiquetaMetodo1(datos,fechaInicio,fechaFin,hforw=15,hback=7,umbral=0.015):
     etiquetas['Date']=fechas
     etiquetas['Adj Close']=precios
     etiquetas=etiquetas.reset_index(drop=True)
+    continuos=cp.deepcopy(etiquetas) #Atributos continuos
 
     #Etiqueta de acuerdo a los percentiles 25 50 75
     numAtributos=etiquetas.shape[1]-3 #No considera columnas Clase, Date y Adj Close
@@ -165,7 +173,7 @@ def etiquetaMetodo1(datos,fechaInicio,fechaFin,hforw=15,hback=7,umbral=0.015):
         etiquetas[i].loc[indicesPercentil100]=4
 
 
-    return etiquetas,percentiles
+    return etiquetas,continuos,percentiles
 
 ##==============================================================================
 ## Función para crear el conjunto de prueba
@@ -191,6 +199,10 @@ def conjuntoPruebaMetodo1 (datos,fechaInicio,fechaFin,percentiles,hback=7):
     hback: periodos hacia atrás
 
     SALIDA:
+
+    etiquetas: Pandas DataFrame con los atributos discretizados
+
+    continuos: Pandas DataFrame con los atributos continuos
 
     '''
     n=datos.shape[0]-1 #Numero de indices validos
@@ -220,6 +232,7 @@ def conjuntoPruebaMetodo1 (datos,fechaInicio,fechaFin,percentiles,hback=7):
     datosPrueba['Date']=fechas
     datosPrueba['Adj Close']=precios
     datosPrueba=datosPrueba.reset_index(drop=True)
+    continuos=cp.deepcopy(datosPrueba)
 
     #Etiqueta de acuerdo a los percentiles 25 50 75
     numAtributos=datosPrueba.shape[1]-2 #No considera columnas Date y Adj Close
@@ -240,4 +253,4 @@ def conjuntoPruebaMetodo1 (datos,fechaInicio,fechaFin,percentiles,hback=7):
         datosPrueba[i].loc[indicesPercentil75]=3
         datosPrueba[i].loc[indicesPercentil100]=4
 
-    return datosPrueba
+    return datosPrueba,continuos
