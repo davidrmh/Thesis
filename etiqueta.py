@@ -254,3 +254,190 @@ def conjuntoPruebaMetodo1 (datos,fechaInicio,fechaFin,percentiles,hback=7):
         datosPrueba[i].loc[indicesPercentil100]=4
 
     return datosPrueba,continuos
+
+##==============================================================================
+## Función para determinar si una compra es posible
+## se basa en np.floor(efectivo/(precio*(1+comision)))>0
+##==============================================================================
+def compraPosible(efectivo,precioEjecucion):
+    '''
+    ENTRADA
+    efectivo: Número que representa el dinero disponible
+    precioEjecucion: Número que representa el precio en el que se comprará
+
+    SALIDA
+    bool: True si es posible comprar False en otro caso
+    '''
+    if np.floor(efectivo/(precioEjecucion*(1+comision)))>0:
+        return True
+    else:
+        return False
+
+##==============================================================================
+## Función para evaluar las predicciones de acuerdo al etiquetamiento
+## del Método 1
+##==============================================================================
+capital=100000.00
+comision=0.25/100
+tasa=0.0/100
+
+def evaluaMetodo1(datos,prueba,hforw=15,umbral=0.015):
+    acciones=0
+    flagPosicionAbierta=False
+    ultimoPrecio=0
+    precioEjecucion=0
+    efectivo=capital
+    numSignals=len(prueba['Clase'])
+
+    fechaInicio=prueba['Date'].iloc[0]
+    fechaFin=prueba['Date'].iloc[numSignals-1]
+
+    ##################################################################
+    ##Cálculo de la ganancia siguiendo la estrategia de Buy and Hold##
+    ##################################################################
+    precioInicioHigh=float(datos[datos['Date']==fechaInicio]['High'])
+    precioInicioLow=float(datos[datos['Date']==fechaInicio]['Low'])
+    precioInicioMid=(precioInicioLow + precioInicioHigh)/2.0
+    acciones=np.floor(efectivo/(precioInicioMid*(1+comision)))
+    efectivo=efectivo-precioInicioMid*acciones*(1+comision)
+
+    precioFinHigh=float(datos[datos['Date']==fechaFin]['High'])
+    precioFinLow=float(datos[datos['Date']==fechaFin]['Low'])
+    precioFinMid=(precioFinLow + precioFinHigh)/2.0
+
+
+    #Ganancia de intereses PENDIENTE
+    #Como es una persona invirtiendo se suponen intereses simples
+    fInicio=pd.to_datetime(fechaInicio,format='%Y-%m-%d')
+    fFin=pd.to_datetime(fechaFin,format='%Y-%m-%d')
+    deltaDias=(fFin-fInicio)/np.timedelta64(1,'D') #Diferencia en días
+    #Para los intereses se consideran fines de semana
+    intereses=efectivo*tasa*deltaDias/365
+
+    #Vendemos las acciones compradas en el pasado
+    #y calculamos el efectivo final asi como la ganancia de Buy and Hold
+    efectivo=efectivo + intereses +acciones*precioFinMid*(1-comision)
+    gananciaBH=(efectivo - capital)/capital
+
+    ##################################################################
+    ###Cálculo de la ganancia siguiendo la estrategia del individuo###
+    ##################################################################
+
+    efectivo=capital
+    acciones=0
+    intereses=0
+    fUltimaOperacion=pd.to_datetime(fechaInicio,format='%Y-%m-%d')
+    variacion=0
+
+    #Para contar el número de periodos que se repite la señal
+    #Cuando contador == hforw, la orden de venta se ejecuta
+    contLimite=0
+
+
+
+
+    #No se incluye el último periodo, por eso es numSignals - 1
+    #en este periodo se cierra la posición abierta (en caso de haberla)
+    for t in range(0,numSignals-1):
+
+        #Auxiliar para la variable variacion
+        #para evitar comprar y vender el mismo día
+        flagCompraReciente=False
+
+        #Se calcula el precio de ejecución
+        #promedio de H y L de t+1
+        #También se obtiene el precio de apertura de t+1
+        fecha=prueba['Date'].iloc[t+1]
+        precioLow=float(datos[datos['Date']==fecha]['Low'])
+        precioHigh=float(datos[datos['Date']==fecha]['High'])
+        precioOpen=float(datos[datos['Date']==fecha]['Open'])
+        precioEjecucion=(precioLow + precioHigh)/2.0
+
+        #Cálculo los intereses acumulados hasta el momento
+        #PENDIENTE
+
+        #es posible comprar?
+        #Se ejecuta compra cuando se tiene dinero y no se había comprado previamente
+        if prueba['Clase'].iloc[t]==1 and compraPosible(efectivo,precioEjecucion) and not flagPosicionAbierta:
+
+            #Se compran más acciones (Se invierte todo el dinero posible)
+            acciones=acciones + np.floor(efectivo/(precioEjecucion*(1+comision)))
+
+            #Se reduce el efectivo
+            efectivo=efectivo-precioEjecucion*acciones*(1+comision)
+
+            #Se registra una posición abierta
+            flagPosicionAbierta=True
+
+            #Se registra el último precio de compra
+            ultimoPrecio=precioEjecucion
+
+            #Se actualiza flagCompraReciente
+            flagCompraReciente=True
+
+            #Se reinicia contLimite
+            contLimite=0
+
+            #Se reinicia variación
+            variacion=0
+
+            print "El día " + fecha + " se compran " + str(acciones) + " acciones"
+            print "A un precio de " + str(precioEjecucion)
+
+
+        #Aumenta el contador de días
+        #Cierre de posición después de cierto número de días
+        #if prueba['Clase'].iloc[t]==1 or prueba['Clase'].iloc[t]==0 :
+        #    contLimite=contLimite+1
+
+        #el mercado abre en t+1 al mínimo nivel de ganancia deseado
+        if not flagCompraReciente and ultimoPrecio!=0:
+            variacion=precioOpen/ultimoPrecio - 1
+            contLimite=contLimite + 1
+
+        #es posible vender?
+        #No se permiten ventas en corto por eso acciones > 0
+        #Se venden todas las acciones en un sólo momento
+        #Se vende cuando:
+        #--Hay señal de venta
+        #--Se llega al límite de dias
+        if acciones>0 and (prueba['Clase'].iloc[t]==-1 or contLimite>=hforw or variacion>=umbral):
+
+            #Aumenta el efectivo
+            efectivo=efectivo + acciones*precioEjecucion*(1-comision)
+
+            print "El día " + fecha + " se venden " + str(acciones)
+
+            #Disminuyen acciones
+            acciones=0
+
+            #Se cierra una posición abierta
+            flagPosicionAbierta=False
+
+            #Se reinicia el contador de dias
+            contLimite=0
+
+            print "A un precio de " + str(precioEjecucion)
+
+    #Se cierra posición abierta (si la hay)
+
+    if flagPosicionAbierta:
+        #cálculo del precio de ejecución
+        fecha=prueba['Date'].iloc[numSignals-1]
+        precioLow=float(datos[datos['Date']==fecha]['Low'])
+        precioHigh=float(datos[datos['Date']==fecha]['High'])
+        precioEjecucion=(precioLow + precioHigh)/2.0
+
+        #Aumenta el efectivo
+        efectivo=efectivo + acciones*precioEjecucion*(1-comision)
+
+        print "Se cierra posicion con " + str(acciones) + " acciones"
+        print "a un precio de " + str(precioEjecucion)
+
+        #Disminuyen acciones
+        acciones=0
+
+    #Se calcula ganancia final
+    ganancia=(efectivo-capital)/capital
+
+    return ganancia,gananciaBH
