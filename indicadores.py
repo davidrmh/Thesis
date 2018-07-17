@@ -162,3 +162,63 @@ def bollinger(datos,start,window=10,k=2.0,colName='Adj Close'):
     datos=datos.reset_index(drop=True)
 
     return datos
+
+##==============================================================================
+## Función para calcular un exponential moving average
+##==============================================================================
+def exponentialMA(datos,start,window=10,colName='Adj Close',resName=''):
+    '''
+    NOTA: Los datos están ordenados de forma creciente relativo a la fecha
+
+    ENTRADA
+    datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
+    columna numérica
+
+    start: String en formato YYYY-MM-DD que representa la fecha de inicio de
+    los valores del MA
+
+    window: Entero que representa la ventana de tiempo del MA
+
+    colName: String con el nombre de la columna que contiene los datos numéricos
+
+    resName: String que representa el nombre de la columna con los datos del MA
+
+    SALIDA
+    datos: Dataframe datos con la columna resName añadida e iniciando en el
+    renglón correspondiente a la fecha start
+    '''
+
+    #Localiza la fecha de inicio y revisa si hay suficiente información
+    indiceInicio=datos[datos['Date']==start].index[0]
+    if window > indiceInicio + 1:
+        print 'No hay suficiente historia para esta fecha'
+        return datos
+
+    #Nombre de la columna con el MA
+    if resName=='':
+        resName=colName + "-EMA"
+
+    #Parámetro para suavizamiento
+    k=2.0/(window + 1)
+
+    #Último índice
+    lastIndex=datos.shape[0] - 1
+
+    #En este numpy array guardo los datos del EMA
+    EMA=np.zeros(datos.shape[0])
+
+    #Primer valor del EMA
+    EMA[indiceInicio]=np.mean(datos[colName].iloc[indiceInicio - window +1 : indiceInicio +1])
+
+    for t in range(1,lastIndex-indiceInicio+1):
+        #Calcula el EMA
+        EMA[indiceInicio+t]=datos[colName].iloc[indiceInicio+t]*k + EMA[indiceInicio + t-1]*(1-k)
+
+    #Añade la nueva columna
+    datos[resName]=EMA
+
+    #Filtra a partir del índice correspondiente a la fecha start
+    datos=datos.iloc[indiceInicio:,:]
+    datos=datos.reset_index(drop=True)
+
+    return datos
