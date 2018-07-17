@@ -41,7 +41,7 @@ def leeTabla(ruta="naftrac.csv"):
 ##==============================================================================
 ## Función para calcular un simple moving average
 ##==============================================================================
-def simpleMA(datos,start,window=10,colName='Adj Close',resName=''):
+def simpleMA(datos,start,end='',window=10,colName='Adj Close',resName=''):
     '''
     NOTA: Los datos están ordenados de forma creciente relativo a la fecha
 
@@ -51,6 +51,8 @@ def simpleMA(datos,start,window=10,colName='Adj Close',resName=''):
 
     start: String en formato YYYY-MM-DD que representa la fecha de inicio de
     los valores del MA
+
+    end: String en formato YYYY-MM-DD que representa la fecha final
 
     window: Entero que representa la ventana de tiempo del MA
 
@@ -74,7 +76,11 @@ def simpleMA(datos,start,window=10,colName='Adj Close',resName=''):
         resName=colName + "-MA"
 
     #Último índice
-    lastIndex=datos.shape[0] - 1
+    if end=='':
+        lastIndex=datos.shape[0] - 1
+    else:
+        lastIndex=datos[datos['Date']==end].index[0]
+
 
     #En este numpy array guardo los datos del MA
     MA=np.zeros(datos.shape[0])
@@ -92,7 +98,7 @@ def simpleMA(datos,start,window=10,colName='Adj Close',resName=''):
     resultado[resName]=MA
 
     #Filtra a partir del índice correspondiente a la fecha start
-    resultado=resultado.iloc[indiceInicio:,:]
+    resultado=resultado.iloc[indiceInicio:lastIndex+1,:]
     resultado=resultado.reset_index(drop=True)
 
     return resultado
@@ -100,7 +106,7 @@ def simpleMA(datos,start,window=10,colName='Adj Close',resName=''):
 ##==============================================================================
 ## Función para calcular bandas de bollinger
 ##==============================================================================
-def bollinger(datos,start,window=10,k=2.0,colName='Adj Close'):
+def bollinger(datos,start,end='',window=10,k=2.0,colName='Adj Close'):
     '''
     NOTA: Los datos están ordenados de forma creciente relativo a la fecha
 
@@ -110,6 +116,8 @@ def bollinger(datos,start,window=10,k=2.0,colName='Adj Close'):
 
     start: String en formato YYYY-MM-DD que representa la fecha de inicio de
     los valores del indicador
+
+    end: String en formato YYYY-MM-DD que representa la fecha final
 
     window: Entero que representa la ventana de tiempo
 
@@ -133,7 +141,10 @@ def bollinger(datos,start,window=10,k=2.0,colName='Adj Close'):
     resBMA=colName + '-BB-MA'
 
     #Último índice
-    lastIndex=datos.shape[0] - 1
+    if end=='':
+        lastIndex=datos.shape[0] - 1
+    else:
+        lastIndex=datos[datos['Date']==end].index[0]
 
     #En este numpy array guardo los datos del MA y las bandas
     MA=np.zeros(datos.shape[0])
@@ -160,7 +171,7 @@ def bollinger(datos,start,window=10,k=2.0,colName='Adj Close'):
     resultado[resBDown]=Down
 
     #Filtra a partir del índice correspondiente a la fecha start
-    resultado=resultado.iloc[indiceInicio:,:]
+    resultado=resultado.iloc[indiceInicio:lastIndex + 1,:]
     resultado=resultado.reset_index(drop=True)
 
     return resultado
@@ -168,7 +179,7 @@ def bollinger(datos,start,window=10,k=2.0,colName='Adj Close'):
 ##==============================================================================
 ## Función para calcular un exponential moving average
 ##==============================================================================
-def exponentialMA(datos,start,window=10,colName='Adj Close',resName=''):
+def exponentialMA(datos,start,end='',window=10,colName='Adj Close',resName=''):
     '''
     NOTA: Los datos están ordenados de forma creciente relativo a la fecha
 
@@ -178,6 +189,8 @@ def exponentialMA(datos,start,window=10,colName='Adj Close',resName=''):
 
     start: String en formato YYYY-MM-DD que representa la fecha de inicio de
     los valores del MA
+
+    end: String en formato YYYY-MM-DD que representa la fecha final
 
     window: Entero que representa la ventana de tiempo del MA
 
@@ -204,7 +217,10 @@ def exponentialMA(datos,start,window=10,colName='Adj Close',resName=''):
     k=2.0/(window + 1)
 
     #Último índice
-    lastIndex=datos.shape[0] - 1
+    if end=='':
+        lastIndex=datos.shape[0] - 1
+    else:
+        lastIndex=datos[datos['Date']==end].index[0]
 
     #En este numpy array guardo los datos del EMA
     EMA=np.zeros(datos.shape[0])
@@ -221,7 +237,40 @@ def exponentialMA(datos,start,window=10,colName='Adj Close',resName=''):
     resultado[resName]=EMA
 
     #Filtra a partir del índice correspondiente a la fecha start
-    resultado=resultado.iloc[indiceInicio:,:]
+    resultado=resultado.iloc[indiceInicio:lastIndex + 1,:]
     resultado=resultado.reset_index(drop=True)
 
     return resultado
+
+##==============================================================================
+## Función para calcular un MACD
+##==============================================================================
+def MACD(datos,start,shortWindow=12,longWindow=26,signalWindow=9,colName='Adj Close'):
+    '''
+    NOTA: Los datos están ordenados de forma creciente relativo a la fecha
+
+    ENTRADA
+    datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
+    columna numérica
+
+    start: String en formato YYYY-MM-DD que representa la fecha de inicio de
+    los valores.
+
+    shortWindow: Entero que representa la ventana de tiempo del EMA de corto plazo
+
+    longWindow: Entero que representa la ventana de tiempo del EMA de largo plazo
+
+    signalWindow: Entero que representa la ventana de tiempo del signalLine
+
+    colName: String que representa el nombre de la columna con la cual se calculará el indicador
+
+    SALIDA
+    resultado: Dataframe datos con las columnas relacionadas al indicador MACD
+    '''
+
+## PENDIENTE
+## Agregar parámetro end (fechaFinal)
+## MACD
+## Función para obtener un dataframe con varios indicadores de una lista
+## Quitar MA de las bandas de bollinger
+## RSI
