@@ -245,7 +245,7 @@ def exponentialMA(datos,start,end='',window=10,colName='Adj Close',resName=''):
 ##==============================================================================
 ## Función para calcular un MACD
 ##==============================================================================
-def MACD(datos,start,shortWindow=12,longWindow=26,signalWindow=9,colName='Adj Close'):
+def MACD(datos,start,end='',shortWindow=12,longWindow=26,signalWindow=9,colName='Adj Close'):
     '''
     NOTA: Los datos están ordenados de forma creciente relativo a la fecha
 
@@ -255,6 +255,8 @@ def MACD(datos,start,shortWindow=12,longWindow=26,signalWindow=9,colName='Adj Cl
 
     start: String en formato YYYY-MM-DD que representa la fecha de inicio de
     los valores.
+
+    end: String en formato YYYY-MM-DD que representa la fecha final
 
     shortWindow: Entero que representa la ventana de tiempo del EMA de corto plazo
 
@@ -268,9 +270,48 @@ def MACD(datos,start,shortWindow=12,longWindow=26,signalWindow=9,colName='Adj Cl
     resultado: Dataframe datos con las columnas relacionadas al indicador MACD
     '''
 
+    #Localiza la fecha de inicio y revisa si hay suficiente información
+    indiceInicio=datos[datos['Date']==start].index[0]
+    if longWindow > indiceInicio + 1:
+        print 'No hay suficiente historia para esta fecha'
+        return datos
+
+    #Último índice
+    if end=='':
+        lastIndex=datos.shape[0] - 1
+    else:
+        lastIndex=datos[datos['Date']==end].index[0]
+
+    #Nombre de las columnas
+    nameShortEMA=colName + "-short-EMA-" + str(shortWindow)
+    nameLongEMA=colName + "-long-EMA-" + str(longWindow)
+    nameSignal=colName + "-signal-EMA-" + str(signalWindow)
+    MACDName= colName + "-MACD-" + "-short-" + str(shortWindow) + "-long-" + str(longWindow)
+
+    #Calcula los EMA de corto y largo plazo, después su diferencia
+    shortEMA= exponentialMA(datos,start,end,window=shortWindow,colName=colName,resName=nameShortEMA)
+    #shortEMA=shortEMA[nameShortEMA]
+    longEMA= exponentialMA(datos,start,end,window=longWindow,colName=colName,resName=nameLongEMA)
+    #longEMA=longEMA[nameLongEMA]
+
+    #Diferencia
+    MACD=shortEMA[nameShortEMA] - longEMA[nameLongEMA]
+
+    #Calcula signal line
+    signalLine=exponentialMA(datos,start,end,window=signalWindow,colName=colName,resName=nameSignal)
+    #signalLine=signalLine[nameSignal]
+
+    #Agrega las columnas
+    resultado=deepcopy(datos.iloc[indiceInicio:lastIndex +1,:])
+    resultado=resultado.reset_index(drop=True)
+    resultado[nameShortEMA]=shortEMA[nameShortEMA]
+    resultado[nameLongEMA]=longEMA[nameLongEMA]
+    resultado[MACDName]=MACD
+    resultado[nameSignal]=signalLine[nameSignal]
+
+    return resultado
+
 ## PENDIENTE
-## Agregar parámetro end (fechaFinal)
-## MACD
 ## Función para obtener un dataframe con varios indicadores de una lista
 ## Quitar MA de las bandas de bollinger
 ## RSI
