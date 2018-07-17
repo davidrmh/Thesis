@@ -59,7 +59,7 @@ def simpleMA(datos,start,window=10,colName='Adj Close',resName=''):
     resName: String que representa el nombre de la columna con los datos del MA
 
     SALIDA
-    datos: Dataframe datos con la columna resName añadida e iniciando en el
+    resultado: Dataframe datos con la columna resName añadida e iniciando en el
     renglón correspondiente a la fecha start
     '''
 
@@ -88,13 +88,14 @@ def simpleMA(datos,start,window=10,colName='Adj Close',resName=''):
         MA[aux+t]=np.mean(datos[colName].iloc[indiceInicio - window +1 +t : indiceInicio + t +1])
 
     #Añade la nueva columna
-    datos[resName]=MA
+    resultado=deepcopy(datos)
+    resultado[resName]=MA
 
     #Filtra a partir del índice correspondiente a la fecha start
-    datos=datos.iloc[indiceInicio:,:]
-    datos=datos.reset_index(drop=True)
+    resultado=resultado.iloc[indiceInicio:,:]
+    resultado=resultado.reset_index(drop=True)
 
-    return datos
+    return resultado
 
 ##==============================================================================
 ## Función para calcular bandas de bollinger
@@ -117,7 +118,7 @@ def bollinger(datos,start,window=10,k=2.0,colName='Adj Close'):
     colName: String con el nombre de la columna que contiene los datos numéricos
 
     SALIDA
-    datos: Dataframe datos con nuevas columnas relacionadas al indicador
+    resultado: Dataframe datos con nuevas columnas relacionadas al indicador
     '''
 
     #Localiza la fecha de inicio y revisa si hay suficiente información
@@ -153,15 +154,16 @@ def bollinger(datos,start,window=10,k=2.0,colName='Adj Close'):
         Down[aux+t]= MA[aux+t] - k* desviacion
 
     #Añade las nuevas columnas
-    datos[resBMA]=MA
-    datos[resBUp]=Up
-    datos[resBDown]=Down
+    resultado=deepcopy(datos)
+    resultado[resBMA]=MA
+    resultado[resBUp]=Up
+    resultado[resBDown]=Down
 
     #Filtra a partir del índice correspondiente a la fecha start
-    datos=datos.iloc[indiceInicio:,:]
-    datos=datos.reset_index(drop=True)
+    resultado=resultado.iloc[indiceInicio:,:]
+    resultado=resultado.reset_index(drop=True)
 
-    return datos
+    return resultado
 
 ##==============================================================================
 ## Función para calcular un exponential moving average
@@ -184,7 +186,7 @@ def exponentialMA(datos,start,window=10,colName='Adj Close',resName=''):
     resName: String que representa el nombre de la columna con los datos del MA
 
     SALIDA
-    datos: Dataframe datos con la columna resName añadida e iniciando en el
+    resultado: Dataframe datos con la columna resName añadida e iniciando en el
     renglón correspondiente a la fecha start
     '''
 
@@ -215,10 +217,11 @@ def exponentialMA(datos,start,window=10,colName='Adj Close',resName=''):
         EMA[indiceInicio+t]=datos[colName].iloc[indiceInicio+t]*k + EMA[indiceInicio + t-1]*(1-k)
 
     #Añade la nueva columna
-    datos[resName]=EMA
+    resultado=deepcopy(datos)
+    resultado[resName]=EMA
 
     #Filtra a partir del índice correspondiente a la fecha start
-    datos=datos.iloc[indiceInicio:,:]
-    datos=datos.reset_index(drop=True)
+    resultado=resultado.iloc[indiceInicio:,:]
+    resultado=resultado.reset_index(drop=True)
 
-    return datos
+    return resultado
