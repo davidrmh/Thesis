@@ -32,6 +32,7 @@ def leeTabla(ruta="naftrac.csv"):
     data['Date']=pd.to_datetime(data['Date'])
     data["Open"]=data["Open"].astype('float')
     data["High"]=data["High"].astype('float')
+    data["Low"]=data["Low"].astype('float')
     data["Close"]=data["Close"].astype('float')
     data["Adj Close"]=data["Adj Close"].astype('float')
     data["Volume"]=data["Volume"].astype('int')
