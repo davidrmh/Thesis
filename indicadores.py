@@ -324,7 +324,7 @@ def MACD(datos,start,end='',shortWindow=12,longWindow=26,signalWindow=9,colName=
     resultado[nameSignal]=signalLine[nameSignal]
 
     #agrega metadatos
-    resultado.tipo = 'macd'
+    resultado.tipo = 'MACD'
     resultado.MACDName = MACDName
 
     return resultado
@@ -414,7 +414,7 @@ def combinaIndicadores(listaIndicadores):
         elif element.tipo == 'exponentialMA':
             key = element.resName
             columnas.append(element[key])
-        elif element.tipo == 'macd':
+        elif element.tipo == 'MACD':
             key = element.MACDName
             columnas.append(element[key])
 
