@@ -45,7 +45,7 @@ def normaliza_min_max(datos,lmin='',lmax=''):
 
     for i in range(0,n_col):
         col_name = datos.columns[i]
-        diccionario[col_name] = (datos.iloc[:,i].astype('float') - lmin[i]) / (lmax[i] - lmin[i] + eps)
+        diccionario[col_name] = (datos.iloc[:,i].astype('float') - lmin[i] + eps) / (lmax[i] - lmin[i] + eps)
 
     normalizados = pd.DataFrame(data = diccionario)
 
