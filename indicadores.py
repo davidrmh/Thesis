@@ -74,7 +74,7 @@ def simpleMA(datos,start,end='',window=10,colName='Adj Close',resName=''):
 
     #Nombre de la columna con el MA
     if resName=='':
-        resName=colName + "-MA"
+        resName=colName + "-MA-" + str(window)
 
     #Último índice
     if end=='':
@@ -101,6 +101,10 @@ def simpleMA(datos,start,end='',window=10,colName='Adj Close',resName=''):
     #Filtra a partir del índice correspondiente a la fecha start
     resultado=resultado.iloc[indiceInicio:lastIndex+1,:]
     resultado=resultado.reset_index(drop=True)
+
+    #añade metadatos
+    resultado.tipo = 'simpleMA'
+    resultado.resName = resName
 
     return resultado
 
