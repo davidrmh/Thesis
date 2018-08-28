@@ -319,6 +319,10 @@ def MACD(datos,start,end='',shortWindow=12,longWindow=26,signalWindow=9,colName=
     resultado[MACDName]=MACD
     resultado[nameSignal]=signalLine[nameSignal]
 
+    #agrega metadatos
+    resultado.tip = 'macd'
+    resultado.MACDName = MACDName
+
     return resultado
 
 ## PENDIENTE
