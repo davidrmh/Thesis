@@ -141,9 +141,9 @@ def bollinger(datos,start,end='',window=10,k=2.0,colName='Adj Close'):
         return datos
 
     #Nombre de las columnas que se crearán
-    resBUp=colName + '-BB-Up'
-    resBDown=colName + '-BB-Down'
-    resBMA=colName + '-BB-MA'
+    resBUp=colName + '-BB-Up-' + str(window) + '-' + str(k)
+    resBDown=colName + '-BB-Down-'+ str(window) + '-' + str(k)
+    resBMA=colName + '-BB-MA-' + str(window) + '-' + str(k)
 
     #Último índice
     if end=='':
@@ -178,6 +178,11 @@ def bollinger(datos,start,end='',window=10,k=2.0,colName='Adj Close'):
     #Filtra a partir del índice correspondiente a la fecha start
     resultado=resultado.iloc[indiceInicio:lastIndex + 1,:]
     resultado=resultado.reset_index(drop=True)
+
+    #agrega metadatos
+    resultado.tipo = 'bollinger'
+    resultado.resBUp = resBUp
+    resultado.resBDown = resBDown
 
     return resultado
 
