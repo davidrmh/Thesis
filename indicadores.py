@@ -329,7 +329,52 @@ def MACD(datos,start,end='',shortWindow=12,longWindow=26,signalWindow=9,colName=
 
     return resultado
 
+##==============================================================================
+## Función para crear una lista con la información de distintos indicadores
+##==============================================================================
+def creaIndicadores (dicc = {}, start = '', end = '', datos):
+    '''
+    ENTRADA
+    dicc: Un diccionario de la forma
+    dicc[key] = {'tipo':'FUNCION','parametros':{'window':10,...}}
+    en donde FUNCIÓN corresponde al nombre de alguna de las funciones
+    para calcular un indicador en particular.
+    parametros es un diccionario con los parámetros del indicador de interés
+
+    start, end: Strings de la format 'YYYY-MM-DD' representando la fecha
+    de inicio y final de los datos
+
+    datos: Pandas dataframe con la información del CSV de Yahoo Finance
+
+    SALIDA
+    resultado: Lista de pandas dataframes
+    '''
+
+    resultado = []
+    for key in dicc.keys():
+        tipo = dicc[key]['tipo']
+
+        if tipo == 'simpleMA':
+            #simpleMA(datos,start,end,window,colName='Adj Close')
+            window = dicc[key]['parametros']['window']
+            colName = dicc[key]['parametros']['colName']
+            resultado.append(simpleMA(datos,start,end,window,colName))
+
+        elif tipo == 'bollinger':
+            #bollinger(datos,start,end,window,k,colName='Adj Close')
+            window = dicc[key]['parametros']['window']
+            colName = dicc[key]['parametros']['colName']
+            k = dicc[key]['parametros']['k']
+            resultado.append(bollinger(datos,start,end,window,k,colName))
+
+        elif tipo == 'exponentialMA':
+            #exponentialMA(datos,start,end,window,colName)
+            window = dicc[key]['parametros']['window']
+            colName = dicc[key]['parametros']['colName']
+            resultado.append(exponentialMA(datos,start,end,window,colName))
+
+
+
 ## PENDIENTE
-## Función para obtener un dataframe con varios indicadores de una lista
-## Quitar MA de las bandas de bollinger
+## Función para combinar los dataframes de la función creaIndicadores
 ## RSI
