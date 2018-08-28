@@ -29,3 +29,11 @@
   + Normalizar el conjunto de prueba y aplicar *K-NN* para obtener la clase que pertenece cada observación.
 
 + Calcular las métricas de desempeño.
+
+## Observaciones
+
++ En los códigos debo de asegurarme que el orden de las columnas sea el mismo en
+el conjunto de entrenamiento y en el de prueba, además de utilizar los mismos
+parámetros para cada indicador.
+
++ Lo anterior me limita a utilizar sólo un conjunto de parámetros.
