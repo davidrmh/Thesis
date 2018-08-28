@@ -383,6 +383,45 @@ def creaIndicadores (datos, dicc = {}, start = '', end = ''):
 
     return resultado
 
+##==============================================================================
+## Función para combinar una lista de indicadores
+##==============================================================================
+def combinaIndicadores(listaIndicadores):
+    '''
+    ENTRADA
+    listaIndicadores: Lista creada con la función creaIndicadores
+
+    SALIDA
+    resultado: Pandas dataframe con las columnas de interés de cada
+    indicador
+
+    '''
+
+    #Aquí se guardará cada columna de interés
+    columnas = []
+
+    for element in listaIndicadores:
+        if element.tipo == 'simpleMA':
+            key = element.resName
+            columnas.append(element[key])
+
+        elif element.tipo == 'bollinger':
+            key1 = element.resBUp
+            key2 = element.resBDown
+            columnas.append(element[key1])
+            columnas.append(element[key2])
+
+        elif element.tipo == 'exponentialMA':
+            key = element.resName
+            columnas.append(element[key])
+        elif element.tipo == 'macd':
+            key = element.MACDName
+            columnas.append(element[key])
+
+    resultado = pd.concat(columnas, axis = 1)
+
+    return resultado
+
 
 
 ## PENDIENTE
