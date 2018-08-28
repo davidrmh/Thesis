@@ -324,7 +324,7 @@ def MACD(datos,start,end='',shortWindow=12,longWindow=26,signalWindow=9,colName=
     resultado[nameSignal]=signalLine[nameSignal]
 
     #agrega metadatos
-    resultado.tip = 'macd'
+    resultado.tipo = 'macd'
     resultado.MACDName = MACDName
 
     return resultado
@@ -332,7 +332,7 @@ def MACD(datos,start,end='',shortWindow=12,longWindow=26,signalWindow=9,colName=
 ##==============================================================================
 ## Función para crear una lista con la información de distintos indicadores
 ##==============================================================================
-def creaIndicadores (dicc = {}, start = '', end = '', datos):
+def creaIndicadores (datos, dicc = {}, start = '', end = ''):
     '''
     ENTRADA
     dicc: Un diccionario de la forma
@@ -372,6 +372,16 @@ def creaIndicadores (dicc = {}, start = '', end = '', datos):
             window = dicc[key]['parametros']['window']
             colName = dicc[key]['parametros']['colName']
             resultado.append(exponentialMA(datos,start,end,window,colName))
+
+        elif tipo == 'MACD':
+            #MACD(datos,start,end,shortWindow,longWindow,signalWindow,colName='Adj Close'):
+            shortWindow = dicc[key]['parametros']['shortWindow']
+            longWindow = dicc[key]['parametros']['longWindow']
+            signalWindow = dicc[key]['parametros']['signalWindow']
+            colName = dicc[key]['parametros']['colName']
+            resultado.append(MACD(datos, start, end, shortWindow, longWindow, signalWindow, colName))
+
+    return resultado
 
 
 
