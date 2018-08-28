@@ -221,7 +221,7 @@ def exponentialMA(datos,start,end='',window=10,colName='Adj Close',resName=''):
 
     #Nombre de la columna con el MA
     if resName=='':
-        resName=colName + "-EMA"
+        resName=colName + "-EMA-" + str(window)
 
     #Parámetro para suavizamiento
     k=2.0/(window + 1)
@@ -249,6 +249,10 @@ def exponentialMA(datos,start,end='',window=10,colName='Adj Close',resName=''):
     #Filtra a partir del índice correspondiente a la fecha start
     resultado=resultado.iloc[indiceInicio:lastIndex + 1,:]
     resultado=resultado.reset_index(drop=True)
+
+    #Agrega metadatos
+    resultado.tipo = 'exponentialMA'
+    resultado.resName = resName
 
     return resultado
 
