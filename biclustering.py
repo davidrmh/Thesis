@@ -7,6 +7,7 @@ import pandas as pd
 from sklearn import svm
 from sklearn import tree
 import numpy as np
+from sklearn.preprocessing import StandardScaler
 
 ##==============================================================================
 ## Biclustering Opción 1
@@ -29,26 +30,35 @@ dicc = {1: {'parametros': {'colName': 'Adj Close', 'window': 10}, 'tipo': 'simpl
 
 #Fechas para el conjunto de entrenamiento
 start_train = '2015-01-02'
-end_train = '2015-01-30'
+end_train = '2015-03-31'
 
 #Fechas para el conjunto de prueba
 start_test = '2015-02-03'
 end_test = '2015-03-02'
 
 #nombre del conjuto de entrenamiento etiquetado
-pathTrain = 'naftrac-2015-01-02-2015-01-30.csv'
+pathTrain = 'naftrac-2015-01-02-2015-03-31.csv'
+
+#Para escalar los datos (mean = 0, std = 1)
+scaler = StandardScaler()
 
 #Obtiene el valor de los indicadores para el conjunto de entrenamiento
 #Esto se hace sólo con el fin de obtener las lista lmin y lmax, necesarias
 #para normalizar el conjunto de prueba
 listaIndEntrena = ind.creaIndicadores(datos, dicc, start_train, end_train)
 atributosEntrena = ind.combinaIndicadores(listaIndEntrena)
-atributosEntrenaNorm,lmin,lmax = nor.normaliza_min_max(atributosEntrena)
+#atributosEntrenaNorm,lmin,lmax = nor.normaliza_min_max(atributosEntrena)
+
+#Escala a media 0 desv.std 1
+atributosEntrenaNorm = scaler.fit_transform(atributosEntrena)
 
 #Obtiene el valor de los indicadores para el conjunto de prueba
 listaIndPrueba = ind.creaIndicadores(datos, dicc, start_test, end_test)
 atributosPrueba = ind.combinaIndicadores(listaIndPrueba)
-atributosPruebaNorm,lmin,lmax = nor.normaliza_min_max(atributosPrueba,lmin,lmax)
+#atributosPruebaNorm,lmin,lmax = nor.normaliza_min_max(atributosPrueba,lmin,lmax)
+
+#Escala a media 0 desv.std 1
+atributosPruebaNorm = scaler.transform(atributosPrueba)
 
 #Carga el conjunto de entrenamiento
 entrena = pd.read_csv(pathTrain)
@@ -103,17 +113,26 @@ end_test = '2015-04-30'
 #nombre del conjuto de entrenamiento etiquetado
 pathTrain = 'naftrac-2015-01-02-2015-03-31.csv'
 
+#Para escalar los datos (mean = 0, std = 1)
+scaler = StandardScaler()
+
 #Obtiene el valor de los indicadores para el conjunto de entrenamiento
 #Esto se hace sólo con el fin de obtener las lista lmin y lmax, necesarias
 #para normalizar el conjunto de prueba
 listaIndEntrena = ind.creaIndicadores(datos, dicc, start_train, end_train)
 atributosEntrena = ind.combinaIndicadores(listaIndEntrena)
-atributosEntrenaNorm,lmin,lmax = nor.normaliza_min_max(atributosEntrena)
+#atributosEntrenaNorm,lmin,lmax = nor.normaliza_min_max(atributosEntrena)
+
+#Escala a media 0 desv.std 1
+atributosEntrenaNorm = scaler.fit_transform(atributosEntrena)
 
 #Obtiene el valor de los indicadores para el conjunto de prueba
 listaIndPrueba = ind.creaIndicadores(datos, dicc, start_test, end_test)
 atributosPrueba = ind.combinaIndicadores(listaIndPrueba)
-atributosPruebaNorm,lmin,lmax = nor.normaliza_min_max(atributosPrueba,lmin,lmax)
+#atributosPruebaNorm,lmin,lmax = nor.normaliza_min_max(atributosPrueba,lmin,lmax)
+
+#Escala a media 0 desv.std 1
+atributosPruebaNorm = scaler.transform(atributosPrueba)
 
 #Carga el conjunto de entrenamiento
 entrena = pd.read_csv(pathTrain)
@@ -149,7 +168,8 @@ nObs = atributosPruebaNorm.shape[0]
 nVec = len(diccVectores['compra'])
 
 for i in range(0,nObs):
-    observacion = np.array(atributosPruebaNorm.iloc[i,:])
+    #observacion = np.array(atributosPruebaNorm.iloc[i,:])
+    observacion = atributosPruebaNorm[i]
 
     distCompra = 0
     distVenta = 0
