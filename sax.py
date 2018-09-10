@@ -114,3 +114,45 @@ def segmentos(window, num_seg = 3):
             segmentos[i] = (float(num_seg) / n) * np.sum(x)
 
     return segmentos, window_norm
+
+##===========================================================================##
+## Función para convertir un segmento en una palabra
+##===========================================================================##
+def palabra(segmentos, beta, alfabeto):
+    '''
+    ENTRADA
+    segmentos: numpy array que representa los segmentos de una ventana
+    (ver función segmentos)
+
+    beta: numpy array que contiene los breakpoints de una curva normal
+    (ver función divide_normal)
+
+    alfabeto: numpy array de longitud len(beta) + 1. Cada entrada es una
+    letra del alfabeto a utilizar
+
+    SALIDA
+    word: String que representa el segmento
+    '''
+    word = ''
+
+    for segmento in segmentos:
+
+        #Casos base
+        if segmento <= beta[0]:
+            word = word + alfabeto[0]
+        elif segmento > beta[-1]:
+            word = word + alfabeto[-1]
+
+        else:
+            for i in range(1, len(beta)):
+
+                #extremo izquierdo
+                bleft = beta[i-1]
+
+                #extremo derecho
+                bright = beta[i]
+
+                if bleft < segmento and segmento <= bright:
+                    word = word + alfabeto[i]
+
+    return word                        
