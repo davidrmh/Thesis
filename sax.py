@@ -155,4 +155,44 @@ def palabra(segmentos, beta, alfabeto):
                 if bleft < segmento and segmento <= bright:
                     word = word + alfabeto[i]
 
-    return word                        
+    return word
+
+##===========================================================================##
+## Función para crear ventanas deslizantes a partir de una serie de tiempo
+## y una ventana de tiempo dada.
+## La serie de tiempo se supone ordenada de forma creciente relativo al tiempo
+##
+## La idea para crear cada ventana es la siguiente
+## ventana 1 = serie[0:k] (es decir se incluye serie[0,1,...,k-1])
+## ventana 2 = serie[1:k+1] (es decir se incluye serie[1,2,...,k])
+## ventana 3 = serie[2:k+2] (es decir se incluye serie[2,3,...,k+1])
+## ventana j = serie[j-1:k+j-1] (es decir se incluye serie[j-1,j,...,k + j - 2])
+##
+## se crean un total de n - k + 1 ventanas
+##===========================================================================##
+def ventanas(serie, k):
+    '''
+    ENTRADA
+    serie: Numpy array con los datos de la serie de tiempo
+
+    k: Entero que representa el tamaño de cada ventana
+
+    SALIDA
+    windows: lista con las ventanas creadas. Se supone un orden creciente
+    respecto al tiempo
+    '''
+
+    #longitud de la serie de tiempo
+    n = len(serie)
+
+    #revisa que k < n
+    if k>n:
+        print 'k debe de ser menor que len(serie)'
+        return 0
+
+    windows = []
+
+    for j in range(1, n - k + 2):
+        windows.append(serie[j-1:k + j - 1])
+
+    return windows
