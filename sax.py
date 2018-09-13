@@ -262,4 +262,43 @@ def mindist(palabra1, palabra2, tabla, n):
 
     distancia = np.sqrt(float(n) / w) * np.sqrt(suma)
 
-    return distancia    
+    return distancia
+
+##===========================================================================##
+## Función para encontrar los patrones en un conjunto de ventanas de tiempo
+##===========================================================================##
+def encuentra_patrones(windows, num_seg, beta, alfabeto):
+    '''
+    ENTRADA
+    windows: windows: lista con las ventanas creadas. Se supone un orden creciente
+    respecto al tiempo (ver función ventanas)
+
+    num_seg: Número de segmentos en el que se divide una ventana en particular
+
+    beta: numpy array con len(alfabeto) - 1 elementos, cada elemento
+    representa un breakpoint en la curva normal.
+
+    alfabeto: Lista con el alfabeto utilizado
+
+    SALIDA
+    patrones: Diccionario con cada key igual a un patrón y value el número de
+    veces que se repitió dicho patrón
+    '''
+
+    patrones ={}
+
+    for window in windows:
+
+        #Obtiene los segmentos horizontales
+        seg = segmentos(window, num_seg)[0]
+
+        #obtiene la palabra
+        word = palabra(seg, beta, alfabeto)
+
+        #agrega al diccionario (en caso de ser necesario) e incrementa el conteo
+        if patrones.has_key(word):
+            patrones[word] = patrones[word] + 1
+        else:
+            patrones[word] = 1
+
+    return patrones
