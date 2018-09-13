@@ -234,3 +234,32 @@ def tabla_distancias(alfabeto, beta):
     tabla = pd.DataFrame(data = tabla, index = alfabeto, columns = alfabeto)
 
     return tabla
+
+##===========================================================================##
+## Función para calcular la función MINDIST
+##===========================================================================##
+def mindist(palabra1, palabra2, tabla, n):
+    '''
+    ENTRADA
+    palabra1, palabra2: Strings creados con la función palabra
+
+    tabla: pandas DataFrame creado con la función tabla_distancias.
+
+    n: Tamaño de la ventana. Debe ser el mismo parámetro que fue utilizado para
+    la función ventanas
+
+    SALIDA
+    distancia: número real que representa la distancia entre las palabras
+    '''
+    #número de segmentos (un carácter por segmento)
+    w = len(palabra1)
+
+    #para acumular la suma
+    suma = 0
+
+    for i in range(0, w):
+        suma = suma + tabla.loc[palabra1[i], palabra2[i]]**2
+
+    distancia = np.sqrt(float(n) / w) * np.sqrt(suma)
+
+    return distancia    
