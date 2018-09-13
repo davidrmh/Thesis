@@ -5,6 +5,7 @@
 import scipy.stats
 import numpy as np
 import copy as cp
+import pandas as pd
 
 ##==============================================================================
 ## Función para dividir una distribución normal en N divisiones equiprobables
@@ -196,3 +197,40 @@ def ventanas(serie, k):
         windows.append(serie[j-1:k + j - 1])
 
     return windows
+
+
+##===========================================================================##
+## Función para calcular la tabla de distancias entre los caracteres
+## de un alfabeto dado
+##===========================================================================##
+def tabla_distancias(alfabeto, beta):
+    '''
+    ENTRADA
+    alfabeto: Lista con el alfabeto utilizado
+
+    beta: divisiones de la distribución normal (ver función divide_normal)
+
+    SALIDA
+    tabla: pandas DataFrame con la distancia de cada letra. La dimension es
+    len(alfabeto) X len(alfabeto)
+    '''
+
+    #longitud del alfabeto
+    n = len(alfabeto)
+
+    #inicializa la tabla
+    tabla = np.zeros(shape = (n , n))
+
+    #llena la tabla
+    for i in range(0,n): #renglón
+        for j in range(0,n): #columna
+            if np.abs(i-j)>1:
+                if j - 1 > i:
+                    tabla[i][j] = beta[j-1] - beta[i]
+                elif i > j + 1:
+                    tabla[i][j] = beta[i-1] - beta[j]
+
+    #convierte a DataFrame
+    tabla = pd.DataFrame(data = tabla, index = alfabeto, columns = alfabeto)
+
+    return tabla
