@@ -302,3 +302,22 @@ def encuentra_patrones(windows, num_seg, beta, alfabeto):
             patrones[word] = 1
 
     return patrones
+
+##===========================================================================##
+## Función para generar un alfabeto
+##===========================================================================##
+def genera_alfabeto(num_letras = 5):
+    '''
+    ENTRADA
+    num_letras: número de letras que contendrá el alfabeto
+
+    SALIDA
+    alfabeto: lista de la forma ['A0','A1',...'An']
+    '''
+
+    alfabeto = []
+
+    for i in range(0, num_letras):
+        letra = 'A' + str(i)
+        alfabeto.append(letra)
+    return alfabeto    
