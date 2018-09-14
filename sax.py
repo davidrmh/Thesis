@@ -416,3 +416,30 @@ def regiones_densas(serie, window_size = [10,150], alf_size = [2,20]):
 
     #guarda el archivo
     tabla.to_csv('regiones_densas.csv', index = False)
+
+##===========================================================================##
+## Función para convertir una palabra en un segmento representativo
+##===========================================================================##
+def palabra_a_segmento(word, beta):
+    '''
+    ENTRADA
+    word: String creado con la función palabra
+
+    beta: numpy array creado con la función divide_normal
+
+    SALIDA
+    resultado: numpy array que representa word (extremos derechos de beta)
+    '''
+
+    #Obtiene los índices de acuerdo a la codificación de la palabra
+    #(Ver función genera_alfabeto)
+    indices = word.split('A')[1:]
+
+    resultado = []
+
+    for i in indices:
+        resultado.append(beta[int(i)])
+
+    resultado = np.array(resultado)
+
+    return resultado
