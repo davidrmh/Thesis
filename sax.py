@@ -250,15 +250,22 @@ def mindist(palabra1, palabra2, tabla, n):
 
     SALIDA
     distancia: número real que representa la distancia entre las palabras
+
+    NOTA: Las palabras deben de obtenerse con un alfabeto creado con la función
+    genera_alfabeto
     '''
-    #número de segmentos (un carácter por segmento)
-    w = len(palabra1)
+    #número de segmentos
+    w = len(palabra1.split('A')[1:])
+
+    #indices de la tabla
+    rows = palabra1.split('A')[1:]
+    cols = palabra2.split('A')[1:]
 
     #para acumular la suma
     suma = 0
 
     for i in range(0, w):
-        suma = suma + tabla.loc[palabra1[i], palabra2[i]]**2
+        suma = suma + tabla.iloc[int(rows[i]), int(cols[i])]**2
 
     distancia = np.sqrt(float(n) / w) * np.sqrt(suma)
 
