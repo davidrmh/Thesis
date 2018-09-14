@@ -304,6 +304,43 @@ def encuentra_patrones(windows, num_seg, beta, alfabeto):
     return patrones
 
 ##===========================================================================##
+## Función para encontrar los patrones en un conjunto de ventanas de tiempo
+## INCLUYE REPETICIONES
+##===========================================================================##
+def encuentra_patrones_rep(windows, num_seg, beta, alfabeto):
+    '''
+    ENTRADA
+    windows: windows: lista con las ventanas creadas. Se supone un orden creciente
+    respecto al tiempo (ver función ventanas)
+
+    num_seg: Número de segmentos en el que se divide una ventana en particular
+
+    beta: numpy array con len(alfabeto) - 1 elementos, cada elemento
+    representa un breakpoint en la curva normal.
+
+    alfabeto: Lista con el alfabeto utilizado
+
+    SALIDA
+    patrones: Lista con mismo tamaño que windows. Cada elemento es un string
+    representando un patrón
+    '''
+
+    patrones =[]
+
+    for window in windows:
+
+        #Obtiene los segmentos horizontales
+        seg = segmentos(window, num_seg)[0]
+
+        #obtiene la palabra
+        word = palabra(seg, beta, alfabeto)
+
+        #agrega a la lista
+        patrones.append(word)
+
+    return patrones
+
+##===========================================================================##
 ## Función para generar un alfabeto
 ##===========================================================================##
 def genera_alfabeto(num_letras = 5):
