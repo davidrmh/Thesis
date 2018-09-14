@@ -320,4 +320,55 @@ def genera_alfabeto(num_letras = 5):
     for i in range(0, num_letras):
         letra = 'A' + str(i)
         alfabeto.append(letra)
-    return alfabeto    
+    return alfabeto
+##===========================================================================##
+## Función para encontrar las regiones más densas de acuerdo a:
+## tamaño de la ventana de tiempo (n)
+## tamaño de la palabra (en función del tamaño de la ventana, [2,...,n/2])
+## tamaño del alfabeto
+##===========================================================================##
+def regiones_densas(serie, window_size = [10,150], alf_size = [2,20]):
+    '''
+    ENTRADA
+    serie: Numpy array con los datos de la serie de tiempo
+
+    window_size: Lista con [0] la ventana de tiempo más pequeña, [1] la ventana
+    de tiempo más grande
+
+    alf_size: Lista con [0] el tamaño más pequeño del alfabeto, [1] el más grande
+
+    SALIDA
+    escribe un archivo con una tabla que muestra el número de patrones
+    encontrados para cada combinación de parámetros
+    '''
+
+    tabla = []
+
+    for n in range(window_size[0], window_size[1] + 1):
+
+        #Crea las ventanas
+        windows = ventanas(serie, n)
+
+        #tamaño de la palabra (en función de n)
+        for w in range(2, int(n / 2) + 1):
+
+            for a in range(alf_size[0], alf_size[1] + 1):
+
+                #Crea el alfabeto
+                alfabeto = genera_alfabeto(a)
+
+                #Obtiene beta
+                beta = divide_normal(a)
+
+                #Obtiene los patrones
+                patrones = encuentra_patrones(windows, w, beta, alfabeto)
+
+                #crea renglón de la tabla
+                renglon = [n, w, a, len(patrones)]
+                tabla.append(renglon)
+
+    #convierte la tabla en un DataFrame
+    tabla = pd.DataFrame(data = tabla, columns = ('Ventana', 'Palabra', 'Alfabeto', 'Patrones'))
+
+    #guarda el archivo
+    tabla.to_csv('regiones_densas.csv', index = False)
