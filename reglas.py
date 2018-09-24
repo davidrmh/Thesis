@@ -113,4 +113,10 @@ def tabla_bool(datos, comb, ops = ['<=', '>=']):
 
             tabla = compara_series(serie1, serie2, op, tabla)
 
+    #Quita las columnas que tienen la misma señal para cada observación
+    columnas = tabla.columns
+    for columna in columnas:
+        if len(tabla[columna][tabla[columna] == 1]) == tabla.shape[0] or len(tabla[columna][tabla[columna] == 0]) == tabla.shape[0]:
+            del tabla[columna]
+
     return tabla
