@@ -51,3 +51,27 @@ def compara_series(serie1, serie2, op, dataframe):
     df[colName] = resultado
 
     return df
+
+##==============================================================================
+## Función para crear las combinaciones de n en 2 a partir de un conjunto
+## de strings
+##==============================================================================
+def n_en_2(lista):
+    '''
+    ENTRADA
+    lista: Lista de strings
+
+    SALIDA
+    comb: Lista con todas las posibles parejas de elementos en lista
+    '''
+
+    #obtiene la longitud de la lista
+    n = len(lista)
+
+    comb = []
+
+    for i in range(0, n):
+        for j in range(i + 1, n):
+            comb.append([lista[i], lista[j]])
+
+    return comb        
