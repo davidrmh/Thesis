@@ -1054,9 +1054,13 @@ def etiqueta_futuro(datos, start, end, window = 10, umbral_d = -0.015, umbral_u 
     #auxiliar para crear la columna Clase
     aux = np.zeros(datos.shape[0])
 
+    #calcula el promedio
+    #promedio = np.mean(datos['Adj Close'].iloc[indice_fin: indice_fin + window + 1])
+    promedio = np.mean(datos['Adj Close'].iloc[indice_inicio: indice_fin + 1])
+
     for t in range(indice_inicio, indice_fin + 1):
         precio = datos['Adj Close'].iloc[t]
-        promedio = np.mean(datos['Adj Close'].iloc[t: t + window + 1])
+        #promedio = np.mean(datos['Adj Close'].iloc[t: t + window + 1])
         cambio = precio / promedio - 1
 
         if cambio <= umbral_d:
@@ -1072,4 +1076,4 @@ def etiqueta_futuro(datos, start, end, window = 10, umbral_d = -0.015, umbral_u 
     resultado = resultado.iloc[indice_inicio: indice_fin + 1,:]
     resultado = resultado.reset_index(drop = True)
 
-    return resultado                
+    return resultado
