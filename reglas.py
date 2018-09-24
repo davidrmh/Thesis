@@ -74,4 +74,43 @@ def n_en_2(lista):
         for j in range(i + 1, n):
             comb.append([lista[i], lista[j]])
 
-    return comb        
+    return comb
+
+##==============================================================================
+##  Función para crear tabla booleanizada
+##==============================================================================
+def tabla_bool(datos, comb, ops = ['<=', '>=']):
+    '''
+    ENTRADA
+    datos: Pandas dataframe con los valores a comparar
+    (idealmente creado con combinaIndicadores del módulo indicadores)
+
+    comb: Lista de la forma [[str1, str2],[str1, str3],...] (ver n_en_2)
+
+    ops: Lista de strings con las operaciones booleanas para comparar
+
+    SALIDA
+    tabla: pandas dataframe que representa la tabla booleanizada
+    cada columna representa la comparación de dos series en datos de acuerdo
+    a un operador en ops
+    '''
+
+    #número de combinaciones
+    n_comb = len(comb)
+
+    #inicializa la tabla
+    tabla = pd.DataFrame()
+
+    for op in ops:
+        for i in range(0, n_comb):
+            #nombre de las series a compara
+            name1 = comb[i][0]
+            name2 = comb[i][1]
+
+            #series
+            serie1 = datos[name1]
+            serie2 = datos[name2]
+
+            tabla = compara_series(serie1, serie2, op, tabla)
+
+    return tabla
