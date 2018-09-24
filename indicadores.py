@@ -383,7 +383,7 @@ def roc(datos,start,end='',window=10,colName='Adj Close'):
     resultado=resultado.reset_index(drop=True)
 
     #añade metadatos
-    resultado.tipo = 'ROC'
+    resultado.tipo = 'roc'
     resultado.resName = resName
 
     return resultado
@@ -442,6 +442,12 @@ def creaIndicadores (datos, dicc = {}, start = '', end = ''):
             colName = dicc[key]['parametros']['colName']
             resultado.append(MACD(datos, start, end, shortWindow, longWindow, signalWindow, colName))
 
+        elif tipo == 'roc':
+            #roc(datos,start,end,window,colName='Adj Close')
+            window = dicc[key]['parametros']['window']
+            colName = dicc[key]['parametros']['colName']
+            resultado.append(roc(datos,start,end,window,colName))
+
     return resultado
 
 ##==============================================================================
@@ -475,8 +481,13 @@ def combinaIndicadores(listaIndicadores):
         elif element.tipo == 'exponentialMA':
             key = element.resName
             columnas.append(element[key])
+
         elif element.tipo == 'MACD':
             key = element.MACDName
+            columnas.append(element[key])
+
+        elif element.tipo == 'roc':
+            key = element.resName
             columnas.append(element[key])
 
     resultado = pd.concat(columnas, axis = 1)
