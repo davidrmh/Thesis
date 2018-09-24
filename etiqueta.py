@@ -1014,3 +1014,62 @@ def guardaEntrenamiento(datos,fechas,prefijo="naftrac"):
         entrenamiento.to_csv(nombreArchivo,index=False)
 
     return 0
+
+##==============================================================================
+## Función para etiquetar de acuerdo al promedio de los precios futuros
+##==============================================================================
+def etiqueta_futuro(datos, start, end, window = 10, umbral_d = -0.015, umbral_u = 0.015):
+    '''
+    ENTRADA
+    datos: Pandas dataframe con los datos del csv de Yahoo Finance
+
+    start, end: Strings de la forma YYY-MM-DD indicando la fecha inicio y
+    la fecha final
+
+    window: ventana de tiempo utilizada para promediar los precios futuros
+
+    umbral_d, umbral_u: umbrales para clasificar una señala de venta o compra
+    respectivamente.
+    Compra = P[t]/mean(P[t],...,P[t + window - 1]) - 1 >= umbral_u
+    Venta = P[t]/mean(P[t],...,P[t + window - 1]) - 1 <= umbral_u
+
+    SALIDA
+    resultado: Dataframe datos con nueva columna Clase
+    '''
+
+    #Busca el índice de inicio
+    indice_inicio = datos[datos['Date']==start].index[0]
+
+    #Busca el índice final
+    indice_fin = datos[datos['Date']==end].index[0]
+
+    #valida que exista suficiente información
+    if indice_fin + window - 1 > datos.shape[0] - 1:
+        print 'ERROR: No hay suficiente información para esta ventana'
+        return 0
+
+    #inicializa el dataframe resultado
+    resultado = cp.deepcopy(datos)
+
+    #auxiliar para crear la columna Clase
+    aux = np.zeros(datos.shape[0])
+
+    for t in range(indice_inicio, indice_fin + 1):
+        precio = datos['Adj Close'].iloc[t]
+        promedio = np.mean(datos['Adj Close'].iloc[t: t + window + 1])
+        cambio = precio / promedio - 1
+
+        if cambio <= umbral_d:
+            aux[t] = -1
+        elif cambio >= umbral_u:
+            aux[t] = 1
+        else:
+            aux[t] = 0
+
+    #filtra el rango deseado
+    resultado['Clase'] = aux
+
+    resultado = resultado.iloc[indice_inicio: indice_fin + 1,:]
+    resultado = resultado.reset_index(drop = True)
+
+    return resultado                
