@@ -330,6 +330,67 @@ def MACD(datos,start,end='',shortWindow=12,longWindow=26,signalWindow=9,colName=
     return resultado
 
 ##==============================================================================
+## Función para calcular el indicador rate of change (ROC)
+##==============================================================================
+def roc(datos,start,end='',window=10,colName='Adj Close'):
+    '''
+    ENTRADA
+    datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
+    columna numérica
+
+    start, end: strings en formato 'YYYY-MM-DD' representando la fecha de inicio
+    y la fecha final respectivamente
+
+    window: Entero que representa la ventan de tiempo a utilizar
+
+    colName: String que representa el nombre de la columna con la cual se calculará el indicador
+
+    SALIDA
+    resultado: Dataframe datos con una columna extra conteniendo la información
+    del ROC
+    '''
+    #Localiza la fecha de inicio y revisa si hay suficiente información
+    indiceInicio=datos[datos['Date']==start].index[0]
+    if window > indiceInicio + 1:
+        print 'No hay suficiente historia para esta fecha'
+        return datos
+
+    #Último índice
+    if end=='':
+        lastIndex=datos.shape[0] - 1
+    else:
+        lastIndex=datos[datos['Date']==end].index[0]
+
+
+    #En este numpy array guardo los datos del ROC
+    ROC=np.zeros(datos.shape[0])
+
+    #La variable aux se utiliza para llena el arreglo
+    aux=indiceInicio
+
+    for t in range(0,lastIndex-indiceInicio+1):
+
+        #Extrae los datos del bloque correspondiente y calcula el promedio
+        ROC[aux+t] = 100*(datos[colName].iloc[indiceInicio + t] / datos[colName].iloc[indiceInicio - window +1 +t] - 1)
+
+    #Añade la nueva columna
+    resName = colName + '-ROC-' + str(window)
+    resultado=deepcopy(datos)
+    resultado[resName]=ROC
+
+    #Filtra a partir del índice correspondiente a la fecha start
+    resultado=resultado.iloc[indiceInicio:lastIndex+1,:]
+    resultado=resultado.reset_index(drop=True)
+
+    #añade metadatos
+    resultado.tipo = 'ROC'
+    resultado.resName = resName
+
+    return resultado
+
+
+
+##==============================================================================
 ## Función para crear una lista con la información de distintos indicadores
 ##==============================================================================
 def creaIndicadores (datos, dicc = {}, start = '', end = ''):
