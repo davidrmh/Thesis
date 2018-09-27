@@ -438,7 +438,10 @@ def palabra_a_segmento(word, beta):
     resultado = []
 
     for i in indices:
-        resultado.append(beta[int(i)])
+        if int(i) < len(beta):
+            resultado.append(beta[int(i)])
+        elif int(i) >= len(beta):
+            resultado.append(beta[-1])    
 
     resultado = np.array(resultado)
 
