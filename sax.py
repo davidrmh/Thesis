@@ -6,6 +6,7 @@ import scipy.stats
 import numpy as np
 import copy as cp
 import pandas as pd
+import matplotlib.pyplot as plt
 
 ##==============================================================================
 ## Función para dividir una distribución normal en N divisiones equiprobables
@@ -441,8 +442,35 @@ def palabra_a_segmento(word, beta):
         if int(i) < len(beta):
             resultado.append(beta[int(i)])
         elif int(i) >= len(beta):
-            resultado.append(beta[-1])    
+            resultado.append(beta[-1])
 
     resultado = np.array(resultado)
 
     return resultado
+
+##===========================================================================##
+## Funció para graficar segmentos horizontales y una ventana normalizada
+##===========================================================================##
+def grafica_segmentos(segmentos, window_norm):
+    '''
+    ENTRADA
+    segmentos: Numpy array que representa segmentos horizontales
+    (ver función segmentos)
+
+    window_norm: Numpy array que representa la ventana normalizada
+    (Ver función segmentos)
+
+    SALIDA
+    gráfica
+    '''
+
+    #Tamaño de cada segmento
+    n = int(len(window_norm) / len(segmentos))
+
+    plt.plot(window_norm, '-b')
+
+    rango = range(0, len(window_norm), n)
+    for i in range(0,len(rango) - 1):
+        plt.plot(range(rango[i], rango[i + 1] + 1), np.repeat(segmentos[i], n + 1), '-r')
+
+    plt.show()
