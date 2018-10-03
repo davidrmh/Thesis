@@ -492,10 +492,13 @@ tasa=0.0/100
 ##==============================================================================
 ## Función de fitness para el etiquetamiento del método 2
 ##==============================================================================
-def fitnessMetodo2(datos):
+def fitnessMetodo2(datos, flagOper = True):
     '''
     ENTRADA:
     datos. Pandas DataFrame con los precios y la columna Clase
+
+    flagOper. Booleano. True => Considera el número de transacciones
+    False => No considera el número de transacciones
 
     SALIDA:
     exceso. Float. Exceso de ganancia
@@ -552,6 +555,8 @@ def fitnessMetodo2(datos):
     intereses=0
     fUltimaOperacion=pd.to_datetime(fechaInicio,format='%Y-%m-%d')
     variacion=0
+    #contador de operaciones
+    contOper = 0
 
     #No se incluye el último periodo, por eso es numSignals - 1
     #en este periodo se cierra la posición abierta (en caso de haberla)
@@ -598,6 +603,9 @@ def fitnessMetodo2(datos):
             #Se reinicia variación
             variacion=0
 
+            #Se incrementa el contador de operaciones
+            contOper = contOper + 1
+
             #print "El día " + fecha + " se compran " + str(acciones) + " acciones"
             #print "A un precio de " + str(precioEjecucion)
 
@@ -623,6 +631,9 @@ def fitnessMetodo2(datos):
             #Se reinicia el contador de dias
             contLimite=0
 
+            #Se incrementa el contador de operaciones
+            contOper = contOper + 1
+
             #print "A un precio de " + str(precioEjecucion)
 
     #Se cierra posición abierta (si la hay)
@@ -643,11 +654,18 @@ def fitnessMetodo2(datos):
         #Disminuyen acciones
         acciones=0
 
+        #Se incrementa el contador de operaciones
+        contOper = contOper + 1
+
     #Se calcula ganancia final
     ganancia=(efectivo-capital)/capital
 
     #Exceso de ganancia (buscamos maximizar esta cantidad)
     exceso=ganancia-gananciaBH
+
+    #Se ajusta por el número de operaciones
+    if flagOper:
+        exceso = exceso / contOper
 
     return exceso
 
@@ -703,12 +721,15 @@ def creaPoblacion (numPeriodos,popSize,proba=""):
 ##==============================================================================
 ## Función para regresar calcular el fitness de cada individuo en la población
 ##==============================================================================
-def fitnessPoblacion (datos,poblacion):
+def fitnessPoblacion (datos,poblacion, flagOper = True):
     '''
     ENTRADA
     datos. Pandas DataFrame con los precios
 
     poblacion: numpy array  (idealmente creado con la función creaPoblacion)
+
+    flagOper. Booleano. True => Considera el número de transacciones
+    False => No considera el número de transacciones
 
     SALIDA
     fitness: numpy array. arreglo cuya i-ésima entrada representa el fitness
@@ -722,13 +743,13 @@ def fitnessPoblacion (datos,poblacion):
 
     for i in poblacion:
         auxDatos.loc[:,('Clase')]=i #De esta forma para evitar el warning
-        fitness.append(fitnessMetodo2(auxDatos))
+        fitness.append(fitnessMetodo2(auxDatos, flagOper))
 
     sinAjuste=cp.deepcopy(fitness)
     sinAjuste=np.array(sinAjuste)
 
     #Normaliza para que todas las entradas sean positivas
-    margen=0.001 #para evitar entradas con 0
+    margen=0.00001 #para evitar entradas con 0
     probas=np.array(fitness)-np.min(fitness) + margen
     probas=probas/np.sum(probas)
 
@@ -788,18 +809,69 @@ def actualizaProbabilidades (mejores):
 
     return probas
 
+##==============================================================================
+## Función para limpiar las señales repetidas
+##==============================================================================
+def limpiaRepetidas(datos):
+    '''
+    ENTRADA
+    datos: Pandas dataframe con la Columna Clase (ver función etiquetaMetodo2)
+
+    SALIDA
+    datosLimpios: Pandas dataframe 'datos' con la columna Clase eliminando las señales
+    repetidas
+    '''
+    #copia datos
+    datosLimpios = cp.deepcopy(datos)
+
+    #guarda en un numpy array (para modificar sin warnings de pandas)
+    clase = np.array(datosLimpios['Clase'])
+
+    #número de observaciones
+    n = clase.shape[0]
+
+    #compra / venta en el pasado?
+    flagCompra = False
+    flagVenta = False
+
+    for t in range(0, n):
+
+        #Venta en el pasado
+        if clase[t] == -1 and flagCompra == False and flagVenta == True:
+            clase[t] = 0
+        #Se inicia con señal de venta
+        elif clase[t] == -1 and flagCompra == False and flagVenta == False:
+            clase[t] = 0
+        #Compra en el pasado
+        elif clase[t] == 1 and flagCompra == True and flagVenta == False:
+            clase[t] = 0
+
+        #Cambio de banderas
+        elif clase[t] == 1 and flagCompra == False:
+            flagCompra = True
+            flagVenta = False
+        elif clase[t] == -1 and flagVenta == False:
+            flagVenta = True
+            flagCompra = False
+
+    datosLimpios['Clase'] = clase
+
+    return datosLimpios
 
 ##==============================================================================
 ## Función para etiquetar los datos de acuerdo al método 2
 ##==============================================================================
 
-def etiquetaMetodo2 (datos,numGen=30,popSize=50):
+def etiquetaMetodo2 (datos,numGen=30,popSize=50, flagOper = True):
     '''
     Etiqueta los datos utilizando un algoritmo genético que busca
     la combinación de señales compra,venta,hold que generen mayor ganancia
 
     ENTRADA
     datos: Pandas DataFrame. Conjunto de entrenamiento
+
+    flagOper. Booleano. True => Considera el número de transacciones
+    False => No considera el número de transacciones
 
     SALIDA
     datos: Pandas DataFrame. Conjunto de entrenamiento con la nueva columna
@@ -822,7 +894,7 @@ def etiquetaMetodo2 (datos,numGen=30,popSize=50):
     for i in range(0,numGen):
 
         #Calcula el fitness de la poblacion
-        probas,fitness=fitnessPoblacion(datos,poblacion)
+        probas,fitness=fitnessPoblacion(datos,poblacion, flagOper)
 
         #Encuentra los k mejores
         mejores=kMejores(poblacion,probas,k)
@@ -843,6 +915,9 @@ def etiquetaMetodo2 (datos,numGen=30,popSize=50):
 
     #añade la estrategia del mejor individuo
     datos.loc[:,('Clase')]=mejores[0,:]
+
+    #Limpia señales repetidas
+    datos = limpiaRepetidas(datos)
 
     return datos,probas
 
