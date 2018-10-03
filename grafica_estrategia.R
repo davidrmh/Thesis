@@ -10,7 +10,7 @@ grafica_estrategia <- function(filename){
   # gráfica
   
   datos <- read.csv(filename)
-  plot(datos$Adj.Close, type = "l", main = "Rojo = Venta \n Azul = Compra \n (Momentos de ejecución)")
+  plot(datos$Adj.Close, type = "l", main = "Rojo = Venta \n Azul = Compra \n (Momentos de ejecución)", lwd = 2)
   indices_buy <- which(datos$Clase == 1)
   indices_sell <- which(datos$Clase == -1)
   points(x = indices_buy + 1, datos$Adj.Close[indices_buy + 1], col = "blue", pch = 25, cex = 1.5, lwd = 2)
