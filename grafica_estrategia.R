@@ -61,3 +61,80 @@ segmentos_recta <- function(filename){
     
   }
 }
+
+###============================================================
+### Función para graficar los segmentos de manera progresiva
+###============================================================
+segmentos_recta_prog <- function(filename){
+  # ENTRADA
+  # filename: Ruta del archivo csv (debe tener columna Adj Close)
+  
+  # SALIDA
+  # gráfica
+  # Data.frame con los mismos datos del csv y una columna Clase
+  
+  #lee los datos
+  datos <- read.csv(filename)
+  
+  #extrae los precios
+  precios_cierre <- as.numeric(datos$Adj.Close)
+  precios_apertura <- as.numeric(datos$Open)
+  
+  #número de observaciones
+  n_obs <- length(precios)
+  
+  #grafica el primer punto
+  plot(1,precios_apertura[1], xlim = c(1, n_obs), ylim = c(min(precios_apertura), max(precios_apertura)) , cex = 0, ylab = "precio", xlab = "día")
+  title(sub = "Negro = Precio Cierre, Verde = Precio Apertura")
+  
+  #para almacenar las decisiones
+  vec_clase <- c(0)
+  
+  #ganancia acumulada
+  ganancia_acum <- 0
+  
+  
+  for(t in 2:n_obs){
+    
+    y1_cierre <- precios_cierre[t-1]
+    y2_cierre <- precios_cierre[t]
+    y1_apertura <- precios_apertura[t-1]
+    y2_apertura <- precios_apertura[t]
+    segments(t-1, y1_cierre, t, y2_cierre, lwd = 2.5, col = "black")
+    segments(t-1, y1_apertura, t, y2_apertura, lwd = 2.5, col = "darkgreen")
+    
+    clase <- readline("Que decisión tomas (1 = Compra, -1 = Venta) \n")
+    
+    if(clase == 1){
+      #Se dibuja el punto en el momento de ejecución
+      #Como son precios de apertura, se considera el mismo día
+      points(x = t + 1, y = precios_apertura[t], col = "blue", pch = 25, cex = 1.5, lwd = 2)
+      
+      #Precio de ejecución es el promedio high y low del mismo día
+      ultimo_precio_compra <- mean(datos$High[t], datos$Low[t])
+    }
+    
+    if(clase == -1){
+      #Se dibuja el punto en el momento de ejecución
+      points(x = t + 1, y = precios_apertura[t], col = "red", pch = 25, cex = 1.5, lwd = 2)
+      precio_venta <- mean(datos$High[t], datos$Low[t])
+      par(col.main="white")
+      title(paste("Ganancia acumulada ($) = ", round(ganancia_acum, 2), sep = ""))
+      ganancia_acum <- ganancia_acum + precio_venta - ultimo_precio_compra
+      par(col.main="black")
+      title(paste("Ganancia acumulada ($) = ", round(ganancia_acum, 2), sep = ""))
+    }
+    
+    if(clase == ""){
+      clase <- 0
+    }
+    
+    vec_clase <- c(vec_clase, clase)
+    
+  }
+  
+  datos$Clase = vec_clase
+  
+  return(datos)
+  
+}
