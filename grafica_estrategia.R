@@ -81,7 +81,7 @@ segmentos_recta_prog <- function(filename){
   precios_apertura <- as.numeric(datos$Open)
   
   #número de observaciones
-  n_obs <- length(precios)
+  n_obs <- length(precios_cierre)
   
   #grafica el primer punto
   plot(1,precios_apertura[1], xlim = c(1, n_obs), ylim = c(min(precios_apertura), max(precios_apertura)) , cex = 0, ylab = "precio", xlab = "día")
