@@ -63,6 +63,41 @@ segmentos_recta <- function(filename){
 }
 
 ###============================================================
+### Función para seleccionar un periodo aleatorio
+###============================================================
+subconjunto <- function(filename, longitud = 252){
+  # ENTRADA
+  # filename: Ruta del archivo csv de Yahoo Finance
+  # (sin NULL: i.e. se limpió on la función leeTabla del módulo indicadores.py)
+  # longitud: longitud del periodo
+  
+  # Salida
+  # Data frame con los datos correspondientes al periodo
+  
+  #lee los datos
+  datos <- read.csv(filename)  
+  
+  #obtiene fechas
+  fechas <- datos$Date
+  
+  #número de observaciones
+  n_obs <- length(fechas)
+  
+  #obtiene una fecha inicial aleatoria
+  fecha_inicial <- sample(fechas[1:(n_obs - longitud)], size = 1)
+  
+  #índice de la fecha inicial
+  indice_fecha_inicial <- which(datos$Date == fecha_inicial)
+  
+  #subconjunto de datos
+  sub_datos <- datos[indice_fecha_inicial:(indice_fecha_inicial + longitud - 1),]
+  
+  return(sub_datos)
+  
+}
+
+
+###============================================================
 ### Función para graficar los segmentos de manera progresiva
 ###============================================================
 segmentos_recta_prog <- function(filename){
@@ -78,7 +113,7 @@ segmentos_recta_prog <- function(filename){
   
   #extrae los precios
   precios_cierre <- as.numeric(datos$Adj.Close)
-  precios_apertura <- as.numeric(datos$Open)
+  precios_apertura <- as.numeric(datos$Open) 
   
   #número de observaciones
   n_obs <- length(precios_cierre)
