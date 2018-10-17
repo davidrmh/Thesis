@@ -1,3 +1,15 @@
+###============================================================
+## VARIABLES GLOBALES
+###============================================================
+
+#Costos de transacción
+costo_trans <- .25/100
+
+#Capital Inicial
+capital_inicial <- 100000
+
+
+
 
 ###============================================================
 ### Función para graficar una estrategia
@@ -117,7 +129,7 @@ segmentos_recta_prog <- function(datos){
   n_obs <- length(precios_cierre)
   
   #grafica el primer punto
-  plot(1,precios_apertura[1], xlim = c(1, n_obs), ylim = c(min(precios_apertura), max(precios_apertura)) , cex = 0, ylab = "precio", xlab = "día")
+  plot(1,precios_apertura[1], xlim = c(1, n_obs), ylim = c(min(datos$Low), max(datos$High)) , cex = 0, ylab = "precio", xlab = "día")
   title(sub = "Negro = Precio Cierre, Verde = Precio Apertura")
   
   #para almacenar las decisiones
@@ -125,6 +137,15 @@ segmentos_recta_prog <- function(datos){
   
   #ganancia acumulada
   ganancia_acum <- 0
+  
+  #Acciones
+  acciones <- 0
+  
+  #Capital
+  capital <- capital_inicial
+  
+  #flag primera compra
+  flag_primera_compra <- TRUE
   
   
   for(t in 2:n_obs){
@@ -138,22 +159,58 @@ segmentos_recta_prog <- function(datos){
     
     clase <- readline("Que decisión tomas (1 = Compra, -1 = Venta) \n")
     
+    #Compra
     if(clase == 1){
+      
+      #Precio de ejecución
+      precio_ejecucion <- mean(datos$High[t], datos$Low[t])
+      
+      #Acciones compradas
+      acciones <- acciones + floor(capital / (precio_ejecucion*(1 + costo_trans)))
+      
+      #Se actualiza el capital
+      capital <- capital - precio_ejecucion*(1 + costo_trans) * acciones
+      
       #Se dibuja el punto en el momento de ejecución
       #Como son precios de apertura, se considera el mismo día
-      points(x = t + 1, y = precios_apertura[t], col = "blue", pch = 25, cex = 1.5, lwd = 2)
+      points(x = t, y = precio_ejecucion, col = "blue", pch = 25, cex = 1.5, lwd = 2)
       
-      #Precio de ejecución es el promedio high y low del mismo día
-      ultimo_precio_compra <- mean(datos$High[t], datos$Low[t])
+      #registra el precio de la primera compra
+      if(flag_primera_compra){
+        precio_primera_compra  <- precio_ejecucion
+        acciones_primera_compra <- acciones
+        flag_primera_compra <- FALSE
+      }
+      
     }
     
+    #Venta
     if(clase == -1){
+      
+      #Precio de ejecución
+      precio_ejecucion <- mean(datos$High[t], datos$Low[t])
+      
+      #Actualiza capital
+      capital <- capital + precio_ejecucion*(1 - costo_trans)*acciones
+      
+      #Actualiza acciones
+      acciones <- 0
+      
+      #Actualiza ganancia acumulada
+      ganancia_acum_prev <- ganancia_acum
+      ganancia_acum <- ganancia_acum + (capital - capital_inicial)
+      
+      #Registra el precio de la última venta
+      precio_ultima_venta <- precio_ejecucion
+      
       #Se dibuja el punto en el momento de ejecución
-      points(x = t + 1, y = precios_apertura[t], col = "red", pch = 25, cex = 1.5, lwd = 2)
-      precio_venta <- mean(datos$High[t], datos$Low[t])
+      points(x = t, y = precio_ejecucion, col = "red", pch = 25, cex = 1.5, lwd = 2)
+      
+      #Transparenta el título anterior
       par(col.main="white")
-      title(paste("Ganancia acumulada ($) = ", round(ganancia_acum, 2), sep = ""))
-      ganancia_acum <- ganancia_acum + precio_venta - ultimo_precio_compra
+      title(paste("Ganancia acumulada ($) = ", round(ganancia_acum_prev, 2), sep = ""))
+      
+      #nuevo título
       par(col.main="black")
       title(paste("Ganancia acumulada ($) = ", round(ganancia_acum, 2), sep = ""))
     }
@@ -164,7 +221,7 @@ segmentos_recta_prog <- function(datos){
     
     vec_clase <- c(vec_clase, clase)
     
-  }
+  } #end for t
   
   datos$Clase = vec_clase
   
