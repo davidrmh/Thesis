@@ -100,16 +100,14 @@ subconjunto <- function(filename, longitud = 252){
 ###============================================================
 ### Función para graficar los segmentos de manera progresiva
 ###============================================================
-segmentos_recta_prog <- function(filename){
+segmentos_recta_prog <- function(datos){
   # ENTRADA
-  # filename: Ruta del archivo csv (debe tener columna Adj Close)
+  # datos: Data frame con los precios (idealmente creado con la función subconjunto)
   
   # SALIDA
   # gráfica
   # Data.frame con los mismos datos del csv y una columna Clase
   
-  #lee los datos
-  datos <- read.csv(filename)
   
   #extrae los precios
   precios_cierre <- as.numeric(datos$Adj.Close)
