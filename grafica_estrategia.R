@@ -147,6 +147,9 @@ segmentos_recta_prog <- function(datos){
   #flag primera compra
   flag_primera_compra <- TRUE
   
+  #segmentos horizontales en t-1
+  segmento_horizontal_prev <- c()
+  
   
   for(t in 2:n_obs){
     
@@ -173,7 +176,19 @@ segmentos_recta_prog <- function(datos){
       
       #Se dibuja el punto en el momento de ejecución
       #Como son precios de apertura, se considera el mismo día
-      points(x = t, y = precio_ejecucion, col = "blue", pch = 25, cex = 1.5, lwd = 2)
+      points(x = t, y = precio_ejecucion, col = "blue", pch = 20, cex = 1.5, lwd = 2)
+      
+      #Dibuja segmentos horizontales
+      
+      #Primero borra los anteriores
+      abline(h = segmento_horizontal_prev, col = "white", lty = 2, lwd = 2)
+      
+      #obtiene los nuevos segmentos
+      for(j in 1:2){
+        segmento_horizontal <- locator(n = 1)
+        segmento_horizontal_prev <- c(segmento_horizontal_prev, segmento_horizontal$y)
+        abline(h = segmento_horizontal$y, col = "blue", lty = 2, lwd = 2)
+      }
       
       #registra el precio de la primera compra
       if(flag_primera_compra){
@@ -204,7 +219,7 @@ segmentos_recta_prog <- function(datos){
       precio_ultima_venta <- precio_ejecucion
       
       #Se dibuja el punto en el momento de ejecución
-      points(x = t, y = precio_ejecucion, col = "red", pch = 25, cex = 1.5, lwd = 2)
+      points(x = t, y = precio_ejecucion, col = "red", pch = 20, cex = 1.5, lwd = 2)
       
       #Transparenta el título anterior
       par(col.main="white")
@@ -222,6 +237,17 @@ segmentos_recta_prog <- function(datos){
     vec_clase <- c(vec_clase, clase)
     
   } #end for t
+  
+  #calcula B&H
+  capital_final_buy_hold <- capital_inicial + precio_ultima_venta*(1- costo_trans)*acciones_primera_compra
+  ganancia_buy_hold <- capital_final_buy_hold - capital_inicial
+  
+  #Transparenta el título anterior
+  par(col.main="white")
+  title(paste("Ganancia acumulada ($) = ", round(ganancia_acum_prev, 2), sep = ""))
+  
+  par(col.main = "black")
+  title(paste("Ganancia acumulada estrategia ($) = ", round(ganancia_acum, 2), "\n Ganancia acumulada Buy & Hold = ", round(ganancia_buy_hold,2), sep ="" ))
   
   datos$Clase = vec_clase
   
