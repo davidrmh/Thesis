@@ -8,9 +8,6 @@ costo_trans <- .25/100
 #Capital Inicial
 capital_inicial <- 100000
 
-
-
-
 ###============================================================
 ### Función para graficar una estrategia
 ###============================================================
@@ -129,7 +126,9 @@ segmentos_recta_prog <- function(datos){
   n_obs <- length(precios_cierre)
   
   #grafica el primer punto
-  plot(1,precios_apertura[1], xlim = c(1, n_obs), ylim = c(min(datos$Low), max(datos$High)) , cex = 0, ylab = "precio", xlab = "día")
+  y_min <- min(min(datos$Low), min(datos$Adj.Close), min(datos$Close), min(datos$High))
+  y_max <- max(max(datos$Low), max(datos$Adj.Close), max(datos$Close), max(datos$High))
+  plot(1,precios_apertura[1], xlim = c(1, n_obs), ylim = c(y_min, y_max) , cex = 0, ylab = "precio", xlab = "día")
   title(sub = "Negro = Precio Cierre, Verde = Precio Apertura")
   
   #para almacenar las decisiones
@@ -239,8 +238,7 @@ segmentos_recta_prog <- function(datos){
   } #end for t
   
   #calcula B&H
-  capital_final_buy_hold <- capital_inicial + precio_ultima_venta*(1- costo_trans)*acciones_primera_compra
-  ganancia_buy_hold <- capital_final_buy_hold - capital_inicial
+  ganancia_buy_hold <- precio_ultima_venta*(1- costo_trans)*acciones_primera_compra - precio_primera_compra*(1 + costo_trans) * acciones_primera_compra
   
   #Transparenta el título anterior
   par(col.main="white")
