@@ -126,9 +126,9 @@ segmentos_recta_prog <- function(datos){
   n_obs <- length(precios_cierre)
   
   #grafica el primer punto
-  y_min <- min(min(datos$Low), min(datos$Adj.Close), min(datos$Close), min(datos$High))
-  y_max <- max(max(datos$Low), max(datos$Adj.Close), max(datos$Close), max(datos$High))
-  plot(1,precios_apertura[1], xlim = c(1, n_obs), ylim = c(y_min, y_max) , cex = 0, ylab = "precio", xlab = "día")
+  y_min <- min(min(datos$Low), min(datos$Adj.Close), min(datos$Close), min(datos$High)) - 4
+  y_max <- max(max(datos$Low), max(datos$Adj.Close), max(datos$Close), max(datos$High)) + 4
+  plot(1,precios_apertura[1], xlim = c(1, n_obs), ylim = c(y_min, y_max) , cex = 0, ylab = "precio", xlab = "")
   title(sub = "Negro = Precio Cierre, Verde = Precio Apertura")
   
   #para almacenar las decisiones
@@ -159,7 +159,24 @@ segmentos_recta_prog <- function(datos){
     segments(t-1, y1_cierre, t, y2_cierre, lwd = 2.5, col = "black")
     segments(t-1, y1_apertura, t, y2_apertura, lwd = 2.5, col = "darkgreen")
     
+    #Actualiza xlab
+    if(t > 2){
+      par(col.lab = "white")
+      title(xlab = paste("dia = ", t-1, sep = ""))
+      
+      par(col.lab = "black")
+      title(xlab = paste("dia = ", t, sep = ""))
+      
+    }
+    
+    else{
+      par(col.lab = "black")
+      title(xlab = paste("dia = ", t, sep = ""))
+      
+    }
+    
     clase <- readline("Que decisión tomas (1 = Compra, -1 = Venta) \n")
+    
     
     #Compra
     if(clase == 1){
@@ -245,7 +262,7 @@ segmentos_recta_prog <- function(datos){
   title(paste("Ganancia acumulada ($) = ", round(ganancia_acum_prev, 2), sep = ""))
   
   par(col.main = "black")
-  title(paste("Ganancia acumulada estrategia ($) = ", round(ganancia_acum, 2), "\n Ganancia acumulada Buy & Hold = ", round(ganancia_buy_hold,2), sep ="" ))
+  title(paste("Ganancia acumulada estrategia ($) = ", round(ganancia_acum, 2), "\n\n Ganancia acumulada Buy & Hold = ", round(ganancia_buy_hold,2), sep ="" ))
   
   datos$Clase = vec_clase
   
