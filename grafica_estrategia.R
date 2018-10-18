@@ -126,8 +126,8 @@ segmentos_recta_prog <- function(datos){
   n_obs <- length(precios_cierre)
   
   #grafica el primer punto
-  y_min <- min(min(datos$Low), min(datos$Adj.Close), min(datos$Close), min(datos$High)) - 4
-  y_max <- max(max(datos$Low), max(datos$Adj.Close), max(datos$Close), max(datos$High)) + 4
+  y_min <- min(min(datos$Low), min(datos$Adj.Close), min(datos$Close), min(datos$High)) - 3
+  y_max <- max(max(datos$Low), max(datos$Adj.Close), max(datos$Close), max(datos$High)) + 3
   plot(1,precios_apertura[1], xlim = c(1, n_obs), ylim = c(y_min, y_max) , cex = 0, ylab = "precio", xlab = "")
   title(sub = "Negro = Precio Cierre, Verde = Precio Apertura")
   
@@ -188,6 +188,7 @@ segmentos_recta_prog <- function(datos){
       acciones <- acciones + floor(capital / (precio_ejecucion*(1 + costo_trans)))
       
       #Se actualiza el capital
+      capital_prev <- capital
       capital <- capital - precio_ejecucion*(1 + costo_trans) * acciones
       
       #Se dibuja el punto en el momento de ejecución
@@ -229,7 +230,7 @@ segmentos_recta_prog <- function(datos){
       
       #Actualiza ganancia acumulada
       ganancia_acum_prev <- ganancia_acum
-      ganancia_acum <- ganancia_acum + (capital - capital_inicial)
+      ganancia_acum <- ganancia_acum + (capital - capital_prev)
       
       #Registra el precio de la última venta
       precio_ultima_venta <- precio_ejecucion
@@ -260,6 +261,7 @@ segmentos_recta_prog <- function(datos){
   #Transparenta el título anterior
   par(col.main="white")
   title(paste("Ganancia acumulada ($) = ", round(ganancia_acum_prev, 2), sep = ""))
+  title(paste("Ganancia acumulada ($) = ", round(ganancia_acum, 2), sep = ""))
   
   par(col.main = "black")
   title(paste("Ganancia acumulada estrategia ($) = ", round(ganancia_acum, 2), "\n\n Ganancia acumulada Buy & Hold = ", round(ganancia_buy_hold,2), sep ="" ))
