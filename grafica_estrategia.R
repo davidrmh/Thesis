@@ -271,3 +271,82 @@ segmentos_recta_prog <- function(datos){
   return(datos)
   
 }
+
+###============================================================
+### Función para calcular la ganancia de una estrategia (etiquetado)
+###============================================================
+calcula_ganancia<-function(datos, col.clase = "Clase.manual", cap_inicial = 100000){
+  # ENTRADA
+  # datos: Data frame con los precios (Open, High, Low, Close, Adj.Close)
+  # col.clase: String con el nombre de la columna que contiene la estrategia (columna de -1,0,1)
+  # cap_inicial: Número que representa el capital inicial
+  #
+  # SALIDA
+  # ganancia porcentual de la estrategia
+  
+  #Número de observaciones
+  n_obs <- dim(datos)[1]
+
+  #ganancia acumulada
+  ganancia_acum <- 0
+  
+  #Acciones
+  acciones <- 0
+  
+  #Capital
+  capital <- cap_inicial
+
+  for(t in 1:n_obs){
+    
+    clase <- datos[col.clase][t,]
+    
+    #Compra
+    if(clase == 1){
+      
+      #Precio de ejecución
+      precio_ejecucion <- mean(datos$High[t], datos$Low[t])
+      
+      #Acciones compradas
+      
+      if(capital <= 0){
+        print("Perdiste todo el dinero")
+        return(-1)
+      }
+      
+      acciones <- acciones + floor(capital / (precio_ejecucion*(1 + costo_trans)))
+      
+      #Se actualiza el capital
+      capital_prev <- capital
+      capital <- capital - precio_ejecucion*(1 + costo_trans) * acciones
+    }
+    
+    #Venta
+    else if(clase == -1){
+      
+      #Precio de ejecución
+      precio_ejecucion <- mean(datos$High[t], datos$Low[t])
+      
+      #Actualiza capital
+      capital <- capital + precio_ejecucion*(1 - costo_trans)*acciones
+      
+      #Actualiza acciones
+      acciones <- 0
+      
+      #Actualiza ganancia acumulada
+      ganancia_acum <- ganancia_acum + (capital - capital_prev)
+      
+    }
+    
+    
+  }
+  
+  #Calcula el capital final
+  capital_final <- cap_inicial + ganancia_acum
+  
+  #calcula ganancia porcentual
+  ganancia_porcentual <- capital_final / cap_inicial - 1
+  
+  print(paste("La estrategia ", col.clase, " obtuvo un ", round(ganancia_porcentual,2), "% de rendimiento", sep = ""))
+  return(ganancia_porcentual)
+  
+}
