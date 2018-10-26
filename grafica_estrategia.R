@@ -29,6 +29,24 @@ grafica_estrategia <- function(filename){
 }
 
 ###============================================================
+### Función para graficar una estrategia
+###============================================================
+grafica_estrategia_2 <- function(datos, col.name){
+  # ENTRADA
+  # datos: Data frame con los datos etiquetados y los precios
+  # col.name: String con el nombre de la columna que contiene las etiquetas
+  
+  # SALIDA
+  # gráfica
+  
+  plot(datos$Adj.Close, type = "l", main = "Rojo = Venta \n Azul = Compra \n (Momentos de ejecución)", lwd = 2)
+  indices_buy <- which(datos[col.name] == 1)
+  indices_sell <- which(datos[col.name] == -1)
+  points(x = indices_buy, datos$Adj.Close[indices_buy], col = "blue", pch = 25, cex = 1.5, lwd = 2)
+  points(x = indices_sell, datos$Adj.Close[indices_sell], col = "red", pch = 25, cex = 1.5, lwd = 2)
+}
+
+###============================================================
 ### Función para graficar segmentos de recta
 ### Esta función se creó para el etiquetado MANUAL
 ###============================================================
