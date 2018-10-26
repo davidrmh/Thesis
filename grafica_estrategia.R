@@ -174,7 +174,7 @@ segmentos_recta_prog <- function(datos){
     y2_cierre <- precios_cierre[t]
     y1_apertura <- precios_apertura[t-1]
     y2_apertura <- precios_apertura[t]
-    segments(t-1, y1_cierre, t, y2_cierre, lwd = 2.5, col = "black")
+    #segments(t-1, y1_cierre, t, y2_cierre, lwd = 2.5, col = "black")
     segments(t-1, y1_apertura, t, y2_apertura, lwd = 2.5, col = "darkgreen")
     
     #Actualiza xlab
