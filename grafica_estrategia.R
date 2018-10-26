@@ -200,7 +200,8 @@ segmentos_recta_prog <- function(datos){
     if(clase == 1){
       
       #Precio de ejecución
-      precio_ejecucion <- mean(datos$High[t], datos$Low[t])
+      #precio_ejecucion <- mean(datos$High[t], datos$Low[t])
+      precio_ejecucion <- datos$Open[t]
       
       #Acciones compradas
       acciones <- acciones + floor(capital / (precio_ejecucion*(1 + costo_trans)))
@@ -238,7 +239,8 @@ segmentos_recta_prog <- function(datos){
     if(clase == -1){
       
       #Precio de ejecución
-      precio_ejecucion <- mean(datos$High[t], datos$Low[t])
+      #precio_ejecucion <- mean(datos$High[t], datos$Low[t])
+      precio_ejecucion <- datos$Open[t]
       
       #Actualiza capital
       capital <- capital + precio_ejecucion*(1 - costo_trans)*acciones
@@ -322,7 +324,8 @@ calcula_ganancia<-function(datos, col.clase = "Clase.manual", cap_inicial = 1000
     if(clase == 1){
       
       #Precio de ejecución
-      precio_ejecucion <- mean(datos$High[t], datos$Low[t])
+      #precio_ejecucion <- mean(datos$High[t], datos$Low[t])
+      precio_ejecucion <- datos$Open[t]
       
       #Acciones compradas
       
@@ -342,7 +345,8 @@ calcula_ganancia<-function(datos, col.clase = "Clase.manual", cap_inicial = 1000
     else if(clase == -1){
       
       #Precio de ejecución
-      precio_ejecucion <- mean(datos$High[t], datos$Low[t])
+      #precio_ejecucion <- mean(datos$High[t], datos$Low[t])
+      precio_ejecucion <- datos$Open[t]
       
       #Actualiza capital
       capital <- capital + precio_ejecucion*(1 - costo_trans)*acciones
