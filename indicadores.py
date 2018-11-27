@@ -5,7 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import json
 from copy import deepcopy
-from ta.momentum import money_flow_index 
+from ta.momentum import money_flow_index
+from ta.momentum import rsi 
 
 ##==============================================================================
 ## Datos de Yaho Finance
@@ -434,6 +435,56 @@ def mfi(datos, start, end = '', window = 14):
 
     #añade metadatos
     resultado.tipo = 'mfi'
+    resultado.resName = resName
+
+    return resultado
+
+##==============================================================================
+## Función para calcular un RSI
+##==============================================================================
+def RSI(datos, start, end, window = 10, colName = 'Adj Close'):
+    '''
+    ENTRADA
+    datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
+    columna numérica
+
+    start, end: strings en formato 'YYYY-MM-DD' representando la fecha de inicio
+    y la fecha final respectivamente
+
+    window: Entero que representa la ventan de tiempo a utilizar
+
+    colName: String que representa el nombre de la columna con la cual se calculará el indicador
+
+    SALIDA
+    resultado: Dataframe datos con una columna extra conteniendo la información
+    del indicador
+    '''
+    #Localiza la fecha de inicio y revisa si hay suficiente información
+    indiceInicio=datos[datos['Date']==start].index[0]
+    if window > indiceInicio + 1:
+        print 'No hay suficiente historia para esta fecha'
+        return datos
+
+    #Último índice
+    if end=='':
+        lastIndex=datos.shape[0] - 1
+    else:
+        lastIndex=datos[datos['Date']==end].index[0]
+
+    #calcula el indicador
+    indicador = rsi(datos[colName], window)
+
+    #agrega la nueva columna
+    resultado = deepcopy(datos)
+    resName = colName + '-RSI-' + str(window)
+    resultado[resName] = indicador
+
+    #Filtra a partir del índice correspondiente a la fecha start
+    resultado=resultado.iloc[indiceInicio:lastIndex+1,:]
+    resultado=resultado.reset_index(drop=True)
+
+    #añade metadatos
+    resultado.tipo = 'rsi'
     resultado.resName = resName
 
     return resultado
