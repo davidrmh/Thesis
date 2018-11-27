@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import json
 from copy import deepcopy
+from ta.momentum import money_flow_index 
 
 ##==============================================================================
 ## Datos de Yaho Finance
@@ -388,6 +389,54 @@ def roc(datos,start,end='',window=10,colName='Adj Close'):
 
     return resultado
 
+##==============================================================================
+## Función para calcular Money Flow Index (MFI)
+##==============================================================================
+def mfi(datos, start, end = '', window = 14):
+    '''
+    ENTRADA
+    datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
+    columna numérica
+
+    start, end: strings en formato 'YYYY-MM-DD' representando la fecha de inicio
+    y la fecha final respectivamente
+
+    window: Entero que representa la ventan de tiempo a utilizar
+
+    SALIDA
+    resultado: Dataframe datos con una columna extra conteniendo la información
+    del MFI
+    '''
+
+    #Localiza la fecha de inicio y revisa si hay suficiente información
+    indiceInicio=datos[datos['Date']==start].index[0]
+    if window > indiceInicio + 1:
+        print 'No hay suficiente historia para esta fecha'
+        return datos
+
+    #Último índice
+    if end=='':
+        lastIndex=datos.shape[0] - 1
+    else:
+        lastIndex=datos[datos['Date']==end].index[0]
+
+    #calcula el indicador
+    MFI = money_flow_index(datos['High'], datos['Low'], datos['Adj Close'], datos['Volume'], n = window)
+
+    #agrega la nueva columna
+    resultado = deepcopy(datos)
+    resName = 'MFI-' + str(window)
+    resultado[resName] = MFI
+
+    #Filtra a partir del índice correspondiente a la fecha start
+    resultado=resultado.iloc[indiceInicio:lastIndex+1,:]
+    resultado=resultado.reset_index(drop=True)
+
+    #añade metadatos
+    resultado.tipo = 'mfi'
+    resultado.resName = resName
+
+    return resultado
 
 
 ##==============================================================================
@@ -494,8 +543,3 @@ def combinaIndicadores(listaIndicadores):
 
     return resultado
 
-
-
-## PENDIENTE
-## Función para combinar los dataframes de la función creaIndicadores
-## RSI
