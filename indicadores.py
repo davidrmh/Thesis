@@ -497,6 +497,11 @@ def creaIndicadores (datos, dicc = {}, start = '', end = ''):
             colName = dicc[key]['parametros']['colName']
             resultado.append(roc(datos,start,end,window,colName))
 
+        elif tipo == 'mfi':    
+            #mfi(datos, start, end , window)
+            window = dicc[key]['parametros']['window']
+            resultado.append(mfi(datos, start, end, window))
+
     return resultado
 
 ##==============================================================================
