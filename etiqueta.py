@@ -862,7 +862,7 @@ def limpiaRepetidas(datos):
 ## Función para etiquetar los datos de acuerdo al método 2
 ##==============================================================================
 
-def etiquetaMetodo2 (datos,numGen=30,popSize=50, flagOper = True):
+def etiquetaMetodo2 (datos,numGen=30,popSize=50, flagOper = True, limpia = True):
     '''
     Etiqueta los datos utilizando un algoritmo genético que busca
     la combinación de señales compra,venta,hold que generen mayor ganancia
@@ -876,10 +876,6 @@ def etiquetaMetodo2 (datos,numGen=30,popSize=50, flagOper = True):
     SALIDA
     datos: Pandas DataFrame. Conjunto de entrenamiento con la nueva columna
     Clase, que contiene la estrategia encontrada por el algoritmo genético.
-
-    proba: Lista con numPeriodos elementos, cada uno de ellos es una
-    lista con la probabilidad de seleccionar un -1, 0 o 1.
-    Por ejemplo para dos periodos [[0.2,0.2,0.6],[0.6,0.4,0]]
     '''
 
     numPeriodos=datos.shape[0]
@@ -917,9 +913,10 @@ def etiquetaMetodo2 (datos,numGen=30,popSize=50, flagOper = True):
     datos.loc[:,('Clase')]=mejores[0,:]
 
     #Limpia señales repetidas
-    datos = limpiaRepetidas(datos)
+    if limpia:
+        datos = limpiaRepetidas(datos)
 
-    return datos,probas
+    return datos
 
 ##==============================================================================
 ## Función para crear los features para el etiquetado del modelo 2
