@@ -553,6 +553,13 @@ def creaIndicadores (datos, dicc = {}, start = '', end = ''):
             window = dicc[key]['parametros']['window']
             resultado.append(mfi(datos, start, end, window))
 
+        elif tipo == 'rsi':
+            #RSI(datos, start, end, window, colName)
+            window = dicc[key]['parametros']['window']
+            colName = dicc[key]['parametros']['colName']
+            resultado.append(RSI(datos,start,end,window,colName))
+
+
     return resultado
 
 ##==============================================================================
