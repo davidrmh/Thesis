@@ -15,6 +15,30 @@ from ta.trend import aroon_up
 from ta.trend import cci
 
 ##==============================================================================
+## VARIABLE GLOBALES
+##==============================================================================
+
+#Tipo de indicadores
+tipos_ind = ['simpleMA', 'bollinger','exponentialMA', 'MACD', 'roc', 'mfi', 
+'rsi', 'williams', 'ease-mov', 'chaikin-flow', 'dif-aroon', 'comm-chan']
+
+#Factor k de las bandas de Bollinger
+factorK = np.linspace(0.01, 2.5, 100)
+
+#Ventanas de tiempo
+windows = range(5,201)
+
+#Columnas
+columnas_precios = ['Open', 'High', 'Low', 'Adj Close']
+columnas_vol = ['Open', 'High', 'Low', 'Adj Close', 'Volume']
+
+#Factor C del Commodity Channel Index
+factor_c = [0.015]
+
+
+
+
+##==============================================================================
 ## Datos de Yaho Finance
 ## Lee datos, quita los null
 ## transforma a float
@@ -913,4 +937,131 @@ def combinaIndicadores(listaIndicadores):
     resultado = pd.concat(columnas, axis = 1)
 
     return resultado
+
+##==============================================================================
+## Función para crear un diccionario con la información de distintos indicadores
+##==============================================================================
+def creaDiccionario(num_indicadores = 30):
+  '''
+  ENTRADA
+  num_indicadores: Entero que representa el número de indicadores
+
+  SALIDA
+  Diccionario {'tipo':'FUNCION','parametros':{'window':10,...}}
+  en donde FUNCIÓN corresponde al nombre de alguna de las funciones
+  para calcular un indicador en particular.
+  parametros es un diccionario con los parámetros del indicador de interés
+  '''
+  #este diccionario tendrá la información de los indicadores
+  dicc = {}
+
+  #Para contador el número de indicadores generados
+  contador = 0
+
+  #Memoria para evitar indicadores repetidos
+  memoria = []
+
+  while contador < num_indicadores:
+
+    #elige un tipo de indicador
+    tipo_indicador = np.random.choice(tipos_ind, 1)[0]
+
+    #Elige los parámetros del indicador
+
+    #Estos indicadores sólo utilizan una ventana de tiempo
+    #y una columna
+    if tipo_indicador in ['simpleMA','exponentialMA','roc', 'rsi', 'dif-aroon'] :
+
+      #Genera parámetros
+      ventana = np.random.choice(windows,1)[0]
+      columna = np.random.choice(columnas_precios,1)[0]
+
+      #Para ir registrando los indicadores que están en memoria
+      stringID = tipo_indicador + '-' + str(ventana) + '-' + columna
+
+      #Revisa si está en memoria
+      if stringID not in memoria:
+        dicc[contador] = {}
+        dicc[contador]['tipo'] = tipo_indicador
+        dicc[contador]['parametros'] = {}
+        dicc[contador]['parametros']['window'] = ventana
+        dicc[contador]['parametros']['colName'] = columna
+        memoria.append(stringID)
+        contador = contador + 1
+
+    elif tipo_indicador == 'bollinger':
+      ventana = np.random.choice(windows,1)[0]
+      columna = np.random.choice(columnas_precios,1)[0]
+      k = np.random.choice(factorK,1)[0]
+      stringID = tipo_indicador + '-' + str(ventana) + '-' + columna + '-' + str(k)
+
+      if stringID not in memoria:
+        dicc[contador] = {}
+        dicc[contador]['tipo'] = tipo_indicador
+        dicc[contador]['parametros'] = {}
+        dicc[contador]['parametros']['window'] = ventana
+        dicc[contador]['parametros']['colName'] = columna
+        dicc[contador]['parametros']['k'] = k
+        contador = contador + 1
+
+    elif tipo_indicador == 'MACD':
+
+      #3 ventanas de tiempo
+      aux = np.random.choice(windows,3,replace=False)
+      aux.sort()
+      short = aux[0]
+      signal = aux[1]
+      long_w = aux[2]
+
+      #precio a utilizar
+      columna = np.random.choice(columnas_precios,1)[0]
+
+      stringID = tipo_indicador + str(short) + str(signal) + str(long_w)
+      if stringID not in memoria:
+        dicc[contador] = {}
+        dicc[contador]['tipo'] = tipo_indicador
+        dicc[contador]['parametros'] = {}
+        dicc[contador]['parametros']['shortWindow'] = short
+        dicc[contador]['parametros']['longWindow'] = long_w
+        dicc[contador]['parametros']['signalWindow'] = signal
+        dicc[contador]['parametros']['colName'] = columna
+        memoria.append(stringID)
+        contador = contador + 1
+
+    #Estos indicadores sólo utilizan el parámetro window    
+    elif tipo_indicador in ['mfi', 'williams', 'ease-mov', 'chaikin-flow']:
+
+      ventana = np.random.choice(windows,1)[0]
+      stringID = tipo_indicador + '-' + str(ventana)
+
+      if stringID not in memoria:
+        dicc[contador] = {}
+        dicc[contador]['tipo'] = tipo_indicador
+        dicc[contador]['parametros'] = {}
+        dicc[contador]['parametros']['window'] = ventana
+        memoria.append(stringID)
+        contador = contador + 1
+
+    elif tipo_indicador == 'comm-chan':
+      ventana = np.random.choice(windows,1)[0]
+      c = np.random.choice(factor_c,1)[0]
+
+      stringID = tipo_indicador + str(ventana) + str(c)
+
+      if stringID not in memoria:
+        dicc[contador] = {}
+        dicc[contador]['tipo'] = tipo_indicador
+        dicc[contador]['parametros'] = {}
+        dicc[contador]['parametros']['window'] = ventana
+        dicc[contador]['parametros']['factorC'] = c
+        memoria.append(stringID)
+        contador = contador + 1
+
+  return dicc      
+
+
+
+
+
+      
 
