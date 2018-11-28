@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 import json
 from copy import deepcopy
 from ta.momentum import money_flow_index
-from ta.momentum import rsi 
+from ta.momentum import rsi
+from ta.momentum import wr
 
 ##==============================================================================
 ## Datos de Yaho Finance
@@ -489,6 +490,53 @@ def RSI(datos, start, end, window = 10, colName = 'Adj Close'):
 
     return resultado
 
+##==============================================================================
+## Función para calcular Williams %R
+##==============================================================================
+def williams(datos, start, end, window = 10):
+    '''
+    ENTRADA
+    datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
+    columna numérica
+
+    start, end: strings en formato 'YYYY-MM-DD' representando la fecha de inicio
+    y la fecha final respectivamente
+
+    window: Entero que representa la ventan de tiempo a utilizar
+
+    SALIDA
+    resultado: Dataframe datos con una columna extra conteniendo la información
+    del indicador
+    '''
+    #Localiza la fecha de inicio y revisa si hay suficiente información
+    indiceInicio=datos[datos['Date']==start].index[0]
+    if window > indiceInicio + 1:
+        print 'No hay suficiente historia para esta fecha'
+        return datos
+
+    #Último índice
+    if end=='':
+        lastIndex=datos.shape[0] - 1
+    else:
+        lastIndex=datos[datos['Date']==end].index[0]
+
+    #calcula el indicador
+    indicador = wr(datos['High'], datos['Low'], datos['Adj Close'], window)
+
+    #agrega la nueva columna
+    resultado = deepcopy(datos)
+    resName = 'Williams-R-' + str(window)
+    resultado[resName] = indicador
+
+    #Filtra a partir del índice correspondiente a la fecha start
+    resultado=resultado.iloc[indiceInicio:lastIndex+1,:]
+    resultado=resultado.reset_index(drop=True)
+
+    #añade metadatos
+    resultado.tipo = 'williams'
+    resultado.resName = resName
+
+    return resultado
 
 ##==============================================================================
 ## Función para crear una lista con la información de distintos indicadores
@@ -559,6 +607,10 @@ def creaIndicadores (datos, dicc = {}, start = '', end = ''):
             colName = dicc[key]['parametros']['colName']
             resultado.append(RSI(datos,start,end,window,colName))
 
+        elif tipo == 'williams':
+            #williams(datos, start, end, window)
+            window = dicc[key]['parametros']['window']
+            resultado.append(williams(datos,start,end,window))
 
     return resultado
 
@@ -610,6 +662,9 @@ def combinaIndicadores(listaIndicadores):
             key = element.resName
             columnas.append(element[key])
 
+        elif element.tipo == 'williams':
+            key = element.resName
+            columnas.append(element[key])
 
     resultado = pd.concat(columnas, axis = 1)
 
