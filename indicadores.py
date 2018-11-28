@@ -12,6 +12,7 @@ from ta.volume import ease_of_movement
 from ta.volume import chaikin_money_flow
 from ta.trend import aroon_down
 from ta.trend import aroon_up
+from ta.trend import cci
 
 ##==============================================================================
 ## Datos de Yaho Finance
@@ -692,6 +693,56 @@ def dif_aroon(datos, start, end = '', colName = 'Adj Close', window = 10):
 
     return resultado
 
+##==============================================================================
+## Función para calcular el Commodity Channel Index (CCI)
+##==============================================================================
+def comm_channel(datos, start, end = '', window = 10, factorC = 0.015):
+    '''
+    ENTRADA
+    datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
+    columna numérica
+
+    start, end: strings en formato 'YYYY-MM-DD' representando la fecha de inicio
+    y la fecha final respectivamente
+
+    window: Entero que representa la ventan de tiempo a utilizar
+
+    factorC: Real (ver la teoría de este indicador)
+
+    SALIDA
+    resultado: Dataframe datos con una columna extra conteniendo la información
+    del indicador
+    '''
+    #Localiza la fecha de inicio y revisa si hay suficiente información
+    indiceInicio=datos[datos['Date']==start].index[0]
+    if window > indiceInicio + 1:
+        print 'No hay suficiente historia para esta fecha'
+        return datos
+
+    #Último índice
+    if end=='':
+        lastIndex=datos.shape[0] - 1
+    else:
+        lastIndex=datos[datos['Date']==end].index[0]
+
+    #calcula el indicador
+    indicador = cci(datos['High'], datos['Low'], datos['Adj Close'], window, factorC)
+
+    #agrega la nueva columna
+    resultado = deepcopy(datos)
+    resName = 'Comm-Chan-' + str(window) + '-' + str(factorC)
+    resultado[resName] = indicador
+
+    #Filtra a partir del índice correspondiente a la fecha start
+    resultado=resultado.iloc[indiceInicio:lastIndex+1,:]
+    resultado=resultado.reset_index(drop=True)
+
+    #añade metadatos
+    resultado.tipo = 'comm-chan'
+    resultado.resName = resName
+
+    return resultado
+
 
 ##==============================================================================
 ## Función para crear una lista con la información de distintos indicadores
@@ -783,6 +834,12 @@ def creaIndicadores (datos, dicc = {}, start = '', end = ''):
             colName = dicc[key]['parametros']['colName']
             resultado.append(dif_aroon(datos,start,end,colName,window))
 
+        elif tipo == 'comm-chan':
+            #comm_channel(datos, start, end, window, factorC)
+            window = dicc[key]['parametros']['window']
+            factorC = dicc[key]['parametros']['factorC']
+            resultado.append(comm_channel(datos,start,end,window,factorC))
+
     return resultado
 
 ##==============================================================================
@@ -846,6 +903,10 @@ def combinaIndicadores(listaIndicadores):
             columnas.append(element[key])
 
         elif element.tipo ==  'dif-aroon':  
+            key = element.resName
+            columnas.append(element[key])
+
+        elif element.tipo == 'comm-chan':
             key = element.resName
             columnas.append(element[key])
 
