@@ -1059,9 +1059,32 @@ def creaDiccionario(num_indicadores = 30):
 
   return dicc      
 
+##==============================================================================
+## Función para crear la matriz de atributos
+##==============================================================================
+def creaAtributos(datos, start, end='', num_indicadores = 100):
+  '''
+  ENTRADA
+  datos: Pandas data frame creado con la función leeTabla
 
+  start, end: Strings en formato YYYY-MM-DD para la fecha de inicio y fin
 
+  num_indicadores: Entero que representa el número de indicadores (atributos)
 
+  SALIDA
+  matriz: Pandas dataframe con el valor de cada atributo en cada periodo
 
-      
+  dicc: Diccionario con la información de cada indicador
+  '''
+
+  #Crea el diccionario
+  dicc = creaDiccionario(num_indicadores)
+
+  #Crea la lista de indicadores
+  lista = creaIndicadores(datos, dicc, start, end)
+
+  #Combina indicadores
+  matriz = combinaIndicadores(lista)
+
+  return matriz, dicc
 
