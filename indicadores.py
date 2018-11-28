@@ -10,6 +10,8 @@ from ta.momentum import rsi
 from ta.momentum import wr
 from ta.volume import ease_of_movement
 from ta.volume import chaikin_money_flow
+from ta.trend import aroon_down
+from ta.trend import aroon_up
 
 ##==============================================================================
 ## Datos de Yaho Finance
@@ -445,7 +447,7 @@ def mfi(datos, start, end = '', window = 14):
 ##==============================================================================
 ## Función para calcular un RSI
 ##==============================================================================
-def RSI(datos, start, end, window = 10, colName = 'Adj Close'):
+def RSI(datos, start, end= '', window = 10, colName = 'Adj Close'):
     '''
     ENTRADA
     datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
@@ -495,7 +497,7 @@ def RSI(datos, start, end, window = 10, colName = 'Adj Close'):
 ##==============================================================================
 ## Función para calcular Williams %R
 ##==============================================================================
-def williams(datos, start, end, window = 10):
+def williams(datos, start, end= '', window = 10):
     '''
     ENTRADA
     datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
@@ -543,7 +545,7 @@ def williams(datos, start, end, window = 10):
 ##==============================================================================
 ## Función para calcular Ease of Movement
 ##==============================================================================
-def ease_mov(datos, start, end, window = 10):
+def ease_mov(datos, start, end = '', window = 10):
     '''
     ENTRADA
     datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
@@ -591,7 +593,7 @@ def ease_mov(datos, start, end, window = 10):
 ##==============================================================================
 ## Función para calcular Chaikin Money Flow (CMF)
 ##==============================================================================
-def chaikin_flow(datos, start, end, window = 10):
+def chaikin_flow(datos, start, end = '', window = 10):
     '''
     ENTRADA
     datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
@@ -636,6 +638,60 @@ def chaikin_flow(datos, start, end, window = 10):
     resultado.resName = resName
 
     return resultado
+
+##==============================================================================
+## Función para calcular la diferencia de Aroon-Up - Aroon-Down
+##==============================================================================
+def dif_aroon(datos, start, end = '', colName = 'Adj Close', window = 10):
+    '''
+    ENTRADA
+    datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
+    columna numérica
+
+    start, end: strings en formato 'YYYY-MM-DD' representando la fecha de inicio
+    y la fecha final respectivamente
+
+    window: Entero que representa la ventan de tiempo a utilizar
+
+    colName: String que representa el nombre de la columna con la cual se calculará el indicador
+
+    SALIDA
+    resultado: Dataframe datos con una columna extra conteniendo la información
+    del indicador
+    '''
+
+    #Localiza la fecha de inicio y revisa si hay suficiente información
+    indiceInicio=datos[datos['Date']==start].index[0]
+    if window > indiceInicio + 1:
+        print 'No hay suficiente historia para esta fecha'
+        return datos
+
+    #Último índice
+    if end=='':
+        lastIndex=datos.shape[0] - 1
+    else:
+        lastIndex=datos[datos['Date']==end].index[0]
+
+    #calcula el indicador
+    aroonUp = aroon_up(datos[colName], window)
+    aroonDown = aroon_down(datos[colName], window)
+    indicador = aroonUp - aroonDown
+
+    #agrega la nueva columna
+    resultado = deepcopy(datos)
+    resName = 'Dif-Aroon-' + str(window)
+    resultado[resName] = indicador
+
+    #Filtra a partir del índice correspondiente a la fecha start
+    resultado=resultado.iloc[indiceInicio:lastIndex+1,:]
+    resultado=resultado.reset_index(drop=True)
+
+    #añade metadatos
+    resultado.tipo = 'dif-aroon'
+    resultado.resName = resName
+
+    return resultado
+
 
 ##==============================================================================
 ## Función para crear una lista con la información de distintos indicadores
@@ -721,6 +777,12 @@ def creaIndicadores (datos, dicc = {}, start = '', end = ''):
             window = dicc[key]['parametros']['window']
             resultado.append(chaikin_flow(datos,start,end,window))
 
+        elif tipo == 'dif-aroon':
+            #dif_aroon(datos, start, end, colName, window)
+            window = dicc[key]['parametros']['window']
+            colName = dicc[key]['parametros']['colName']
+            resultado.append(dif_aroon(datos,start,end,colName,window))
+
     return resultado
 
 ##==============================================================================
@@ -780,6 +842,10 @@ def combinaIndicadores(listaIndicadores):
             columnas.append(element[key])
 
         elif element.tipo == 'chaikin-flow':
+            key = element.resName
+            columnas.append(element[key])
+
+        elif element.tipo ==  'dif-aroon':  
             key = element.resName
             columnas.append(element[key])
 
