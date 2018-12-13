@@ -29,7 +29,7 @@ def crea_nombres(atributos):
 
     for j in range(0, n_col):
         #Valores sin repeticiones del atributo j
-        val_unico = np.array(atributos.iloc[:,j])
+        val_unico = np.unique(np.array(atributos.iloc[:,j]))
 
         #prefijo
         prefijo = atributos.iloc[:,j].name
@@ -70,11 +70,11 @@ def binariza(atributos):
             val_atributo = atributos.iloc[i,j]
 
             #Valores sin repeticiones del atributo j
-            val_unico = np.array(atributos.iloc[:,j])
+            val_unico = np.unique(np.array(atributos.iloc[:,j]))
 
             #convierte en ceros y unos
-            # val_atributo <= val_unico => 1, 0 en otro caso
-            ceros_unos = (val_atributo <= val_unico).astype(np.int)
+            # val_atributo >= val_unico => 1, 0 en otro caso
+            ceros_unos = (val_atributo >= val_unico).astype(np.int)
 
             #agrega a renglon_bin
             renglon_bin.extend(list(ceros_unos))
