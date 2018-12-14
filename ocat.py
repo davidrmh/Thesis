@@ -86,3 +86,23 @@ def binariza(atributos):
     binarizados = pd.DataFrame(binarizados, columns = nombres_columnas)
 
     return binarizados
+
+##==============================================================================
+## Función para calcular las cantidades POS(a) y NEG(a)
+##==============================================================================
+def numero_pos_neg(datos_bin, nombre_atributo, tipo_atributo):
+    '''
+    ENTRADA
+    datos_bin: Pandas dataframe con observaciones binarizadas
+
+    nombre_atributo: String con el nombre de una columna de datos_bin
+
+    tipo_atributo: Entero en {1,0}. 1 => atributo es 1, 0 => atributo es 0 (negación del atributo)
+
+    SALIDA
+    entero que representa POS(a) o NEG(a) de acuerdo al conjunto que representa datos_bin
+    '''
+
+    
+    conteo = len(datos_bin[datos_bin[nombre_atributo]== tipo_atributo])
+    return conteo
