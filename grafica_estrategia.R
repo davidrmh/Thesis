@@ -137,6 +137,7 @@ segmentos_recta_prog <- function(datos){
   
   
   #extrae los precios
+  #precios_cierre <- as.numeric(datos$Close)
   precios_cierre <- as.numeric(datos$Adj.Close)
   precios_apertura <- as.numeric(datos$Open) 
   
@@ -170,11 +171,16 @@ segmentos_recta_prog <- function(datos){
   
   for(t in 2:n_obs){
     
-    y1_cierre <- precios_cierre[t-1]
-    y2_cierre <- precios_cierre[t]
+  
+    
+    
     y1_apertura <- precios_apertura[t-1]
     y2_apertura <- precios_apertura[t]
-    #segments(t-1, y1_cierre, t, y2_cierre, lwd = 2.5, col = "black")
+    if(t >= 3){
+      y1_cierre <- precios_cierre[t-1]
+      y2_cierre <- precios_cierre[t-2]
+      segments(t-1, y1_cierre, t-2, y2_cierre, lwd = 2.5, col = "black")
+    }
     segments(t-1, y1_apertura, t, y2_apertura, lwd = 2.5, col = "darkgreen")
     
     #Actualiza xlab
