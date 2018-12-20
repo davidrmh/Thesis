@@ -1,14 +1,27 @@
 #NOTACIÓN
 ~ := Similiar o crece poco
-<< := Crece mucho
->> := Decrece mucho
+A << B := B es mucho mayor que A
+A >> B := B es mucho menor que A
+BS := Banda superior
+BI := Banda inferior
 
 #Reglas de primera compra
 para t>=3
-1. Si PC[t-2] > PC[t-1] (crece) y PA[t] > PA[t-1] , entonces COMPRAR
-2. Si PC[t-2] ~ PC[t-1] (crece poco) y PA[t] < PA[t-1], entonces ESPERAR (señales ambiguas)
-3. Si PC[t-2] ~ PC[t-1] (crece poco) Y PA[t-2]<<PA[t-1]<<PA[t], entonces COMPRAR
-4. Si PC[t-2] ~ PC[t-1] (crece poco) Y PA[t-2] ~ PA[t-1] << PA[t], entonces COMPRAR 
-5. Si PC[t-2] ~ PC[t-1]  Y PA[t-2] >> PA[t-1] << PA[t], entonces ESPERAR
-6. Si PC[t-2] << PC[t-1] y PA[t] < PA[t-1] y (PA[t-1] ~ PA[t-2] o PA[t-1] > PA[t-2]), entonces COMPRAR 
-7. Si PC[t-2] << PC[t-1] y PA[t] < PA[t-1] < PA[t-1] , entonces ESPERAR 
+1) Si PC[t-2] > PC[t-1] y PA[t] > PA[t-1] > PA[t-2], entonces COMPRAR
+2) Si PC[t-2] ~ PC[t-1] y PA[t] < PA[t-1], entonces ESPERAR (señales ambiguas)
+3) Si PC[t-2] ~ PC[t-1] Y PA[t-2]<<PA[t-1]<<PA[t], entonces COMPRAR
+4) Si PC[t-2] ~ PC[t-1] Y PA[t-2] ~ PA[t-1] << PA[t], entonces COMPRAR 
+5) Si PC[t-2] ~ PC[t-1]  Y PA[t-2] >> PA[t-1] << PA[t], entonces ESPERAR
+6) Si PC[t-2] << PC[t-1] y PA[t] < PA[t-1] y (PA[t-1] ~ PA[t-2] o PA[t-1] > PA[t-2]), entonces COMPRAR 
+7) Si PC[t-2] << PC[t-1] y PA[t] < PA[t-1], entonces ESPERAR
+8) Si PC[t-2] > PC[t-1] y PA[t] < PA[t-1], entonces COMPRAR
+9) Si PC[t-2] << PC[t-1] y PA[t-1] << PA[t], entonce ESPERAR
+10) Si PC[t-2] ~ PC[t-1] y PA[t-2] > PA[t-1] y PA[t-1] << PA[t], entonces COMPRAR
+
+#Reglas para vender
+#Después de COMPRAR colocar bandas
+1V) Si PA[t] >= BS, entonces VENDER
+2V) Si PA[t] <= BI, entonces VENDER
+
+
+
