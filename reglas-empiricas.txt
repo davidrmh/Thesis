@@ -15,13 +15,18 @@ para t>=3
 6) Si PC[t-2] << PC[t-1] y PA[t] < PA[t-1] y (PA[t-1] ~ PA[t-2] o PA[t-1] > PA[t-2]), entonces COMPRAR 
 7) Si PC[t-2] << PC[t-1] y PA[t] < PA[t-1], entonces ESPERAR
 8) Si PC[t-2] > PC[t-1] y PA[t] < PA[t-1], entonces COMPRAR
-9) Si PC[t-2] << PC[t-1] y PA[t-1] << PA[t], entonce ESPERAR
+9) Si PC[t-2] << PC[t-1] y PA[t-1] << PA[t], entonces COMPRAR
 10) Si PC[t-2] ~ PC[t-1] y PA[t-2] > PA[t-1] y PA[t-1] << PA[t], entonces COMPRAR
 
 #Reglas para vender
 #Después de COMPRAR colocar bandas
-1V) Si PA[t] >= BS, entonces VENDER
-2V) Si PA[t] <= BI, entonces VENDER
+1) Si PA[t] >= BS, entonces VENDER
+2) Si PA[t] <= BI, entonces VENDER
+
+#Reglas para comprar (compra distinta de la primera)
+1) Si PA[t-2] > PA[t-1] y PA[t-1] < PA[t] y PC[t-2] < PC[t-1], entonces COMPRAR
+2) Si PA[t-1] < PA[t-1] < PA[t] y PC[t-2] < PC[t-1], entonces COMPRAR
+
 
 
 
