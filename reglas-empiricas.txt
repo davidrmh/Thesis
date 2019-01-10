@@ -18,15 +18,27 @@ para t>=3
 9) Si PC[t-2] << PC[t-1] y PA[t-1] << PA[t], entonces COMPRAR
 10) Si PC[t-2] ~ PC[t-1] y PA[t-2] > PA[t-1] y PA[t-1] << PA[t], entonces COMPRAR
 
+Después de la primera compra, para establecer BI tomar en cuenta mínimo de la historia de PC
+Crear parámetro de nivel de codicia para BS. Podría ser un factor entre la diferencia de PA[t] y PC[t-1]
+
 #Reglas para vender
 #Después de COMPRAR colocar bandas
 1) Si PA[t] >= BS, entonces VENDER
 2) Si PA[t] <= BI, entonces VENDER
+3) Si PC[t-1] < BI y PA[t] < última compra, entonces VENDER ??? (Parece que no funciona)
+
 
 #Reglas para comprar (compra distinta de la primera)
 1) Si PA[t-2] > PA[t-1] y PA[t-1] < PA[t] y PC[t-2] < PC[t-1], entonces COMPRAR
-2) Si PA[t-1] < PA[t-1] < PA[t] y PC[t-2] < PC[t-1], entonces COMPRAR
+2) Si PA[t-2] < PA[t-1] < PA[t] y PC[t-2] < PC[t-1], entonces COMPRAR
 
+Establecer un parámetro relativo al periodo de recuperación (R)
+Se compra cuando en R días consecutivos el PA muestra la misma tendencia (crece) y el PC crece en el periodo anterior.
 
+Al tener una venta que generó pérdida, la BS se establece en el nivel de la compra anterior (se busca recuperar lo que se perdió)
+
+Si la última venta generó ganancias entonces establecer BI en el precio de cierre más pequeño hasta la compra anterior.
+
+Si la última venta generó ganancias, entonces establecer BS en el nivel de dicha venta.
 
 
