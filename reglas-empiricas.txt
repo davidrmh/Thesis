@@ -22,6 +22,7 @@ Después de la primera compra, para establecer BI tomar en cuenta mínimo de la 
 Crear parámetro de nivel de codicia para BS. Podría ser un factor entre la diferencia de PA[t] y PC[t-1]
 
 #Reglas para vender
+#Establecer un parámetro de pérdida, si la pérdida es muy grande evitar vender
 #Después de COMPRAR colocar bandas
 1) Si PA[t] >= BS, entonces VENDER
 2) Si PA[t] <= BI, entonces VENDER
