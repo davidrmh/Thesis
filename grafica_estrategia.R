@@ -168,11 +168,13 @@ segmentos_recta_prog <- function(datos){
   #segmentos horizontales en t-1
   segmento_horizontal_prev <- c()
   
+  #Precio de ejecución
+  precio_ejecucion <- 0
+  
+  #Decisión tomada
+  clase <- 0
   
   for(t in 2:n_obs){
-    
-  
-    
     
     y1_apertura <- precios_apertura[t-1]
     y2_apertura <- precios_apertura[t]
@@ -198,9 +200,28 @@ segmentos_recta_prog <- function(datos){
       title(xlab = paste("dia = ", t, sep = ""))
       
     }
+
+    #Mensajes auxiliares para la toma de decisión
+    acciones_compra_aux <- floor(capital / (datos$Open[t]*(1 + costo_trans)))
+    costo_compra_aux <- datos$Open[t]*(1 + costo_trans)*acciones_compra_aux
+    dinero_venta <- datos$Open[t]*(1 - costo_trans)*acciones
+    valor_mercado <- datos$Open[t]*acciones
+    capital_si_venta <- capital + datos$Open[t]*(1 - costo_trans)*acciones
+    print(paste("Capital=", capital, sep = " "), quote = FALSE)
+    print(paste("Valor de mercado=", valor_mercado, sep = " "), quote = FALSE)
+    print(paste("Precio de apertura=", datos$Open[t], sep = " "), quote = FALSE)
+    print(paste("Último precio de ejecución=", precio_ejecucion, sep = " "), quote = FALSE)
+    if(acciones > 0){ 
+      print(paste("Ganancia de una venta=", capital_si_venta - capital_prev , sep = " "), quote = FALSE)
+      print(paste("Ganancia acumulada=", ganancia_acum + capital_si_venta - capital_prev , sep = " "), quote = FALSE)
+    }
+    #print(paste("Decisión previa=", clase, sep = " "), quote = FALSE)
+    #print(paste("Ganancia de una venta (por acción)=", datos$Open[t]*(1 - costo_trans), sep = " "), quote = FALSE)
+    #print(paste("Ganancia de una venta (total)=", datos$Open[t]*(1 - costo_trans)*acciones, sep = " "), quote = FALSE)
+    #print(paste("Costo de una compra (por acción)=", datos$Open[t]*(1 + costo_trans), sep = " "), quote = FALSE)
+    #print(paste("Costo de una compra (total)=", costo_compra_aux, sep = " "), quote = FALSE)
     
     clase <- readline("Que decisión tomas (1 = Compra, -1 = Venta) \n")
-    
     
     #Compra
     if(clase == 1){
