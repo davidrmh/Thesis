@@ -23,6 +23,7 @@ Crear parámetro de nivel de codicia para BS. Podría ser un factor entre la dif
 
 #Reglas para vender
 #Establecer un parámetro de pérdida, si la pérdida es muy grande evitar vender
+#Establecer un parámetro de conformismo (si la ganancia que genera una venta es mayor o igual a dicho parámetro, entonces vender, aunque no se rebase BS)
 #Después de COMPRAR colocar bandas
 1) Si PA[t] >= BS, entonces VENDER
 2) Si PA[t] <= BI, entonces VENDER
