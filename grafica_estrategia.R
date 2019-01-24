@@ -174,6 +174,9 @@ segmentos_recta_prog <- function(datos){
   #Decisión tomada
   clase <- 0
   
+  #Costos de transacción acumulados
+  costos_acumulados <- 0
+  
   for(t in 2:n_obs){
     
     y1_apertura <- precios_apertura[t-1]
@@ -215,6 +218,7 @@ segmentos_recta_prog <- function(datos){
       print(paste("Ganancia de una venta=", capital_si_venta - capital_prev , sep = " "), quote = FALSE)
       print(paste("Ganancia acumulada=", ganancia_acum + capital_si_venta - capital_prev , sep = " "), quote = FALSE)
     }
+    print(paste("Costos de transacción acumulados=", costos_acumulados, sep =" "), quote = FALSE)
     #print(paste("Decisión previa=", clase, sep = " "), quote = FALSE)
     #print(paste("Ganancia de una venta (por acción)=", datos$Open[t]*(1 - costo_trans), sep = " "), quote = FALSE)
     #print(paste("Ganancia de una venta (total)=", datos$Open[t]*(1 - costo_trans)*acciones, sep = " "), quote = FALSE)
@@ -232,6 +236,9 @@ segmentos_recta_prog <- function(datos){
       
       #Acciones compradas
       acciones <- acciones + floor(capital / (precio_ejecucion*(1 + costo_trans)))
+      
+      #Costo de transacción
+      costos_acumulados <- costos_acumulados +  precio_ejecucion * costo_trans * acciones
       
       #Se actualiza el capital
       capital_prev <- capital
@@ -271,6 +278,9 @@ segmentos_recta_prog <- function(datos){
       
       #Actualiza capital
       capital <- capital + precio_ejecucion*(1 - costo_trans)*acciones
+      
+      #Costo de transacción
+      costos_acumulados <- costos_acumulados +  precio_ejecucion * costo_trans * acciones
       
       #Actualiza acciones
       acciones <- 0
