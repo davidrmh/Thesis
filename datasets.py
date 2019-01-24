@@ -5,6 +5,7 @@ Funciones para crear los conjuntos de prueba y de entrenamiento
 '''
 
 import indicadores as ind
+import etiqueta as eti
 import pandas as pd
 import numpy as np
 
@@ -46,4 +47,54 @@ def separaBloques(datos, lon = 90):
 		bloques.append(bloque)
 
 	return bloques	
+
+##==============================================================================
+## Función para etiquetar los bloques creados con separaBloques
+##==============================================================================
+def etiquetaBloques(bloques,numGen=30,popSize=50, flagOper = True, limpia = True):
+    '''
+    Etiqueta los datos utilizando un algoritmo genético que busca
+    la combinación de señales compra,venta,hold que generen mayor ganancia
+
+    ENTRADA
+    bloques: Lista con los bloques a etiquetar (cada bloque es un pandas dataframe)
+
+    numGen: Entero, número de generaciones.
+
+    popSize: Entero, tamaño de la población.
+
+    flagOper: Booleano. True => Considera el número de transacciones
+    False => No considera el número de transacciones
+
+    limpia: Booleano. True => Limpia señales repetidas
+
+    SALIDA
+    Lista con los bloques etiquetados
+    '''
+
+    bloques_eti = []
+
+    #número de bloques
+    n_bloq = len(bloques)
+
+    #auxiliar
+    cont = 0
+
+    for bloque in bloques:
+
+    	etiquetado = eti.etiquetaMetodo2(bloque, numGen, popSize, flagOper, limpia)
+
+    	print 50*'='
+
+    	cont = cont + 1
+
+    	print 'Finaliza bloque ' + str(cont) + ' de ' + str(n_bloq)
+
+    	print 50*'='
+
+    	bloques_eti.append(etiquetado)
+
+    return bloques_eti	
+
+    	
 
