@@ -219,6 +219,7 @@ segmentos_recta_prog <- function(datos){
       print(paste("Ganancia acumulada=", ganancia_acum + capital_si_venta - capital_prev , sep = " "), quote = FALSE)
     }
     print(paste("Costos de transacción acumulados=", costos_acumulados, sep =" "), quote = FALSE)
+    print(paste("Restan ", n_obs - t, "días", sep =" "), quote = FALSE)
     #print(paste("Decisión previa=", clase, sep = " "), quote = FALSE)
     #print(paste("Ganancia de una venta (por acción)=", datos$Open[t]*(1 - costo_trans), sep = " "), quote = FALSE)
     #print(paste("Ganancia de una venta (total)=", datos$Open[t]*(1 - costo_trans)*acciones, sep = " "), quote = FALSE)
