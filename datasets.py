@@ -39,6 +39,9 @@ def separaBloques(datos, lon = 90):
 		#obtiene el bloque j
 		bloque =  datos.iloc[j*lon:(j+1)*lon,]
 
+		#Reinicia los índices
+		bloque = bloque.reset_index(drop = True)
+
 		#agrega a la lista
 		bloques.append(bloque)
 
