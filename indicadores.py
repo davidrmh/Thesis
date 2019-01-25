@@ -767,6 +767,78 @@ def comm_channel(datos, start, end = '', window = 10, factorC = 0.015):
 
     return resultado
 
+##==============================================================================
+## Función para calcular el cociente de precios con un lag
+##==============================================================================
+def cociente(datos, start, end='', lagNum = 0, lagDen = 1, tipo = 'Open'):
+    '''
+    ENTRADA
+    datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
+    columna numérica
+
+    start, end: strings en formato 'YYYY-MM-DD' representando la fecha de inicio
+    y la fecha final respectivamente
+
+    lagNum: Entero que representa el rezago (lag) del precio en el numerador
+
+    lagDen: Entero que representa el rezago (lago) del precio en el denominador
+
+    tipo: String que indica el tipo de precio a utilizar
+
+    SALIDA    
+    Dataframe datos con una columna extra conteniendo la información
+    del indicador
+    '''
+
+    #Localiza la fecha de inicio y revisa si hay suficiente información
+    indiceInicio=datos[datos['Date']==start].index[0]
+    if indiceInicio - max(lagNum,lagDen) < 0:
+        print 'No hay suficiente historia para esta fecha'
+        return datos
+
+    #Último índice
+    if end=='':
+        lastIndex=datos.shape[0] - 1
+    else:
+        lastIndex=datos[datos['Date']==end].index[0]
+
+    #Calcula los cocientes
+
+    cocientes = []
+
+    for t in range(indiceInicio, lastIndex + 1):
+
+        #obtiene los precios
+        precio_num = datos.iloc[t - lagNum][tipo]
+        precio_den = datos.iloc[t - lagDen][tipo]
+
+        if precio_den == 0:
+            print 'Precio igual a 0!! REVISA LOS DATOS'
+            print 'REVISA LA FECHA' + str(datos.iloc[t - lagDen][tipo])
+            return datos
+        else:
+
+            cocientes.append(precio_num / precio_den)
+
+    #Convierte en arreglo numpy
+    cocientes = np.array(cocientes)
+
+    #filtra el dataframe datos y agrega la nueva columna
+    resultado = deepcopy(datos.iloc[indiceInicio: (lastIndex + 1)])
+    resultado = resultado.reset_index(drop = True)
+
+    #Nombre de la nueva columna
+    resName = 'cociente-' + tipo + '-num-' + str(lagNum) + '-den-' + str(lagDen)
+    resultado[resName] = cocientes
+
+    #Agrega metadatos
+    resultado.tipo = 'cociente'
+    resultado.resName = resName
+
+    return resultado
+
+
+
 
 ##==============================================================================
 ## Función para crear una lista con la información de distintos indicadores
