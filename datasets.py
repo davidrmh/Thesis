@@ -96,5 +96,40 @@ def etiquetaBloques(bloques,numGen=30,popSize=50, flagOper = True, limpia = True
 
     return bloques_eti	
 
+##==============================================================================
+## Función para crear archivos csv a partir de una lista que contiene
+## pandas dataframes. Idealmente esta función se utiliza con la lista de 
+## la función etiquetaBloques
+##==============================================================================
+def guardaCSV(lista, ruta = '/datasets/', activo = 'naftrac'):
+	'''
+	ENTRADA
+
+	lista: Lista que contiene los dataframes
+
+	ruta: String con la carpeta en donde se guardarán los csv
+
+	activo: String con el nombre del activo
+	'''
+
+	#auxiliar para el nombre de los archivos
+	aux = 1
+	for bloque in lista:
+
+		#Extrae fecha inicial y fecha final
+		n_obs = bloque.shape[0]
+		fecha_in = str(bloque.loc[0,'Date']).split(' ')[0]
+		fecha_fin = str(bloque.loc[n_obs-1,'Date']).split(' ')[0]
+
+		#Crea el nombre del archivo
+		nombre = '_'.join([str(aux), activo, fecha_in, fecha_fin, str(n_obs) ])
+		nombre = ruta + nombre + '.csv'
+
+		#Escribe el csv
+		bloque.to_csv(path_or_buf = nombre, index = False)
+
+		aux = aux + 1
+
+	return	
     	
 
