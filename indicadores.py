@@ -770,7 +770,7 @@ def comm_channel(datos, start, end = '', window = 10, factorC = 0.015):
 ##==============================================================================
 ## Función para calcular el cociente de precios con un lag
 ##==============================================================================
-def cociente(datos, start, end='', lagNum = 0, lagDen = 1, tipo = 'Open'):
+def cociente(datos, start, end='', lagNum = 0, lagDen = 1, colName = 'Open'):
     '''
     ENTRADA
     datos: Pandas dataframe que contiene al menos una columna de fechas (DATE) y otra
@@ -783,7 +783,7 @@ def cociente(datos, start, end='', lagNum = 0, lagDen = 1, tipo = 'Open'):
 
     lagDen: Entero que representa el rezago (lago) del precio en el denominador
 
-    tipo: String que indica el tipo de precio a utilizar
+    colName: String que indica el tipo de precio a utilizar
 
     SALIDA    
     Dataframe datos con una columna extra conteniendo la información
@@ -809,12 +809,12 @@ def cociente(datos, start, end='', lagNum = 0, lagDen = 1, tipo = 'Open'):
     for t in range(indiceInicio, lastIndex + 1):
 
         #obtiene los precios
-        precio_num = datos.iloc[t - lagNum][tipo]
-        precio_den = datos.iloc[t - lagDen][tipo]
+        precio_num = datos.iloc[t - lagNum][colName]
+        precio_den = datos.iloc[t - lagDen][colName]
 
         if precio_den == 0:
             print 'Precio igual a 0!! REVISA LOS DATOS'
-            print 'REVISA LA FECHA' + str(datos.iloc[t - lagDen][tipo])
+            print 'REVISA LA FECHA' + str(datos.iloc[t - lagDen][colName])
             return datos
         else:
 
@@ -828,7 +828,7 @@ def cociente(datos, start, end='', lagNum = 0, lagDen = 1, tipo = 'Open'):
     resultado = resultado.reset_index(drop = True)
 
     #Nombre de la nueva columna
-    resName = 'cociente-' + tipo + '-num-' + str(lagNum) + '-den-' + str(lagDen)
+    resName = 'cociente-' + colName + '-num-' + str(lagNum) + '-den-' + str(lagDen)
     resultado[resName] = cocientes
 
     #Agrega metadatos
@@ -935,6 +935,14 @@ def creaIndicadores (datos, dicc = {}, start = '', end = ''):
             window = dicc[key]['parametros']['window']
             factorC = dicc[key]['parametros']['factorC']
             resultado.append(comm_channel(datos,start,end,window,factorC))
+
+        elif tipo == 'cociente':
+            #cociente(datos, start, end, lagNum, lagDen, colName = 'Open')
+            lagNum = dicc[key]['parametros']['lagNum']
+            lagDen = dicc[key]['parametros']['lagDen']
+            colName = dicc[key]['parametros']['colName']
+            resultado.append(cociente(datos, start, end, lagNum, lagDen, colName))
+
 
     return resultado
 
