@@ -1014,6 +1014,10 @@ def combinaIndicadores(listaIndicadores):
             key = element.resName
             columnas.append(element[key])
 
+        elif element.tipo == 'cociente':
+            key = element.resName
+            columnas.append(element[key])
+
     resultado = pd.concat(columnas, axis = 1)
 
     return resultado
