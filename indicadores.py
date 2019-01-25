@@ -20,7 +20,7 @@ from ta.trend import cci
 
 #Tipo de indicadores
 tipos_ind = ['simpleMA', 'bollinger','exponentialMA', 'MACD', 'roc', 'mfi', 
-'rsi', 'williams', 'ease-mov', 'chaikin-flow', 'dif-aroon', 'comm-chan']
+'rsi', 'williams', 'ease-mov', 'chaikin-flow', 'dif-aroon', 'comm-chan', 'cociente']
 
 #Factor k de las bandas de Bollinger
 factorK = np.linspace(0.01, 2.5, 100)
@@ -34,6 +34,9 @@ columnas_vol = ['Open', 'High', 'Low', 'Adj Close', 'Volume']
 
 #Factor C del Commodity Channel Index
 factor_c = [0.015]
+
+#Rezagos para el indicador cociente
+lags = [0, 1, 2, 3]
 
 
 
@@ -1140,6 +1143,26 @@ def creaDiccionario(num_indicadores = 30):
         dicc[contador]['parametros']['factorC'] = c
         memoria.append(stringID)
         contador = contador + 1
+
+    elif tipo_indicador == 'cociente':
+
+        l = np.random.choice(lags, 2, replace = False)
+        lagNum = l[0]
+        lagDen = l[1]
+        columna = np.random.choice(columnas_precios,1)[0]
+
+        stringID = tipo_indicador + str(lagNum) + str(lagDen) + str(columna)
+
+        if stringID not in memoria:
+            dicc[contador] = {}
+            dicc[contador]['tipo'] = tipo_indicador
+            dicc[contador]['parametros'] = {}
+            dicc[contador]['parametros']['lagNum'] = lagNum
+            dicc[contador]['parametros']['lagDen'] = lagDen
+            dicc[contador]['parametros']['colName'] = columna
+            memoria.append(stringID)
+            contador = contador + 1
+
 
   return dicc      
 
