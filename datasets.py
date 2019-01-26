@@ -8,6 +8,7 @@ import indicadores as ind
 import etiqueta as eti
 import pandas as pd
 import numpy as np
+from copy import deepcopy
 
 ##==============================================================================
 ## Función para separar los datos en bloques consecutivos del mismo tamaño
@@ -107,7 +108,7 @@ def guardaCSV(lista, ruta = '/datasets/', activo = 'naftrac'):
 	'''
 	ENTRADA
 
-	lista: Lista que contiene los dataframes
+	lista: Lista que contiene los dataframes (deben de contener al menos una columna llamada Date)
 
 	ruta: String con la carpeta en donde se guardarán los csv
 
@@ -134,4 +135,37 @@ def guardaCSV(lista, ruta = '/datasets/', activo = 'naftrac'):
 
 	return	
     	
+##==============================================================================
+## Función para crear un dataframe con los atributos y las clases
+##==============================================================================
+def atributosClases(atributos, clases):
+	'''
+	ENTRADA
+
+	atributos: Pandas dataframe con los atributos, idealmente creado con la
+	funcion combinaIndicadores del modulo indicadores
+
+	clases: Pandas dataframe que contiene al menos las columnas Date y Clase
+	(idealmente creado con la funcion etiquetaBloques de este modulo)
+
+	SALIDA
+	Pandas dataframe con las columnas Date, las columnas del dataframe atributos y la columna Clase
+	'''
+
+	#Nombre de los atributos
+	nombre_atributos = atributos.columns
+
+	resultado = pd.DataFrame()
+
+	#Agrega columna de fechas
+	resultado['Date']  = deepcopy(clases.loc[:,'Date'])
+
+	#Agrega los atributos
+	for atributo in nombre_atributos:
+		resultado[atributo]  = deepcopy(atributos.loc[:,atributo])
+
+	#Agrega la columna Clase
+	resultado['Clase']  = deepcopy(clases.loc[:,'Clase'])
+
+	return resultado
 
