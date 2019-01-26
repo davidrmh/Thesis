@@ -12,7 +12,7 @@ import numpy as np
 ##==============================================================================
 ## Función para separar los datos en bloques consecutivos del mismo tamaño
 ##==============================================================================
-def separaBloques(datos, lon = 90):
+def separaBloques(datos, lon = 90, inicio = 200):
 	'''
 	ENTRADA
 
@@ -20,6 +20,8 @@ def separaBloques(datos, lon = 90):
 	(idealmente creado con la función leeTabla del módulo indicadores)
 
 	lon: Entero que representa el número de observaciones de cada bloque
+
+	inicio: Entero que representa el indice de inicio
 
 	SALIDA
 	Lista con los bloques de datos
@@ -30,7 +32,7 @@ def separaBloques(datos, lon = 90):
 	n_obs = datos.shape[0]
 
 	#número de bloques posibles
-	n_bloques = int(n_obs / lon)
+	n_bloques = int((n_obs - inicio) / lon)
 
 	#lista para almacenar los bloques
 	bloques = []
@@ -38,7 +40,7 @@ def separaBloques(datos, lon = 90):
 	for j in range(0, n_bloques):
 
 		#obtiene el bloque j
-		bloque =  datos.iloc[j*lon:(j+1)*lon,]
+		bloque =  datos.iloc[inicio + j*lon: (inicio + (j+1)*lon),]
 
 		#Reinicia los índices
 		bloque = bloque.reset_index(drop = True)
