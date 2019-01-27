@@ -49,7 +49,7 @@ def separaBloques(datos, lon = 90, inicio = 200):
 		#agrega a la lista
 		bloques.append(bloque)
 
-	return bloques	
+	return bloques
 
 ##==============================================================================
 ## Función para etiquetar los bloques creados con separaBloques
@@ -97,11 +97,11 @@ def etiquetaBloques(bloques,numGen=30,popSize=50, flagOper = True, limpia = True
 
     	bloques_eti.append(etiquetado)
 
-    return bloques_eti	
+    return bloques_eti
 
 ##==============================================================================
 ## Función para crear archivos csv a partir de una lista que contiene
-## pandas dataframes. Idealmente esta función se utiliza con la lista de 
+## pandas dataframes. Idealmente esta función se utiliza con la lista de
 ## la función etiquetaBloques
 ##==============================================================================
 def guardaCSV(lista, ruta = '/datasets/', activo = 'naftrac'):
@@ -133,8 +133,8 @@ def guardaCSV(lista, ruta = '/datasets/', activo = 'naftrac'):
 
 		aux = aux + 1
 
-	return	
-    	
+	return
+
 ##==============================================================================
 ## Función para crear un dataframe con los atributos y las clases
 ##==============================================================================
@@ -169,3 +169,57 @@ def atributosClases(atributos, clases):
 
 	return resultado
 
+##==============================================================================
+## Función para crear los conjuntos de entrenamiento
+##==============================================================================
+def creaEntrenamiento(datos, dicc, arch_eti = 'archivos_etiquetados.csv', ruta_eti = './datasets/entrenamiento/etiquetado', ruta_dest = './datasets/entrenamiento/atributos_clases', activo = 'naftrac-entrena' ):
+	'''
+	ENTRADA
+
+	datos: Pandas dataframe con la informacion del CSV de Yahoo Finance. Creado con
+	la funcion leeTabla del modulo indicadores
+
+    dicc: Un diccionario de la forma
+    dicc[key] = {'tipo':'FUNCION','parametros':{'window':10,...}}
+    en donde FUNCIÓN corresponde al nombre de alguna de las funciones
+    para calcular un indicador en particular.
+    parametros es un diccionario con los parámetros del indicador de interés
+
+    arch_eti: String con el nombre de archivo CSV que contiene el nombre de
+	cada bloque etiquetado (e.g. 1_naftrac-etiquetado_2013-02-15_2013-06-28_90.csv)
+
+    ruta_eti: String con la ruta (sin incluir el nombre del archivo) de los archivos relacionado a lista_arch
+
+    ruta_dest: String con la ruta en donde se guardaran los archivos
+
+	activo: String auxiliar para el nombre del archivo
+	'''
+
+	#aquí almaceno cada dataframe que utilizará la función guardarCSV
+	entrenamiento = []
+
+	lista_arch = np.array(pd.read_csv(arch_eti, header = None))
+
+	for x in lista_arch:
+
+		archivo = x[0]
+
+		#Nombre del archivo
+		nombre_arch = ruta_eti + archivo
+
+		#Abre el archivo con las clases
+		clases = pd.read_csv(nombre_arch)
+
+		#Obtiene los atributos
+		start = str(clases.loc[0,'Date']).split(' ')[0] #fecha inicial
+		n_obs = clases.shape[0] #número de observaciones
+		end = str(clases.loc[n_obs - 1,'Date']).split(' ')[0] #fecha final
+
+		lista = ind.creaIndicadores(datos, dicc, start, end)
+		atributos = ind.combinaIndicadores(lista)
+		entrenamiento.append( atributosClases(atributos, clases) )
+
+	#guarda los archivos
+	guardaCSV(entrenamiento, ruta_dest, activo)
+
+	return
