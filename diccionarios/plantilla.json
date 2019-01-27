@@ -1,0 +1,2 @@
+{"ind1": {"parametros": {"lagDen": 1, "colName": "Open", "lagNum": 0}, "tipo": "cociente"}, "ind2": {"parametros": {"lagDen": 2, "colName": "Open", "lagNum": 1}, "tipo": "cociente"},
+"ind3": {"parametros": {"lagDen":1, "colName":"Close", "lagNum":2}, "tipo":"cociente"} }
