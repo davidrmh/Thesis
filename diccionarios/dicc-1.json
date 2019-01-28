@@ -1,0 +1,2 @@
+{"ind1": {"parametros": {"window": 25, "colName": "Adj Close"}, "tipo": "dif-aroon"}, "ind2":{"parametros": {"window": 14, "colName": "Adj Close"}, "tipo": "rsi"},
+"ind3": {"parametros": {"window":14}, "tipo":"mfi"}, "ind4": {"parametros": {"window":14}, "tipo":"williams" }, "ind5":{"parametros": {"window":20, "factorC":0.015}, "tipo":"comm-chan"}}
