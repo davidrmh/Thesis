@@ -219,6 +219,8 @@ def creaEntrenamiento(datos, dicc, arch_eti = 'archivos_etiquetados.csv', ruta_e
 		atributos = ind.combinaIndicadores(lista)
 		entrenamiento.append( atributosClases(atributos, clases) )
 
+		print "Finaliza con archivo" + archivo
+
 	#guarda los archivos
 	guardaCSV(entrenamiento, ruta_dest, activo)
 
