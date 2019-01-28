@@ -172,7 +172,7 @@ def atributosClases(atributos, clases):
 ##==============================================================================
 ## Función para crear los conjuntos de entrenamiento
 ##==============================================================================
-def creaEntrenamiento(datos, dicc, arch_eti = 'archivos_etiquetados.csv', ruta_eti = './datasets/entrenamiento/etiquetado', ruta_dest = './datasets/entrenamiento/atributos_clases', activo = 'naftrac-entrena' ):
+def creaEntrenamiento(datos, dicc, arch_eti = 'archivos_etiquetados.csv', ruta_eti = './datasets/entrenamiento/etiquetado/', ruta_dest = './datasets/entrenamiento/atributos_clases/', activo = 'naftrac-entrena' ):
 	'''
 	ENTRADA
 
