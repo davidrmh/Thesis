@@ -13,7 +13,7 @@ from copy import deepcopy
 ##==============================================================================
 ## Función para separar los datos en bloques consecutivos del mismo tamaño
 ##==============================================================================
-def separaBloques(datos, lon = 90, inicio = 200):
+def separaBloques(datos, lon = 90, start = '2013-02-15'):
 	'''
 	ENTRADA
 
@@ -22,12 +22,15 @@ def separaBloques(datos, lon = 90, inicio = 200):
 
 	lon: Entero que representa el número de observaciones de cada bloque
 
-	inicio: Entero que representa el indice de inicio
+	start: String de la forma YYYY-MM-DD que indica la fecha de inicio
 
 	SALIDA
 	Lista con los bloques de datos
 
 	'''
+
+	#índice de inicio
+	inicio=datos[datos['Date']==start].index[0]
 
 	#número de observaciones
 	n_obs = datos.shape[0]
@@ -172,7 +175,7 @@ def atributosClases(atributos, clases):
 ##==============================================================================
 ## Función para crear los conjuntos de entrenamiento
 ##==============================================================================
-def creaEntrenamiento(datos, dicc, arch_eti = 'archivos_etiquetados.csv', ruta_eti = './datasets/entrenamiento/etiquetado/', ruta_dest = './datasets/entrenamiento/atributos_clases/', activo = 'naftrac-entrena' ):
+def creaEntrenamiento(datos, dicc, arch_eti = 'archivos_etiquetados.csv', ruta_eti = './datasets/etiquetado/', ruta_dest = './datasets/atributos_clases/', activo = 'naftrac-entrena' ):
 	'''
 	ENTRADA
 
