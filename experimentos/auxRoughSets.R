@@ -58,3 +58,43 @@ discretiza <- function(entrenaDT, salidaDT, metodo, param){
   #PENDIENTE LOS OTROS DOS MÉTODOS
   
 }
+
+
+##==============================================================================================
+## Función para realizar las predicciones para un conjunto de reglas
+##
+## ENTRADA
+## reglas: Objeto de la clase "RuleSetRST"
+##
+## entrena: tibble con el conjunto de entrenamiento, se obtiene de la lista
+## l[['entrenamiento']][[idx]] creada con la función listaDatos del módulo obtenConjuntos
+##
+## prueba: tibble con el conjunto de entrenamiento, se obtiene de la lista
+## l[['prueba']][[idx]] creada con la función listaDatos del módulo obtenConjuntos
+##
+## metodoDisc: String que representa el método de discretización 
+## ("global.discernibility", "local.discernibility", "unsupervised.intervals", "unsupervised.quantiles")
+##
+## param: Lista de la forma param[[key]] en donde key es un string que corresponde al nombre de un parámetro
+## relativo al método de discretización, por ejemplo param[['nOfIntervals']] para "unsupervised.intervals"
+##
+## SALIDA
+## data.frame con las predicciones
+##==============================================================================================
+reglas.predice <- function(reglas, entrena, prueba, metodoDisc = "unsupervised.intervals",
+                           param = list(nOfIntervals = 4)){
+  
+  predicciones <- predict(reglas, discretiza(convierteDT(entrena),convierteDT(prueba), metodoDisc, param))
+  
+  return(predicciones)
+  
+}
+
+
+
+
+
+
+
+
+
