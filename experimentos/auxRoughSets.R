@@ -79,12 +79,13 @@ discretiza <- function(entrenaDT, salidaDT, metodo, param){
 ## relativo al método de discretización, por ejemplo param[['nOfIntervals']] para "unsupervised.intervals"
 ##
 ## SALIDA
-## data.frame con las predicciones
+## vector numérico con las predicciones
 ##==============================================================================================
 reglas.predice <- function(reglas, entrena, prueba, metodoDisc = "unsupervised.intervals",
                            param = list(nOfIntervals = 4)){
   
   predicciones <- predict(reglas, discretiza(convierteDT(entrena),convierteDT(prueba), metodoDisc, param))
+  predicciones <- as.numeric(as.vector(predicciones$predictions))
   
   return(predicciones)
   
