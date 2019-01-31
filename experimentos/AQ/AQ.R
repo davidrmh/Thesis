@@ -1,6 +1,17 @@
 source('../auxRoughSets.R')
 source('../obtenConjuntos.R')
 ##==============================================================================================
+## VARIABLES GLOBALES
+##
+## PARA EL MÓDULO 'obtenConjuntos.R'
+arch_csv = "../entrena_prueba.csv"
+ruta_entrena = "../../datasets/atributos_clases_dicc-1_rep/"
+ruta_prueba = "../../datasets/atributos_clases_dicc-1_rep/" 
+ruta_etiqueta = "../../datasets/etiquetado/"
+##==============================================================================================
+
+
+##==============================================================================================
 ## Función para obtener un conjunto de reglas a partir de un conjunto de entrenamiento
 ##
 ## ENTRADA
@@ -35,3 +46,71 @@ AQ.fit <- function(entrena, confidence = 0.9, timesCovered = 1, metodoDisc = "un
   return(reglas)
   
 }
+
+
+##==============================================================================================
+## Función main: Ajusta un modelo para cada conjunto de entrenamiento, realiza las predicciones
+## para el conjunto de prueba correspondiente y guarda un csv con las columnas Date, Precios y Clase
+## con el fin de ser evaluado con distintas métricas
+##
+## ENTRADA
+## ruta_dest: String con la ruta de la carpeta en donde se guardarán las predicciones para cada
+## conjunto de prueba
+##
+## confidence: Valor numérico que representa la confianza mínima de las reglas calculadas
+##
+## timesCovered:  Entero positivo. Representa el número mínimo de reglas que deben de cubrir cada ejemplo
+##
+## metodoDisc: String que representa el método de discretización 
+##
+## param: Lista de la forma param[[key]] en donde key es un string que corresponde al nombre de un parámetro
+## relativo al método de discretización, por ejemplo param[['nOfIntervals']] para "unsupervised.intervals"
+##
+## SALIDA
+## Crea archivos en ruta_dest
+##==============================================================================================
+AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.9, timesCovered = 2, 
+                    metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4)){
+  
+  #Carga los conjuntos de entrenamiento, prueba y etiquetado
+  conjuntos <- listaDatos(arch_csv, ruta_entrena, ruta_prueba, ruta_etiqueta)
+  
+  #número de modelos a ajustar
+  n_modelos <- length(conjuntos[['entrenamiento']])
+  
+  #Abre el archivo CSV que contiene en el nombre de cada archivo
+  datos_csv <- read.csv(arch_csv, stringsAsFactors = FALSE)
+  
+  #Ajusta modelos
+  for(i in 1:n_modelos){
+    
+    #obtiene las reglas
+    entrena <- conjuntos[['entrenamiento']][[i]]
+    reglas <- AQ.fit(entrena, confidence, timesCovered, metodoDisc, param)
+    
+    #Obtiene las predicciones para el conjunto de prueba
+    prueba <- conjuntos[['prueba']][[i]]
+    predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
+    
+    #Crea tibble que contendrá las predicciones
+    etiquetado <- conjuntos[['etiquetado']][[i]]
+    etiquetado[,'Clase'] <- predicciones
+    
+    #nombre del archivo de salida
+    #aux1 tiene la forma "2_naftrac-etiquetado_2013-07-01_2013-11-04_90"
+    aux1 <- str_split(datos_csv[i,'etiquetado'],'.csv')[[1]][1]
+    nom_salida <- str_c(ruta_dest,aux1, '_predicciones.csv')
+    
+    #guarda archivo
+    write.csv(etiquetado, file = nom_salida, row.names = FALSE)
+  }
+  print("Predicciones guardadas")
+}
+
+
+
+
+
+
+
+
