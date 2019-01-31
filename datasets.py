@@ -57,7 +57,7 @@ def separaBloques(datos, lon = 90, start = '2013-02-15'):
 ##==============================================================================
 ## Función para etiquetar los bloques creados con separaBloques
 ##==============================================================================
-def etiquetaBloques(bloques,numGen=30,popSize=50, flagOper = True, limpia = True):
+def etiquetaBloques(bloques,numGen=30,popSize=50, flagOper = True, limpia = True, tipoEjec = 'open', h = 0):
     '''
     Etiqueta los datos utilizando un algoritmo genético que busca
     la combinación de señales compra,venta,hold que generen mayor ganancia
@@ -73,6 +73,11 @@ def etiquetaBloques(bloques,numGen=30,popSize=50, flagOper = True, limpia = True
     False => No considera el número de transacciones
 
     limpia: Booleano. True => Limpia señales repetidas
+
+    tipoEjec: String que indica el tipo de precio de ejecución (ver función precioEjecucion módulo etiqueta)
+
+    h: Entero positivo que representa el número de periodos en el futuro, a partir de  'fecha', 
+    en el cual se calculará el precio de ejecución
 
     SALIDA
     Lista con los bloques etiquetados
