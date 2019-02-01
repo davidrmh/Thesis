@@ -45,7 +45,7 @@ def precioEjecucion(datos, fecha, tipo = 'open', h = 0):
 	ENTRADA
 	datos: Pandas dataframe con la columna Date y los distintos precios
 
-	fecha: string con formato 'YYYY-MM-DD' que representa la fecha en que se 
+	fecha: string con formato 'YYYY-MM-DD' que representa la fecha en que se
 	calcula el precio de ejecución
 
 	h: Entero positivo que representa el número de periodos en el futuro, a partir de  'fecha',
@@ -54,7 +54,7 @@ def precioEjecucion(datos, fecha, tipo = 'open', h = 0):
 	tipo: String que indica el tipo de precio de ejecución
 
 	'open': precioEjecucion = Precio de apertura en el día 'fecha' + h
-	
+
 	'mid': precioEjecucion = promedio entre High y Low en 'fecha' +  h
 
 	'adj.close': precioEjecucion = Cierre ajustado en 'fecha' + h
@@ -80,7 +80,7 @@ def precioEjecucion(datos, fecha, tipo = 'open', h = 0):
 			#Columna nombrada por R
 			return float(datos['Adj.Close'].iloc[indiceFecha + h])
 		else:
-			return float(datos['Adj Close'].iloc[indiceFecha + h])	
+			return float(datos['Adj Close'].iloc[indiceFecha + h])
 
 	elif tipo == 'close':
 		return float(datos['Close'].iloc[indiceFecha + h])
@@ -103,7 +103,7 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0):
 
    	tipoEjec: String que indica el tipo de precio de ejecución (ver función precioEjecucion)
 
-    h: Entero positivo que representa el número de periodos en el futuro, a partir de  'fecha', 
+    h: Entero positivo que representa el número de periodos en el futuro, a partir de  'fecha',
     en el cual se calculará el precio de ejecución
 
     SALIDA:
@@ -238,3 +238,64 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0):
         exceso = exceso / contOper
 
     return exceso
+
+##==============================================================================
+## Función para crear un CSV con los resultados de métrica en cada archivo
+##==============================================================================
+def evaluaMetrica(ruta_pred = './AQ/AQ_resultados/', ruta_arch = 'arch_evaluar.csv', ruta_dest='./AQ/', metrica = 'exret', aux = 'AQ', dicc = {'flagOper': False, 'tipoEjec': 'open', 'h': 0}):
+	'''
+	ENTRADA
+
+	ruta_pred: String con la ruta de la carpeta que contiene los archivos con las predicciones
+
+	ruta_arch: String con la ruta del archivo que contiene el nombre de los cojuntos de datos a evaluar
+
+	ruta_dest: String que contiene la ruta del archivo en donde se guardarán los resultados
+
+	metrica: string con el nombre de la métrica a evaluar
+	'exret' = excessReturn
+
+	aux: String auxiliar para nombrar el archivo de salida, el nombre tendrá la forma 'metricas-' + aux
+
+	dicc: Diccionario con los parámetros utilizados en la métrica a evaluar (key = string con el nombre del parámetro)
+
+	SALIDA
+	Crea un CSV con el resultado de las métricas para cada archivo
+	'''
+	#Abre el archivo en ruta_arch
+	archivos = pd.read_csv(ruta_arch)
+
+	#número de archivos
+	numArch = archivos.shape[0]
+
+	#nombre del archivo de salida
+	nombre_salida = ruta_dest +'-'.join(['metrica', metrica, aux]) + '.csv'
+
+	#Obtiene los parámetros de la métrica
+	if metrica == 'exret':
+		flagOper = dicc['flagOper']
+		tipoEjec = dicc['tipoEjec']
+		h = dicc['h']
+
+	#dataframe de salida
+	salida = pd.DataFrame()
+
+	for i in range(0, numArch):
+
+		#nombre del archivo con las predicciones
+		arch_pred = archivos.loc[i,'archivo']
+		nombre_pred = ruta_pred + arch_pred
+		datos = pd.read_csv(nombre_pred)
+
+		#Calcula la métrica correspondiente
+		if metrica == 'exret':
+			performance = excessReturn(datos, flagOper, tipoEjec, h)
+			salida.loc[i, 'archivo'] = arch_pred
+			salida.loc[i, metrica] = performance
+
+	#Guarda el csv
+	salida.to_csv(nombre_salida, index = False)
+
+	print 'Métrica evaluada, revisa el archivo'
+
+	return
