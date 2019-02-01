@@ -85,24 +85,29 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
   for(i in 1:n_modelos){
     
     #obtiene las reglas
-    entrena <- conjuntos[['entrenamiento']][[i]]
-    reglas <- AQ.fit(entrena, confidence, timesCovered, metodoDisc, param)
-    
-    #Obtiene las predicciones para el conjunto de prueba
-    prueba <- conjuntos[['prueba']][[i]]
-    predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
-    
-    #Crea tibble que contendrá las predicciones
-    etiquetado <- conjuntos[['etiquetado']][[i]]
-    etiquetado[,'Clase'] <- predicciones
-    
-    #nombre del archivo de salida
-    #aux1 tiene la forma "2_naftrac-etiquetado_2013-07-01_2013-11-04_90"
-    aux1 <- str_split(datos_csv[i,'etiquetado'],'.csv')[[1]][1]
-    nom_salida <- str_c(ruta_dest,aux1, '_predicciones.csv')
-    
-    #guarda archivo
-    write.csv(etiquetado, file = nom_salida, row.names = FALSE)
+    try({
+      entrena <- conjuntos[['entrenamiento']][[i]]
+      reglas <- AQ.fit(entrena, confidence, timesCovered, metodoDisc, param)
+      
+      #Obtiene las predicciones para el conjunto de prueba
+      prueba <- conjuntos[['prueba']][[i]]
+      predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
+      
+      #Crea tibble que contendrá las predicciones
+      etiquetado <- conjuntos[['etiquetado']][[i]]
+      etiquetado[,'Clase'] <- predicciones
+      
+      #nombre del archivo de salida
+      #aux1 tiene la forma "2_naftrac-etiquetado_2013-07-01_2013-11-04_90"
+      aux1 <- str_split(datos_csv[i,'etiquetado'],'.csv')[[1]][1]
+      nom_salida <- str_c(ruta_dest,aux1, '_predicciones.csv')
+      
+      #guarda archivo
+      write.csv(etiquetado, file = nom_salida, row.names = FALSE)
+      
+      #mensaje auxiliar
+      print(paste("Se crea archivo ", nom_salida, sep = ""), quote = FALSE)
+    })  
   }
   print("Predicciones guardadas")
 }
