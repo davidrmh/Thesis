@@ -1,0 +1,4 @@
+{"ind1": {"parametros": {"lagDen": 1, "colName": "Adj Close", "lagNum": 2}, "tipo": "cociente"},
+"ind2": {"parametros": {"lagDen":2, "colName":"Open", "lagNum":1}, "tipo":"cociente"},
+"ind3": {"parametros": {"lagDen":0, "colName":"Open", "lagNum":1}, "tipo":"cociente"},
+"ind4": {"parametros": {"lagDen":0, "colName":"Open", "lagNum":2}, "tipo":"cociente"} }

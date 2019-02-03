@@ -15,5 +15,10 @@
 	+ MFI (Money Flow Index) con ventana de 14 días.
 	+ Williams %R con ventana de 14 días.
 	+ Commodity Channel Index con ventana de 20 días y factorC igual a 0.015
++ **dicc-2.json**: Este diccionario utiliza 4 indicadores, los cuales se derivaron del archivo **reglas-empiricas.txt**.
+	+ Cociente PC[t - 2] / PC[t - 1] (PC[t] = precio de cierre ajustado en el día t)
+	+ Cociente PA[t - 1] / PA[t - 2] (PA[t] = precio de apertura en el día t)
+	+ Cociente PA[t - 1] / PA[t]
+	+ Cociente PA[t - 2] / PA[t]	
 
 
