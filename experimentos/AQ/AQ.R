@@ -102,8 +102,14 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
       aux1 <- str_split(datos_csv[i,'etiquetado'],'.csv')[[1]][1]
       nom_salida <- str_c(ruta_dest,aux1, '_predicciones.csv')
       
-      #guarda archivo
+      #guarda archivo CSV
       write.csv(etiquetado, file = nom_salida, row.names = FALSE)
+      
+      #guarda archivo TXT con las reglas
+      
+      #Nombre del archivo de salida para guardar las reglas
+      nom_salida_reglas <- str_c(ruta_dest,aux1, '_reglas.txt')
+      write(x = as.character(reglas), file = nom_salida_reglas)
       
       #mensaje auxiliar
       print(paste("Se crea archivo ", nom_salida, sep = ""), quote = FALSE)
