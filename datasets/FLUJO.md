@@ -1,4 +1,4 @@
-# Flujos de trabajo
+# Flujo de trabajo
 
 ## Crear conjuntos de entrenamiento
 
