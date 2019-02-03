@@ -93,7 +93,7 @@ def precioEjecucion(datos, fecha, tipo = 'open', h = 0):
 ##==============================================================================
 ## Función para calcular el Excess Return de una estrategia
 ##==============================================================================
-def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0):
+def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = False):
     '''
     ENTRADA:
     datos. Pandas DataFrame con los precios y la columna Clase
@@ -105,6 +105,8 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0):
 
     h: Entero positivo que representa el número de periodos en el futuro, a partir de  'fecha',
     en el cual se calculará el precio de ejecución
+
+	flagTot: Booleano. True => Se calcula ganancia total porcentual. False => Se calcula el exceso de ganancia
 
     SALIDA:
     exceso. Float. Exceso de ganancia
@@ -149,6 +151,7 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0):
     ###Cálculo de la ganancia siguiendo la estrategia del individuo###
     ##################################################################
 
+    inicializaGlobales()
     efectivo=capital
     acciones=0
     intereses=0
@@ -230,6 +233,10 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0):
     #Se calcula ganancia final
     ganancia = (efectivo - capital) / capital
 
+      #Ganancia total porcentual
+    if flagTot:
+      return ganancia
+
     #Exceso de ganancia (buscamos maximizar esta cantidad)
     exceso = ganancia - gananciaBH
 
@@ -254,6 +261,7 @@ def evaluaMetrica(ruta_pred = './AQ/AQ_resultados/', ruta_arch = 'arch_evaluar.c
 
 	metrica: string con el nombre de la métrica a evaluar
 	'exret' = excessReturn
+	'totret' = Ganancia total porcentual
 
 	aux: String auxiliar para nombrar el archivo de salida, el nombre tendrá la forma 'metricas-' + aux
 
@@ -272,7 +280,7 @@ def evaluaMetrica(ruta_pred = './AQ/AQ_resultados/', ruta_arch = 'arch_evaluar.c
 	nombre_salida = ruta_dest +'-'.join(['metrica', metrica, aux]) + '.csv'
 
 	#Obtiene los parámetros de la métrica
-	if metrica == 'exret':
+	if metrica == 'exret' or metrica == 'totret':
 		flagOper = dicc['flagOper']
 		tipoEjec = dicc['tipoEjec']
 		h = dicc['h']
@@ -290,6 +298,11 @@ def evaluaMetrica(ruta_pred = './AQ/AQ_resultados/', ruta_arch = 'arch_evaluar.c
 		#Calcula la métrica correspondiente
 		if metrica == 'exret':
 			performance = excessReturn(datos, flagOper, tipoEjec, h)
+			salida.loc[i, 'archivo'] = arch_pred
+			salida.loc[i, metrica] = performance
+
+		elif metrica == 'totret':
+			performance = excessReturn(datos, flagOper, tipoEjec, h, True)
 			salida.loc[i, 'archivo'] = arch_pred
 			salida.loc[i, metrica] = performance
 
