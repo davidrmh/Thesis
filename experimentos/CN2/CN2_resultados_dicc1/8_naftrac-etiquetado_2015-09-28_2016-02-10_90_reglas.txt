@@ -1,0 +1,7 @@
+IF MFI.14 is (40.7,57.6] and Comm.Chan.20.0.015 is (-115,-18.8] THEN  is 0; (supportSize=22; laplace=0.92)
+IF Williams.R.14 is (-282,-208] THEN  is 0; (supportSize=25; laplace=0.857142857142857)
+IF Comm.Chan.20.0.015 is (-18.8,77] THEN  is 0; (supportSize=18; laplace=0.80952380952381)
+IF Comm.Chan.20.0.015 is (-115,-18.8] THEN  is 0; (supportSize=11; laplace=0.714285714285714)
+IF Williams.R.14 is (-208,-134] THEN  is 0; (supportSize=12; laplace=0.666666666666667)
+IF Williams.R.14 is [-Inf,-282] THEN  is 0; (supportSize=1; laplace=0.5)
+IF Comm.Chan.20.0.015 is [-Inf,-115] THEN  is 1; (supportSize=1; laplace=0.5)
