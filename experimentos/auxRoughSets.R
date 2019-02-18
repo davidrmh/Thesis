@@ -51,7 +51,7 @@ discretiza <- function(entrenaDT, salidaDT, metodo, param){
   if(metodo %in% c("unsupervised.intervals", "unsupervised.quantiles")) {
     numInter <- param[['nOfIntervals']]
     cutValues <- D.discretization.RST(entrenaDT, type.method = metodo, nOfIntervals = numInter)
-    salidaDT <- SF.applyDecTable(entrenaDT, cutValues)
+    salidaDT <- SF.applyDecTable(salidaDT, cutValues)
     return(salidaDT)
   }
   
