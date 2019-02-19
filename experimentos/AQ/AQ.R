@@ -1,5 +1,6 @@
 source('../auxRoughSets.R')
 source('../obtenConjuntos.R')
+source('../auxFun.R')
 ##==============================================================================================
 ## VARIABLES GLOBALES
 ##
@@ -66,11 +67,13 @@ AQ.fit <- function(entrena, confidence = 0.9, timesCovered = 1, metodoDisc = "un
 ## param: Lista de la forma param[[key]] en donde key es un string que corresponde al nombre de un parámetro
 ## relativo al método de discretización, por ejemplo param[['nOfIntervals']] para "unsupervised.intervals"
 ##
+## ignoraEspera: Booleano. TRUE => se ignora la clase 'espera' (0)
+##
 ## SALIDA
 ## Crea archivos en ruta_dest
 ##==============================================================================================
 AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.9, timesCovered = 2, 
-                    metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4)){
+                    metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4), ignoraEspera = FALSE){
   
   #Carga los conjuntos de entrenamiento, prueba y etiquetado
   conjuntos <- listaDatos(arch_csv, ruta_entrena, ruta_prueba, ruta_etiqueta)
@@ -87,6 +90,7 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
     #obtiene las reglas
     try({
       entrena <- conjuntos[['entrenamiento']][[i]]
+      if(ignoraEspera){entrena <- quitaEspera(entrena)}
       reglas <- AQ.fit(entrena, confidence, timesCovered, metodoDisc, param)
       
       #Obtiene las predicciones para el conjunto de prueba
