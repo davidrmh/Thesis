@@ -1,5 +1,6 @@
 source('../auxRoughSets.R')
 source('../obtenConjuntos.R')
+source('../auxFun.R')
 ##==============================================================================================
 ## VARIABLES GLOBALES
 ##
@@ -64,11 +65,13 @@ CN2.fit <- function(entrena, K = 5, metodoDisc = "unsupervised.intervals",
 ## param: Lista de la forma param[[key]] en donde key es un string que corresponde al nombre de un parámetro
 ## relativo al método de discretización, por ejemplo param[['nOfIntervals']] para "unsupervised.intervals"
 ##
+## ignoraEspera: Booleano. TRUE => se ignora la clase 'espera' (0)
+##
 ## SALIDA
 ## Crea archivos en ruta_dest
 ##==============================================================================================
 CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5, 
-                    metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4)){
+                    metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4), ignoraEspera = FALSE){
   
   #Carga los conjuntos de entrenamiento, prueba y etiquetado
   conjuntos <- listaDatos(arch_csv, ruta_entrena, ruta_prueba, ruta_etiqueta)
@@ -85,6 +88,7 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
     #obtiene las reglas
     try({
       entrena <- conjuntos[['entrenamiento']][[i]]
+      if(ignoraEspera){entrena <- quitaEspera(entrena)}
       reglas <- CN2.fit(entrena, K, metodoDisc, param)
       
       #Obtiene las predicciones para el conjunto de prueba
