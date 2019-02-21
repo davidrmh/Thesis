@@ -119,6 +119,18 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
       print(paste("Se crea archivo ", nom_salida, sep = ""), quote = FALSE)
     })  
   }
+  
+  #Agrega archivo con los parámetros utilizados
+  arch_param <- paste(ruta_dest, "parametros.txt", sep = "")
+  
+  write(paste("confidence = ", confidence, sep = ""), arch_param, append = TRUE)
+  write(paste("times covered = ", timesCovered, sep = ""), arch_param, append = TRUE)
+  
+  #Por el momento sólo utilizaré dos métodos de discretización
+  write(paste("Metodo discretizacion = ", metodoDisc, sep = ""), arch_param, append = TRUE)
+  write(paste("Número intervalos = ", param[["nOfIntervals"]], sep = ""), arch_param, append = TRUE)
+  
+  write(paste("Ignora espera = ", ignoraEspera , sep = ""), arch_param, append = TRUE)
   print("Predicciones guardadas")
 }
 
