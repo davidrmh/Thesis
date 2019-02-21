@@ -1,0 +1,8 @@
+IF Williams.R.14 is (-109,-91.9] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
+IF Adj.Close.RSI.14 is (63.3, Inf] and Williams.R.14 is (-74.7, Inf] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
+IF Comm.Chan.20.0.015 is [-Inf,-91.6] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
+IF Adj.Close.RSI.14 is (40.4,48] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
+IF Dif.Aroon.25 is (-41.7,-23.4] and MFI.14 is (57.3, Inf] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
+IF Williams.R.14 is (-91.9,-74.7] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
+IF Williams.R.14 is (-126,-109] THEN  is -1; (supportSize=2; laplace=0.75)
+IF Adj.Close.RSI.14 is (55.7,63.3] and Comm.Chan.20.0.015 is (61.9, Inf] THEN  is -1; (supportSize=3; laplace=0.8)

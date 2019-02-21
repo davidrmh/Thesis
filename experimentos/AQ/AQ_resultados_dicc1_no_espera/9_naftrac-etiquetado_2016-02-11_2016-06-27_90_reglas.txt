@@ -1,0 +1,6 @@
+IF MFI.14 is [-Inf,36.5] THEN  is 1; (supportSize=2; laplace=0.75)
+IF Adj.Close.RSI.14 is (29.9,37.6] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
+IF Comm.Chan.20.0.015 is (-85.6,-42.2] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
+IF Adj.Close.RSI.14 is (37.6,45.2] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
+IF Adj.Close.RSI.14 is (60.6, Inf] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
+IF Adj.Close.RSI.14 is (52.9,60.6] THEN  is -1; (supportSize=2; laplace=0.75)
