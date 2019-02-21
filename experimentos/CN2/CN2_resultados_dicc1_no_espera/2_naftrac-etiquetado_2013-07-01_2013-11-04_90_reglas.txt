@@ -1,0 +1,8 @@
+IF Williams.R.14 is (-200,-167] THEN  is 1; (supportSize=4; laplace=0.833333333333333)
+IF Comm.Chan.20.0.015 is [-Inf,-126] THEN  is 1; (supportSize=2; laplace=0.75)
+IF Dif.Aroon.25 is (-72,-52] THEN  is -1; (supportSize=3; laplace=0.8)
+IF Comm.Chan.20.0.015 is (-89.9,-54.1] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
+IF Comm.Chan.20.0.015 is (17.7,53.5] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
+IF Comm.Chan.20.0.015 is (53.5, Inf] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
+IF Williams.R.14 is [-Inf,-267] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
+IF Comm.Chan.20.0.015 is (-126,-89.9] THEN  is 1; (supportSize=1; laplace=0.666666666666667)

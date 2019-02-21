@@ -1,0 +1,5 @@
+IF Comm.Chan.20.0.015 is [-Inf,-114] THEN  is 1; (supportSize=2; laplace=0.75)
+IF Williams.R.14 is [-Inf,-202] THEN  is 1; (supportSize=2; laplace=0.75)
+IF Adj.Close.RSI.14 is (56.5, Inf] THEN  is -1; (supportSize=4; laplace=0.833333333333333)
+IF Comm.Chan.20.0.015 is (-114,-78.7] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
+IF Comm.Chan.20.0.015 is (-78.7,-43.9] THEN  is -1; (supportSize=1; laplace=0.666666666666667)

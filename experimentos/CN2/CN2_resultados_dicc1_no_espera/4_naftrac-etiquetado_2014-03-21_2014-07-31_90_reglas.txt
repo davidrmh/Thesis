@@ -1,0 +1,5 @@
+IF Comm.Chan.20.0.015 is [-Inf,-83.7] THEN  is 1; (supportSize=4; laplace=0.833333333333333)
+IF Comm.Chan.20.0.015 is (117, Inf] THEN  is -1; (supportSize=2; laplace=0.75)
+IF MFI.14 is (40,47] THEN  is -1; (supportSize=2; laplace=0.75)
+IF Comm.Chan.20.0.015 is (-3.28,36.9] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
+IF Comm.Chan.20.0.015 is (36.9,77.2] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
