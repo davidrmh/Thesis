@@ -64,9 +64,13 @@ def precioEjecucion(datos, fecha, tipo = 'open', h = 0):
 	SALIDA
 	float que representa el precio de ejecución
 	'''
+	indiceFecha = datos[datos['Date']==fecha].index[0];
+	ultimoIndice = datos.shape[0] - 1
 
-	indiceFecha = datos[datos['Date']==fecha].index[0]
-
+	#Para evitar error 'out of bounds'
+	if indiceFecha + h > ultimoIndice:
+		h = 0
+  
 	if tipo == 'open':
 		return float(datos['Open'].iloc[indiceFecha + h])
 
