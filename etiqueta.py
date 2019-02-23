@@ -11,6 +11,8 @@ from matplotlib.dates import DateFormatter
 capital=100000.00
 comision=0.25/100
 tasa=0.0/100
+#Fija semilla
+np.random.seed(54321)
 
 ##==============================================================================
 ## Función para inicializar variables globales
