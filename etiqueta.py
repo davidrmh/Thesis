@@ -199,6 +199,7 @@ def fitnessMetodo2(datos, flagOper = True, tipoEjec = 'open', h = 0):
     fUltimaOperacion=pd.to_datetime(fechaInicio,format='%Y-%m-%d')
     #contador de operaciones
     contOper = 0
+    contOperGanancia = 0
 
     #No se incluye el último periodo, por eso es numSignals - 1
     #en este periodo se cierra la posición abierta (en caso de haberla)
@@ -228,7 +229,7 @@ def fitnessMetodo2(datos, flagOper = True, tipoEjec = 'open', h = 0):
             flagPosicionAbierta=True
 
             #Se registra el último precio de compra
-            ultimoPrecio=precioEjec
+            ultimoPrecioCompra=precioEjec
 
             #Se actualiza flagCompraReciente
             flagCompraReciente=True
@@ -254,6 +255,8 @@ def fitnessMetodo2(datos, flagOper = True, tipoEjec = 'open', h = 0):
 
             #Se incrementa el contador de operaciones
             contOper = contOper + 1
+            if precioEjec > ultimoPrecioCompra:
+                contOperGanancia = contOperGanancia + 1
 
     #Se cierra posición abierta (si la hay)
 
@@ -270,6 +273,9 @@ def fitnessMetodo2(datos, flagOper = True, tipoEjec = 'open', h = 0):
 
         #Se incrementa el contador de operaciones
         contOper = contOper + 1
+        if precioEjec > ultimoPrecioCompra:
+            contOperGanancia = contOperGanancia + 1
+
 
     #Se calcula ganancia final
     ganancia = (efectivo - capital) / capital
@@ -279,7 +285,7 @@ def fitnessMetodo2(datos, flagOper = True, tipoEjec = 'open', h = 0):
 
     #Se ajusta por el número de operaciones
     if flagOper:
-        exceso = exceso / contOper
+        exceso = contOperGanancia * exceso / contOper
 
     return exceso
 
