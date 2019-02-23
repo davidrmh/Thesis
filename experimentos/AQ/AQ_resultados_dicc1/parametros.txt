@@ -1,5 +1,0 @@
-confidence = 0.9
-times covered = 1
-Metodo discretizacion = unsupervised.intervals
-Número intervalos = 7
-Ignora espera = FALSE

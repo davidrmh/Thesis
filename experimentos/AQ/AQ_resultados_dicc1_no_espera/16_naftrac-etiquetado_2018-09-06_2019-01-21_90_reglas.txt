@@ -1,7 +1,0 @@
-IF Adj.Close.RSI.14 is (58.9,62.6] and Dif.Aroon.25 is (46.3,69.1] THEN  is 1; (supportSize=2; laplace=0.75)
-IF Dif.Aroon.25 is (-45.1,-22.3] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
-IF Adj.Close.RSI.14 is (55.3,58.9] THEN  is 1; (supportSize=2; laplace=0.75)
-IF Dif.Aroon.25 is (23.4,46.3] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
-IF Adj.Close.RSI.14 is (69.9, Inf] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
-IF Adj.Close.RSI.14 is (62.6,66.3] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
-IF Williams.R.14 is [-Inf,-88.2] THEN  is -1; (supportSize=2; laplace=0.75)

@@ -1,8 +1,0 @@
-IF Comm.Chan.20.0.015 is (-49,-16.8] THEN  is 1; (supportSize=3; laplace=0.8)
-IF Comm.Chan.20.0.015 is [-Inf,-49] THEN  is 1; (supportSize=2; laplace=0.75)
-IF Williams.R.14 is (-125, Inf] THEN  is -1; (supportSize=3; laplace=0.8)
-IF Adj.Close.RSI.14 is (59.8,65.5] THEN  is -1; (supportSize=2; laplace=0.75)
-IF Comm.Chan.20.0.015 is (-16.8,15.4] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
-IF Comm.Chan.20.0.015 is (47.6,79.9] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
-IF Comm.Chan.20.0.015 is (79.9,112] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
-IF Comm.Chan.20.0.015 is (112, Inf] THEN  is -1; (supportSize=1; laplace=0.666666666666667)

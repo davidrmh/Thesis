@@ -1,6 +1,0 @@
-IF cociente.Adj.Close.num.2.den.1 is (1.007,1.013] THEN  is 1; (supportSize=3; laplace=0.8)
-IF cociente.Adj.Close.num.2.den.1 is (1.018, Inf] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
-IF cociente.Open.num.2.den.0 is (1,1.01] THEN  is 1; (supportSize=4; laplace=0.833333333333333)
-IF cociente.Open.num.1.den.0 is [-Inf,0.995] THEN  is -1; (supportSize=5; laplace=0.857142857142857)
-IF cociente.Open.num.1.den.0 is (0.995,1] and cociente.Adj.Close.num.2.den.1 is (0.9964,1.002] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
-IF cociente.Open.num.1.den.2 is (1.012,1.018] THEN  is -1; (supportSize=2; laplace=0.75)

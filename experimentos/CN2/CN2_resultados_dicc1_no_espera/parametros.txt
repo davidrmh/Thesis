@@ -1,4 +1,0 @@
-K = 5
-Metodo discretizacion = unsupervised.intervals
-Número intervalos = 7
-Ignora espera = TRUE

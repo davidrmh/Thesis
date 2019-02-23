@@ -1,6 +1,0 @@
-IF cociente.Open.num.2.den.0 is (0.992,1.01] and cociente.Open.num.1.den.2 is (1,1.01] THEN  is 0; (supportSize=31; laplace=0.911764705882353)
-IF cociente.Open.num.1.den.0 is (0.988,1] THEN  is 0; (supportSize=37; laplace=0.875)
-IF cociente.Open.num.2.den.0 is (1.01,1.02] THEN  is 0; (supportSize=16; laplace=0.789473684210526)
-IF cociente.Open.num.1.den.2 is (0.986,1] THEN  is 1; (supportSize=4; laplace=0.571428571428571)
-IF cociente.Open.num.2.den.0 is [-Inf,0.976] THEN  is -1; (supportSize=1; laplace=0.5)
-IF cociente.Open.num.2.den.0 is (0.976,0.992] THEN  is 0; (supportSize=1; laplace=0.5)
