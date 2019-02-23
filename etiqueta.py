@@ -476,6 +476,73 @@ def limpiaRepetidas(datos):
     return datosLimpios
 
 ##==============================================================================
+## Función para eliminar las operaciones que generen pérdidas
+##==============================================================================
+def eliminaPerdidas(datos, tipoEjec = 'open', h = 0):
+    '''
+    ENTRADA
+    datos: Pandas DataFrame con los precios y la columna Clase
+
+    tipoEjec: String que indica el tipo de precio de ejecución (ver función precioEjecucion)
+
+    h: Entero positivo que representa el número de periodos en el futuro, a partir de  'fecha', 
+    en el cual se calculará el precio de ejecución
+
+    SALIDA
+    El DataFrame 'datos' sin las operaciones que generan pérdidas
+    '''
+
+    #índices de compra
+    indicesCompra = datos[datos['Clase'] == 1].index
+
+    #Memoria de los índices de venta que se han analizado
+    memoria = []
+
+    #Quita las compras que ocurren antes de la primera compra
+    indicesVenta = datos[datos['Clase'] == -1].index
+    indicesVenta = indicesVenta[indicesVenta < indicesCompra[0] ]
+    datos.loc[indicesVenta,'Clase'] = 0
+
+    for i in indicesCompra:
+
+        #Obtiene los índices de venta
+        indicesVenta = datos[datos['Clase'] == -1].index
+
+        #Filtra para obtener sólo los que son mayores al índice de compra actual
+        indicesVenta = indicesVenta[indicesVenta > i]
+
+        #Quita los que ya fueron analizados
+        indicesVenta = indicesVenta.difference(pd.Index(memoria))
+
+        #Si todavía hay ventas
+        if len(indicesVenta) != 0:
+
+            #Elige el índice de la venta más próxima a la compra actual
+            j = indicesVenta[0]
+
+            #Obtiene los precios de ejecución de los movimientos
+            fechaCompra = datos['Date'].iloc[i]
+            fechaVenta = datos['Date'].iloc[j]
+            precioCompra = precioEjecucion(datos, fechaCompra, tipoEjec, h)
+            precioVenta = precioEjecucion(datos, fechaVenta, tipoEjec, h)
+
+            #Elimina la operación si ésta causó pérdida
+            if precioCompra > precioVenta:
+                datos.loc[i, 'Clase'] = 0
+                datos.loc[j, 'Clase'] = 0
+
+            #Actualiza la memoria
+            memoria.append(j)
+
+    return datos    
+
+
+
+
+
+
+
+##==============================================================================
 ## Función para etiquetar los datos de acuerdo al método 2
 ##==============================================================================
 
@@ -539,5 +606,8 @@ def etiquetaMetodo2(datos,numGen=30,popSize=50, flagOper = True, limpia = True, 
     #Limpia señales repetidas
     if limpia:
         datos = limpiaRepetidas(datos)
+
+    #Elimina operaciones que generan pérdidas
+    datos = eliminaPerdidas(datos, tipoEjec, h)  
 
     return datos
