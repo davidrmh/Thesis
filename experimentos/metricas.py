@@ -191,7 +191,7 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
             flagPosicionAbierta=True
 
             #Se registra el último precio de compra
-            ultimoPrecio=precioEjec
+            ultimoPrecioCompra=precioEjec
 
             #Se actualiza flagCompraReciente
             flagCompraReciente=True
@@ -204,7 +204,8 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
         #Se venden todas las acciones en un sólo momento
         #Se vende cuando:
         #--Hay señal de venta y se tienen acciones
-        if acciones>0 and datos['Clase'].iloc[t]==-1:
+        ##--La venta no genera pérdidas (relativo a la última compra realizada)
+        if acciones>0 and datos['Clase'].iloc[t]==-1 and ultimoPrecioCompra < precioEjec:
 
             #Aumenta el efectivo
             efectivo=efectivo + acciones * precioEjec * (1 - comision)
