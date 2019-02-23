@@ -99,6 +99,11 @@ def precioEjecucion(datos, fecha, tipo = 'open', h = 0):
     '''
 
     indiceFecha = datos[datos['Date']==fecha].index[0]
+    ultimoIndice = datos.shape[0] - 1
+
+    #para evitar out of bouds
+    if indiceFecha + h > ultimoIndice:
+        h = 0
 
     if tipo == 'open':
         return float(datos['Open'].iloc[indiceFecha + h])
