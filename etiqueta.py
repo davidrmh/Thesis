@@ -328,8 +328,6 @@ def creaPoblacion (numPeriodos,popSize,proba=""):
 
     return poblacion
 
-
-
 ##==============================================================================
 ## Función para regresar calcular el fitness de cada individuo en la población
 ##==============================================================================
@@ -360,7 +358,7 @@ def fitnessPoblacion (datos,poblacion, flagOper = True, tipoEjec = 'open', h = 0
 
     for i in poblacion:
         auxDatos.loc[:,('Clase')]=i #De esta forma para evitar el warning
-        fitness.append(fitnessMetodo2(auxDatos, flagOper))
+        fitness.append(fitnessMetodo2(auxDatos, flagOper, tipoEjec, h))
 
     sinAjuste=cp.deepcopy(fitness)
     sinAjuste=np.array(sinAjuste)
@@ -535,11 +533,6 @@ def eliminaPerdidas(datos, tipoEjec = 'open', h = 0):
             memoria.append(j)
 
     return datos    
-
-
-
-
-
 
 
 ##==============================================================================
