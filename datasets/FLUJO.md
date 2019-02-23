@@ -9,6 +9,7 @@
 2. Con dat.separaBloques separar el conjunto de datos en bloques del mismo tamaño.
 
 3. Con dat.etiquetaBloques obtén las etiquetas de cada bloque, utilizando limpia = False
+(AJUSTAR VARIABLE GLOBAL **incentivoSig**)
 
 4. Con eti.limpiaRepetidas quita las señales repetidas, así se crea el bloque de datos etiquetados sin señales repetidas.
 
