@@ -13,6 +13,7 @@ comision=0.25/100
 tasa=0.0/100
 #Fija semilla
 np.random.seed(54321)
+incentivoSig = 15.0 / 100 # porcentaje de señales (efectivas) para evitar tener pocas observaciones útiles
 
 ##==============================================================================
 ## Función para inicializar variables globales
@@ -286,6 +287,14 @@ def fitnessMetodo2(datos, flagOper = True, tipoEjec = 'open', h = 0):
     #Se ajusta por el número de operaciones
     if flagOper:
         exceso = contOperGanancia * exceso / contOper
+
+    #Se penaliza si hay pocas señales (efectivas y que generen ganancias) 
+    datos_limpios = limpiaRepetidas(datos)
+    datos_limpios = eliminaPerdidas(datos_limpios, tipoEjec, h)
+    n_compras = len(datos_limpios[datos_limpios['Clase'] == 1].index)
+
+    if n_compras < numSignals * incentivoSig:
+        exceso = exceso - 0.5
 
     return exceso
 
