@@ -160,6 +160,10 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
   ultimaOperacion <- "espera"
   ultimoPrecioCompra <- 0
   
+  #Convierte tibbles as data.frames
+  atributos <- as.data.frame(atributos)
+  etiquetado <- as.data.frame(etiquetado)
+  
   #Obtiene la clase de cada observación
   for(i in 1:n_obs){
     
