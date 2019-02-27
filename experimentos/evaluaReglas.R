@@ -8,7 +8,8 @@ source("auxFun.R")
 ## VARIABLES GLOBALES
 ##==============================================================================================
 glob_claseDefault <- 0
-glob_umbralVenta <- 0.02
+glob_bandaSuperior <- 0.02 #numero positivo
+glob_bandaInferior <- -0.04 #número negativo
 
 ##==============================================================================================
 ## Función para evaluar un conjunto de selectores
@@ -180,7 +181,8 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
       
       #INFORMACIÓN CONTEXTUAL (BANDAS HORIZONTALES)
       diferencia_porcentual <- precioEjec / ultimoPrecioCompra - 1
-      if(decision && (diferencia_porcentual > glob_umbralVenta)){
+      if(decision && ((diferencia_porcentual > glob_bandaSuperior) 
+                      || (diferencia_porcentual < glob_bandaInferior)) ){
         clases[i] <- -1
         ultimaOperacion <- "venta"
       }
