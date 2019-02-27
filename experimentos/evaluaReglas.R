@@ -2,12 +2,15 @@
 ## Funciones para evaluar las reglas del paquete Roughsets de forma arbitraria
 ##==============================================================================================
 library(stringr)
+source("auxFun.R")
 
 ##==============================================================================================
 ## VARIABLES GLOBALES
 ##==============================================================================================
-ultimaOperacion <- "espera"
-claseDefault <- 0
+glob_ultimaOperacion <- "espera"
+glob_ultimoPrecioCompra <- 0
+glob_claseDefault <- 0
+glob_umbralVenta <- 0.02
 
 ##==============================================================================================
 ## Función para evaluar un conjunto de selectores
@@ -128,28 +131,63 @@ obtenDecision <- function(reglas, observacion){
 ##
 ## atributos: Dataframe con los atributos del periodo
 ##
-## eitquetado: Dataframe con los precios del periodo (proviene de los archivos etiquetados)
+## etiquetado: Dataframe con los precios del periodo (proviene de los archivos etiquetados)
+##
+## tipoEjec: String con el tipo de precio de ejecución (ver preciosEjecucion del módulo auxFun.R)
+##
+## h: Entero no negativo que representa el número de periodos hacia el futuro para calcular el precio de ejecución
 ##
 ## SALIDA
 ## Dataframe etiquetado con la columna 'Clase' conteniendo la estrategia del periodo de acuerdo
 ## a las reglas
 ##==============================================================================================
-evaluaReglas <- function(reglas, atributos, etiquetado){
+evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0){
   
   #número de observaciones
   n_obs <- dim(atributos)[1]
   
+  #para almacenar las decisiones
+  clases <- rep(glob_claseDefault, n_obs)
+  
   #Obtiene la clase de cada observación
   for(i in 1:n_obs){
     observacion <- atributos[i,]
+    fechaSignal <- atributos[i, 'Date']
+    indiceEjecucion <- which(atributos[i, 'Date'] == fechaSignal) + h
+    fechaEjecucion <- atributos[indiceEjecucion, 'Date']
+    precioEjec <- preciosEjecucion(etiquetado, fechaEjecucion, tipoEjec)
     
     #Clasifica las reglas de acuerdo a su tipo (cuidado con los espacios!)
     reglasCompra <- reglas[str_detect(reglas, "THEN  is 1;")]
     reglasVenta <- reglas[str_detect(reglas, "THEN  is -1;")]
     #PODRÍA ORDENAR LAS REGLAS DE ACUERDO A supportSize o laplace (ver str_extract)
     
+    #Se examinan las reglas de compra cuando la última operación obtenida no fue de compra
+    if(glob_ultimaOperacion != "compra"){
+      decision <- obtenDecision(reglasCompra, observacion)
+      if(decision){
+        clases[i] <- 1
+        glob_ultimaOperacion <- "compra"
+        glob_ultimoPrecioCompra <- precioEjec
+      }
+    }
+    
+    else if(glob_ultimaOperacion == "compra"){
+      decision <- obtenDecision(reglasVenta, observacion)
+      
+      #INFORMACIÓN CONTEXTUAL (BANDAS HORIZONTALES)
+      diferencia_porcentual <- precioEjec / glob_ultimoPrecioCompra - 1
+      if(decision && (diferencia_porcentual > glob_umbralVenta)){
+        clases[i] <- -1
+        glob_ultimaOperacion <- "venta"
+      }
+    }
     
   }
   
+  #Agrega a la columna 'Clase' de 'etiquetado'
+  etiquetado$Clase <- clases
+  
+  return(etiquetado)
   
 }
