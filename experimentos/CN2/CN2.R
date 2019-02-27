@@ -1,6 +1,8 @@
 source('../auxRoughSets.R')
 source('../obtenConjuntos.R')
 source('../auxFun.R')
+source('../auxFun.R')
+source('../evaluaReglas.R')
 ##==============================================================================================
 ## VARIABLES GLOBALES
 ##
@@ -9,6 +11,11 @@ arch_csv = "../entrena_prueba.csv"
 ruta_entrena = "../../datasets/atributos_clases_dicc-2/"
 ruta_prueba = "../../datasets/atributos_clases_dicc-2/" 
 ruta_etiqueta = "../../datasets/etiquetado/"
+# AJUSTAR VARIABLES  DEL MÓDULO evaluaReglas.R (función evaluaReglas)
+glob_bandaSuperior <- 0.03 #numero positivo
+glob_bandaInferior <- -0.04 #número negativo
+glob_tipoEjec <- 'open'
+glob_h <- 0
 ##==============================================================================================
 
 
@@ -91,13 +98,14 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
       if(ignoraEspera){entrena <- quitaEspera(entrena)}
       reglas <- CN2.fit(entrena, K, metodoDisc, param)
       
-      #Obtiene las predicciones para el conjunto de prueba
-      prueba <- conjuntos[['prueba']][[i]]
-      predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
-      
       #Crea tibble que contendrá las predicciones
       etiquetado <- conjuntos[['etiquetado']][[i]]
-      etiquetado[,'Clase'] <- predicciones
+      
+      #Obtiene las predicciones para el conjunto de prueba
+      prueba <- conjuntos[['prueba']][[i]]
+      etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h)
+      #predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
+      #etiquetado$Clase <- predicciones
       
       #nombre del archivo de salida
       #aux1 tiene la forma "2_naftrac-etiquetado_2013-07-01_2013-11-04_90"
@@ -123,9 +131,10 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
   write(paste("K = ", K, sep = ""), arch_param, append = TRUE)
   
   #Por el momento sólo utilizaré dos métodos de discretización
-  write(paste("Metodo discretizacion = ", metodoDisc, sep = ""), arch_param, append = TRUE)
+  write(paste("Método discretización = ", metodoDisc, sep = ""), arch_param, append = TRUE)
   write(paste("Número intervalos = ", param[["nOfIntervals"]], sep = ""), arch_param, append = TRUE)
   
   write(paste("Ignora espera = ", ignoraEspera , sep = ""), arch_param, append = TRUE)
+  write(paste("Tipo de precio de ejecución = ", tipoEjec, " h = ", h, sep = ""), arch_param, append  = TRUE)
   print("Predicciones guardadas")
 }
