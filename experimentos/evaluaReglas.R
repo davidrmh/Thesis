@@ -2,7 +2,10 @@
 ## Funciones para evaluar las reglas del paquete Roughsets de forma arbitraria
 ##==============================================================================================
 library(stringr)
-source("auxFun.R")
+if(!exists("AUX_FUN_R")){
+  source("auxFun.R")  
+}
+
 
 ##==============================================================================================
 ## VARIABLES GLOBALES

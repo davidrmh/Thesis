@@ -3,6 +3,10 @@
 ##==============================================================================================
 library(dplyr)
 
+# Esta variable sirve como los ifdef de c++
+# se utiliza para evitar importar el código si ya se ha importado
+AUX_FUN_R <- "AUX_FUN_R"
+
 ##==============================================================================================
 ## Función para remover la clase ESPERA (Clase 0) de un conjunto de datos
 ##
