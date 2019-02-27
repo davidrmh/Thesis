@@ -1,7 +1,6 @@
 source('../auxRoughSets.R')
 source('../obtenConjuntos.R')
 source('../auxFun.R')
-source('../auxFun.R')
 source('../evaluaReglas.R')
 ##==============================================================================================
 ## VARIABLES GLOBALES
