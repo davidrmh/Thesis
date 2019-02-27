@@ -7,8 +7,6 @@ source("auxFun.R")
 ##==============================================================================================
 ## VARIABLES GLOBALES
 ##==============================================================================================
-glob_ultimaOperacion <- "espera"
-glob_ultimoPrecioCompra <- 0
 glob_claseDefault <- 0
 glob_umbralVenta <- 0.02
 
@@ -149,40 +147,44 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
   #para almacenar las decisiones
   clases <- rep(glob_claseDefault, n_obs)
   
+  #Clasifica las reglas de acuerdo a su tipo (cuidado con los espacios!)
+  reglasCompra <- reglas[str_detect(reglas, "THEN  is 1;")]
+  reglasVenta <- reglas[str_detect(reglas, "THEN  is -1;")]
+  #PODRÍA ORDENAR LAS REGLAS DE ACUERDO A supportSize o laplace (ver str_extract)
+  
+  #Variables auxiliares
+  ultimaOperacion <- "espera"
+  ultimoPrecioCompra <- 0
+  
   #Obtiene la clase de cada observación
   for(i in 1:n_obs){
+    
     observacion <- atributos[i,]
     fechaSignal <- atributos[i, 'Date']
-    indiceEjecucion <- which(atributos[i, 'Date'] == fechaSignal) + h
+    indiceEjecucion <- which(atributos[, 'Date'] == fechaSignal) + h
     fechaEjecucion <- atributos[indiceEjecucion, 'Date']
     precioEjec <- preciosEjecucion(etiquetado, fechaEjecucion, tipoEjec)
-    
-    #Clasifica las reglas de acuerdo a su tipo (cuidado con los espacios!)
-    reglasCompra <- reglas[str_detect(reglas, "THEN  is 1;")]
-    reglasVenta <- reglas[str_detect(reglas, "THEN  is -1;")]
-    #PODRÍA ORDENAR LAS REGLAS DE ACUERDO A supportSize o laplace (ver str_extract)
-    
+  
     #Se examinan las reglas de compra cuando la última operación obtenida no fue de compra
-    if(glob_ultimaOperacion != "compra"){
+    if(ultimaOperacion != "compra"){
       decision <- obtenDecision(reglasCompra, observacion)
       if(decision){
         clases[i] <- 1
-        glob_ultimaOperacion <- "compra"
-        glob_ultimoPrecioCompra <- precioEjec
+        ultimaOperacion <- "compra"
+        ultimoPrecioCompra <- precioEjec
       }
     }
     
-    else if(glob_ultimaOperacion == "compra"){
+    else{
       decision <- obtenDecision(reglasVenta, observacion)
       
       #INFORMACIÓN CONTEXTUAL (BANDAS HORIZONTALES)
-      diferencia_porcentual <- precioEjec / glob_ultimoPrecioCompra - 1
+      diferencia_porcentual <- precioEjec / ultimoPrecioCompra - 1
       if(decision && (diferencia_porcentual > glob_umbralVenta)){
         clases[i] <- -1
-        glob_ultimaOperacion <- "venta"
+        ultimaOperacion <- "venta"
       }
     }
-    
   }
   
   #Agrega a la columna 'Clase' de 'etiquetado'
