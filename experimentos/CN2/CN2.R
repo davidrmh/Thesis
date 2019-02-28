@@ -73,14 +73,17 @@ CN2.fit <- function(entrena, K = 5, metodoDisc = "unsupervised.intervals",
 ##
 ## ignoraEspera: Booleano. TRUE => se ignora la clase 'espera' (0)
 ##
-## acumReglas: Booleano TRUE => las reglas se acumulan. 
+## acumReglas: Booleano TRUE => las reglas se acumulan.
+##
+## top_k: Entero positivo que representa el número de las k mejores reglas a extraer
+## si top_k > |reglas| o top_k = 0 entonces top_k = |reglas|. SÓLO UTILIZAR CUANDO acumReglas = TRUE
 ##
 ## SALIDA
 ## Crea archivos en ruta_dest
 ##==============================================================================================
 CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5, 
                     metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4),
-                    ignoraEspera = FALSE, acumReglas = FALSE){
+                    ignoraEspera = FALSE, acumReglas = FALSE, top_k = 5){
   
   #Carga los conjuntos de entrenamiento, prueba y etiquetado
   conjuntos <- listaDatos(arch_csv, ruta_entrena, ruta_prueba, ruta_etiqueta)
@@ -112,6 +115,10 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
       #Acumula reglas
       if(acumReglas){
         reglasAcum <- c(reglasAcum, as.character(reglas))
+        
+        #Obtiene las top_k mejores reglas
+        if(top_k == 0 || top_k > length(reglasAcum)){top_k = length(reglasAcum)}
+        reglasAcum <- ordenaReglas(reglasAcum, top_k)
         etiquetado <- evaluaReglas(reglasAcum, prueba, etiquetado, glob_tipoEjec, glob_h)
       }
       
@@ -158,6 +165,7 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
   
   if(acumReglas){
     write(reglasAcum, paste(ruta_dest,"reglas_acumuladas.txt", sep = ""))
+    write(paste("top_k = ",  top_k, sep = ""), arch_param, append = TRUE)
   }
   
   print("Predicciones guardadas")
