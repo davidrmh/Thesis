@@ -124,7 +124,37 @@ obtenDecision <- function(reglas, observacion){
   return(FALSE)
 }
 
-
+##==============================================================================================
+## Función para ordenar un conjunto de reglas de acuerdo a supportSize + laplace
+##
+## ENTRADA
+## reglas: vector de strings que representan reglas
+##
+## top_k: Entero positivo que representa el número de las k mejores reglas a extraer
+## si top_k > |reglas| entonces top_k = |reglas|
+##
+## SALIDA
+## vector de strings con las reglas ordenadas de mayor a menor de acuerdo a supportSize + laplace
+##==============================================================================================
+ordenaReglas <- function(reglas, top_k = length(reglas)){
+  
+  #Extrae los valores de supportSize de cada regla
+  supportSize <- as.numeric(str_replace_all(str_extract(reglas, "supportSize=."), "supportSize=",""))
+  
+  #Extrae los valores de laplace de cada regla
+  laplace <-as.numeric(str_replace_all(str_extract(reglas, "laplace=\\d{1,2}\\.\\d{1,}"),"laplace=",""))
+  
+  suma <- supportSize + laplace
+  
+  #Obtiene la permutación de los elementos ordenados de mayor a menor
+  permutacion <- order(suma, decreasing = TRUE)
+  
+  #obtiene las top_k reglas
+  if(top_k > length(reglas)){top_k = length(reglas)}
+  reglas_ordenadas <- reglas[permutacion[1:top_k]]
+  
+  return(reglas_ordenadas)
+}
 ##==============================================================================================
 ## Función para evaluar un conjunto de reglas del paquete Roughsets
 ##
