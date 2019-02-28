@@ -134,6 +134,9 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
   write(paste("Número intervalos = ", param[["nOfIntervals"]], sep = ""), arch_param, append = TRUE)
   
   write(paste("Ignora espera = ", ignoraEspera , sep = ""), arch_param, append = TRUE)
-  write(paste("Tipo de precio de ejecución = ", tipoEjec, " h = ", h, sep = ""), arch_param, append  = TRUE)
+  write(paste("Tipo de precio de ejecución = ", glob_tipoEjec, " h = ", glob_h, sep = ""), arch_param, append  = TRUE)
+  write(paste("Banda superior = ", glob_bandaSuperior), arch_param, append = TRUE)
+  write(paste("Banda inferior = ", glob_bandaInferior), arch_param, append = TRUE)
+  
   print("Predicciones guardadas")
 }
