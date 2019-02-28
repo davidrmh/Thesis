@@ -1,6 +1,7 @@
 source('../auxRoughSets.R')
 source('../obtenConjuntos.R')
 source('../auxFun.R')
+source('../evaluaReglas.R')
 ##==============================================================================================
 ## VARIABLES GLOBALES
 ##
@@ -9,6 +10,11 @@ arch_csv = "../entrena_prueba.csv"
 ruta_entrena = "../../datasets/atributos_clases_dicc-1_rep/"
 ruta_prueba = "../../datasets/atributos_clases_dicc-1_rep/" 
 ruta_etiqueta = "../../datasets/etiquetado/"
+# AJUSTAR VARIABLES  DEL MÓDULO evaluaReglas.R (función evaluaReglas)
+glob_bandaSuperior <- 0.03 #numero positivo
+glob_bandaInferior <- -0.04 #número negativo
+glob_tipoEjec <- 'open'
+glob_h <- 0
 ##==============================================================================================
 
 
@@ -93,13 +99,15 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
       if(ignoraEspera){entrena <- quitaEspera(entrena)}
       reglas <- AQ.fit(entrena, confidence, timesCovered, metodoDisc, param)
       
-      #Obtiene las predicciones para el conjunto de prueba
-      prueba <- conjuntos[['prueba']][[i]]
-      predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
-      
       #Crea tibble que contendrá las predicciones
       etiquetado <- conjuntos[['etiquetado']][[i]]
-      etiquetado[,'Clase'] <- predicciones
+      
+      #Obtiene las predicciones para el conjunto de prueba
+      prueba <- conjuntos[['prueba']][[i]]
+      etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h)
+      #predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
+      #etiquetado[,'Clase'] <- predicciones
+      
       
       #nombre del archivo de salida
       #aux1 tiene la forma "2_naftrac-etiquetado_2013-07-01_2013-11-04_90"
@@ -131,6 +139,10 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
   write(paste("Número intervalos = ", param[["nOfIntervals"]], sep = ""), arch_param, append = TRUE)
   
   write(paste("Ignora espera = ", ignoraEspera , sep = ""), arch_param, append = TRUE)
+  write(paste("Tipo de precio de ejecución = ", glob_tipoEjec, " h = ", glob_h, sep = ""), arch_param, append  = TRUE)
+  write(paste("Banda superior = ", glob_bandaSuperior), arch_param, append = TRUE)
+  write(paste("Banda inferior = ", glob_bandaInferior), arch_param, append = TRUE)
+  
   print("Predicciones guardadas")
 }
 
