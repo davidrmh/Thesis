@@ -156,5 +156,9 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
   write(paste("Banda inferior = ", glob_bandaInferior), arch_param, append = TRUE)
   write(paste("Acumula reglas = ", acumReglas, sep = ""), arch_param, append = TRUE)
   
+  if(acumReglas){
+    write(reglasAcum, paste(ruta_dest,"reglas_acumuladas.txt", sep = ""))
+  }
+  
   print("Predicciones guardadas")
 }
