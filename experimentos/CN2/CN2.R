@@ -73,11 +73,14 @@ CN2.fit <- function(entrena, K = 5, metodoDisc = "unsupervised.intervals",
 ##
 ## ignoraEspera: Booleano. TRUE => se ignora la clase 'espera' (0)
 ##
+## acumReglas: Booleano TRUE => las reglas se acumulan. 
+##
 ## SALIDA
 ## Crea archivos en ruta_dest
 ##==============================================================================================
 CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5, 
-                    metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4), ignoraEspera = FALSE){
+                    metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4),
+                    ignoraEspera = FALSE, acumReglas = FALSE){
   
   #Carga los conjuntos de entrenamiento, prueba y etiquetado
   conjuntos <- listaDatos(arch_csv, ruta_entrena, ruta_prueba, ruta_etiqueta)
@@ -87,6 +90,9 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
   
   #Abre el archivo CSV que contiene en el nombre de cada archivo
   datos_csv <- read.csv(arch_csv, stringsAsFactors = FALSE)
+  
+  #Para acumular las reglas (en forma de string)
+  reglasAcum <- c()
   
   #Ajusta modelos
   for(i in 1:n_modelos){
@@ -102,9 +108,19 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
       
       #Obtiene las predicciones para el conjunto de prueba
       prueba <- conjuntos[['prueba']][[i]]
-      etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h)
-      #predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
-      #etiquetado$Clase <- predicciones
+      
+      #Acumula reglas
+      if(acumReglas){
+        reglasAcum <- c(reglasAcum, as.character(reglas))
+        etiquetado <- evaluaReglas(reglasAcum, prueba, etiquetado, glob_tipoEjec, glob_h)
+      }
+      
+      else{
+        etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h)
+        #predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
+        #etiquetado$Clase <- predicciones
+      }
+      
       
       #nombre del archivo de salida
       #aux1 tiene la forma "2_naftrac-etiquetado_2013-07-01_2013-11-04_90"
@@ -127,6 +143,7 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
 
   #Agrega archivo con los parámetros utilizados
   arch_param <- paste(ruta_dest, "parametros.txt", sep = "")
+  write("", arch_param, append = FALSE)
   write(paste("K = ", K, sep = ""), arch_param, append = TRUE)
   
   #Por el momento sólo utilizaré dos métodos de discretización
@@ -137,6 +154,7 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
   write(paste("Tipo de precio de ejecución = ", glob_tipoEjec, " h = ", glob_h, sep = ""), arch_param, append  = TRUE)
   write(paste("Banda superior = ", glob_bandaSuperior), arch_param, append = TRUE)
   write(paste("Banda inferior = ", glob_bandaInferior), arch_param, append = TRUE)
+  write(paste("Acumula reglas = ", acumReglas, sep = ""), arch_param, append = TRUE)
   
   print("Predicciones guardadas")
 }
