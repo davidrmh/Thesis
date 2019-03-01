@@ -7,6 +7,8 @@ import numpy as np
 capital=100000.00
 comision=0.25/100
 tasa=0.0/100
+glob_bandaSuperior = 4.0 / 100 #número positivo
+glob_bandaInferior = -3.0 / 100 #numero negativo
 
 
 ##==============================================================================
@@ -148,8 +150,16 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
 
     #Vendemos las acciones compradas en el pasado
     #y calculamos el efectivo final asi como la ganancia de Buy and Hold
-    efectivo=efectivo + intereses +acciones*precioFinEjec*(1-comision)
+    efectivo=efectivo + intereses + acciones * precioFinEjec * (1 - comision)
     gananciaBH=(efectivo - capital)/capital
+
+    #Si la ganancia BH < 0 entonces no convenía vender al final
+    #del periodo, una persona (inteligente) no haría tal movimiento
+    #Sólo vendería si se supera su umbral de riesgo
+    diferencia_porcentual = precioFinEjec / precioInicioEjec - 1
+    if gananciaBH < 0 and diferencia_porcentual < glob_bandaInferior:
+        gananciaBH = 0 # Ejectuar la venta causa un pérdida tolerable
+
 
     ##################################################################
     ###Cálculo de la ganancia siguiendo la estrategia del individuo###
@@ -162,6 +172,9 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
     fUltimaOperacion=pd.to_datetime(fechaInicio,format='%Y-%m-%d')
     #contador de operaciones
     contOper = 0
+
+    #ganancia acumulada porcentual
+    ganancia_acum_porcentual = 0
 
     #No se incluye el último periodo, por eso es numSignals - 1
     #en este periodo se cierra la posición abierta (en caso de haberla)
@@ -179,7 +192,7 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
 
         #es posible comprar?
         #Se ejecuta compra cuando se tiene dinero y no se había comprado previamente
-        if datos['Clase'].iloc[t]==1 and compraPosible(efectivo,precioEjec) and not flagPosicionAbierta:
+        if datos['Clase'].iloc[t] == 1 and compraPosible(efectivo,precioEjec) and not flagPosicionAbierta:
 
             #Se compran más acciones (Se invierte todo el dinero posible)
             acciones = acciones + np.floor(efectivo / (precioEjec * (1 + comision)))
@@ -210,6 +223,9 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
             #Aumenta el efectivo
             efectivo=efectivo + acciones * precioEjec * (1 - comision)
 
+            #calcula la ganancia acumulada hasta el momento
+            ganancia_acum_porcentual = ganancia_acum_porcentual + (efectivo / capital - 1)
+
             #Disminuyen acciones
             acciones=0
 
@@ -221,6 +237,9 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
 
     #Se cierra posición abierta (si la hay)
 
+    #Esta parte era para forzar una venta al final del periodo
+    #sin importar si generaba una pérdida
+    '''
     if flagPosicionAbierta:
         #cálculo del precio de ejecución
         fecha = datos['Date'].iloc[numSignals - 1]
@@ -237,13 +256,37 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
 
     #Se calcula ganancia final
     ganancia = (efectivo - capital) / capital
+    '''
+    #Si al final del episodio hay una posición abierta, sólo se vende cuando:
+    # 1. La venta genera ganancias
+    # 2. La diferencia entre los precios de compra y venta rebasa el umbral de riesgo
+    if flagPosicionAbierta:
 
-      #Ganancia total porcentual
+        #cálculo del precio de ejecución
+        fecha = datos['Date'].iloc[numSignals - 1]
+        precioEjec = precioEjecucion(datos, fecha, tipoEjec, h)
+
+        #diferencia entre precios
+        #considerando costos de transacción
+        diferencia_porcentual = ( precioEjec*(1 - comision) ) / (ultimoPrecioCompra*(1 + comision) ) - 1
+
+        #Caso: Venta genera ganancias
+        #o La diferencia entre los precios de compra y venta rebasa el umbral de riesgo
+        if diferencia_porcentual > 0 or diferencia_porcentual < glob_bandaInferior:
+
+            #Aumenta el efectivo y disminuyen acciones
+            efectivo = efectivo + acciones * precioEjec * (1 - comision)
+            acciones = 0
+
+            #Aumenta ganancia acumulada porcentual
+            ganancia_acum_porcentual = ganancia_acum_porcentual + (efectivo / capital - 1)
+
+    #Ganancia total porcentual
     if flagTot:
-      return ganancia
+      return ganancia_acum_porcentual * capital
 
     #Exceso de ganancia (buscamos maximizar esta cantidad)
-    exceso = ganancia - gananciaBH
+    exceso = ganancia_acum_porcentual - gananciaBH
 
     #Se ajusta por el número de operaciones
     if flagOper:
