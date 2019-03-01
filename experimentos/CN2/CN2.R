@@ -75,7 +75,7 @@ CN2.fit <- function(entrena, K = 5, metodoDisc = "unsupervised.intervals",
 ##
 ## acumReglas: Booleano TRUE => las reglas se acumulan.
 ##
-## top_k: Entero positivo que representa el número de las k mejores reglas a extraer
+## top_k: Entero no negativo que representa el número de las k mejores reglas a extraer
 ## si top_k > |reglas| o top_k = 0 entonces top_k = |reglas|. SÓLO UTILIZAR CUANDO acumReglas = TRUE
 ##
 ## SALIDA
@@ -116,9 +116,29 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
       if(acumReglas){
         reglasAcum <- c(reglasAcum, as.character(reglas))
         
-        #Obtiene las top_k mejores reglas
-        if(top_k == 0 || top_k > length(reglasAcum)){top_k = length(reglasAcum)}
-        reglasAcum <- ordenaReglas(reglasAcum, top_k)
+        #Obtiene las top_k reglas de compra y venta
+        reglasCompra <- reglasAcum[str_detect(reglasAcum, "THEN  is 1;")]
+        reglasVenta <- reglasAcum[str_detect(reglasAcum, "THEN  is -1;")]
+        
+        #top_k reglas de compra
+        if(top_k == 0 || top_k > length(reglasCompra)){
+          reglasCompra <- ordenaReglas(reglasCompra, length(reglasCompra))
+        }
+        else{
+          reglasCompra <- ordenaReglas(reglasCompra, top_k)
+        }
+        
+        if(top_k == 0 || top_k > length(reglasVenta)){
+          reglasVenta <- ordenaReglas(reglasVenta, length(reglasVenta))
+        }
+        else{
+          reglasVenta <- ordenaReglas(reglasVenta, top_k)
+        }
+        
+        #junta las top_k reglas de compra y venta
+        reglasAcum <- c(reglasCompra, reglasVenta)
+        
+        #Realiza las predicciones
         etiquetado <- evaluaReglas(reglasAcum, prueba, etiquetado, glob_tipoEjec, glob_h)
       }
       
