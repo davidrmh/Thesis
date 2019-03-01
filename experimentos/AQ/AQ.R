@@ -75,11 +75,17 @@ AQ.fit <- function(entrena, confidence = 0.9, timesCovered = 1, metodoDisc = "un
 ##
 ## ignoraEspera: Booleano. TRUE => se ignora la clase 'espera' (0)
 ##
+## acumReglas: Booleano TRUE => las reglas se acumulan.
+##
+## top_k: Entero no negativo que representa el número de las k mejores reglas a extraer
+## si top_k > |reglas| o top_k = 0 entonces top_k = |reglas|. SÓLO UTILIZAR CUANDO acumReglas = TRUE
+##
 ## SALIDA
 ## Crea archivos en ruta_dest
 ##==============================================================================================
 AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.9, timesCovered = 2, 
-                    metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4), ignoraEspera = FALSE){
+                    metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4),
+                    ignoraEspera = FALSE, acumReglas = FALSE, top_k = 5){
   
   #Carga los conjuntos de entrenamiento, prueba y etiquetado
   conjuntos <- listaDatos(arch_csv, ruta_entrena, ruta_prueba, ruta_etiqueta)
@@ -89,6 +95,9 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
   
   #Abre el archivo CSV que contiene en el nombre de cada archivo
   datos_csv <- read.csv(arch_csv, stringsAsFactors = FALSE)
+
+  #Para acumular las reglas (en forma de string)
+  reglasAcum <- c()  
   
   #Ajusta modelos
   for(i in 1:n_modelos){
@@ -104,10 +113,42 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
       
       #Obtiene las predicciones para el conjunto de prueba
       prueba <- conjuntos[['prueba']][[i]]
-      etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h)
-      #predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
-      #etiquetado[,'Clase'] <- predicciones
       
+      #Acumula reglas
+      if(acumReglas){
+        reglasAcum <- c(reglasAcum, as.character(reglas))
+        
+        #Obtiene las top_k reglas de compra y venta
+        reglasCompra <- reglasAcum[str_detect(reglasAcum, "THEN  is 1;")]
+        reglasVenta <- reglasAcum[str_detect(reglasAcum, "THEN  is -1;")]
+        
+        #top_k reglas de compra
+        if(top_k == 0 || top_k > length(reglasCompra)){
+          reglasCompra <- ordenaReglas(reglasCompra, length(reglasCompra))
+        }
+        else{
+          reglasCompra <- ordenaReglas(reglasCompra, top_k)
+        }
+        
+        if(top_k == 0 || top_k > length(reglasVenta)){
+          reglasVenta <- ordenaReglas(reglasVenta, length(reglasVenta))
+        }
+        else{
+          reglasVenta <- ordenaReglas(reglasVenta, top_k)
+        }
+        
+        #junta las top_k reglas de compra y venta
+        reglasAcum <- c(reglasCompra, reglasVenta)
+        
+        #Realiza las predicciones
+        etiquetado <- evaluaReglas(reglasAcum, prueba, etiquetado, glob_tipoEjec, glob_h)
+      }
+      
+      else{
+        etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h)
+        #predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
+        #etiquetado$Clase <- predicciones
+      }
       
       #nombre del archivo de salida
       #aux1 tiene la forma "2_naftrac-etiquetado_2013-07-01_2013-11-04_90"
@@ -142,6 +183,12 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
   write(paste("Tipo de precio de ejecución = ", glob_tipoEjec, " h = ", glob_h, sep = ""), arch_param, append  = TRUE)
   write(paste("Banda superior = ", glob_bandaSuperior), arch_param, append = TRUE)
   write(paste("Banda inferior = ", glob_bandaInferior), arch_param, append = TRUE)
+  write(paste("Acumula reglas = ", acumReglas, sep = ""), arch_param, append = TRUE)
+  
+  if(acumReglas){
+    write(reglasAcum, paste(ruta_dest,"reglas_acumuladas.txt", sep = ""))
+    write(paste("top_k = ",  top_k, sep = ""), arch_param, append = TRUE)
+  }
   
   print("Predicciones guardadas")
 }
