@@ -171,7 +171,7 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
   
   #Agrega archivo con los parámetros utilizados
   arch_param <- paste(ruta_dest, "parametros.txt", sep = "")
-  
+  write("", arch_param, append = FALSE)
   write(paste("confidence = ", confidence, sep = ""), arch_param, append = TRUE)
   write(paste("times covered = ", timesCovered, sep = ""), arch_param, append = TRUE)
   
