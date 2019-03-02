@@ -1,0 +1,7 @@
+cociente.Open.num.2.den.0  = PA[t - 2] / PA[t]
+cociente.Adj.Close.num.2.den.1 = PC[t - 2] / PC[t - 1]
+cociente.Open.num.1.den.0 = PA[t - 1] / PA[t]
+cociente.Open.num.1.den.2 = PA[t - 1] / PA[t - 2]
+
+IF cociente.Open.num.1.den.2 is (0,1) and cociente.Open.num.1.den.0 is (0,1) and cociente.Adj.Close.num.2.den.1 (0,1) THEN  is 1; (supportSize=1; laplace=1)
+IF cociente.Open.num.1.den.2 is (1, Inf] and cociente.Open.num.1.den.0 is (0,1) and cociente.Adj.Close.num.2.den.1 (0,1) THEN  is 1; (supportSize=1; laplace=1)
