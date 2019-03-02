@@ -4,7 +4,7 @@
 source("auxFun.R")
 
 ##==============================================================================================
-## Función para visualizar una estrategia
+## Función para visualizar una estrategia (SIN SEÑALES REPETIDAS)
 ##
 ## ENTRADA
 ## datos: Dataframe con al menos las columnas Date y Clase
@@ -13,9 +13,10 @@ source("auxFun.R")
 ##
 ## step: Entero positivo que representa el número de periodos hacia el futuro
 ##
+## bandaInf: Número negativo que representa la banda inferior (en porcentaje)
 ## SALIDA
 ## Gráfica de la estrategia. S
-visualizaEstrategia <- function(datos, eje_y = "open", step = 1){
+visualizaEstrategia <- function(datos, eje_y = "open", step = 0, bandaInf = - 3 / 100, comision = 0.25 / 100){
   
   #Número de observaciones
   n_obs <- nrow(datos)
@@ -41,6 +42,38 @@ visualizaEstrategia <- function(datos, eje_y = "open", step = 1){
     indicesCompra <- which(datos$Clase == 1) + step
   }
   
+  #Revisa las posiciones que quedan abiertas
+  if(length(indicesCompra) > length(indicesVenta)){
+    
+    #Obtiene datos de la última compra
+    ultimoIndiceCompra <- indicesCompra[length(indicesCompra)]
+    fechaUltimaCompra <- datos$Date[ultimoIndiceCompra]
+    ultimoPrecioCompra <- preciosEjecucion(datos, fechaUltimaCompra, tipo = eje_y)
+    
+    #Obtiene datos del último día en el episodio
+    fechaUltimoDia <- datos$Date[length(datos$Date)]
+    precioUltimoDia <- preciosEjecucion(datos, fechaUltimoDia, tipo = eje_y)
+    
+    #Analiza si se debe de vender o no
+    #Se vende cuando:
+    #1. La venta genera ganancias (sin importar la banda superior)
+    #2. El precio de venta (considerando comisiones) cae debajo del umbral de riesgo (banda inferior)
+    diferenciaPorcentual <- ( precioUltimoDia*(1 - comision) )/ ( (ultimoPrecioCompra)*(1 + comision) ) - 1
+    
+    if(diferenciaPorcentual > 0 || diferenciaPorcentual < bandaInf){
+      #El último día se vende
+      indicesVenta <- c(indicesVenta, n_obs)
+    }
+    
+    else{
+      #No si considera la compra que generó la posición abierta
+      indiceRemover <- which(indicesCompra == ultimoIndiceCompra)
+      indicesCompra[indiceRemover] <- 0
+      
+    }
+  }
+  
+  
   #Calcula los precios de ejecución
   fechasCompra <- datos$Date[indicesCompra]
   preciosCompra <- preciosEjecucion(datos, fechasCompra, tipo = eje_y)
@@ -49,6 +82,8 @@ visualizaEstrategia <- function(datos, eje_y = "open", step = 1){
   
   #Obtiene los precios a graficar
   precios<-preciosEjecucion(datos, datos$Date, tipo = eje_y)
+  
+  #Revisa si
   
   #Crea la gráfica
   ylab <- paste("Precio ejecución = ", eje_y, sep = "")
