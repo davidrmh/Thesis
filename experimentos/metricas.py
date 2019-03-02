@@ -12,13 +12,23 @@ glob_bandaInferior = -3.0 / 100 #numero negativo
 
 
 ##==============================================================================
-## Función para inicializar variables globales
+## Función para inicializar variables globales  
 ##==============================================================================
-def inicializaGlobales():
-	capital=100000.00
-	comision=0.25/100
-	tasa=0.0/100
-	return
+def inicializaGlobales(dicc):
+  '''
+  ENTRADA
+
+  dicc: Diccionario con el valor de cada parámetro
+
+  SALIDA
+  inicializa variables globales
+  '''
+  capital = dicc['capital']
+  comision = dicc['comision']
+  glob_bandaSuperior = dicc['bandaSuperior']
+  glob_bandaInferior = dicc['bandaInferior']
+  #tasa = dicc['tasa']
+  return
 
 
 ##==============================================================================
@@ -99,7 +109,7 @@ def precioEjecucion(datos, fecha, tipo = 'open', h = 0):
 ##==============================================================================
 ## Función para calcular el Excess Return de una estrategia
 ##==============================================================================
-def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = False):
+def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = False, dicc_glob = {'capital':100000.0, 'comision':0.25 / 100, 'bandaSuperior':0.035, 'bandaInferior':-0.03, 'tasa':0}):
     '''
     ENTRADA:
     datos. Pandas DataFrame con los precios y la columna Clase
@@ -114,10 +124,12 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
 
 	flagTot: Booleano. True => Se calcula ganancia total porcentual. False => Se calcula el exceso de ganancia
 
+    dicc_glob: Diccionario para inicializar las variables globales
+
     SALIDA:
     exceso. Float. Exceso de ganancia
     '''
-    inicializaGlobales()
+    inicializaGlobales(dicc_glob)
 
     acciones=0
     flagPosicionAbierta=False
@@ -165,7 +177,7 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
     ###Cálculo de la ganancia siguiendo la estrategia del individuo###
     ##################################################################
 
-    inicializaGlobales()
+    inicializaGlobales(dicc_glob)
     efectivo=capital
     acciones=0
     intereses=0
@@ -297,7 +309,8 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
 ##==============================================================================
 ## Función para crear un CSV con los resultados de métrica en cada archivo
 ##==============================================================================
-def evaluaMetrica(ruta_pred = './AQ/AQ_resultados/', ruta_arch = 'arch_evaluar.csv', ruta_dest='./AQ/', metrica = 'exret', aux = 'AQ', dicc = {'flagOper': False, 'tipoEjec': 'open', 'h': 0}):
+def evaluaMetrica(ruta_pred = './AQ/AQ_resultados/', ruta_arch = 'arch_evaluar.csv', ruta_dest='./AQ/', metrica = 'exret', aux = 'AQ',
+ dicc = {'flagOper': False, 'tipoEjec': 'open', 'h': 0}, dicc_glob = {'capital':100000.0, 'comision':0.25 / 100, 'bandaSuperior':0.035, 'bandaInferior':-0.03, 'tasa':0}):
 	'''
 	ENTRADA
 
@@ -314,6 +327,8 @@ def evaluaMetrica(ruta_pred = './AQ/AQ_resultados/', ruta_arch = 'arch_evaluar.c
 	aux: String auxiliar para nombrar el archivo de salida, el nombre tendrá la forma 'metricas-' + aux
 
 	dicc: Diccionario con los parámetros utilizados en la métrica a evaluar (key = string con el nombre del parámetro)
+
+    dicc_glob: Diccionario para inicializar las variables globales
 
 	SALIDA
 	Crea un CSV con el resultado de las métricas para cada archivo
@@ -345,12 +360,12 @@ def evaluaMetrica(ruta_pred = './AQ/AQ_resultados/', ruta_arch = 'arch_evaluar.c
 
 		#Calcula la métrica correspondiente
 		if metrica == 'exret':
-			performance = excessReturn(datos, flagOper, tipoEjec, h)
+			performance = excessReturn(datos, flagOper, tipoEjec, h, False, dicc_glob)
 			salida.loc[i, 'archivo'] = arch_pred
 			salida.loc[i, metrica] = performance
 
 		elif metrica == 'totret':
-			performance = excessReturn(datos, flagOper, tipoEjec, h, True)
+			performance = excessReturn(datos, flagOper, tipoEjec, h, True, dicc_glob)
 			salida.loc[i, 'archivo'] = arch_pred
 			salida.loc[i, metrica] = performance
 
