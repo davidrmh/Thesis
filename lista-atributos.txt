@@ -1,7 +1,0 @@
-# Posibles atributos
-## Atributos Continuos
--> Cociente PA[t] / PA[t-1]
--> Cociente PA[t-1] / PA[t-2]
--> Cociente PC[t-1] / PA[t-2]
-
-## Atributos
