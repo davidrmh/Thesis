@@ -22,6 +22,12 @@ como conjuntos de prueba.
 **prueba** pero con los precios de Yahoo Finance y la columna *Clase*. Estos
 archivos se utilizarán para crear los archivos necesarios para calcular las
 métricas de desempeño.
+
+## NOTA IMPORTANTE
++ Los archivos **txt** con las reglas tienen un desfase con su nombre.
+Por ejemplo el archivo 2_naftrac_2013-07-01_2013-11-04_90_reglas.txt contiene las reglas
+aprendidas con el archivo 1_naftrac_... Las cuales se utilizaron para crear la estrategia
+de 2_naftrac_ ...
  
 
 
