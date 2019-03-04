@@ -1,0 +1,7 @@
+IF cociente.Open.num.2.den.0 is (1.015, Inf] THEN  is 1; (supportSize=5; laplace=0.857142857142857)
+IF cociente.Open.num.1.den.2 is (1.004,1.011] THEN  is -1; (supportSize=4; laplace=0.833333333333333)
+IF cociente.Open.num.1.den.0 is (1,1.01] THEN  is 1; (supportSize=4; laplace=0.833333333333333)
+IF cociente.Open.num.1.den.2 is (0.9972,1.004] THEN  is -1; (supportSize=4; laplace=0.833333333333333)
+IF cociente.Open.num.1.den.2 is (0.9904,0.9972] THEN  is -1; (supportSize=2; laplace=0.75)
+IF cociente.Open.num.1.den.2 is (1.011,1.018] THEN  is 1; (supportSize=2; laplace=0.75)
+IF cociente.Open.num.2.den.0 is [-Inf,0.9559] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
