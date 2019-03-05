@@ -44,7 +44,7 @@
   + Acumula reglas = TRUE
   + top_k = 5
 
-  + **AQ_exp_4**:
++ **AQ_exp_4**:
   + Diccionario 2 (atributos empíricos)
   + Longitud de periodo: 90
   + Etiquetado: Sin señales repetidas, precio Open
