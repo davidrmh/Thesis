@@ -112,3 +112,12 @@
   + Banda superior =  0.035
   + Banda inferior =  -0.03
   + Acumula reglas = FALSE
+
+## YO
++ **AQ_exp_1**
+  + Reglas aprendidas en **AQ/AQ_exp_1/** en los periodos 1 al 5.
+  + top_k = 5
+
++ **AQ_exp_2**
+  + Reglas aprendidas en **AQ/AQ_exp_1/** en los periodos 1 al 5.
+  + top_k = 0 (todas las reglas)
