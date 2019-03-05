@@ -118,6 +118,6 @@
   + Reglas aprendidas en **AQ/AQ_exp_1/** en los periodos 1 al 5.
   + top_k = 5
 
-+ **AQ_exp_2**
++ **AQ_exp_1_2**
   + Reglas aprendidas en **AQ/AQ_exp_1/** en los periodos 1 al 5.
   + top_k = 0 (todas las reglas)
