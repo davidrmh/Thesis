@@ -114,6 +114,9 @@
   + Acumula reglas = FALSE
 
 ## YO
++ **yo_resultados**
+  + Reglas aprendidas de forma empírica.
+  
 + **AQ_exp_1**
   + Reglas aprendidas en **AQ/AQ_exp_1/** en los periodos 1 al 5.
   + top_k = 5
