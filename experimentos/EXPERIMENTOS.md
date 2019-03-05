@@ -171,6 +171,60 @@
   + Banda inferior =  -0.03
   + Acumula reglas = FALSE
 
++ **CN2_exp_1_30**
+  + Diccionario 2 (atributos empíricos)
+  + Longitud de periodo: 30
+  + Etiquetado: Sin señales repetidas, precio Mid
+  + K = 5
+  + Método discretización = unsupervised.intervals
+  + Número intervalos = 6
+  + Ignora espera = TRUE
+  + Tipo de precio de ejecución = mid h = 0
+  + Banda superior =  0.02
+  + Banda inferior =  -0.03
+  + Acumula reglas = TRUE
+  + top_k = 5
+
++ **CN2_exp_2_30**
+  + Diccionario 2 (atributos empíricos)
+  + Longitud de periodo: 30
+  + Etiquetado: Sin señales repetidas, precio Mid
+  + K = 5
+  + Método discretización = unsupervised.intervals
+  + Número intervalos = 6
+  + Ignora espera = TRUE
+  + Tipo de precio de ejecución = mid h = 0
+  + Banda superior =  0.02
+  + Banda inferior =  -0.03
+  + Acumula reglas = FALSE
+
++ **CN2_exp_3_30**
+  + Diccionario 2 (atributos empíricos)
+  + Longitud de periodo: 30
+  + Etiquetado: Sin señales repetidas, precio Mid
+  + K = 5
+  + Método discretización = unsupervised.quantiles
+  + Número intervalos = 6
+  + Ignora espera = TRUE
+  + Tipo de precio de ejecución = mid h = 0
+  + Banda superior =  0.02
+  + Banda inferior =  -0.03
+  + Acumula reglas = TRUE
+  + top_k = 5
+
++ **CN2_exp_4_30**
+  + Diccionario 2 (atributos empíricos)
+  + Longitud de periodo: 30
+  + Etiquetado: Sin señales repetidas, precio Mid
+  + K = 5
+  + Método discretización = unsupervised.quantiles
+  + Número intervalos = 6
+  + Ignora espera = TRUE
+  + Tipo de precio de ejecución = mid h = 0
+  + Banda superior =  0.02
+  + Banda inferior =  -0.03
+  + Acumula reglas = FALSE
+
 ## YO
 + **yo_resultados**
   + Reglas aprendidas de forma empírica.
