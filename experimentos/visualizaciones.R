@@ -4,6 +4,37 @@
 source("auxFun.R")
 
 ##==============================================================================================
+## Función para combinar dataframe 
+##
+## ENTRADA
+## ruta: Ruta del archivo que contiene la lista de los archivos a combinar
+## (estos archivos deben de ser escritos en orden cronológico) (archivo combinaArchivos.csv)
+##
+## SALIDA
+## un dataframe con la información de cada dataframe
+## Este dataframe se puede utilizar con la función visualizaEstrategia (debe tener columnas Date y Clase)
+##==============================================================================================
+combinaDatos <- function(ruta){
+  
+  #aquí se almancena toda la información
+  resultado <- data.frame()
+  
+  #vector con la ruta de cada archivo
+  lista_archivos <- read.csv(ruta, stringsAsFactors = FALSE)
+  
+  #número de archivos
+  n_arch <- length(lista_archivos)
+  
+  for(i in 1:n_arch){
+    resultado <- rbind(resultado, read.csv(lista_archivos[i,] ))
+  }
+
+  return(resultado)
+  
+}
+
+
+##==============================================================================================
 ## Función para visualizar una estrategia (SIN SEÑALES REPETIDAS)
 ##
 ## ENTRADA
