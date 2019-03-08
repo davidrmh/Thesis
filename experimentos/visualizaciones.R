@@ -23,7 +23,7 @@ combinaDatos <- function(ruta){
   lista_archivos <- read.csv(ruta, stringsAsFactors = FALSE)
   
   #número de archivos
-  n_arch <- length(lista_archivos)
+  n_arch <- dim(lista_archivos)[1]
   
   for(i in 1:n_arch){
     resultado <- rbind(resultado, read.csv(lista_archivos[i,] ))
