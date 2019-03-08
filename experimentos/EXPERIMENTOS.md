@@ -1,4 +1,5 @@
 # Descripción de los experimentos
+# NAFTRAC
 ## AQ
 + **AQ_exp_1**:
   + Diccionario 2 (atributos empíricos)
@@ -245,3 +246,33 @@
   + Reglas aprendidas en **CN2/CN2_exp_1** en los periodos 1 al 5.
   + top_k = 0 (todas las reglas)
 
+
+# SPY500
++ **AQ_exp_1_sp500_90**:
+  + Diccionario 2 (atributos empíricos)
+  + Longitud de periodo: 90
+  + Etiquetado: Sin señales repetidas, precio Mid
+  + confidence = 0.9
+  + times covered = 2
+  + Metodo discretizacion = unsupervised.intervals
+  + Número intervalos = 8
+  + Ignora espera = TRUE
+  + Tipo de precio de ejecución = mid h = 0
+  + Banda superior =  0.035
+  + Banda inferior =  -0.03
+  + Acumula reglas = TRUE
+  + top_k = 5
+
++ **AQ_exp_2_sp500_90**:
+  + Diccionario 2 (atributos empíricos)
+  + Longitud de periodo: 90
+  + Etiquetado: Sin señales repetidas, precio Mid
+  + confidence = 0.9
+  + times covered = 2
+  + Metodo discretizacion = unsupervised.intervals
+  + Número intervalos = 8
+  + Ignora espera = TRUE
+  + Tipo de precio de ejecución = mid h = 0
+  + Banda superior =  0.035
+  + Banda inferior =  -0.03
+  + Acumula reglas = FALSE
