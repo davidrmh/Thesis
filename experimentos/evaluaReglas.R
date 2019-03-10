@@ -201,6 +201,10 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
     observacion <- atributos[i,]
     fechaSignal <- atributos[i, 'Date']
     indiceEjecucion <- which(atributos[, 'Date'] == fechaSignal) + h
+    
+    #Para evitar out of bounds
+    if(indiceEjecucion > n_obs){indiceEjecucion <- which(atributos[, 'Date'] == fechaSignal)}
+    
     fechaEjecucion <- atributos[indiceEjecucion, 'Date']
     precioEjec <- preciosEjecucion(etiquetado, fechaEjecucion, tipoEjec)
   
