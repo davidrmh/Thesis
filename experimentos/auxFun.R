@@ -60,7 +60,7 @@ preciosEjecucion <- function(datos, fechas, tipo = 'open'){
     }
     
     else if(tipo == 'mid'){
-      precio <- mean(datos$High[indice], datos$Low[indice])
+      precio <- mean(c(datos$High[indice], datos$Low[indice]))
       preciosEj <- c(preciosEj, precio)
     }
     
