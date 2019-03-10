@@ -236,7 +236,8 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
             efectivo=efectivo + acciones * precioEjec * (1 - comision)
 
             #calcula la ganancia acumulada hasta el momento
-            ganancia_acum_porcentual = ganancia_acum_porcentual + (efectivo / capital - 1)
+            #ganancia_acum_porcentual = ganancia_acum_porcentual + (efectivo / capital - 1)
+            ganancia_acum_porcentual = (efectivo / capital - 1)
 
             #Disminuyen acciones
             acciones=0
@@ -291,7 +292,8 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
             acciones = 0
 
             #Aumenta ganancia acumulada porcentual
-            ganancia_acum_porcentual = ganancia_acum_porcentual + (efectivo / capital - 1)
+            #ganancia_acum_porcentual = ganancia_acum_porcentual + (efectivo / capital - 1)
+            ganancia_acum_porcentual = (efectivo / capital - 1)
 
     #Ganancia total porcentual
     if flagTot:
