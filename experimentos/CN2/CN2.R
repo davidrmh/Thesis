@@ -116,6 +116,9 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
       if(acumReglas){
         reglasAcum <- c(reglasAcum, as.character(reglas))
         
+        #Elimina repetidas
+        reglasAcum <- unique(reglasAcum)
+        
         #Obtiene las top_k reglas de compra y venta
         reglasCompra <- reglasAcum[str_detect(reglasAcum, "THEN  is 1;")]
         reglasVenta <- reglasAcum[str_detect(reglasAcum, "THEN  is -1;")]

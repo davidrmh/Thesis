@@ -118,6 +118,9 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
       if(acumReglas){
         reglasAcum <- c(reglasAcum, as.character(reglas))
         
+        #Elimina repetidas
+        reglasAcum <- unique(reglasAcum)
+        
         #Obtiene las top_k reglas de compra y venta
         reglasCompra <- reglasAcum[str_detect(reglasAcum, "THEN  is 1;")]
         reglasVenta <- reglasAcum[str_detect(reglasAcum, "THEN  is -1;")]
