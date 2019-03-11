@@ -1,0 +1,5 @@
+
+Tipo de precio de ejecución = mid h = 1
+Banda superior =  0.035
+Banda inferior =  -0.03
+top_k = 5
