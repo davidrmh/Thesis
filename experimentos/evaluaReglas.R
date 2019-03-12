@@ -241,6 +241,7 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
         clases[i] <- 1
         ultimaOperacion <- "compra"
         ultimoPrecioCompra <- precioEjec
+        indiceUltimaCompra <- i
         
         #Actualiza tabla del log
         glob_tabla_log[glob_indice_tabla, 'accion'] <- 'Compra'
@@ -278,6 +279,38 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
   
   #Agrega a la columna 'Clase' de 'etiquetado'
   etiquetado$Clase <- clases
+  
+  #Cierra posiciones abiertas
+  if(ultimaOperacion == 'compra'){
+    
+    observacion <- atributos[n_obs,]
+    fechaSignal <- atributos[n_obs, 'Date']
+    indiceEjecucion <- which(atributos[, 'Date'] == fechaSignal)
+    
+    glob_indice_tabla <- n_obs
+    glob_tabla_log[glob_indice_tabla, 'fechaSen'] <- as.character(fechaSignal)
+    
+    #Precio de ejecución sin considerar comisiones
+    fechaEjecucion <- atributos[indiceEjecucion, 'Date']
+    precioEjec <- preciosEjecucion(etiquetado, fechaEjecucion, tipoEjec)
+    glob_tabla_log[glob_indice_tabla, 'fechaEjec'] <- as.character(fechaEjecucion)
+    
+    #diferencia porcentual
+    diferencia_porcentual <- ( precioEjec * (1 - comision) ) / ( (ultimoPrecioCompra * (1 + comision) ) ) - 1
+    
+    #Se vende si hay una ganancia (la que sea) o se cae debajo de la banda inferior (pánico)
+    if(diferencia_porcentual > 0 || diferencia_porcentual < glob_bandaInferior){
+      
+      glob_tabla_log[glob_indice_tabla, 'precioEjec'] <- precioEjec * (1 - comision)
+      glob_tabla_log[glob_indice_tabla, 'regla'] <- "No aplica"
+      glob_tabla_log[glob_indice_tabla, 'accion'] <- "Venta fin periodo"
+      
+    }
+    
+    else{
+      glob_tabla_log[indiceUltimaCompra, 'accion'] <- "Venta fin periodo"
+    }
+  }
   
   #filtra la tabla de log y la guarda
   glob_tabla_log <- subset(glob_tabla_log, accion != "espera")
