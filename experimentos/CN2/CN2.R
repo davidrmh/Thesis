@@ -104,6 +104,7 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
     #aux1 tiene la forma "2_naftrac-etiquetado_2013-07-01_2013-11-04_90"
     aux1 <- str_split(datos_csv[i,'etiquetado'],'.csv')[[1]][1]
     nom_salida <- str_c(ruta_dest,aux1, '_predicciones.csv')
+    nom_salida_reglas_acum <- str_c(ruta_dest, '/reglas/',aux1,'_reglas_acum.txt')
     
     #obtiene las reglas
     try({
@@ -145,6 +146,9 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
         
         #junta las top_k reglas de compra y venta
         reglasAcum <- c(reglasCompra, reglasVenta)
+
+        #Guardar reglas acumuladas que aplicaron para este periodo (crear una carpeta reglas)
+        write(x = as.character(reglasAcum), file = nom_salida_reglas_acum)
         
         #Realiza las predicciones
         etiquetado <- evaluaReglas(reglasAcum, prueba, etiquetado, glob_tipoEjec, glob_h, ruta_dest = ruta_dest, prefijo = aux1)
@@ -162,7 +166,7 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
       #guarda archivo TXT con las reglas
       
       #Nombre del archivo de salida para guardar las reglas
-      nom_salida_reglas <- str_c(ruta_dest,aux1, '_reglas.txt')
+      nom_salida_reglas <- str_c(ruta_dest,'/reglas/',aux1, '_reglas.txt')
       write(x = as.character(reglas), file = nom_salida_reglas)
       
       #mensaje auxiliar
