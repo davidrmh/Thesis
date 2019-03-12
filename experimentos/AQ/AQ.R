@@ -102,6 +102,11 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
   #Ajusta modelos
   for(i in 1:n_modelos){
     
+    #nombre del archivo de salida
+    #aux1 tiene la forma "2_naftrac-etiquetado_2013-07-01_2013-11-04_90"
+    aux1 <- str_split(datos_csv[i,'etiquetado'],'.csv')[[1]][1]
+    nom_salida <- str_c(ruta_dest,aux1, '_predicciones.csv')
+    
     #obtiene las reglas
     try({
       entrena <- conjuntos[['entrenamiento']][[i]]
@@ -144,19 +149,14 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
         reglasAcum <- c(reglasCompra, reglasVenta)
         
         #Realiza las predicciones
-        etiquetado <- evaluaReglas(reglasAcum, prueba, etiquetado, glob_tipoEjec, glob_h)
+        etiquetado <- evaluaReglas(reglasAcum, prueba, etiquetado, glob_tipoEjec, glob_h, ruta_dest = ruta_dest, prefijo = aux1)
       }
       
       else{
-        etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h)
+        etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h, ruta_dest = ruta_dest, prefijo = aux1)
         #predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
         #etiquetado$Clase <- predicciones
       }
-      
-      #nombre del archivo de salida
-      #aux1 tiene la forma "2_naftrac-etiquetado_2013-07-01_2013-11-04_90"
-      aux1 <- str_split(datos_csv[i,'etiquetado'],'.csv')[[1]][1]
-      nom_salida <- str_c(ruta_dest,aux1, '_predicciones.csv')
       
       #guarda archivo CSV
       write.csv(etiquetado, file = nom_salida, row.names = FALSE)

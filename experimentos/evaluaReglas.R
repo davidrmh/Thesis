@@ -14,6 +14,8 @@ glob_claseDefault <- 0
 glob_bandaSuperior <- 0.02 #numero positivo
 glob_bandaInferior <- -0.04 #número negativo
 comision <- 0.25 / 100
+glob_tabla_log <- data.frame() #Para el archivo log
+glob_indice_tabla <- 0 #Esta variable lleva un control de que renglón de glob_tabla_log se está modificando
 
 ##==============================================================================================
 ## Función para evaluar un conjunto de selectores
@@ -104,7 +106,8 @@ evaluaSelectores <- function(selectores, observacion){
 ## observacion: Dataframe que representa una observación
 ##
 ## SALIDA
-## Booleano. TRUE si la observación cumple el antecedente de alguna regla en reglas. FALSE en otro caso.
+## String con la regla que aplica a la observación (FALSE si no aplica ninguna regla)
+## HICE ESTA ABERRACIÓN CON EL FIN DEL PODER CREAR LA TABLA DE LOG :(
 ##==============================================================================================
 obtenDecision <- function(reglas, observacion){
   
@@ -119,7 +122,10 @@ obtenDecision <- function(reglas, observacion){
     selectores <- str_split(antecedente, " and ")
     
     #Evalua cada selector
-    if(evaluaSelectores(selectores, observacion)){return(TRUE)}
+    if(evaluaSelectores(selectores, observacion)){
+
+      return(regla)
+    }
   }
   
   return(FALSE)
@@ -170,11 +176,15 @@ ordenaReglas <- function(reglas, top_k = length(reglas)){
 ##
 ## h: Entero no negativo que representa el número de periodos hacia el futuro para calcular el precio de ejecución
 ##
+## ruta_dest: String que representa la ruta destino del archivo log (dentro de esta ruta se debe de tener una carpeta con el nombre log)
+##
+## prefijo: String que representa el prefijo del archivo log ("2_naftrac-etiquetado_2013-07-01_2013-11-04_90")
+##
 ## SALIDA
 ## Dataframe etiquetado con la columna 'Clase' conteniendo la estrategia del periodo de acuerdo
 ## a las reglas
 ##==============================================================================================
-evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0){
+evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0, ruta_dest = './ruta/', prefijo = 'pref'){
   
   #número de observaciones
   n_obs <- dim(atributos)[1]
@@ -195,6 +205,15 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
   atributos <- as.data.frame(atributos)
   etiquetado <- as.data.frame(etiquetado)
   
+  #Dataframe que contendrá el log
+  #El precio de ejecución del dataframe ya considerará comisiones 
+  x<-rep("espera", n_obs)
+  #glob_tabla_log <- data.frame(fechaSen = "", fechaEjec = "", precioEjec = 0, regla = "", accion = x)
+  glob_tabla_log <- data.frame(fechaSen = as.character(atributos$Date))
+  
+  #Nombre del archivo log
+  nombre_log <- str_c(ruta_dest, "/log/", prefijo, "_log.csv")
+  
   #Obtiene la clase de cada observación
   for(i in 1:n_obs){
     
@@ -202,19 +221,31 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
     fechaSignal <- atributos[i, 'Date']
     indiceEjecucion <- which(atributos[, 'Date'] == fechaSignal) + h
     
+    glob_indice_tabla <- i
+    glob_tabla_log[glob_indice_tabla, 'fechaSen'] <- as.character(fechaSignal)
+    
     #Para evitar out of bounds
     if(indiceEjecucion > n_obs){indiceEjecucion <- which(atributos[, 'Date'] == fechaSignal)}
     
+    #Precio de ejecución sin considerar comisiones
     fechaEjecucion <- atributos[indiceEjecucion, 'Date']
     precioEjec <- preciosEjecucion(etiquetado, fechaEjecucion, tipoEjec)
+    glob_tabla_log[glob_indice_tabla, 'fechaEjec'] <- as.character(fechaEjecucion)
   
     #Se examinan las reglas de compra cuando la última operación obtenida no fue de compra
     if(ultimaOperacion != "compra"){
+      
       decision <- obtenDecision(reglasCompra, observacion)
-      if(decision){
+      
+      if(is.character(decision)){
         clases[i] <- 1
         ultimaOperacion <- "compra"
         ultimoPrecioCompra <- precioEjec
+        
+        #Actualiza tabla del log
+        glob_tabla_log[glob_indice_tabla, 'accion'] <- 'Compra'
+        glob_tabla_log[glob_indice_tabla, 'precioEjec'] <- precioEjec * (1 + comision)
+        glob_tabla_log[glob_indice_tabla, 'regla'] <- decision
       }
     }
     
@@ -224,16 +255,33 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
       
       #INFORMACIÓN CONTEXTUAL (BANDAS HORIZONTALES CONSIDERANDO COMISIÓN)
       diferencia_porcentual <- ( precioEjec * (1 - comision) ) / ( (ultimoPrecioCompra * (1 + comision) ) ) - 1
-      if(decision && ((diferencia_porcentual > glob_bandaSuperior) 
+      
+      if(is.character(decision) && ((diferencia_porcentual > glob_bandaSuperior) 
                       || (diferencia_porcentual < glob_bandaInferior)) ){
         clases[i] <- -1
         ultimaOperacion <- "venta"
+        
+        #Actualiza tabla del log
+        glob_tabla_log[glob_indice_tabla, 'precioEjec'] <- precioEjec * (1 - comision)
+        glob_tabla_log[glob_indice_tabla, 'regla'] <- decision
+        
+        if(diferencia_porcentual > glob_bandaSuperior){
+          glob_tabla_log[glob_indice_tabla, 'accion'] <- 'Venta por banda superior'
+        }
+        else if(diferencia_porcentual < glob_bandaInferior){
+          glob_tabla_log[glob_indice_tabla, 'accion'] <- 'Venta por banda inferior'
+        }
+        
       }
     }
   }
   
   #Agrega a la columna 'Clase' de 'etiquetado'
   etiquetado$Clase <- clases
+  
+  #filtra la tabla de log y la guarda
+  glob_tabla_log <- subset(glob_tabla_log, accion != "espera")
+  write.csv(glob_tabla_log, file = nombre_log, row.names = FALSE)
   
   return(etiquetado)
   
