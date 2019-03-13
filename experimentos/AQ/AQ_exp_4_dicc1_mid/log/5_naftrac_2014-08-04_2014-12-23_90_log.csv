@@ -1,0 +1,6 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2014-08-04","2014-08-05","Compra",44.5711510025,"IF MFI.14 is (55.4,58.8] and Williams.R.14 is (-245,-202] THEN  is 1; (supportSize=1; laplace=0.666666666666667)"
+"2014-09-09","2014-09-10","Venta por banda superior",46.17926299875,"IF Adj.Close.RSI.14 is (60.1,65.4] and MFI.14 is (65.9, Inf] THEN  is -1; (supportSize=1; laplace=0.666666666666667)"
+"2014-09-10","2014-09-11","Compra",45.81425050125,"IF Comm.Chan.20.0.015 is (98.1,122] and Williams.R.14 is (-193,-164] THEN  is 1; (supportSize=1; laplace=0.666666666666667)"
+"2014-11-10","2014-11-11","Venta por banda inferior",44.4236625,"IF Williams.R.14 is (-193,-164] and Comm.Chan.20.0.015 is (46.2,52.9] THEN  is -1; (supportSize=1; laplace=0.666666666666667)"
+"2014-11-12","2014-11-14","0",43.5536125,"IF MFI.14 is (55.4,58.8] and Williams.R.14 is (-245,-202] THEN  is 1; (supportSize=1; laplace=0.666666666666667)"
