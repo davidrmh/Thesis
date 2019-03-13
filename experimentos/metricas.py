@@ -23,6 +23,11 @@ def inicializaGlobales(dicc):
   SALIDA
   inicializa variables globales
   '''
+  global capital
+  global comision
+  global glob_bandaSuperior
+  global glob_bandaInferior
+  
   capital = dicc['capital']
   comision = dicc['comision']
   glob_bandaSuperior = dicc['bandaSuperior']
