@@ -1,0 +1,4 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2015-05-20","2015-05-21","Compra",45.50848800125,"IF MFI.14 is (45.1,47.2] THEN  is 1; (supportSize=3; laplace=0.8)"
+"2015-08-27","2015-08-28","Venta por banda inferior",43.25159850375,"IF Adj.Close.RSI.14 is (48.9, Inf] THEN  is -1; (supportSize=4; laplace=0.833333333333333)"
+"2015-09-07","2015-09-08","Venta fin periodo",43.20273900375,"IF MFI.14 is (45.1,47.2] THEN  is 1; (supportSize=3; laplace=0.8)"
