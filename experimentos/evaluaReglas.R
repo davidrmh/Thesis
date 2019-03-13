@@ -215,7 +215,7 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
   nombre_log <- str_c(ruta_dest, "/log/", prefijo, "_log.csv")
   
   #Obtiene la clase de cada observación
-  for(i in 1:n_obs){
+  for(i in 1:(n_obs -1)){
     
     observacion <- atributos[i,]
     fechaSignal <- atributos[i, 'Date']
@@ -308,7 +308,8 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
     }
     
     else{
-      glob_tabla_log[indiceUltimaCompra, 'accion'] <- "Venta fin periodo"
+      #La última compra no se considera
+      glob_tabla_log[indiceUltimaCompra, 'accion'] <- 0
     }
   }
   
