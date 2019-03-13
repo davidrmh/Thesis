@@ -1,3 +1,3 @@
 "fechaSen","fechaEjec","accion","precioEjec","regla"
-"2014-05-06","2014-05-06","Compra",41.378189505,"IF Williams.R.14 is (-154,-125] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
+"2014-05-06","2014-05-07","Compra",41.7290625,"IF Williams.R.14 is (-154,-125] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
 "2014-07-31","2014-07-31","Venta fin periodo",43.77528799875,"No aplica"
