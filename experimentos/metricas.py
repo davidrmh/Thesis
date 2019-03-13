@@ -173,9 +173,9 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
     #Si la ganancia BH < 0 entonces no convenía vender al final
     #del periodo, una persona (inteligente) no haría tal movimiento
     #Sólo vendería si se supera su umbral de riesgo
-    diferencia_porcentual = precioFinEjec / precioInicioEjec - 1
-    if gananciaBH < 0 and diferencia_porcentual < glob_bandaInferior:
-        gananciaBH = 0 # Ejectuar la venta causa un pérdida tolerable
+    diferencia_porcentual = (precioFinEjec * (1 - comision) ) / ( precioInicioEjec * (1 + comision) ) - 1
+    if gananciaBH < 0 and diferencia_porcentual > glob_bandaInferior:
+        gananciaBH = 0 # No vender (no se reconoce la pérdida)
 
 
     ##################################################################
