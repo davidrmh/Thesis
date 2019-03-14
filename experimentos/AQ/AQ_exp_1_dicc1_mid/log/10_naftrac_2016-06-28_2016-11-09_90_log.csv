@@ -3,4 +3,3 @@
 "2016-07-19","2016-07-20","Venta por banda superior",47.10195149625,"IF Comm.Chan.20.0.015 is (88.3, Inf] THEN  is -1; (supportSize=5; laplace=0.857142857142857)"
 "2016-07-27","2016-07-28","Compra",46.626275,"IF Williams.R.14 is (-154,-125] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
 "2016-08-12","2016-08-15","Venta por banda superior",48.45356100375,"IF Comm.Chan.20.0.015 is (88.3, Inf] THEN  is -1; (supportSize=5; laplace=0.857142857142857)"
-"2016-08-23","2016-08-24","Venta fin periodo",47.84932449875,"IF Williams.R.14 is (-154,-125] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"

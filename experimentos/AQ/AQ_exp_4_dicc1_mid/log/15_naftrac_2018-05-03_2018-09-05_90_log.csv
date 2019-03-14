@@ -3,4 +3,3 @@
 "2018-06-01","2018-06-04","Venta por banda inferior",45.146848005,"IF Dif.Aroon.25 is [-Inf,-63] and Adj.Close.RSI.14 is (36.6,40.4] THEN  is -1; (supportSize=1; laplace=0.666666666666667)"
 "2018-06-07","2018-06-08","Compra",45.92452449875,"IF Williams.R.14 is (-75.4,-70.2] and Comm.Chan.20.0.015 is (-54,-25.5] THEN  is 1; (supportSize=1; laplace=0.666666666666667)"
 "2018-07-04","2018-07-05","Venta por banda superior",47.66553700125,"IF Adj.Close.RSI.14 is (59.2,65.3] THEN  is -1; (supportSize=4; laplace=0.833333333333333)"
-"2018-07-05","2018-07-06","0",48.89693699875,"IF Comm.Chan.20.0.015 is (119, Inf] and Adj.Close.RSI.14 is (65.3,74.7] THEN  is 1; (supportSize=1; laplace=0.666666666666667)"

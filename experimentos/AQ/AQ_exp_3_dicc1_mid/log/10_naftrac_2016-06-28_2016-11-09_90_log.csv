@@ -5,4 +5,3 @@
 "2016-09-13","2016-09-14","Venta por banda inferior",45.9897375,"IF Williams.R.14 is (-180,-176] THEN  is -1; (supportSize=4; laplace=0.833333333333333)"
 "2016-09-14","2016-09-15","Compra",45.9896875,"IF Adj.Close.RSI.14 is [-Inf,32.3] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
 "2016-09-27","2016-09-28","Venta por banda superior",47.7253884975,"IF Adj.Close.RSI.14 is (48.9, Inf] THEN  is -1; (supportSize=4; laplace=0.833333333333333)"
-"2016-10-04","2016-10-05","Venta fin periodo",48.1550875,"IF MFI.14 is (58.1,60.5] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"

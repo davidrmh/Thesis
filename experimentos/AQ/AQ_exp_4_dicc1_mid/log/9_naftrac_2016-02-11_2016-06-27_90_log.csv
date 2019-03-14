@@ -1,4 +1,3 @@
 "fechaSen","fechaEjec","accion","precioEjec","regla"
 "2016-02-12","2016-02-15","Compra",43.00223800125,"IF Williams.R.14 is (-132,-120] THEN  is 1; (supportSize=3; laplace=0.8)"
 "2016-03-03","2016-03-04","Venta por banda superior",44.9722865025,"IF MFI.14 is (63.8,72.3] and Adj.Close.RSI.14 is (68.7, Inf] THEN  is -1; (supportSize=1; laplace=0.666666666666667)"
-"2016-03-08","2016-03-09","0",44.59119949875,"IF Adj.Close.RSI.14 is (59.9,68.7] and MFI.14 is (63.8,72.3] THEN  is 1; (supportSize=1; laplace=0.666666666666667)"

@@ -3,4 +3,3 @@
 "2016-02-23","2016-02-24","Venta por banda inferior",42.03963799875,"IF Adj.Close.RSI.14 is (48.9, Inf] THEN  is -1; (supportSize=4; laplace=0.833333333333333)"
 "2016-02-29","2016-03-02","Compra",44.61626199875,"IF MFI.14 is (58.1,60.5] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
 "2016-06-07","2016-06-08","Venta por banda superior",46.234125,"IF Adj.Close.RSI.14 is (48.9, Inf] THEN  is -1; (supportSize=4; laplace=0.833333333333333)"
-"2016-06-10","2016-06-13","Venta fin periodo",45.09244949875,"IF Comm.Chan.20.0.015 is [-Inf,-84.8] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"

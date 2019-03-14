@@ -1,0 +1,7 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2014-03-26","2014-03-26","Compra",39.8994989975,"IF cociente.Open.num.2.den.0 is (1.007,1.013] THEN  is 1; (supportSize=5; laplace=0.857142857142857)"
+"2014-05-07","2014-05-07","Venta por banda superior",41.406223005,"IF cociente.Open.num.1.den.2 is (1.004,1.011] THEN  is -1; (supportSize=4; laplace=0.833333333333333)"
+"2014-05-09","2014-05-09","Compra",41.8042510025,"IF cociente.Adj.Close.num.2.den.1 is (1.001,1.009] and cociente.Open.num.1.den.0 is (0.9976,1.004] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
+"2014-07-04","2014-07-04","Venta por banda superior",43.461075,"IF cociente.Open.num.1.den.2 is (1.004,1.011] THEN  is -1; (supportSize=4; laplace=0.833333333333333)"
+"2014-07-09","2014-07-09","Compra",43.6288,"IF cociente.Adj.Close.num.2.den.1 is (1.001,1.009] and cociente.Open.num.1.den.0 is (0.9976,1.004] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
+"2014-07-31","2014-07-31","Venta fin periodo",44.0895009975,"No aplica"
