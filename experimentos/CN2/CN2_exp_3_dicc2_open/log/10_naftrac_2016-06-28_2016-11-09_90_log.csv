@@ -1,0 +1,3 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2016-07-07","2016-07-08","Compra",45.5937,"IF cociente.Open.num.2.den.0 is (1.011, Inf] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
+"2016-07-20","2016-07-21","Venta por banda superior",47.530876995,"IF cociente.Open.num.2.den.0 is [-Inf,0.9926] THEN  is -1; (supportSize=4; laplace=0.833333333333333)"

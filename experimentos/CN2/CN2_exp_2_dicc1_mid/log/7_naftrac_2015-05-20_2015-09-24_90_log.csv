@@ -1,0 +1,3 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2015-05-21","2015-05-22","Compra",45.21776199875,"IF Comm.Chan.20.0.015 is (-6.96,17.8] THEN  is 1; (supportSize=1; laplace=0.666666666666667)"
+"2015-08-13","2015-08-14","Venta por banda inferior",43.82516399625,"IF MFI.14 is (41.2,46] THEN  is -1; (supportSize=2; laplace=0.75)"

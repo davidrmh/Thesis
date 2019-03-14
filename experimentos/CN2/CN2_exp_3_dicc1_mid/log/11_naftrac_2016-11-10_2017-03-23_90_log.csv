@@ -1,0 +1,5 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2016-11-10","2016-11-11","Compra",45.3531,"IF Comm.Chan.20.0.015 is [-Inf,-102] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
+"2017-01-23","2017-01-24","Venta por banda superior",47.4959625,"IF Comm.Chan.20.0.015 is (-8.3, Inf] THEN  is -1; (supportSize=4; laplace=0.833333333333333)"
+"2017-02-17","2017-02-20","Compra",47.3280239975,"IF Comm.Chan.20.0.015 is (-65.8,-22.6] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
+"2017-03-23","2017-03-23","Venta fin periodo",48.52338799875,"No aplica"

@@ -1,0 +1,10 @@
+
+K = 5
+Método discretización = unsupervised.intervals
+Número intervalos = 8
+Ignora espera = TRUE
+Tipo de precio de ejecución = open h = 1
+Banda superior =  0.035
+Banda inferior =  -0.03
+Acumula reglas = TRUE
+top_k = 5

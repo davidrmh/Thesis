@@ -1,0 +1,7 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2017-08-10","2017-08-11","Compra",50.9069489975,"IF cociente.Open.num.2.den.0 is (1.005,1.01] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
+"2017-11-07","2017-11-08","Venta por banda inferior",48.777751995,"IF cociente.Open.num.2.den.0 is [-Inf,0.9849] THEN  is -1; (supportSize=4; laplace=0.833333333333333)"
+"2017-11-09","2017-11-10","Compra",48.8418010025,"IF cociente.Open.num.2.den.0 is (1.003,1.008] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
+"2017-11-30","2017-12-01","Venta por banda inferior",46.982248005,"IF cociente.Open.num.2.den.0 is [-Inf,0.9849] THEN  is -1; (supportSize=4; laplace=0.833333333333333)"
+"2017-12-01","2017-12-04","Compra",47.718997995,"IF cociente.Open.num.2.den.0 is (1.005,1.01] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
+"2017-12-15","2017-12-15","Venta fin periodo",48.3388490025,"No aplica"

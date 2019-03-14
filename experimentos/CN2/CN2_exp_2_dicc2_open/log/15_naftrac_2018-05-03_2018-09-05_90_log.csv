@@ -1,0 +1,7 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2018-05-03","2018-05-04","Compra",47.127522995,"IF cociente.Open.num.1.den.0 is (1.01,1.02] THEN  is 1; (supportSize=2; laplace=0.75)"
+"2018-05-24","2018-05-25","Venta por banda inferior",45.4361240025,"IF cociente.Open.num.2.den.0 is (0.987,0.995] THEN  is -1; (supportSize=2; laplace=0.75)"
+"2018-05-25","2018-05-28","Compra",45.1626239975,"IF cociente.Open.num.1.den.0 is (1,1.01] THEN  is 1; (supportSize=4; laplace=0.833333333333333)"
+"2018-06-12","2018-06-13","Venta por banda superior",46.782751995,"IF cociente.Open.num.1.den.0 is (0.985,0.994] THEN  is -1; (supportSize=7; laplace=0.888888888888889)"
+"2018-06-15","2018-06-18","Compra",46.866875,"IF cociente.Adj.Close.num.2.den.1 is (0.9905,0.9949] THEN  is 1; (supportSize=1; laplace=0.666666666666667)"
+"2018-07-06","2018-07-09","Venta por banda superior",48.8775,"IF cociente.Open.num.2.den.0 is [-Inf,0.979] THEN  is -1; (supportSize=1; laplace=0.666666666666667)"
