@@ -304,12 +304,14 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
       glob_tabla_log[glob_indice_tabla, 'precioEjec'] <- precioEjec * (1 - comision)
       glob_tabla_log[glob_indice_tabla, 'regla'] <- "No aplica"
       glob_tabla_log[glob_indice_tabla, 'accion'] <- "Venta fin periodo"
+      etiquetado$Clase[n_obs] <- -1
       
     }
     
     else{
       #La última compra no se considera
-      glob_tabla_log[indiceUltimaCompra, 'accion'] <- 0
+      glob_tabla_log[indiceUltimaCompra, 'accion'] <- "espera"
+      etiquetado$Clase[indiceUltimaCompra] <- 0
     }
   }
   

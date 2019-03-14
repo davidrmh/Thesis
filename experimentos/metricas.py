@@ -234,8 +234,7 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
         #Se venden todas las acciones en un sólo momento
         #Se vende cuando:
         #--Hay señal de venta y se tienen acciones
-        ##--La venta no genera pérdidas (relativo a la última compra realizada)
-        if acciones>0 and datos['Clase'].iloc[t]==-1 and ultimoPrecioCompra < precioEjec:
+        if acciones>0 and datos['Clase'].iloc[t]==-1:
 
             #Aumenta el efectivo
             efectivo=efectivo + acciones * precioEjec * (1 - comision)
