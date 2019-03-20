@@ -513,7 +513,7 @@ def eliminaPerdidas(datos, tipoEjec = 'open', h = 0):
     #Memoria de los índices de venta que se han analizado
     memoria = []
 
-    #Quita las compras que ocurren antes de la primera compra
+    #Quita las ventas que ocurren antes de la primera compra
     indicesVenta = datos[datos['Clase'] == -1].index
     indicesVenta = indicesVenta[indicesVenta < indicesCompra[0] ]
     datos.loc[indicesVenta,'Clase'] = 0
@@ -600,6 +600,11 @@ def etiquetaMetodo2(datos,numGen=30,popSize=50, flagOper = True, limpia = True, 
         if fitness[np.argmax(fitness)]>mejorFitness:
             mejorFitness=fitness[np.argmax(fitness)]
             mejorEstrategia=mejores[0]
+
+        #Para ahorrar tiempo se rompe el loop si mejorFitness > 0.2
+        if mejorFitness > 0.2:
+            print "Mejor fitness = " + str(round(np.max(mejorFitness),6)) +   " se rebasa el umbral de 0.2"
+            break
 
         #actualiza probabilidades
         probas=actualizaProbabilidades(mejores)

@@ -93,7 +93,7 @@ def etiquetaBloques(bloques,numGen=30,popSize=50, flagOper = True, limpia = True
 
     for bloque in bloques:
 
-    	etiquetado = eti.etiquetaMetodo2(bloque, numGen, popSize, flagOper, limpia)
+    	etiquetado = eti.etiquetaMetodo2(bloque, numGen, popSize, flagOper, limpia, tipoEjec, h)
 
     	print 50*'='
 
