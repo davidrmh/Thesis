@@ -1,3 +1,1 @@
 "fechaSen","fechaEjec","accion","precioEjec","regla"
-"2017-12-18","2017-12-19","Compra",48.7415510025,"IF MFI.14 is (45.9,52.5] and Dif.Aroon.25 is [-Inf,-44] THEN  is 1; (supportSize=3; laplace=0.8)"
-"2018-01-24","2018-01-25","Venta por banda superior",50.65803700125,"IF Comm.Chan.20.0.015 is (88.3, Inf] THEN  is -1; (supportSize=5; laplace=0.857142857142857)"
