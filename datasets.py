@@ -11,6 +11,53 @@ import numpy as np
 from copy import deepcopy
 
 ##==============================================================================
+## Función para separar bloques de una manera deslizante (más suave que la función separaBloques)
+##==============================================================================
+def bloquesDeslizantes(datos, lon = 90, paso = 1, start = '2013-02-15'):
+	'''
+	ENTRADA
+
+	datos: Pandas dataframe con los datos del CSV
+	(idealmente creado con la función leeTabla del módulo indicadores)
+
+	lon: Entero positivo que representa el número de observaciones de cada bloque
+
+	paso: Entero positivo que representa la magnitud de deslizamiento
+
+	start: String de la forma YYYY-MM-DD que indica la fecha de inicio
+
+	SALIDA
+	Lista con los bloques de datos
+	'''
+	bloques = []
+
+	#índice de inicio
+	inicio=datos[datos['Date']==start].index[0]
+
+	#índice fin del primer bloque
+	fin = inicio + lon - 1
+
+	#último índice válido
+	ultimoIndice = datos.shape[0] - 1
+
+	#Separa los bloques hasta que fin > ultimoIndice
+	while fin <= ultimoIndice:
+		#Obtiene el bloque correspondiente
+		bloque = datos.loc[inicio:fin,:]
+
+		#Reinicia índices
+		bloque = bloque.reset_index(drop = True)
+
+		#Agrega a la lista
+		bloques.append(bloque)
+
+		#Actualiza índices
+		inicio = inicio + paso
+		fin = fin + paso
+
+	return bloques	
+
+##==============================================================================
 ## Función para separar los datos en bloques consecutivos del mismo tamaño
 ##==============================================================================
 def separaBloques(datos, lon = 90, start = '2013-02-15'):
