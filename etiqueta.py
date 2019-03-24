@@ -588,7 +588,15 @@ def etiquetaMetodo2(datos,numGen=30,popSize=50, flagOper = True, limpia = True, 
     mejorFitness=-100
     mejorEstrategia=""
 
+    #Para evitar seguir iterando cuando no se puede mejorar
+    contadorFlat = 0
+    mejorFitnessAnterior = 0
+
     for i in range(0,numGen):
+
+        if contadorFlat >= 10:
+            print 'No ha habido mejora en 10 generaciones'
+            break
 
         #Calcula el fitness de la poblacion
         probas,fitness=fitnessPoblacion(datos,poblacion, flagOper, tipoEjec, h)
@@ -600,11 +608,16 @@ def etiquetaMetodo2(datos,numGen=30,popSize=50, flagOper = True, limpia = True, 
         if fitness[np.argmax(fitness)]>mejorFitness:
             mejorFitness=fitness[np.argmax(fitness)]
             mejorEstrategia=mejores[0]
+            contadorFlat = 0
+            mejorFitnessAnterior = mejorFitness
+        else:
+            if mejorFitnessAnterior > 0:
+                contadorFlat = contadorFlat + 1
 
         #Para ahorrar tiempo se rompe el loop si mejorFitness > 0.2
         if mejorFitness > 0.2:
             print "Mejor fitness = " + str(round(np.max(mejorFitness),6)) +   " se rebasa el umbral de 0.2"
-            break
+            break    
 
         #actualiza probabilidades
         probas=actualizaProbabilidades(mejores)
