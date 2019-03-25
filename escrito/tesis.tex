@@ -1,0 +1,58 @@
+\documentclass[onesided, 12pt]{scrbook}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsthm} %Para definir ambientes con \newtheorem
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\title{Aprendizaje de reglas en el mercado accionario mexicano}
+\publishers{Centro de Investigación en Computación, Instituto Politécnico Nacional}
+\date{}
+\author{David Ricardo Montalván Hernández}
+
+%=========Define los ambientes a utilizar =======%
+%Define estilo para dar un salto de línea en el encabezado
+%del 'teorema'
+\newtheoremstyle{break}
+{2ex} %above space
+{2ex} %below space
+{\itshape} %Body font)
+{} %indent amount
+{\bfseries} %head font
+{:} %post head puncuation
+{\newline} %post head space
+{}
+
+\theoremstyle{break}
+%Definición
+\newtheorem{definicion}{Definicion}[chapter]
+
+%Teorema
+\newtheorem{teorema}{Teorema}[chapter]
+
+%Algoritmo (Utiliza el ambiente tabbing)
+
+\newtheorem{algoritmo}{Algoritmo}[chapter]
+%=================================================%
+
+
+\begin{document}
+\maketitle
+\pagenumbering{Roman} %numeración romana con mayúsculas
+\renewcommand{\contentsname}{Contenido}
+\tableofcontents
+\renewcommand{\listfigurename}{Lista de imágenes}
+\listoffigures
+\renewcommand{\listtablename}{Lista de tablas}
+\listoftables
+\chapter*{Dedicatoria}
+\chapter*{Agradecimientos}
+\chapter*{Resumen}
+
+\pagenumbering{arabic} %Numeración árabe
+
+
+
+
+\end{document}
