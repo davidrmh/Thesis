@@ -49,48 +49,102 @@
 \chapter*{Dedicatoria}
 \chapter*{Agradecimientos}
 \chapter*{Resumen}
+\chapter*{Abstract}
 
 \pagenumbering{arabic} %Numeración árabe
 
 %=============== INTRODUCCIÓN ================= %
 \chapter{Introducción}
+\label{capitulo:introduccion}
+%Motivación y ¿qué es lo que se busca con este trabajo?
+%Objetivo general y objetivos particulares.
+%Estructura del trabajo.
+El incremento en el poder de cómputo, la digitalización de los mercados financieros (en particular el mercado accionario) y la oportunidad de ganar dinero, son algunos de los factores que han motivado la investigación y desarrollo de algoritmos computacionales enfocados a guiar la toma de decisiones de inversión, en particular, determinar los momentos adecuados para realizar compras o ventas.
+
+A pesar de que la idea básica es comprar barato y vender caro, la incertidumbre y complejidad de los mercados financieros han dado lugar al uso de herramientas computacionales con el fin de guiar la toma de decisiones, concretamente, técnicas relacionadas a la inteligencia artificial han ganado notoriedad.
+
+El objetivo general de este trabajo es proponer, bajo un paradigma simbólico, una metodología para aprender un conjunto de reglas \textit{IF..THEN}. Estas reglas se utilizarán para obtener estrategias de inversión cuya ganancia buscamos sea superior a la ganancia generada por la estrategia de \textbf{compra y espera} (ver sección \ref{seccion:hipotesis mercado eficiente}).
+
+Una de las contribuciones de este trabajo es el análisis del mercado accionario mexicano, el cual está representado por el instrumento llamado \textbf{NAFTRAC ISHRS} (ver sección \ref{seccion:naftrac}).
+
+Además, la metodología propuesta busca obtener un modelo interpretable, contrastando con la tendencia actual que se caracteriza por el uso de las llamadas \textit{cajas negras}, e.g., redes neuronales (ver capítulo \ref{capitulo:antecedentes}).
+
+Los objetivos particulares de este trabajo son:
 \begin{itemize}
-\item Motivación y ¿qué es lo que se busca con este trabajo?
-\item Objetivo general y objetivos particulares.
-\item Estructura del trabajo.
+\item Selección de atributos.
+
+\item Etiquetado de datos.
 \end{itemize}
+
+
+
 
 %=============== Antecedentes ================= %
 \chapter{Antecedentes}
+\label{capitulo:antecedentes}
 \begin{itemize}
 \item Explicación de los artículos (en forma cronológica).
 \end{itemize}
 
-%=============== Mercado accionario ================= %
-\chapter{El mercado accionario}
+%=============== Marco teórico ================= %
+\chapter{Marco teórico}
+\label{capitulo:marco teorico}
 
 \section{Mecánica de un mercado accionario.}
-\section{Estrategia Buy and Hold.}
+\label{seccion:mecanica del mercado}
+
+\section{Hipótesis del mercado eficiente.}
+\label{seccion:hipotesis mercado eficiente}
+
 \section{Costos de transacción}
+\label{seccion:costos de transaccion}
+
 \section{NAFTRAC e IPC.}
+\label{seccion:naftrac}
+
+\section{Análisis técnico}
+\label{seccion:analisisTecnico}
+
+\section{Supuestos del trabajo}
+\label{seccion:supuestos}
 
 
 %=============== AQ y CN2 ================= %
-\chapter{Algoritmos AQ y CN2}
-\section{Algoritmo AQ}
-\section{Algoritmo CN2}
+\section{Algoritmos AQ y CN2}
+\label{seccion:algoritmos aq cn2}
 
-%=============== Metodología propuesta ================= %
-\chapter{Metodología propuesta y resultados}
+\subsection{Algoritmo AQ}
+\label{subseccion:algoritmo aq}
+
+\subsection{Algoritmo CN2}
+\label{subseccion:algoritmo cn2}
+
+%=============== Solución propuesta ================= %
+\chapter{Solución propuesta}
+\label{capitulo:solucion propuesta}
+
 \section{Separación de datos}
-\section{Proceso de etiquemiento}
+\label{seccion:separacion de datos}
+
+\section{Proceso de etiquetado}
+\label{seccion:proceso etiquetado}
+
 \section{Aprendizaje incremental}
-\section{Resultados}
+\label{seccion:aprendizaje incremental}
+
+%=============== Resultados ================= %
+\chapter{Resultados experimentales}
+\label{capitulo:resultados experimentales}
 
 %=============== Conclusión ================= %
 \chapter{Conclusiones y trabajo futuro}
+\label{capitulo:conclusiones}
+
 \section{Conclusiones}
+\label{seccion:conclusiones}
+
 \section{Trabajo futuro}
+\label{seccion:trabajo futuro}
 
 \chapter{Bibliografía}
 
