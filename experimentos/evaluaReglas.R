@@ -180,11 +180,13 @@ ordenaReglas <- function(reglas, top_k = length(reglas)){
 ##
 ## prefijo: String que representa el prefijo del archivo log ("2_naftrac-etiquetado_2013-07-01_2013-11-04_90")
 ##
+## boolForzar: Booleano. TRUE => Se obliga a que la primera compra coincida con la primera compra de BH
+##
 ## SALIDA
 ## Dataframe etiquetado con la columna 'Clase' conteniendo la estrategia del periodo de acuerdo
 ## a las reglas
 ##==============================================================================================
-evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0, ruta_dest = './ruta/', prefijo = 'pref'){
+evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0, ruta_dest = './ruta/', prefijo = 'pref', boolForzar = FALSE){
   
   #número de observaciones
   n_obs <- dim(atributos)[1]
@@ -237,7 +239,7 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
       
       decision <- obtenDecision(reglasCompra, observacion)
       
-      if(is.character(decision)){
+      if(is.character(decision) || (boolForzar && i == 1)){
         clases[i] <- 1
         ultimaOperacion <- "compra"
         ultimoPrecioCompra <- precioEjec

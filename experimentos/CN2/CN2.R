@@ -78,12 +78,14 @@ CN2.fit <- function(entrena, K = 5, metodoDisc = "unsupervised.intervals",
 ## top_k: Entero no negativo que representa el número de las k mejores reglas a extraer
 ## si top_k > |reglas| o top_k = 0 entonces top_k = |reglas|. SÓLO UTILIZAR CUANDO acumReglas = TRUE
 ##
+## boolForzar: Booleano. TRUE => Se obliga a que la primera compra coincida con la primera compra de BH
+##
 ## SALIDA
 ## Crea archivos en ruta_dest
 ##==============================================================================================
 CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5, 
                     metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4),
-                    ignoraEspera = FALSE, acumReglas = FALSE, top_k = 5){
+                    ignoraEspera = FALSE, acumReglas = FALSE, top_k = 5, boolForzar = FALSE){
   
   #Carga los conjuntos de entrenamiento, prueba y etiquetado
   conjuntos <- listaDatos(arch_csv, ruta_entrena, ruta_prueba, ruta_etiqueta)
@@ -151,11 +153,11 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
         write(x = as.character(reglasAcum), file = nom_salida_reglas_acum)
         
         #Realiza las predicciones
-        etiquetado <- evaluaReglas(reglasAcum, prueba, etiquetado, glob_tipoEjec, glob_h, ruta_dest = ruta_dest, prefijo = aux1)
+        etiquetado <- evaluaReglas(reglasAcum, prueba, etiquetado, glob_tipoEjec, glob_h, ruta_dest = ruta_dest, prefijo = aux1, boolForzar = boolForzar)
       }
       
       else{
-        etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h, ruta_dest = ruta_dest, prefijo = aux1)
+        etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h, ruta_dest = ruta_dest, prefijo = aux1, boolForzar = boolForzar)
         #predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
         #etiquetado$Clase <- predicciones
       }
@@ -188,6 +190,7 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
   write(paste("Banda superior = ", glob_bandaSuperior), arch_param, append = TRUE)
   write(paste("Banda inferior = ", glob_bandaInferior), arch_param, append = TRUE)
   write(paste("Acumula reglas = ", acumReglas, sep = ""), arch_param, append = TRUE)
+  write(paste("Forzar primera compra = ", boolForzar, sep = ""), arch_param, append = TRUE)
   
   if(acumReglas){
     write(reglasAcum, paste(ruta_dest,"reglas_acumuladas.txt", sep = ""))

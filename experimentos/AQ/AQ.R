@@ -80,12 +80,14 @@ AQ.fit <- function(entrena, confidence = 0.9, timesCovered = 1, metodoDisc = "un
 ## top_k: Entero no negativo que representa el número de las k mejores reglas a extraer
 ## si top_k > |reglas| o top_k = 0 entonces top_k = |reglas|. SÓLO UTILIZAR CUANDO acumReglas = TRUE
 ##
+## boolForzar: Booleano. TRUE => Se obliga a que la primera compra coincida con la primera compra de BH
+##
 ## SALIDA
 ## Crea archivos en ruta_dest
 ##==============================================================================================
 AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.9, timesCovered = 2, 
                     metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4),
-                    ignoraEspera = FALSE, acumReglas = FALSE, top_k = 5){
+                    ignoraEspera = FALSE, acumReglas = FALSE, top_k = 5, boolForzar = FALSE){
   
   #Carga los conjuntos de entrenamiento, prueba y etiquetado
   conjuntos <- listaDatos(arch_csv, ruta_entrena, ruta_prueba, ruta_etiqueta)
@@ -153,11 +155,11 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
         write(x = as.character(reglasAcum), file = nom_salida_reglas_acum)
         
         #Realiza las predicciones
-        etiquetado <- evaluaReglas(reglasAcum, prueba, etiquetado, glob_tipoEjec, glob_h, ruta_dest = ruta_dest, prefijo = aux1)
+        etiquetado <- evaluaReglas(reglasAcum, prueba, etiquetado, glob_tipoEjec, glob_h, ruta_dest = ruta_dest, prefijo = aux1, boolForzar = boolForzar)
       }
       
       else{
-        etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h, ruta_dest = ruta_dest, prefijo = aux1)
+        etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h, ruta_dest = ruta_dest, prefijo = aux1, boolForzar = boolForzar)
         #predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
         #etiquetado$Clase <- predicciones
       }
@@ -191,6 +193,7 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
   write(paste("Banda superior = ", glob_bandaSuperior), arch_param, append = TRUE)
   write(paste("Banda inferior = ", glob_bandaInferior), arch_param, append = TRUE)
   write(paste("Acumula reglas = ", acumReglas, sep = ""), arch_param, append = TRUE)
+  write(paste("Forzar primera compra = ", boolForzar, sep = ""), arch_param, append = TRUE)
   
   if(acumReglas){
     write(reglasAcum, paste(ruta_dest,"reglas_acumuladas.txt", sep = ""))
