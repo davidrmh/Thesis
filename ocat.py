@@ -90,19 +90,54 @@ def binariza(atributos):
 ##==============================================================================
 ## Función para calcular las cantidades POS(a) y NEG(a)
 ##==============================================================================
-def numero_pos_neg(datos_bin, nombre_atributo, tipo_atributo):
+def numero_pos_neg(datos_bin, nombre_atributo):
     '''
     ENTRADA
     datos_bin: Pandas dataframe con observaciones binarizadas
 
     nombre_atributo: String con el nombre de una columna de datos_bin
-
-    tipo_atributo: Entero en {1,0}. 1 => atributo es 1, 0 => atributo es 0 (negación del atributo)
+    La forma de estos strings es 'POS/nombre_columna' o 'NEG/nombre_columna'
+    (Ver función listaAtributos)
 
     SALIDA
     entero que representa POS(a) o NEG(a) de acuerdo al conjunto que representa datos_bin
     '''
-
-    
-    conteo = len(datos_bin[datos_bin[nombre_atributo]== tipo_atributo])
+    #Extrae el nombre de la columna
+    nom_col = nombre_atributo.split('/')[1]
+    #si es POS
+    if 'POS/' in nombre_atributo:
+      conteo = len(datos_bin[datos_bin[nom_col] == 1])
+    elif 'NEG/' in nombre_atributo:
+      conteo = len(datos_bin[datos_bin[nom_col] == 0])
+    else:
+      print 'ERROR: EL NOMBRE DEL ATRIBUTO NO TIENE LA ESTRUCTURA REQUERIDA'
+      print nombre_atributo  
+      return ''
     return conteo
+
+##==============================================================================
+## Función para crear una lista con el conjunto de todos los atributos
+## este conjunto incluirá el atributo 'A' como '\hat(A)' (A negado)
+##==============================================================================
+def listaAtributos(columnas):
+    '''
+    ENTRADA
+    columnas: pandas.core.indexes.base.Index que contiene el nombre de las
+    columnas de la tabla binarizada. Se obtiene con tabla_bin.columns
+
+    SALIDA
+    lista con strings que representan los atributos
+    La forma de estos strings es 'POS/nombre_columna' o 'NEG/nombre_columna'
+    '''
+    #Aquí se guardarán los atributos
+    lista = []
+
+    #Crea los atributos con POS/
+    lista.extend('POS/' + columnas)
+
+    #Crea los atributos con NEG/
+    lista.extend('NEG/' + columnas)
+
+    return lista
+
+
