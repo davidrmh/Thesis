@@ -6,6 +6,7 @@
 ##==============================================================================
 import numpy as np
 import pandas as pd
+from copy import deepcopy
 
 ##==============================================================================
 ## Crear nombres para los atributos binarizados
@@ -86,6 +87,53 @@ def binariza(atributos):
     binarizados = pd.DataFrame(binarizados, columns = nombres_columnas)
 
     return binarizados
+
+##==============================================================================
+## Separa los datos en E+ y E-
+##==============================================================================
+def separaDatos(datos, tabla_bin, clase_pos = 1, clase_ignora = ''):
+  '''
+  ENTRADA
+  datos: Pandas dataframe con los datos crudos (sin binarizar). Debe de contener
+  una columna llamada 'Clase'
+
+  tabla_bin: Pandas dataframe que representa los atributos de 'datos' binarizados
+
+  clase_pos: Clase positiva
+
+  clase_ignora: Clase (distinta de clase_pos) que se ignora.
+  Si clase_ignora = '', no se ignora ninguna clase. Esta clase se ignora del
+  conjunto de observaciones de la clase negativa
+
+  SALIDA
+  pos, neg: Pandas dataframes que son un subconjunto de tabla_in.
+  pos representa E+
+  neg representa E-
+  '''
+  #conjunto con los índices de E-
+  indices_neg = set(datos[datos['Clase'] != clase_pos].index)
+
+  if clase_ignora != '':
+
+    #conjunto de índices de la clase_ignora
+    indices_ignora = set(datos[datos['Clase'] == clase_ignora].index)
+
+    #remueve indices_ignora de indices_neg
+    indices_neg = set.difference(indices_neg, indices_ignora)
+
+  #lista con los indices de la clase positiva
+  indices_pos = list(datos[datos['Clase'] == clase_pos].index)
+
+  #separa datos
+  pos = tabla_bin.loc[indices_pos, :]
+  neg = tabla_bin.loc[indices_neg, :]
+
+  #reset de índices
+  pos = pos.reset_index(drop = True)
+  neg = neg.reset_index(drop = True)
+
+  return pos, neg
+
 
 ##==============================================================================
 ## Función para calcular las cantidades POS(a) y NEG(a)
