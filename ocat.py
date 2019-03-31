@@ -134,6 +134,33 @@ def separaDatos(datos, tabla_bin, clase_pos = 1, clase_ignora = ''):
 
   return pos, neg
 
+##==============================================================================
+## Función para obtener la cobertura de un atributo
+##==============================================================================
+def obtenCobertura(tabla_bin, atributo):
+  '''
+  ENTRADA
+  tabla_bin: pandas dataframe que representa un conjunto de atributos binarizados
+
+  atributo: String. La forma de este string es 'POS/nombre_columna' o 'NEG/nombre_columna'
+  (Ver función listaAtributos)
+
+  SALIDA
+  Lista que con los índices de las observaciones que cubre el atributo
+  '''
+  #Extrae el nombre de la columna
+  nom_col = atributo.split('/')[1]
+  #si es POS
+  if 'POS/' in atributo:
+    indices = list(tabla_bin[tabla_bin[nom_col] == 1].index)
+  elif 'NEG/' in atributo:
+    indices = list(tabla_bin[tabla_bin[nom_col] == 0].index)
+  else:
+    print 'ERROR: EL NOMBRE DEL ATRIBUTO NO TIENE LA ESTRUCTURA REQUERIDA'
+    print nombre_atributo  
+    return ''
+
+  return indices  
 
 ##==============================================================================
 ## Función para calcular las cantidades POS(a) y NEG(a)
@@ -187,5 +214,3 @@ def listaAtributos(columnas):
     lista.extend('NEG/' + columnas)
 
     return lista
-
-
