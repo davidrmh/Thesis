@@ -185,7 +185,7 @@ def obtenCoberturaDisyuncion(tabla_bin, lista_atributos):
 
   #elimina repetidas
   lista = list(set(lista))
-  
+
   return lista
 
 ##==============================================================================
@@ -240,3 +240,131 @@ def listaAtributos(columnas):
     lista.extend('NEG/' + columnas)
 
     return lista
+
+##==============================================================================
+## Implementación del algoritmo RA1 (Randomized Algorithm 1)
+## Se obtiene un conjunto (num_iter) de cláusulas en forma CNF
+## Se da preferencia a aquella cláusula CNF con menor longitud
+## Una cláusula en CNF se representa como [[A1, A2,..Am],[Ai,Aj,...,Ak],...]
+## en donde cada lista interior es la disyunción de atributos binarios
+##==============================================================================
+def ra1(tabla_pos, tabla_neg, num_iter = 5, top_k = 5):
+  '''
+  ENTRADA
+  tabla_pos, tabla_neg: Pandas dataframe que representan las observaciones
+  binarizadas de la clase positiva y negativa respectivamente
+  (ver función separaDatos)
+
+  num_iter: Entero positivo que representa el número de iteraciones.
+  Este será el número de cláusulas CNF que se obtendrán
+
+  top_k: Entero positivo. Representa la longitud de la lista con los top_k
+  mejores puntajes
+
+  SALIDA
+  lista de listas, cada lista interior representa una cláusula CNF
+  '''
+  lista_cnf = []
+  lista_atributos = listaAtributos(tabla_pos.columns)
+
+  for i in range(0, num_iter):
+    clasula_cnf = []
+
+    #copia de tabla_neg
+    tmp_neg = deepcopy(tabla_neg)
+
+    while tmp_neg.shape[0] != 0:
+      disyuncion = []
+      #copia lista_atributos
+      tmp_atributos = deepcopy(lista_atributos)
+
+      #diccionario para almacenar |NEG(ai)|
+      dicc_neg = {}
+      for atributo in tmp_atributos:
+
+        #calcula |NEG(ai)|
+        conteo_neg = numero_pos_neg(tmp_neg, atributo)
+
+        #Para evitar división entre cero
+        if conteo_neg == 0:
+          conteo_neg = 0.00001
+        dicc_neg[atributo] = conteo_neg
+
+      #copia de tabla_pos
+      tmp_pos = deepcopy(tabla_pos) 
+
+      while tmp_pos.shape[0] != 0:
+        
+        #lista para almacenar |POS(ai)|
+        lista_pos = []
+
+        #lista para almacenar |POS(ai)| / |NEG(ai)|
+        lista_puntaje = []
+
+        #calcula puntaje
+        for j in range(0, len(tmp_atributos)):
+          #Obtiene el atributo
+          atributo = tmp_atributos[j]
+          
+          #calcula |POS(ai)|
+          conteo_pos = numero_pos_neg(tmp_pos, atributo)
+          lista_pos.append(conteo_pos)
+
+          #calcula el cociente
+          lista_puntaje.append(conteo_pos / dicc_neg[atributo])
+
+        #Obtiene el top k
+        lista_argsort = list(np.argsort(lista_puntaje))
+
+        if len(lista_argsort) > top_k:
+          #Se toman todos los elementos
+          #este caso es cuando el número de atributos es menor a top_k
+          lista_top = lista_argsort[:]
+        else:
+          #Se toman sólo top_k elementos
+          lista_top = lista_argsort[:top_k]
+
+        #Selecciona un elemento al azar
+        indice_azar = np.random.choice(lista_top, size=1)[0]
+
+        #atributo correspondiente a indice_azar
+        atributo_azar = tmp_atributos[indice_azar]
+
+        #agrega a disyunción
+        disyuncion.append(atributo_azar)
+
+        #Obtiene cobertura de atributo_azar en tmp_pos
+        cobertura_atributo = obtenCobertura(tmp_pos, atributo_azar)
+
+        #nuevos índices de tmp_pos
+        indices_pos = list(set.difference(set(tmp_pos.index), set(cobertura_atributo)))
+
+        #Actualiza tmp_pos y tmp_atributos
+        tmp_pos = tmp_pos.iloc[indices_pos,:].reset_index(drop = True)
+        tmp_atributos.remove(atributo_azar)
+
+        print 'Faltan ' + str(tmp_pos.shape[0]) + ' observaciones positivas'
+
+      #obtiene la cobertura de la disyunción en tmp_neg
+      cobertura_disy = obtenCoberturaDisyuncion(tmp_neg, disyuncion)
+
+      #nuevo índices de tmp_neg
+      indices_neg = list(set.difference(set(tmp_neg.index), set(cobertura_disy)))
+
+      #actualiza tmp_neg
+      tmp_neg = tmp_neg.iloc[indices_neg,:].reset_index(drop = True)
+      print 'Faltan ' + str(tmp_neg.shape[0]) + ' observaciones negativas'
+
+      #agrega disyunción a cláusula CNF
+      clasula_cnf.append(disyuncion)
+
+    #agrega clausula_cnf a lista_cnf
+    lista_cnf.append(clasula_cnf)
+    print 10*'='
+    print 'Fin de la iteración ' + str(i + 1)
+    print 10*'='
+
+  return lista_cnf  
+
+
+
