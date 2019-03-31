@@ -163,6 +163,32 @@ def obtenCobertura(tabla_bin, atributo):
   return indices  
 
 ##==============================================================================
+## Función para obtener la cobertura de una disyunción
+## una disyunción se representa como una lista de atributos de la forma
+## 'POS/nombre_columna' o 'NEG/nombre_columna'
+##==============================================================================
+def obtenCoberturaDisyuncion(tabla_bin, lista_atributos):
+  '''
+  ENTRADA
+  tabla_bin: pandas dataframe que representa un conjunto de atributos binarizados
+
+  lista_atributos: Lista de strings con la forma '(NEG)POS/nombre_columna'
+
+  SALIDA
+  Lista que con los índices de las observaciones que cubren los atributos
+  '''
+
+  lista = []
+  for atributo in lista_atributos:
+
+    lista.extend(obtenCobertura(tabla_bin, atributo))
+
+  #elimina repetidas
+  lista = list(set(lista))
+  
+  return lista
+
+##==============================================================================
 ## Función para calcular las cantidades POS(a) y NEG(a)
 ##==============================================================================
 def numero_pos_neg(datos_bin, nombre_atributo):
