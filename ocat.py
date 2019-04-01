@@ -31,6 +31,7 @@ def crea_nombres(atributos):
     for j in range(0, n_col):
         #Valores sin repeticiones del atributo j
         val_unico = np.unique(np.array(atributos.iloc[:,j]))
+        val_unico.sort() #ordena de menor a mayor
 
         #prefijo
         prefijo = atributos.iloc[:,j].name
@@ -72,6 +73,7 @@ def binariza(atributos):
 
             #Valores sin repeticiones del atributo j
             val_unico = np.unique(np.array(atributos.iloc[:,j]))
+            val_unico.sort()
 
             #convierte en ceros y unos
             # val_atributo >= val_unico => 1, 0 en otro caso
@@ -264,6 +266,7 @@ def ra1(tabla_pos, tabla_neg, num_iter = 5, top_k = 5):
   SALIDA
   lista de listas, cada lista interior representa una cláusula CNF
   '''
+  np.random.seed(54321)
   lista_cnf = []
   lista_atributos = listaAtributos(tabla_pos.columns)
 
