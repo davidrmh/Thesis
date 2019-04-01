@@ -9,6 +9,27 @@ import pandas as pd
 from copy import deepcopy
 
 ##==============================================================================
+## Función para obtener los valores únicos para cada atributo
+##==============================================================================
+def obtenUnicos(atributos):
+  '''
+  ENTRADA
+  atributos: pandas dataframe con los valores de cada atributo
+
+  SALIDA
+  diccionario con 'keys' iguales al nombre de cada atributo y 'values'
+  una lista con los atributos sin repeticiones ordenados de menor a mayor
+  '''
+  dicc = {}
+
+  for columna in atributos.columns:
+    val_unico = np.unique(np.array(atributos.loc[:,columna]))
+    val_unico.sort()
+    dicc[columna] = list(val_unico)
+
+  return dicc  
+
+##==============================================================================
 ## Crear nombres para los atributos binarizados
 ##==============================================================================
 def crea_nombres(atributos):
