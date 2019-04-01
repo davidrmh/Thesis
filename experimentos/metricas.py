@@ -110,11 +110,75 @@ def precioEjecucion(datos, fecha, tipo = 'open', h = 0):
 		print 'ERROR: TIPO DE PRECIO NO RECONOCIDO'
 		return ''
 
+##==============================================================================
+## Cálculo de Buy and Hold
+##==============================================================================
+def buyHold(datos, tipoEjec = 'open', h = 0, version = 'normal'):
+    '''
+    ENTRADA
+    datos: Pandas dataframe con los precios y la columna Clase
+
+    tipoEjec: String que indica el tipo de precio de ejecución (ver función precioEjecucion)
+
+    h: Entero positivo que representa el número de periodos en el futuro, a partir de  'fecha',
+    en el cual se calculará el precio de ejecución
+
+    version: String que representa la versión de buy-and-hold que se calcula.
+    'normal' => Compra al inicio y venta al final del periodo
+    'mod' => Compra = primera compra. Venta = última venta
+
+    SALIDA
+    float que representa la ganancia de buy-and-hold
+    '''
+    #Obtiene fecha de inicio y fecha fin
+    if version == 'normal':
+        fechaInicio=datos['Date'].iloc[0]
+        fechaFin=datos['Date'].iloc[-1]
+    elif version == 'mod':
+        #Al menos hay una compra y una venta
+        if len(datos[datos['Clase'] == 1].index) > 0 and len(datos[datos['Clase'] == -1].index) > 0:
+            indiceInicio = datos[datos['Clase'] == 1].index[0]
+            indiceFin = datos[datos['Clase'] == -1].index[-1]
+            fechaInicio = datos.loc[indiceInicio,'Date']
+            fechaFin = datos.loc[indiceInicio,'Date']
+        else:
+            return 0    
+
+    #Cálculo de BH
+    efectivo = capital
+
+    #precio de compra
+    precioInicioEjec = precioEjecucion(datos, fechaInicio, tipoEjec, h)
+
+    #acciones compradas
+    acciones = np.floor(efectivo / (precioInicioEjec * (1 + comision)))
+
+    #efectivo restante después de la compra
+    efectivo = efectivo-precioInicioEjec * acciones * (1 + comision)
+
+    #precio venta
+    precioFinEjec = precioEjecucion(datos, fechaFin, tipoEjec, h)
+
+    #efectivo final después de la venta
+    efectivo=efectivo  + acciones * precioFinEjec * (1 - comision)
+
+    #Ganancia BH
+    gananciaBH=(efectivo - capital)/capital
+
+    #Si la ganancia BH < 0 entonces no convenía vender al final
+    #del periodo, una persona (inteligente) no haría tal movimiento
+    #Sólo vendería si se supera su umbral de riesgo
+    diferencia_porcentual = (precioFinEjec * (1 - comision) ) / ( precioInicioEjec * (1 + comision) ) - 1
+    if gananciaBH < 0 and diferencia_porcentual > glob_bandaInferior:
+        gananciaBH = 0 # No vender (no se reconoce la pérdida)
+
+    return gananciaBH    
 
 ##==============================================================================
 ## Función para calcular el Excess Return de una estrategia
 ##==============================================================================
-def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = False, dicc_glob = {'capital':100000.0, 'comision':0.25 / 100, 'bandaSuperior':0.035, 'bandaInferior':-0.03, 'tasa':0}):
+def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = False,
+ dicc_glob = {'capital':100000.0, 'comision':0.25 / 100, 'bandaSuperior':0.035, 'bandaInferior':-0.03, 'tasa':0}, version = 'normal'):
     '''
     ENTRADA:
     datos. Pandas DataFrame con los precios y la columna Clase
@@ -131,62 +195,24 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
 
     dicc_glob: Diccionario para inicializar las variables globales
 
+    version: String que representa la versión de buy-and-hold que se calcula.
+    'normal' => Compra al inicio y venta al final del periodo
+    'mod' => Compra = primera compra. Venta = última venta
+
     SALIDA:
     exceso. Float. Exceso de ganancia
     '''
-    inicializaGlobales(dicc_glob)
-
-    acciones=0
-    flagPosicionAbierta=False
-    ultimoPrecio=0
-    efectivo=capital
-    numSignals=datos.shape[0]
-
-    fechaInicio=datos['Date'].iloc[0]
-    fechaFin=datos['Date'].iloc[numSignals-1]
-
-    ##################################################################
-    ##Cálculo de la ganancia siguiendo la estrategia de Buy and Hold##
-    ##################################################################
-
-    #Se compra en el segundo día del conjunto de datos
-    #esto es para comparar correctamente con la estrategia generada
-    precioInicioEjec = precioEjecucion(datos, fechaInicio, tipoEjec, h)
-    acciones = np.floor(efectivo / (precioInicioEjec * (1 + comision)))
-    efectivo = efectivo-precioInicioEjec * acciones * (1 + comision)
-    precioFinEjec = precioEjecucion(datos, fechaFin, tipoEjec, h)
-
-
-    #Ganancia de intereses PENDIENTE
-    #Como es una persona invirtiendo se suponen intereses simples
-    fInicio=pd.to_datetime(fechaInicio,format='%Y-%m-%d')
-    fFin=pd.to_datetime(fechaFin,format='%Y-%m-%d')
-    deltaDias=(fFin-fInicio)/np.timedelta64(1,'D') #Diferencia en días
-    #Para los intereses se consideran fines de semana
-    intereses=efectivo*tasa*deltaDias/365
-
-    #Vendemos las acciones compradas en el pasado
-    #y calculamos el efectivo final asi como la ganancia de Buy and Hold
-    efectivo=efectivo + intereses + acciones * precioFinEjec * (1 - comision)
-    gananciaBH=(efectivo - capital)/capital
-
-    #Si la ganancia BH < 0 entonces no convenía vender al final
-    #del periodo, una persona (inteligente) no haría tal movimiento
-    #Sólo vendería si se supera su umbral de riesgo
-    diferencia_porcentual = (precioFinEjec * (1 - comision) ) / ( precioInicioEjec * (1 + comision) ) - 1
-    if gananciaBH < 0 and diferencia_porcentual > glob_bandaInferior:
-        gananciaBH = 0 # No vender (no se reconoce la pérdida)
-
-
     ##################################################################
     ###Cálculo de la ganancia siguiendo la estrategia del individuo###
     ##################################################################
-
     inicializaGlobales(dicc_glob)
-    efectivo=capital
-    acciones=0
-    intereses=0
-    fUltimaOperacion=pd.to_datetime(fechaInicio,format='%Y-%m-%d')
+    flagPosicionAbierta = False
+    ultimoPrecio = 0
+    efectivo = capital
+    acciones = 0
+    intereses = 0
+    #fUltimaOperacion = pd.to_datetime(fechaInicio,format='%Y-%m-%d')
+    numSignals = datos.shape[0]
     #contador de operaciones
     contOper = 0
 
@@ -195,10 +221,7 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
 
     #No se incluye el último periodo, por eso es numSignals - 1
     #en este periodo se cierra la posición abierta (en caso de haberla)
-    for t in range(0,numSignals-1):
-
-        #para evitar comprar y vender el mismo día
-        flagCompraReciente=False
+    for t in range(0,numSignals - 1):
 
         #Se calcula el precio de ejecución
         fecha = datos['Date'].iloc[t]
@@ -222,9 +245,6 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
 
             #Se registra el último precio de compra
             ultimoPrecioCompra=precioEjec
-
-            #Se actualiza flagCompraReciente
-            flagCompraReciente=True
 
             #Se incrementa el contador de operaciones
             contOper = contOper + 1
@@ -287,7 +307,7 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
         #considerando costos de transacción
         diferencia_porcentual = ( precioEjec*(1 - comision) ) / (ultimoPrecioCompra*(1 + comision) ) - 1
 
-        #Caso: Venta genera ganancias
+        #Caso: Venta UltimaOperacion genera ganancias
         #o La diferencia entre los precios de compra y venta rebasa el umbral de riesgo
         if diferencia_porcentual > 0 or diferencia_porcentual < glob_bandaInferior:
 
@@ -299,9 +319,14 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
             #ganancia_acum_porcentual = ganancia_acum_porcentual + (efectivo / capital - 1)
             ganancia_acum_porcentual = (efectivo / capital - 1)
 
+            #Ajusta 'datos' para el cálculo de BH
+            datos.loc[numSignals - 1, 'Clase'] = -1
+
     #Ganancia total porcentual
     if flagTot:
       return ganancia_acum_porcentual * capital
+
+    gananciaBH = buyHold(datos, tipoEjec, h, version)  
 
     #Exceso de ganancia (buscamos maximizar esta cantidad)
     exceso = ganancia_acum_porcentual - gananciaBH
@@ -316,7 +341,8 @@ def excessReturn(datos, flagOper = True, tipoEjec = 'open', h = 0, flagTot = Fal
 ## Función para crear un CSV con los resultados de métrica en cada archivo
 ##==============================================================================
 def evaluaMetrica(ruta_pred = './AQ/AQ_resultados/', ruta_arch = 'arch_evaluar.csv', ruta_dest='./AQ/', metrica = 'exret', aux = 'AQ',
- dicc = {'flagOper': False, 'tipoEjec': 'open', 'h': 0}, dicc_glob = {'capital':100000.0, 'comision':0.25 / 100, 'bandaSuperior':0.035, 'bandaInferior':-0.03, 'tasa':0}):
+ dicc = {'flagOper': False, 'tipoEjec': 'open', 'h': 0},
+  dicc_glob = {'capital':100000.0, 'comision':0.25 / 100, 'bandaSuperior':0.035, 'bandaInferior':-0.03, 'tasa':0}, version = 'normal'):
 	'''
 	ENTRADA
 
@@ -335,6 +361,10 @@ def evaluaMetrica(ruta_pred = './AQ/AQ_resultados/', ruta_arch = 'arch_evaluar.c
 	dicc: Diccionario con los parámetros utilizados en la métrica a evaluar (key = string con el nombre del parámetro)
 
     dicc_glob: Diccionario para inicializar las variables globales
+
+    version: String que representa la versión de buy-and-hold que se calcula.
+    'normal' => Compra al inicio y venta al final del periodo
+    'mod' => Compra = primera compra. Venta = última venta
 
 	SALIDA
 	Crea un CSV con el resultado de las métricas para cada archivo
@@ -366,7 +396,7 @@ def evaluaMetrica(ruta_pred = './AQ/AQ_resultados/', ruta_arch = 'arch_evaluar.c
 
 		#Calcula la métrica correspondiente
 		if metrica == 'exret':
-			performance = excessReturn(datos, flagOper, tipoEjec, h, False, dicc_glob)
+			performance = excessReturn(datos, flagOper, tipoEjec, h, False, dicc_glob, version)
 			salida.loc[i, 'archivo'] = arch_pred
 			salida.loc[i, metrica] = performance
 
