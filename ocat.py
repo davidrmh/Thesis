@@ -445,6 +445,39 @@ def cnfRegla(cnf, dicc_unicos, consecuente = 1):
 
   return regla        
 
+##==============================================================================
+## Función para obtener la cláusula CNF más pequeña de una conjunto de CNFs
+## Esta función se basa en el número de cláusulas disyuntivas así como en la
+## longitud de cada una de estas cláusulas
+##==============================================================================
+def seleccionaMejorCNF(lista_cnf):
+  '''
+  ENTRADA
+  lista_cnf: Lista de cláusulas CNF (ver función ra1)
+
+  SALIDA
+  lista que representa la cláusula CNF más pequeña en lista_cnf
+  '''
+  #para almacenar la longitud total de cada clásula
+  longitudes = np.zeros(len(lista_cnf))
+  #auxiliar para índices
+  aux_ind = 0
+
+  for cnf in lista_cnf:
+    #número de clásulas disyuntivas
+    num_disy = len(cnf)
+    #Para almacenar la longitud de cada cláusula disyuntiva
+    aux = 0
+    for dis in cnf:
+      aux = aux + len(dis)
+    longitudes[aux_ind] = num_disy + aux
+    aux_ind = aux_ind + 1
+
+  #índice de la cláusula CNF más pequeña
+  indice_mejor = longitudes.argmin()
+  mejor_cnf = lista_cnf[indice_mejor]
+  return mejor_cnf     
+
 
         
 
