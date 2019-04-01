@@ -390,5 +390,63 @@ def ra1(tabla_pos, tabla_neg, num_iter = 5, top_k = 5):
 
   return lista_cnf  
 
+##==============================================================================
+## Función para convertir una cláusula CNF en regla
+##==============================================================================
+def cnfRegla(cnf, dicc_unicos, consecuente = 1):
+  '''
+  ENTRADA
+  cnf: Lista con la siguiente estructura [[A1, A2,..Am],[Ai,Aj,...,Ak],...]
+
+  dicc_unicos: Diccionario con los valores únicos de cada atributo
+  (ver función obtenUnicos)
+
+  consecuente: Consecuente de la regla
+
+  SALIDA
+  String con la regla
+  '''
+
+  regla = 'IF'
+  for disyuncion in cnf:
+    regla = regla + ' ('
+    #auxiliar para el primer término de cada disyunción
+    aux_primer = True
+    for atributo in disyuncion:
+      #obtiene nombre del atributo (tiene la forma POS(NEG)/nombre:indice))
+      nombre = atributo.split('/')[1].split(':')[0]
+
+      #obtiene el índice
+      indice = int(atributo.split('/')[1].split(':')[1])
+
+      #valor de decisión
+      decision = dicc_unicos[nombre][indice]
+
+      if 'POS/' in atributo:
+        if aux_primer:
+          regla = regla + nombre + ' >= ' + str(decision)
+          aux_primer = False
+        else:
+          regla = regla + ' OR ' + nombre + ' >= ' + str(decision)
+      elif 'NEG/' in atributo:
+        if aux_primer:
+          regla = regla + nombre + ' < ' + str(decision)
+          aux_primer = False
+        else:
+          regla = regla + ' OR ' + nombre + ' < ' + str(decision)
+    if len(cnf) > 1 and cnf[-1] != disyuncion:
+      regla = regla + ') AND'
+    elif len(cnf) > 1 and cnf[-1] == disyuncion:
+      regla = regla + ')'  
+    elif len(cnf)==1:
+      regla = regla + ')'  
+
+  regla = regla + ' THEN ' + str(consecuente)
+
+  return regla        
+
+
+        
+
 
 
