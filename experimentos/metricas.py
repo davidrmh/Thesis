@@ -140,7 +140,7 @@ def buyHold(datos, tipoEjec = 'open', h = 0, version = 'normal'):
             indiceInicio = datos[datos['Clase'] == 1].index[0]
             indiceFin = datos[datos['Clase'] == -1].index[-1]
             fechaInicio = datos.loc[indiceInicio,'Date']
-            fechaFin = datos.loc[indiceInicio,'Date']
+            fechaFin = datos.loc[indiceFin,'Date']
         else:
             return 0    
 
