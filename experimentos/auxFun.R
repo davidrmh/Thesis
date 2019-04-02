@@ -2,6 +2,7 @@
 ## Conjunto de funciones auxiliares
 ##==============================================================================================
 library(dplyr)
+library(stringr)
 
 # Esta variable sirve como los ifdef de c++
 # se utiliza para evitar importar el código si ya se ha importado
@@ -77,5 +78,27 @@ preciosEjecucion <- function(datos, fechas, tipo = 'open'){
   }
   
   preciosEj
+}
+
+##==============================================================================================
+## Función para agregar nuevas reglas a la lista lista_ganancia_reglas
+##
+## ENTRADA
+## reglas: Vector con strings que representan reglas
+## cada regla tiene la forma IF MFI.14 is [-Inf,29.9] THEN  is 1; (supportSize=3; laplace=0.8)
+##
+## lista: lista que contiene la ganancia acumulada de cada regla
+##
+## SALIDA
+## lista con las reglas que antes no se tenían
+##==============================================================================================
+agregaReglas <- function(reglas, lista){
+  for(regla in reglas){
+    #Sólo agrega las reglas que no se tenían
+    if(is.null(lista[[regla]])){
+      lista[[regla]] <- 0
+    }
+  }
+  return(lista)
 }
 
