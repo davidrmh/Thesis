@@ -140,10 +140,12 @@ obtenDecision <- function(reglas, observacion){
 ## top_k: Entero positivo que representa el número de las k mejores reglas a extraer
 ## si top_k > |reglas| entonces top_k = |reglas|
 ##
+## lista_gan: Lista que contiene la ganancia de cada regla
+##
 ## SALIDA
 ## vector de strings con las reglas ordenadas de mayor a menor de acuerdo a supportSize + laplace
 ##==============================================================================================
-ordenaReglas <- function(reglas, top_k = length(reglas)){
+ordenaReglas <- function(reglas, top_k = length(reglas), lista_gan = list()){
   
   #Extrae los valores de supportSize de cada regla
   supportSize <- as.numeric(str_replace_all(str_extract(reglas, "supportSize=."), "supportSize=",""))
@@ -152,6 +154,13 @@ ordenaReglas <- function(reglas, top_k = length(reglas)){
   laplace <-as.numeric(str_replace_all(str_extract(reglas, "laplace=\\d{1,2}\\.\\d{1,}"),"laplace=",""))
   
   suma <- supportSize + laplace
+  
+  #agrega la ganancia de cada regla
+  for(i in 1:length(reglas)){
+    regla <- reglas[i]
+    #Esta línea podría ser una multiplicación (en este caso se inicializa la lista con 1's)
+    suma[i] <- suma[i] + lista_gan[[regla]]
+  }
   
   #Obtiene la permutación de los elementos ordenados de mayor a menor
   permutacion <- order(suma, decreasing = TRUE)
