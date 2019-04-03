@@ -114,6 +114,10 @@ agregaReglas <- function(reglas, lista){
 ## lista con la nueva ganancia de cada regla
 ##==============================================================================================
 actualizaLista <- function(df_log, lista){
+  #Si no se realizaron operaciones no hay nada que actualizar
+  if(nrow(df_log) == 0){
+    return(lista)
+  }
   #obtiene los índices de compra y de venta
   indices_compra <- which(str_detect(df_log$accion, "Compra"))
   indices_venta <- which(str_detect(df_log$accion, "Venta"))
