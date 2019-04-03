@@ -159,7 +159,7 @@ ordenaReglas <- function(reglas, top_k = length(reglas), lista_gan = list()){
   for(i in 1:length(reglas)){
     regla <- reglas[i]
     #Efecto multiplicativo (la suma podría ser otra opción -ver función agregaReglas de auxFun.R-)
-    suma[i] <- suma[i] * lista_gan[[regla]]
+    suma[i] <- suma[i] + lista_gan[[regla]]
   }
   
   #Obtiene la permutación de los elementos ordenados de mayor a menor

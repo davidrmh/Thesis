@@ -82,12 +82,14 @@ AQ.fit <- function(entrena, confidence = 0.9, timesCovered = 1, metodoDisc = "un
 ##
 ## boolForzar: Booleano. TRUE => Se obliga a que la primera compra coincida con la primera compra de BH
 ##
+## boolPenaliza: Booleano. TRUE => Se penalizan las reglas que generaron pérdidas
+##
 ## SALIDA
 ## Crea archivos en ruta_dest
 ##==============================================================================================
 AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.9, timesCovered = 2, 
                     metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4),
-                    ignoraEspera = FALSE, acumReglas = FALSE, top_k = 5, boolForzar = FALSE){
+                    ignoraEspera = FALSE, acumReglas = FALSE, top_k = 5, boolForzar = FALSE, boolPenaliza = FALSE){
   
   #Carga los conjuntos de entrenamiento, prueba y etiquetado
   conjuntos <- listaDatos(arch_csv, ruta_entrena, ruta_prueba, ruta_etiqueta)
@@ -99,7 +101,11 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
   datos_csv <- read.csv(arch_csv, stringsAsFactors = FALSE)
 
   #Para acumular las reglas (en forma de string)
-  reglasAcum <- c()  
+  reglasAcum <- c()
+  
+  #Para registrar la ganancia de cada regla
+  #(sólo se utiliza cuando se acumulan reglas)
+  lista_ganancia_reglas <- list()
   
   #Ajusta modelos
   for(i in 1:n_modelos){
@@ -129,23 +135,26 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
         #Elimina repetidas
         reglasAcum <- unique(reglasAcum)
         
+        #Agrego a lista_ganancia_reglas
+        lista_ganancia_reglas <- agregaReglas(reglasAcum, lista_ganancia_reglas)
+        
         #Obtiene las top_k reglas de compra y venta
         reglasCompra <- reglasAcum[str_detect(reglasAcum, "THEN  is 1;")]
         reglasVenta <- reglasAcum[str_detect(reglasAcum, "THEN  is -1;")]
         
         #top_k reglas de compra
         if(top_k == 0 || top_k > length(reglasCompra)){
-          reglasCompra <- ordenaReglas(reglasCompra, length(reglasCompra))
+          reglasCompra <- ordenaReglas(reglasCompra, length(reglasCompra), lista_ganancia_reglas)
         }
         else{
-          reglasCompra <- ordenaReglas(reglasCompra, top_k)
+          reglasCompra <- ordenaReglas(reglasCompra, top_k, lista_ganancia_reglas)
         }
         
         if(top_k == 0 || top_k > length(reglasVenta)){
-          reglasVenta <- ordenaReglas(reglasVenta, length(reglasVenta))
+          reglasVenta <- ordenaReglas(reglasVenta, length(reglasVenta), lista_ganancia_reglas)
         }
         else{
-          reglasVenta <- ordenaReglas(reglasVenta, top_k)
+          reglasVenta <- ordenaReglas(reglasVenta, top_k, lista_ganancia_reglas)
         }
         
         #junta las top_k reglas de compra y venta
@@ -162,6 +171,13 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
         etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h, ruta_dest = ruta_dest, prefijo = aux1, boolForzar = boolForzar)
         #predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
         #etiquetado$Clase <- predicciones
+      }
+      
+      if(boolPenaliza){
+        #Actualiza la ganancia de cada regla
+        nombre_log <- str_c(ruta_dest, "/log/", aux1, "_log.csv")
+        df_log <- read.csv(nombre_log, stringsAsFactors = FALSE)
+        lista_ganancia_reglas <- actualizaLista(df_log, lista_ganancia_reglas) 
       }
       
       #guarda archivo CSV

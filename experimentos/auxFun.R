@@ -96,7 +96,7 @@ agregaReglas <- function(reglas, lista){
   for(regla in reglas){
     #Sólo agrega las reglas que no se tenían
     if(is.null(lista[[regla]])){
-      lista[[regla]] <- 1
+      lista[[regla]] <- 0
     }
   }
   return(lista)
@@ -129,15 +129,21 @@ actualizaLista <- function(df_log, lista){
     precioCompra <- df_log$precioEjec[indices_compra[i]]
     precioVenta <- df_log$precioEjec[indices_venta[i]]
     ganancia <- precioVenta / precioCompra - 1
+    if(ganancia > 0){
+      puntos <- 1
+    }
+    else{
+      puntos <- -1
+    }
     
     #Actualiza la lista con las ganancias
     regla_compra <- df_log$regla[indices_compra[i]]
     regla_venta <- df_log$regla[indices_venta[i]]
-    lista[[regla_compra]] <- lista[[regla_compra]] + ganancia
+    lista[[regla_compra]] <- lista[[regla_compra]] + puntos
     
     #Para la regla de venta sólo se actuliza si no fue venta por fin de periodo
     if(!str_detect(regla_venta, "No aplica")){
-      lista[[regla_venta]] <- lista[[regla_venta]] + ganancia
+      lista[[regla_venta]] <- lista[[regla_venta]] + puntos
     }
   }
   return(lista)
