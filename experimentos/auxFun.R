@@ -96,9 +96,66 @@ agregaReglas <- function(reglas, lista){
   for(regla in reglas){
     #Sólo agrega las reglas que no se tenían
     if(is.null(lista[[regla]])){
-      lista[[regla]] <- 0
+      lista[[regla]] <- 1
     }
   }
   return(lista)
 }
+
+##==============================================================================================
+## Función para actualizar la ganancia de cada regla de acuerdo al archivo log más reciente
+##
+## ENTRADA
+## df_log: dataframe con el los datos del archivo log
+##
+## lista: lista que contiene la ganancia acumulada de cada regla
+##
+## SALIDA
+## lista con la nueva ganancia de cada regla
+##==============================================================================================
+actualizaLista <- function(df_log, lista){
+  #obtiene los índices de compra y de venta
+  indices_compra <- which(str_detect(df_log$accion, "Compra"))
+  indices_venta <- which(str_detect(df_log$accion, "Venta"))
+  
+  
+  for(i in 1:length(indices_compra)){
+    
+    #calcula la ganancia de cada regla
+    precioCompra <- df_log$precioEjec[indices_compra[i]]
+    precioVenta <- df_log$precioEjec[indices_venta[i]]
+    ganancia <- precioVenta / precioCompra - 1
+    
+    #Actualiza la lista con las ganancias
+    regla_compra <- df_log$regla[indices_compra[i]]
+    regla_venta <- df_log$regla[indices_venta[i]]
+    lista[[regla_compra]] <- lista[[regla_compra]] + ganancia
+    
+    #Para la regla de venta sólo se actuliza si no fue venta por fin de periodo
+    if(!str_detect(regla_venta, "No aplica")){
+      lista[[regla_venta]] <- lista[[regla_venta]] + ganancia
+    }
+  }
+  return(lista)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
