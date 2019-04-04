@@ -106,14 +106,19 @@ agregaReglas <- function(reglas, lista){
 ## Función para actualizar la ganancia de cada regla de acuerdo al archivo log más reciente
 ##
 ## ENTRADA
-## df_log: dataframe con el los datos del archivo log
+## nombre_log: ruta del archivo log
 ##
 ## lista: lista que contiene la ganancia acumulada de cada regla
+##
+## reglas: Vector de strings que representan reglas
 ##
 ## SALIDA
 ## lista con la nueva ganancia de cada regla
 ##==============================================================================================
-actualizaLista <- function(df_log, lista){
+actualizaLista <- function(nombre_log, lista, reglas){
+  #Abre el archivo log
+  df_log <- read.csv(nombre_log, stringsAsFactors = FALSE)
+  
   #Si no se realizaron operaciones no hay nada que actualizar
   if(nrow(df_log) == 0){
     return(lista)
@@ -122,6 +127,11 @@ actualizaLista <- function(df_log, lista){
   indices_compra <- which(str_detect(df_log$accion, "Compra"))
   indices_venta <- which(str_detect(df_log$accion, "Venta"))
   
+  #memoria para saber que reglas penalizar por no ser utilizadas
+  memoria <- c()
+  
+  #para registrar pérdidas
+  registro_perdidas <- c()
   
   for(i in 1:length(indices_compra)){
     
@@ -129,23 +139,67 @@ actualizaLista <- function(df_log, lista){
     precioCompra <- df_log$precioEjec[indices_compra[i]]
     precioVenta <- df_log$precioEjec[indices_venta[i]]
     ganancia <- precioVenta / precioCompra - 1
+    
     if(ganancia > 0){
       puntos <- 1
     }
     else{
+      registro_perdidas <- c(registro_perdidas, ganancia)
       puntos <- -1
     }
     
     #Actualiza la lista con las ganancias
     regla_compra <- df_log$regla[indices_compra[i]]
     regla_venta <- df_log$regla[indices_venta[i]]
-    lista[[regla_compra]] <- lista[[regla_compra]] + puntos
+    lista[[regla_compra]] <- lista[[regla_compra]] + ganancia
+    
+    #Agrega regla de compra a la memoria
+    memoria <- c(memoria, regla_compra)
+    
+    #Extrae los valores de supportSize de cada regla
+    soporte_compra <- as.numeric(str_replace_all(str_extract(regla_compra, "supportSize=."), "supportSize=",""))
+    
+    #Extrae los valores de laplace de cada regla
+    laplace_compra <-as.numeric(str_replace_all(str_extract(regla_compra, "laplace=\\d{1,2}\\.\\d{1,}"),"laplace=",""))
+    
+    #Actualiza log
+    df_log$puntaje_regla[indices_compra[i]] <- lista[[regla_compra]] + soporte_compra + laplace_compra
     
     #Para la regla de venta sólo se actuliza si no fue venta por fin de periodo
     if(!str_detect(regla_venta, "No aplica")){
-      lista[[regla_venta]] <- lista[[regla_venta]] + puntos
+      lista[[regla_venta]] <- lista[[regla_venta]] + ganancia
+      
+      #obtiene soporte y laplace de la regla de venta
+      soporte_venta <- as.numeric(str_replace_all(str_extract(regla_venta, "supportSize=."), "supportSize=",""))
+      laplace_venta <-as.numeric(str_replace_all(str_extract(regla_venta, "laplace=\\d{1,2}\\.\\d{1,}"),"laplace=",""))
+      
+      #Actualiza log
+      df_log$puntaje_regla[indices_venta[i]] <- lista[[regla_venta]] + soporte_venta + laplace_venta
+      
+      #Agrega a la memoria 
+      memoria <- c(memoria, regla_venta)
+    }
+    else{
+      df_log$puntaje_regla[indices_venta[i]] <- 0
     }
   }
+  
+  #Penaliza las reglas que no se utilizaron
+  if(is.null(registro_perdidas)){
+    perdida_media <- 0
+  }
+  else{
+    perdida_media <- mean(registro_perdidas)  
+  }
+  for(regla in reglas){
+    if(!(regla %in% memoria)){
+      lista[[regla]] <- lista[[regla]] + perdida_media  
+    }
+    
+  }
+  
+  #guarda log
+  write.csv(x = df_log, file = nombre_log, row.names = FALSE)
   return(lista)
 }
 

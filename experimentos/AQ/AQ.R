@@ -11,10 +11,10 @@ ruta_entrena = "../../datasets/atributos_clases_dicc-1_rep/"
 ruta_prueba = "../../datasets/atributos_clases_dicc-1_rep/" 
 ruta_etiqueta = "../../datasets/etiquetado/"
 # AJUSTAR VARIABLES  DEL MÓDULO evaluaReglas.R (función evaluaReglas)
-glob_bandaSuperior <- 0.03 #numero positivo
-glob_bandaInferior <- -0.04 #número negativo
-glob_tipoEjec <- 'open'
-glob_h <- 0
+glob_bandaSuperior <- 0.035 #numero positivo
+glob_bandaInferior <- -0.03 #número negativo
+glob_tipoEjec <- 'mid'
+glob_h <- 1
 ##==============================================================================================
 
 
@@ -176,8 +176,7 @@ AQ.main <- function(ruta_dest = "./AQ_resultados_repeticiones/", confidence = 0.
       if(boolPenaliza){
         #Actualiza la ganancia de cada regla
         nombre_log <- str_c(ruta_dest, "/log/", aux1, "_log.csv")
-        df_log <- read.csv(nombre_log, stringsAsFactors = FALSE)
-        lista_ganancia_reglas <- actualizaLista(df_log, lista_ganancia_reglas) 
+        lista_ganancia_reglas <- actualizaLista(nombre_log, lista_ganancia_reglas, reglasAcum) 
       }
       
       #guarda archivo CSV
