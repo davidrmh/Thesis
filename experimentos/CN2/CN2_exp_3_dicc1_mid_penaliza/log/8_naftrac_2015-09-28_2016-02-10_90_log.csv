@@ -1,0 +1,9 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla","puntaje_regla"
+"2015-09-28","2015-09-29","Compra",42.1852,"IF Adj.Close.RSI.14 is [-Inf,53.7] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.89178361928027
+"2015-10-06","2015-10-07","Venta por banda superior",43.7154365025,"IF Comm.Chan.20.0.015 is (-23, Inf] THEN  is -1; (supportSize=4; laplace=0.833333333333333)",5.04138505052597
+"2015-11-09","2015-11-10","Compra",44.50598800125,"IF Adj.Close.RSI.14 is [-Inf,53.7] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.86135765721732
+"2015-12-17","2015-12-18","Venta por banda inferior",43.15185049875,"IF Comm.Chan.20.0.015 is (-23, Inf] THEN  is -1; (supportSize=4; laplace=0.833333333333333)",5.01095908846303
+"2015-12-18","2015-12-21","Compra",43.3481,"IF Adj.Close.RSI.14 is [-Inf,53.7] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.79723085581196
+"2016-01-14","2016-01-15","Venta por banda inferior",40.568325,"IF Williams.R.14 is (-124,-118] THEN  is -1; (supportSize=4; laplace=0.833333333333333)",4.71888591892277
+"2016-01-15","2016-01-18","Compra",40.68145,"IF Adj.Close.RSI.14 is [-Inf,53.7] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.83355913322709
+"2016-01-27","2016-01-28","Venta por banda superior",42.15933700125,"IF Comm.Chan.20.0.015 is (-23, Inf] THEN  is -1; (supportSize=4; laplace=0.833333333333333)",5.04728736587816

@@ -1,0 +1,3 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla","puntaje_regla"
+"2017-03-29","2017-03-30","Compra",49.01222650375,"IF Adj.Close.RSI.14 is (62.6,68.6] and MFI.14 is (56.9,62.1] THEN  is 1; (supportSize=3; laplace=0.8)",3.83815882542812
+"2017-07-11","2017-07-12","Venta por banda superior",50.88247549875,"IF Adj.Close.RSI.14 is (70.9, Inf] THEN  is -1; (supportSize=4; laplace=0.833333333333333)",4.9597497241619

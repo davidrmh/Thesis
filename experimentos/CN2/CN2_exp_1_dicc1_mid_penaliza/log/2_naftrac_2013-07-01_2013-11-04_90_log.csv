@@ -1,0 +1,5 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla","puntaje_regla"
+"2013-08-21","2013-08-22","Compra",41.3982375,"IF Williams.R.14 is [-Inf,-235] THEN  is 1; (supportSize=1; laplace=0.666666666666667)",1.6144525113539
+"2013-08-29","2013-08-30","Venta por banda inferior",39.2366634975,"IF Williams.R.14 is (-153,-132] THEN  is -1; (supportSize=3; laplace=0.8)",3.74778584468723
+"2013-09-30","2013-10-01","Compra",40.8769375,"IF Williams.R.14 is (-214,-194] THEN  is 1; (supportSize=2; laplace=0.75)",2.75367533655133
+"2013-11-04","2013-11-04","Venta fin periodo",41.0271740025,"No aplica",0

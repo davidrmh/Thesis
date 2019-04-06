@@ -1,0 +1,11 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla","puntaje_regla"
+"2013-11-05","2013-11-06","Compra",40.45087550125,"IF Williams.R.14 is [-Inf,-178] THEN  is 1; (supportSize=3; laplace=0.8)",3.83902973617224
+"2013-12-04","2013-12-05","Venta por banda superior",42.0296625,"IF Adj.Close.RSI.14 is (59.5,66.5] THEN  is -1; (supportSize=4; laplace=0.833333333333333)",4.87236306950558
+"2013-12-13","2013-12-16","Compra",42.2654,"IF Comm.Chan.20.0.015 is (6.53,50.7] THEN  is 1; (supportSize=4; laplace=0.666666666666667)",4.62604181752884
+"2014-01-24","2014-01-27","Venta por banda inferior",40.54837450125,"IF MFI.14 is (36.7,44.6] and Dif.Aroon.25 is [-Inf,-44.5] THEN  is -1; (supportSize=3; laplace=0.8)",3.75937515086217
+"2014-01-27","2014-01-28","Compra",41.00726099625,"IF Williams.R.14 is (-178,-161] THEN  is 1; (supportSize=3; laplace=0.8)",3.75597091954239
+"2014-02-24","2014-02-25","Venta por banda inferior",39.2017490025,"IF MFI.14 is (36.7,44.6] and Dif.Aroon.25 is [-Inf,-44.5] THEN  is -1; (supportSize=3; laplace=0.8)",3.71534607040456
+"2014-02-25","2014-02-26","Compra",38.98722449875,"IF Williams.R.14 is [-Inf,-178] THEN  is 1; (supportSize=3; laplace=0.8)",3.80884065474538
+"2014-03-13","2014-03-14","Venta por banda inferior",37.81023600375,"IF MFI.14 is (36.7,44.6] and Dif.Aroon.25 is [-Inf,-44.5] THEN  is -1; (supportSize=3; laplace=0.8)",3.6851569889777
+"2014-03-14","2014-03-18","Compra",38.5561510025,"IF Williams.R.14 is [-Inf,-178] THEN  is 1; (supportSize=3; laplace=0.8)",3.8219630485618
+"2014-03-20","2014-03-20","Venta fin periodo",39.0621,"No aplica",0

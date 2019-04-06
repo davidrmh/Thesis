@@ -1,0 +1,3 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla","puntaje_regla"
+"2016-02-11","2016-02-12","Compra",42.5912135025,"IF Comm.Chan.20.0.015 is (6.53,50.7] THEN  is 1; (supportSize=4; laplace=0.666666666666667)",4.44726613366571
+"2016-02-29","2016-03-02","Venta por banda superior",44.39373700125,"IF Adj.Close.RSI.14 is (59.5,66.5] THEN  is -1; (supportSize=4; laplace=0.833333333333333)",4.96855163164627
