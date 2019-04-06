@@ -1,0 +1,5 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla","puntaje_regla"
+"2018-06-19","2018-06-20","Compra",47.0373,"IF MFI.14 is (51.7,56.7] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.91769754617801
+"2018-07-06","2018-07-09","Venta por banda superior",49.10193799875,"IF Williams.R.14 is (-95.8, Inf] THEN  is -1; (supportSize=5; laplace=0.857142857142857)",5.93852500341525
+"2018-07-27","2018-07-30","Compra",49.75908800125,"IF MFI.14 is (51.7,56.7] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.88324153879083
+"2018-10-09","2018-10-10","Venta por banda inferior",48.0445884975,"IF Williams.R.14 is (-95.8, Inf] THEN  is -1; (supportSize=5; laplace=0.857142857142857)",5.90406899602808
