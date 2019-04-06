@@ -11,10 +11,10 @@ ruta_entrena = "../../datasets/atributos_clases_dicc-2/"
 ruta_prueba = "../../datasets/atributos_clases_dicc-2/" 
 ruta_etiqueta = "../../datasets/etiquetado/"
 # AJUSTAR VARIABLES  DEL MÓDULO evaluaReglas.R (función evaluaReglas)
-glob_bandaSuperior <- 0.03 #numero positivo
-glob_bandaInferior <- -0.04 #número negativo
-glob_tipoEjec <- 'open'
-glob_h <- 0
+glob_bandaSuperior <- 0.035 #numero positivo
+glob_bandaInferior <- -0.03 #número negativo
+glob_tipoEjec <- 'mid'
+glob_h <- 1
 ##==============================================================================================
 
 
@@ -80,12 +80,13 @@ CN2.fit <- function(entrena, K = 5, metodoDisc = "unsupervised.intervals",
 ##
 ## boolForzar: Booleano. TRUE => Se obliga a que la primera compra coincida con la primera compra de BH
 ##
+## boolPenaliza: Booleano. TRUE => Se penalizan las reglas que generaron pérdidas
 ## SALIDA
 ## Crea archivos en ruta_dest
 ##==============================================================================================
 CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5, 
                     metodoDisc = "unsupervised.intervals", param = list(nOfIntervals = 4),
-                    ignoraEspera = FALSE, acumReglas = FALSE, top_k = 5, boolForzar = FALSE){
+                    ignoraEspera = FALSE, acumReglas = FALSE, top_k = 5, boolForzar = FALSE, boolPenaliza = FALSE){
   
   #Carga los conjuntos de entrenamiento, prueba y etiquetado
   conjuntos <- listaDatos(arch_csv, ruta_entrena, ruta_prueba, ruta_etiqueta)
@@ -98,6 +99,10 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
   
   #Para acumular las reglas (en forma de string)
   reglasAcum <- c()
+
+  #Para registrar la ganancia de cada regla
+  #(sólo se utiliza cuando se acumulan reglas)
+  lista_ganancia_reglas <- list()
   
   #Ajusta modelos
   for(i in 1:n_modelos){
@@ -126,6 +131,9 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
         
         #Elimina repetidas
         reglasAcum <- unique(reglasAcum)
+
+        #Agrego a lista_ganancia_reglas
+        lista_ganancia_reglas <- agregaReglas(reglasAcum, lista_ganancia_reglas)
         
         #Obtiene las top_k reglas de compra y venta
         reglasCompra <- reglasAcum[str_detect(reglasAcum, "THEN  is 1;")]
@@ -133,17 +141,17 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
         
         #top_k reglas de compra
         if(top_k == 0 || top_k > length(reglasCompra)){
-          reglasCompra <- ordenaReglas(reglasCompra, length(reglasCompra))
+          reglasCompra <- ordenaReglas(reglasCompra, length(reglasCompra), lista_ganancia_reglas)
         }
         else{
-          reglasCompra <- ordenaReglas(reglasCompra, top_k)
+          reglasCompra <- ordenaReglas(reglasCompra, top_k, lista_ganancia_reglas)
         }
         
         if(top_k == 0 || top_k > length(reglasVenta)){
-          reglasVenta <- ordenaReglas(reglasVenta, length(reglasVenta))
+          reglasVenta <- ordenaReglas(reglasVenta, length(reglasVenta), lista_ganancia_reglas)
         }
         else{
-          reglasVenta <- ordenaReglas(reglasVenta, top_k)
+          reglasVenta <- ordenaReglas(reglasVenta, top_k, lista_ganancia_reglas)
         }
         
         #junta las top_k reglas de compra y venta
@@ -160,6 +168,12 @@ CN2.main <- function(ruta_dest = "./CN2_resultados_dicc2/", K = 5,
         etiquetado <- evaluaReglas(as.character(reglas), prueba, etiquetado, glob_tipoEjec, glob_h, ruta_dest = ruta_dest, prefijo = aux1, boolForzar = boolForzar)
         #predicciones <- reglas.predice(reglas, entrena, prueba, metodoDisc, param)
         #etiquetado$Clase <- predicciones
+      }
+
+      if(boolPenaliza){
+        #Actualiza la ganancia de cada regla
+        nombre_log <- str_c(ruta_dest, "/log/", aux1, "_log.csv")
+        lista_ganancia_reglas <- actualizaLista(nombre_log, lista_ganancia_reglas, reglasAcum) 
       }
       
       #guarda archivo CSV
