@@ -162,6 +162,9 @@ ordenaReglas <- function(reglas, top_k = length(reglas), lista_gan = list()){
     suma[i] <- suma[i] + lista_gan[[regla]]
   }
   
+  #Normaliza la suma
+  suma <- suma / sum(suma)
+  
   #Obtiene la permutación de los elementos ordenados de mayor a menor
   permutacion <- order(suma, decreasing = TRUE)
   
