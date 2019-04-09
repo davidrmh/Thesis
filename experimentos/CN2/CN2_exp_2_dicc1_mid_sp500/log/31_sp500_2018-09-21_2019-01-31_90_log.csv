@@ -1,0 +1,7 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2018-09-21","2018-09-24","Compra",291.66233499375,"IF Williams.R.14 is (-52.2,-40.2] THEN  is 1; (supportSize=1; laplace=0.666666666666667)"
+"2018-11-07","2018-11-08","Venta por banda inferior",279.5194509975,"IF Comm.Chan.20.0.015 is (75.7,109] THEN  is -1; (supportSize=1; laplace=0.666666666666667)"
+"2018-11-09","2018-11-12","Compra",275.41180297625,"IF Adj.Close.RSI.14 is (51.9,58.5] THEN  is 1; (supportSize=3; laplace=0.8)"
+"2019-01-09","2019-01-10","Venta por banda inferior",256.686676995,"IF Comm.Chan.20.0.015 is (42.6,75.7] THEN  is -1; (supportSize=1; laplace=0.666666666666667)"
+"2019-01-29","2019-01-30","Compra",267.05095698625,"IF Adj.Close.RSI.14 is (51.9,58.5] THEN  is 1; (supportSize=3; laplace=0.8)"
+"2019-01-31","2019-01-31","Venta fin periodo",268.1978200125,"No aplica"

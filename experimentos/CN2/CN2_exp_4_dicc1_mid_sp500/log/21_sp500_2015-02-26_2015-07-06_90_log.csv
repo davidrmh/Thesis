@@ -1,0 +1,3 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2015-02-26","2015-02-27","Compra",211.61772901,"IF Comm.Chan.20.0.015 is (72.8,87.5] THEN  is 1; (supportSize=1; laplace=0.666666666666667)"
+"2015-03-10","2015-03-11","Venta por banda inferior",204.4376220075,"IF Comm.Chan.20.0.015 is [-Inf,-101] THEN  is -1; (supportSize=1; laplace=0.666666666666667)"

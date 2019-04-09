@@ -1,0 +1,11 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla","puntaje_regla"
+"2018-01-04","2018-01-05","Compra",273.4368925125,"IF MFI.14 is (51.6,58.9] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.88380501579539
+"2018-01-25","2018-01-26","Venta por banda superior",284.581760505,"IF Comm.Chan.20.0.015 is (81.1, Inf] THEN  is -1; (supportSize=7; laplace=0.666666666666667)",7.8904869811703
+"2018-01-30","2018-01-31","Compra",282.69496547625,"IF MFI.14 is (51.6,58.9] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.83502836546481
+"2018-02-02","2018-02-05","Venta por banda inferior",268.906051995,"IF Dif.Aroon.25 is (66, Inf] THEN  is -1; (supportSize=5; laplace=0.714285714285714)",5.46115615549414
+"2018-02-05","2018-02-06","Compra",264.86051203,"IF Adj.Close.RSI.14 is [-Inf,36.7] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.97388338598359
+"2018-02-26","2018-02-27","Venta por banda superior",275.9483990025,"IF Adj.Close.RSI.14 is (63.1, Inf] THEN  is -1; (supportSize=5; laplace=0.857142857142857)",5.84149901925231
+"2018-02-28","2018-03-01","Compra",270.25896901625,"IF Adj.Close.RSI.14 is (41.7,48.8] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.61351151716697
+"2018-05-02","2018-05-03","Venta por banda inferior",260.55197403375,"IF Dif.Aroon.25 is (34.5,55] THEN  is -1; (supportSize=4; laplace=0.833333333333333)",4.79741595002564
+"2018-05-03","2018-05-04","Compra",264.62992650375,"IF Comm.Chan.20.0.015 is (-97,-62.6] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.86321283198156
+"2018-05-14","2018-05-14","Venta fin periodo",272.536936035,"No aplica",0

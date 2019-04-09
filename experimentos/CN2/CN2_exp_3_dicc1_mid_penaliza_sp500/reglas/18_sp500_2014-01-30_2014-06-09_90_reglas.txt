@@ -1,0 +1,8 @@
+IF Comm.Chan.20.0.015 is [-Inf,-90.1] THEN  is 1; (supportSize=2; laplace=0.75)
+IF Comm.Chan.20.0.015 is (-0.337,20.2] THEN  is 1; (supportSize=2; laplace=0.75)
+IF Dif.Aroon.25 is (44,56] THEN  is -1; (supportSize=3; laplace=0.8)
+IF Comm.Chan.20.0.015 is (-90.1,-0.337] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
+IF Comm.Chan.20.0.015 is (20.2,39.1] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
+IF Comm.Chan.20.0.015 is (39.1,53.6] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
+IF Comm.Chan.20.0.015 is (53.6,71.2] THEN  is 1; (supportSize=1; laplace=0.666666666666667)
+IF Comm.Chan.20.0.015 is (100, Inf] THEN  is -1; (supportSize=1; laplace=0.666666666666667)

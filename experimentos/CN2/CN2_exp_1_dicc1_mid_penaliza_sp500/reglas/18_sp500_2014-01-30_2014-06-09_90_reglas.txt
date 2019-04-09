@@ -1,0 +1,7 @@
+IF Comm.Chan.20.0.015 is (4.43,39.7] THEN  is 1; (supportSize=3; laplace=0.8)
+IF Dif.Aroon.25 is (51.5,58] THEN  is -1; (supportSize=3; laplace=0.8)
+IF Comm.Chan.20.0.015 is [-Inf,-101] THEN  is 1; (supportSize=2; laplace=0.75)
+IF Comm.Chan.20.0.015 is (-30.9,4.43] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
+IF Comm.Chan.20.0.015 is (110, Inf] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
+IF Williams.R.14 is [-Inf,-496] THEN  is -1; (supportSize=1; laplace=0.666666666666667)
+IF Comm.Chan.20.0.015 is (39.7,75] THEN  is 1; (supportSize=1; laplace=0.666666666666667)

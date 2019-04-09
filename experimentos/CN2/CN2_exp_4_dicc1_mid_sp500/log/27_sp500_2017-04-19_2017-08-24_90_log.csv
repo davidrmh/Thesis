@@ -1,0 +1,3 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2017-04-19","2017-04-20","Compra",235.40204000625,"IF Comm.Chan.20.0.015 is [-Inf,-20.4] THEN  is 1; (supportSize=2; laplace=0.75)"
+"2017-07-13","2017-07-14","Venta por banda superior",244.52714950125,"IF MFI.14 is (62.2,66.5] THEN  is -1; (supportSize=2; laplace=0.75)"

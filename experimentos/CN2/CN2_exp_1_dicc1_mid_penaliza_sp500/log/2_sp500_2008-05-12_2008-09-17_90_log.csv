@@ -1,0 +1,15 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla","puntaje_regla"
+"2008-05-12","2008-05-13","Compra",140.66077249375,"IF MFI.14 is (49.2,54.6] and Comm.Chan.20.0.015 is (24.3,58.1] THEN  is 1; (supportSize=2; laplace=0.75)",2.7160436316105
+"2008-06-09","2008-06-10","Venta por banda inferior",135.884443485,"IF Comm.Chan.20.0.015 is [-Inf,-111] THEN  is -1; (supportSize=2; laplace=0.75)",2.7160436316105
+"2008-06-10","2008-06-11","Compra",135.432731485,"IF MFI.14 is (38.4,43.8] THEN  is 1; (supportSize=3; laplace=0.8)",3.76717176903065
+"2008-06-23","2008-06-24","Venta por banda inferior",130.986714495,"IF Comm.Chan.20.0.015 is [-Inf,-111] THEN  is -1; (supportSize=2; laplace=0.75)",2.68321540064114
+"2008-06-24","2008-06-25","Compra",132.65079949875,"IF MFI.14 is (38.4,43.8] THEN  is 1; (supportSize=3; laplace=0.8)",3.72932296962483
+"2008-06-26","2008-06-27","Venta por banda inferior",127.6301259975,"IF Comm.Chan.20.0.015 is [-Inf,-111] THEN  is -1; (supportSize=2; laplace=0.75)",2.64536660123532
+"2008-06-27","2008-06-30","Compra",128.42526600875,"IF Adj.Close.RSI.14 is [-Inf,23.8] THEN  is 1; (supportSize=2; laplace=0.75)",2.71844875515209
+"2008-07-09","2008-07-10","Venta por banda inferior",124.37328899625,"IF Williams.R.14 is (-335,-288] THEN  is -1; (supportSize=3; laplace=0.8)",3.76844875515209
+"2008-07-10","2008-07-11","Compra",124.5054875,"IF Comm.Chan.20.0.015 is (-111,-77.1] THEN  is 1; (supportSize=1; laplace=0.666666666666667)",1.71115131647979
+"2008-08-08","2008-08-11","Venta por banda superior",130.04407051125,"IF Comm.Chan.20.0.015 is (58.1,91.9] THEN  is -1; (supportSize=2; laplace=0.75)",2.79448464981313
+"2008-08-18","2008-08-19","Compra",127.42777550125,"IF MFI.14 is (49.2,54.6] and Comm.Chan.20.0.015 is (24.3,58.1] THEN  is 1; (supportSize=2; laplace=0.75)",2.6826014367614
+"2008-09-04","2008-09-05","Venta por banda inferior",123.16631100375,"IF Comm.Chan.20.0.015 is [-Inf,-111] THEN  is -1; (supportSize=2; laplace=0.75)",2.61192440638622
+"2008-09-10","2008-09-11","Compra",123.979172995,"IF Adj.Close.RSI.14 is (37.6,44.4] THEN  is 1; (supportSize=2; laplace=0.75)",2.71274920308441
+"2008-09-15","2008-09-16","Venta por banda inferior",119.36085,"IF Williams.R.14 is (-335,-288] THEN  is -1; (supportSize=3; laplace=0.8)",3.7311979582365

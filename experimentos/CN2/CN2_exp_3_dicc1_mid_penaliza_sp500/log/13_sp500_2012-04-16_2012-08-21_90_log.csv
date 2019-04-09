@@ -1,0 +1,7 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla","puntaje_regla"
+"2012-04-17","2012-04-18","Compra",139.07682850875,"IF Comm.Chan.20.0.015 is (-76.7,-13.3] THEN  is 1; (supportSize=4; laplace=0.666666666666667)",4.59085663903496
+"2012-05-24","2012-05-25","Venta por banda inferior",131.98421499375,"IF Williams.R.14 is (-277,-258] THEN  is -1; (supportSize=4; laplace=0.833333333333333)",4.69806128110504
+"2012-05-25","2012-05-29","Compra",132.88137048875,"IF Comm.Chan.20.0.015 is (-76.7,-13.3] THEN  is 1; (supportSize=4; laplace=0.666666666666667)",4.6328235226601
+"2012-07-27","2012-07-30","Venta por banda superior",138.4579875,"IF Adj.Close.RSI.14 is (59.5, Inf] THEN  is -1; (supportSize=4; laplace=0.833333333333333)",5.43646370060868
+"2012-07-30","2012-07-31","Compra",138.6357260025,"IF Adj.Close.RSI.14 is (64.4,70.6] THEN  is 1; (supportSize=3; laplace=0.8)",3.89875694568603
+"2012-08-21","2012-08-21","Venta fin periodo",141.91432150875,"No aplica",0

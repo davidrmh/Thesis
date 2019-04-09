@@ -1,0 +1,5 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2018-05-15","2018-05-16","Compra",272.61483499375,"IF Adj.Close.RSI.14 is (53.6,63] THEN  is 1; (supportSize=3; laplace=0.8)"
+"2018-07-25","2018-07-26","Venta por banda superior",282.89099052375,"IF Comm.Chan.20.0.015 is (85.2,127] THEN  is -1; (supportSize=1; laplace=0.666666666666667)"
+"2018-07-26","2018-07-27","Compra",282.805256015,"IF Dif.Aroon.25 is (73, Inf] and Comm.Chan.20.0.015 is (85.2,127] THEN  is 1; (supportSize=2; laplace=0.75)"
+"2018-09-20","2018-09-20","Venta fin periodo",291.85852101,"No aplica"

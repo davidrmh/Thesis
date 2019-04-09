@@ -1,0 +1,7 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla","puntaje_regla"
+"2018-09-21","2018-09-24","Compra",291.66233499375,"IF MFI.14 is (38.6,55.3] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.98012699075411
+"2018-11-06","2018-11-07","Venta por banda inferior",278.39227150875,"IF Adj.Close.RSI.14 is (53.6,58.7] THEN  is -1; (supportSize=4; laplace=0.833333333333333)",4.52570030000096
+"2018-11-07","2018-11-08","Compra",280.9205510025,"IF MFI.14 is (38.6,55.3] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.88139764752068
+"2019-01-04","2019-01-07","Venta por banda inferior",253.18544950125,"IF Adj.Close.RSI.14 is (53.6,58.7] THEN  is -1; (supportSize=4; laplace=0.833333333333333)",4.42697095676753
+"2019-01-07","2019-01-08","Compra",256.2941364975,"IF MFI.14 is (36.3,41] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.87135863973977
+"2019-01-29","2019-01-30","Venta por banda superior",265.71903201375,"IF Adj.Close.RSI.14 is (53.6,58.7] THEN  is -1; (supportSize=4; laplace=0.833333333333333)",4.46374470292127
