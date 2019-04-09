@@ -1,0 +1,5 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2015-02-27","2015-03-02","Compra",211.91847449875,"IF Adj.Close.RSI.14 is (54.2,62.3] and MFI.14 is (53.2,61.3] THEN  is 1; (supportSize=1; laplace=0.666666666666667)"
+"2015-03-25","2015-03-26","Venta por banda inferior",204.7318825125,"IF Dif.Aroon.25 is (-36,-14] and Adj.Close.RSI.14 is (38.1,46.2] THEN  is -1; (supportSize=1; laplace=0.666666666666667)"
+"2015-03-26","2015-03-27","Compra",205.93855798875,"IF Adj.Close.RSI.14 is (30.1,38.1] and Williams.R.14 is (-306,-269] THEN  is 1; (supportSize=1; laplace=0.666666666666667)"
+"2015-07-06","2015-07-06","Venta fin periodo",206.07352150875,"No aplica"

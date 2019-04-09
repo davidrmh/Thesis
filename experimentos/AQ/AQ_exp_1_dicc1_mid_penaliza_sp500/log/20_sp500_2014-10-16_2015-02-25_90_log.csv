@@ -1,0 +1,5 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla","puntaje_regla"
+"2014-10-16","2014-10-17","Compra",189.15670999375,"IF Adj.Close.RSI.14 is [-Inf,36.7] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.64725134634004
+"2014-10-27","2014-10-28","Venta por banda superior",197.0810595075,"IF Adj.Close.RSI.14 is (63.1, Inf] THEN  is -1; (supportSize=5; laplace=0.857142857142857)",6.03729777308018
+"2014-10-31","2014-11-03","Compra",202.38469749375,"IF MFI.14 is (51.6,58.9] THEN  is 1; (supportSize=4; laplace=0.833333333333333)",4.8330057873947
+"2015-02-19","2015-02-20","Venta por banda superior",209.5049240025,"IF Adj.Close.RSI.14 is (63.1, Inf] THEN  is -1; (supportSize=5; laplace=0.857142857142857)",6.07247941772488

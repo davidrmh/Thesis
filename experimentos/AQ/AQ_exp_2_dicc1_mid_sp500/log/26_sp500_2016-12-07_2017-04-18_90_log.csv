@@ -1,0 +1,3 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2016-12-30","2017-01-03","Compra",225.41714100875,"IF MFI.14 is (36.1,41.7] THEN  is 1; (supportSize=2; laplace=0.75)"
+"2017-02-14","2017-02-15","Venta por banda superior",233.6793365025,"IF Dif.Aroon.25 is (68.5, Inf] THEN  is -1; (supportSize=2; laplace=0.75)"

@@ -1,0 +1,3 @@
+"fechaSen","fechaEjec","accion","precioEjec","regla"
+"2014-06-10","2014-06-11","Compra",195.28699548875,"IF Comm.Chan.20.0.015 is (77.8,114] and Williams.R.14 is (-233, Inf] THEN  is 1; (supportSize=1; laplace=0.666666666666667)"
+"2014-10-13","2014-10-14","Venta por banda inferior",187.958925,"IF Williams.R.14 is (-233, Inf] and Dif.Aroon.25 is [-Inf,-28] THEN  is -1; (supportSize=1; laplace=0.666666666666667)"
