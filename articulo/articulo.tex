@@ -6,10 +6,14 @@
 \usepackage{amssymb}
 \usepackage{makeidx}
 \usepackage{graphicx}
+\usepackage{natbib}
+
+%For algorithms
+\newtheorem{algorithm}{Algorithm}[section]
 
 \begin{document}
 \begin{frontmatter}
-  \title{Learning trading rules for the stock market}
+  \title{Rules-based learning for trading in the stock market}
   
   \author[1]{David Ricardo Montalván Hernández \corref{cor1}}
   \ead{davidricardo888@gmail.com}
@@ -33,31 +37,118 @@
 \end{frontmatter}
 
 \section{Introduction}
+\label{sec:introduction}
 Introduction
 
 \section{State of the art}
+\label{sec:state of the art}
 State of the art
 
 \section{Background}
+\label{sec:background}
 Background
+%Cálculo de BH
+%Cálculo de indicadores  técnicos e interpretación
 
 \section{Proposed methodology}
-Proposed methodology
-
+\label{sec:proposed methodology}
 \subsection{Data}
-Data split and labelling.
+\label{subsec:data}
+We used daily prices from the exchange-traded fund \textit{SPDR S\&P 500\footnote{Data from Yahoo Finance}} (which tracks stock index S\&P 500) for a time period comprising from 2008/01/02 up to 2019/03/06.
+
+\subsubsection{Data split}
+\label{subsubsec:data split}
+In order to obtain the training and test sets, we split the data using a sliding window of 90 trading days. Our splitting criterion is motivated by the fact that using such window we are able to capture the quarterly report of financial statements from each company in the \textit{S\&P 500}.
+
+Thus, each training set comprises a 90 trading-days period which is followed by the next 90 trading-days period representing the test set. This latter set will become a the new training set and the following 90 trading-days will become a new test set and so on.
+
+An example of our data split is represented in table \ref{table:data split}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{cc}
+\hline
+\textbf{Training set period} & \textbf{Test set period} \\
+\hline
+2008/01/02 - 2008/05/09 & 2008/05/12 - 2008/09/17 \\
+2008/05/12 - 2008/09/17 & 2008/09/18 - 2009/01/27 \\
+2008/09/18 - 2009/01/27 & 2009/01/28 - 2009/06/05 \\
+\hline
+\end{tabular}
+\caption{\label{table:data split} Data split}
+\end{table}
 
 \subsection{Attributes}
-Features used.
+\label{subsec:attributes}
+As attributes we choose a set of financial technical indicators. The motivation for its use is that such indicators are derived from expertise knowledge and thus can help us capture patterns in the data.
+
+The technical indicators used in this work are listed next
+
+\begin{itemize}
+\item Difference of Aroon up and Aroon down, 25 days time window each.
+
+\item Relative strength index with a 14 days window.
+
+\item Money flow index with a 14 days window.
+
+\item Williams \%R with a 14 days window.
+
+\item Commodity channel index with a 20 day window and a factor $C = 0.015$
+\end{itemize}
 
 \subsection{AQ and CN2 algorithms}
+\label{subsec:algorithms}
+\subsubsection{AQ algorithm}
+\label{subsubsec: aq algorithm}
+The algorithm quasi-optimal (AQ), (for a thorough review of the algorithm please see \cite{michalski1969quasi}, \cite{AQMichalski1991}, \cite{AQCervone2010}, \cite{AQWojtusiak2012} ), is rule induction supervised algorithm based on the principle of separate and conquer.
+
+Given two sets of observations $P_1, P_2, \ldots, P_n$ and $N_1, N_2, \ldots, N_m$, the positive and negatives examples respectively, AQ finds rules that are complete (cover all positive examples) and consistent (don't cover any negative example).
+
+Typically, rules are defined in the form 
+$$ Consequent \leftarrow Premise \sqsubset Exception $$ 
+
+where $Premise$ and $Exception$ are conjunctions of conditions (also called complexes) and each condition is in the form
+
+$$ \left[Attribute.OP.Values\right]$$
+
+where $OP$ depends on the attribute type, in our case, since we are using continuous attributes, $OP \in \{ >, \geq, <, \leq  \}$.
+
+The $Consequent$ part is typically a single condition, e.g., buy action.
+
+The algorithm starts by selecting a positive example $e$, the seed, which is then generalized by creating all complexes that cover $e$ and do not cover any of the negative examples $N$. This set of complexes, $G(e,N)$, is called a star. The best complex in $G(e,N)$ is selected according to a user-defined quality measure $Q$ and added to the cover of the positive class. This process is repeated until we have a disjunction of complexes covering every positive example and none of the negative examples.
+
+Algorithm \ref{algo:AQ} shows a pseudo-code of AQ algorithm
+\begin{algorithm}[AQ algorithm]
+\begin{tabbing}
+\\Let $P$ be the set of positive examples of class C
+\\Let $N$ be the set of negative examples of class C\\
+1. \=$Cover$ $\leftarrow \emptyset $ \\
+2. Repeat while $P \neq \emptyset$:\\
+ \>3. Select a seed $e$ from $P$\\
+ \>4. Generate a star $G(e,N)$\\
+ \>5. Select the best complex $c$ from $G(e,N)$\\
+ \>6. Include $c$ in $Cover$\\
+ \>7. Remove from $P$ all the examples covered by $c$\\
+\=8. Return $Cover$
+\end{tabbing}
+\label{algo:AQ}
+\end{algorithm}
+
+\subsubsection{CN2 algorithm}
+
+\subsection{Incremental learning}
+
 
 \section{Results}
+\label{sec:results}
 Results
 
 \section{Discussion and conclusions}
+\label{sec:conclusions}
 Discussion and conclusions
 
-\bibliographystyle{model1-num-names}
+\bibliography{references}
+\bibliographystyle{elsarticle/elsarticle-harv.bst}
+
 
 \end{document}
