@@ -46,9 +46,86 @@ State of the art
 
 \section{Background}
 \label{sec:background}
-Background
-%Cálculo de BH
-%Cálculo de indicadores  técnicos e interpretación
+
+\subsection{AQ and CN2 algorithms}
+\label{subsec:algorithms}
+
+\subsubsection{AQ algorithm}
+\label{subsubsec: aq algorithm}
+The algorithm quasi-optimal (AQ), (for a thorough review of the algorithm please see \cite{michalski1969quasi}, \cite{AQMichalski1991}, \cite{AQCervone2010}, \cite{AQWojtusiak2012} ), is rule induction supervised algorithm based on the principle of separate and conquer.
+
+Given two sets of observations $P_1, P_2, \ldots, P_n$ and $N_1, N_2, \ldots, N_m$, the positive and negatives examples respectively, AQ finds rules that are complete (cover all positive examples) and consistent (don't cover any negative example).
+
+Typically, rules are defined in the form 
+$$ Consequent \leftarrow Premise \sqsubset Exception $$ 
+
+where $Premise$ and $Exception$ are conjunctions of conditions (also called complexes) and each condition is in the form
+
+$$ \left[Attribute.OP.Values\right]$$
+
+where $OP$ depends on the attribute type, in our case, since we are using continuous attributes, $OP \in \{ >, \geq, <, \leq  \}$.
+
+The $Consequent$ part is typically a single condition, e.g., buy action.
+
+The algorithm starts by selecting a positive example $e$, the seed, which is then generalized by creating all complexes that cover $e$ and do not cover any of the negative examples $N$. This set of complexes, $G(e,N)$, is called a star. The best complex in $G(e,N)$ is selected according to a user-defined quality measure $Q$ and added to the cover of the positive class. This process is repeated until we have a disjunction of complexes covering every positive example and none of the negative examples.
+
+Algorithm \ref{algo:AQ} shows the pseudo-code of AQ algorithm
+\begin{algorithm}[AQ algorithm]
+\begin{tabbing}
+\\Let $P$ be the set of positive examples of class C
+\\Let $N$ be the set of negative examples of class C\\
+1. \=$Cover$ $\leftarrow \emptyset $ \\
+2. Repeat while $P \neq \emptyset$:\\
+ \>3. Select a seed $e$ from $P$\\
+ \>4. Generate a star $G(e,N)$\\
+ \>5. Select the best complex $c$ from $G(e,N)$\\
+ \>6. Include $c$ in $Cover$\\
+ \>7. Remove from $P$ all the examples covered by $c$\\
+\=8. Return $Cover$
+\end{tabbing}
+\label{algo:AQ}
+\end{algorithm}
+
+\subsubsection{CN2 algorithm}
+The CN2 algorithm combines ID3's ability to cope with noisy data and removes AQ's dependence on specific negative examples during the star formation procedure, this is done extending the search space by examining all the possible specializations for a given complex and not just those specializations consistent with the seed and the negative example \cite{CN2-Clark1989}.
+
+In order to select the best complex, CN2 uses two functions for guiding the creation of the star. The first of these functions measures the quality of each complex by using information-theoretic entropy (the lower the entropy the better the complex)
+
+\begin{equation} \label{eqn:cn2-entropy}
+Entropy = - \sum_{i=1}^{n} p_{i} log_{2}(p_{i})
+\end{equation}
+
+
+where $n$ is the number of classes and $p_{i}$ is the probability distribution of class $i$ among all examples covered by the cover. For example for a two class problem, a complex with $P = (p_{1}, p_{2}) = (0.8, 0.3)$ means that, among all of its examples covered, $80\%$ belongs to class $1$ and $20\%$ to class 2.
+Thus, using entropy, we prefer complexes that cover a large number of examples pertaining to the same class.
+
+The second function assesses the significance of the complex by ensuring that the decisions are different from those that would result if the complex selected examples randomly. This significance is tested using the following likelihood ratio:
+
+\begin{equation} \label{eq:cn2-ratio}
+2 \sum_{i=1}^{n} f_{i} log \left( \frac{f_{i}}{e_{i}} \right) 
+\end{equation}
+
+where $f_{i}$ is the observed frequency for class $i$ among the examples covered by the complex and $e_{i}$ is the expected frequency for class $i$ under the assumption that the complex selects examples randomly.
+
+It can be shown that the function in (\ref{eq:cn2-ratio}) is distributed approximately as $\chi^2$ with $n-1$ degrees of freedom and thus can be used as measure of statistical significance.
+
+Algorithm \ref{algo:CN2} shows the pseudo-code of CN2 algorithm
+\begin{algorithm}[CN2 algorithm]
+\begin{tabbing}
+\\Let $E$ be the set of examples
+\\Let $S$ be the set of all selectors\\
+1. \=$RULES$ $\leftarrow \emptyset $ \\
+2. Repeat while $E \neq \emptyset$ or $BC \neq \emptyset$:\\
+ \>3. Select the best complex $BC$\\
+ \>4. Let $EC$ the examples covered by $BC$ \\
+ \>5. Remove $EC$ from $E$\\
+ \>6. Let $C$ the most common class in $EC$\\
+ \>7. Add rule "IF $BC$ then $C$" to $RULES$\\
+\=8. Return $RULES$
+\end{tabbing}
+\label{algo:CN2}
+\end{algorithm}
+
 
 \section{Proposed methodology}
 \label{sec:proposed methodology}
@@ -95,46 +172,6 @@ The technical indicators used in this work are listed next
 
 \item Commodity channel index with a 20 day window and a factor $C = 0.015$
 \end{itemize}
-
-\subsection{AQ and CN2 algorithms}
-\label{subsec:algorithms}
-\subsubsection{AQ algorithm}
-\label{subsubsec: aq algorithm}
-The algorithm quasi-optimal (AQ), (for a thorough review of the algorithm please see \cite{michalski1969quasi}, \cite{AQMichalski1991}, \cite{AQCervone2010}, \cite{AQWojtusiak2012} ), is rule induction supervised algorithm based on the principle of separate and conquer.
-
-Given two sets of observations $P_1, P_2, \ldots, P_n$ and $N_1, N_2, \ldots, N_m$, the positive and negatives examples respectively, AQ finds rules that are complete (cover all positive examples) and consistent (don't cover any negative example).
-
-Typically, rules are defined in the form 
-$$ Consequent \leftarrow Premise \sqsubset Exception $$ 
-
-where $Premise$ and $Exception$ are conjunctions of conditions (also called complexes) and each condition is in the form
-
-$$ \left[Attribute.OP.Values\right]$$
-
-where $OP$ depends on the attribute type, in our case, since we are using continuous attributes, $OP \in \{ >, \geq, <, \leq  \}$.
-
-The $Consequent$ part is typically a single condition, e.g., buy action.
-
-The algorithm starts by selecting a positive example $e$, the seed, which is then generalized by creating all complexes that cover $e$ and do not cover any of the negative examples $N$. This set of complexes, $G(e,N)$, is called a star. The best complex in $G(e,N)$ is selected according to a user-defined quality measure $Q$ and added to the cover of the positive class. This process is repeated until we have a disjunction of complexes covering every positive example and none of the negative examples.
-
-Algorithm \ref{algo:AQ} shows a pseudo-code of AQ algorithm
-\begin{algorithm}[AQ algorithm]
-\begin{tabbing}
-\\Let $P$ be the set of positive examples of class C
-\\Let $N$ be the set of negative examples of class C\\
-1. \=$Cover$ $\leftarrow \emptyset $ \\
-2. Repeat while $P \neq \emptyset$:\\
- \>3. Select a seed $e$ from $P$\\
- \>4. Generate a star $G(e,N)$\\
- \>5. Select the best complex $c$ from $G(e,N)$\\
- \>6. Include $c$ in $Cover$\\
- \>7. Remove from $P$ all the examples covered by $c$\\
-\=8. Return $Cover$
-\end{tabbing}
-\label{algo:AQ}
-\end{algorithm}
-
-\subsubsection{CN2 algorithm}
 
 \subsection{Incremental learning}
 
