@@ -52,7 +52,7 @@ State of the art
 
 \subsubsection{AQ algorithm}
 \label{subsubsec: aq algorithm}
-The algorithm quasi-optimal (AQ), (for a thorough review of the algorithm please see \cite{michalski1969quasi}, \cite{AQMichalski1991}, \cite{AQCervone2010}, \cite{AQWojtusiak2012} ), is rule induction supervised algorithm based on the principle of separate and conquer.
+The algorithm quasi-optimal (AQ), (for a thorough review of the algorithm please see \cite{michalski1969quasi}, \cite{AQMichalski1991}, \cite{AQCervone2010}, \cite{AQWojtusiak2012}), is a rule induction supervised algorithm based on the principle of separate and conquer.
 
 Given two sets of observations $P_1, P_2, \ldots, P_n$ and $N_1, N_2, \ldots, N_m$, the positive and negatives examples respectively, AQ finds rules that are complete (cover all positive examples) and consistent (don't cover any negative example).
 
@@ -63,7 +63,7 @@ where $Premise$ and $Exception$ are conjunctions of conditions (also called comp
 
 $$ \left[Attribute.OP.Values\right]$$
 
-where $OP$ depends on the attribute type, in our case, since we are using continuous attributes, $OP \in \{ >, \geq, <, \leq  \}$.
+where $OP$ depends on the attribute type, for example, if we are using continuous attributes, $OP \in \{ >, \geq, <, \leq  \}$.
 
 The $Consequent$ part is typically a single condition, e.g., buy action.
 
@@ -78,7 +78,7 @@ Algorithm \ref{algo:AQ} shows the pseudo-code of AQ algorithm
 2. Repeat while $P \neq \emptyset$:\\
  \>3. Select a seed $e$ from $P$\\
  \>4. Generate a star $G(e,N)$\\
- \>5. Select the best complex $c$ from $G(e,N)$\\
+ \>5. Select the best complex, $c$, from $G(e,N)$\\
  \>6. Include $c$ in $Cover$\\
  \>7. Remove from $P$ all the examples covered by $c$\\
 \=8. Return $Cover$
@@ -87,7 +87,7 @@ Algorithm \ref{algo:AQ} shows the pseudo-code of AQ algorithm
 \end{algorithm}
 
 \subsubsection{CN2 algorithm}
-The CN2 algorithm combines ID3's ability to cope with noisy data and removes AQ's dependence on specific negative examples during the star formation procedure, this is done extending the search space by examining all the possible specializations for a given complex and not just those specializations consistent with the seed and the negative example \cite{CN2-Clark1989}.
+The CN2 algorithm removes AQ's dependence on specific negative examples during the star formation procedure, this is done extending the search space by examining all the possible specializations for a given complex and not just those specializations consistent with the seed and the negative example \cite{CN2-Clark1989}.
 
 In order to select the best complex, CN2 uses two functions for guiding the creation of the star. The first of these functions measures the quality of each complex by using information-theoretic entropy (the lower the entropy the better the complex)
 
