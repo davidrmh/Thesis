@@ -28,6 +28,8 @@ datos$Mid <- (datos$High + datos$Low) / 2
 datos$Date <- as.Date(datos$Date)
 
 #gráfica de la estrategia
+# Guardar en JPEG tamaño 800 x 676
 plot(datos$Date, datos$Mid, type = "l", lwd = 1.5, xlab = "Date", ylab = "Price", main = "Labeled data")
-points(x = datos$Date[indices_compra], y = datos$Mid[indices_compra], cex = 1.5, pch = 17)
-points(x = datos$Date[indices_venta], y = datos$Mid[indices_venta], cex = 1.5, pch = 25)
+points(x = datos$Date[indices_compra], y = datos$Mid[indices_compra], cex = 2, pch = 17)
+points(x = datos$Date[indices_venta], y = datos$Mid[indices_venta], cex = 2, pch = 25)
+legend(locator(1), legend = c("Buy", "Sell"), pch = c(17, 25), bty = "n", cex = 1.5, y.intersp = 0.6)
