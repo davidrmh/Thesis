@@ -45,6 +45,8 @@ Introduction
 State of the art
 
 \section{Background}
+%Efficient market hyphotesis and buy & hold
+%Technical indicators
 \label{sec:background}
 
 \subsection{AQ and CN2 algorithms}
@@ -54,7 +56,7 @@ State of the art
 \label{subsubsec: aq algorithm}
 The algorithm quasi-optimal (AQ), (for a thorough review of the algorithm please see \cite{michalski1969quasi}, \cite{AQMichalski1991}, \cite{AQCervone2010}, \cite{AQWojtusiak2012}), is a rule induction supervised algorithm based on the principle of separate and conquer.
 
-Given two sets of observations $P_1, P_2, \ldots, P_n$ and $N_1, N_2, \ldots, N_m$, the positive and negatives examples respectively, AQ finds rules that are complete (cover all positive examples) and consistent (don't cover any negative example).
+Given two sets of observations $P_1, P_2, \ldots, P_n$ and $N_1, N_2, \ldots, N_m$, the positive and negatives examples respectively, AQ finds rules that are complete (cover all positive examples) and consistent (don't cover any of the negative examples).
 
 Typically, rules are defined in the form 
 $$ Consequent \leftarrow Premise \sqsubset Exception $$ 
@@ -67,7 +69,7 @@ where $OP$ depends on the attribute type, for example, if we are using continuou
 
 The $Consequent$ part is typically a single condition, e.g., buy action.
 
-The algorithm starts by selecting a positive example $e$, the seed, which is then generalized by creating all complexes that cover $e$ and do not cover any of the negative examples $N$. This set of complexes, $G(e,N)$, is called a star. The best complex in $G(e,N)$ is selected according to a user-defined quality measure $Q$ and added to the cover of the positive class. This process is repeated until we have a disjunction of complexes covering every positive example and none of the negative examples.
+The algorithm starts by selecting a positive example $e$, the seed, which is then generalized by creating all complexes that cover $e$ and do not cover any of the negative examples $N$. This set of complexes, $G(e,N)$, is called a star. The best complex in $G(e,N)$ is selected according to a user-defined criterion and added to the cover of the positive class. This process is repeated until we have a disjunction of complexes covering every positive example and none of the negative examples.
 
 Algorithm \ref{algo:AQ} shows the pseudo-code of AQ algorithm
 \begin{algorithm}[AQ algorithm]
@@ -87,7 +89,7 @@ Algorithm \ref{algo:AQ} shows the pseudo-code of AQ algorithm
 \end{algorithm}
 
 \subsubsection{CN2 algorithm}
-The CN2 algorithm removes AQ's dependence on specific negative examples during the star formation procedure, this is done extending the search space by examining all the possible specializations for a given complex and not just those specializations consistent with the seed and the negative example \cite{CN2-Clark1989}.
+The CN2 algorithm removes AQ's dependence on specific negative examples during the star formation procedure, this is done extending the search space by examining all the possible specializations for a given complex and not just those specializations consistent with the seed and the negative examples \cite{CN2-Clark1989}.
 
 In order to select the best complex, CN2 uses two functions for guiding the creation of the star. The first of these functions measures the quality of each complex by using information-theoretic entropy (the lower the entropy the better the complex)
 
@@ -135,7 +137,7 @@ We used daily prices from the exchange-traded fund \textit{SPDR S\&P 500\footnot
 
 \subsubsection{Data split}
 \label{subsubsec:data split}
-In order to obtain the training and test sets, we split the data using a sliding window of 90 trading days. Our splitting criterion is motivated by the fact that using such window we are able to capture the quarterly report of financial statements from each company in the \textit{S\&P 500}.
+In order to obtain the training and test sets, we split the data using a sliding window of 90 trading days. Our splitting criterion is motivated by the fact that using such window we are able to capture the quarterly reports of financial statements from each company in the \textit{S\&P 500}, hence we can capture how investors react to such information.
 
 Thus, each training set comprises a 90 trading-days period which is followed by the next 90 trading-days period representing the test set. This latter set will become a the new training set and the following 90 trading-days will become a new test set and so on.
 
@@ -155,9 +157,11 @@ An example of our data split is represented in table \ref{table:data split}.
 \caption{\label{table:data split} Data split}
 \end{table}
 
+Using this split methodology, we obtained $30$ training datasets ranging from $2008/01/02$ up to $2018/09/20$ and $30$ test datasets ranging from $2008/05/12$ up to $2019/01/31$.
+
 \subsection{Attributes}
 \label{subsec:attributes}
-As attributes we choose a set of financial technical indicators. The motivation for its use is that such indicators are derived from expertise knowledge and thus can help us capture patterns in the data.
+As attributes we choose a set of financial technical indicators. The motivation for its use is that such indicators are derived from experts' knowledge and thus can help us capture previously studied patterns in the data.
 
 The technical indicators used in this work are listed next
 
@@ -172,6 +176,15 @@ The technical indicators used in this work are listed next
 
 \item Commodity channel index with a 20 day window and a factor $C = 0.015$
 \end{itemize}
+
+\subsection{Labelling methodology}
+\label{subsec:labelling}
+Since our raw data has no labels, we used an univariate marginal distribution algorithm (UMDA) in order to obtain the buy, sell and hold signals. \cite{simon2013evolutionary}.
+
+Each individual in the population represents a particular trading strategy for the given training period and is encoded as a vector $\mathbf{x} = \left(x_1, x_2, \ldots, x_t \right)$ whose components, $x_{i}$, represent the action for the day $i$ with $ x_{i} \in \{-1,0,1 \}$, where $-1,0,1$ represents a sell, hold and buy signal respectively. 
+
+We used \textit{excess return} over the buy-and-hold strategy as the fitness function and a population of $60$ individuals with $40$ generations.
+
 
 \subsection{Incremental learning}
 
