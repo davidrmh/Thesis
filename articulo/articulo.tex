@@ -182,9 +182,9 @@ The technical indicators used in this work are listed next
 \label{subsec:labelling}
 Since our raw data has no labels, we used an univariate marginal distribution algorithm (UMDA) in order to obtain the buy, sell and hold signals for the training data. \cite{simon2013evolutionary}.
 
-Each individual in the population represents a particular trading strategy for the given training period and is encoded as a vector $\mathbf{x} = \left(x_1, x_2, \ldots, x_t \right)$ whose components, $x_{i}$, represent the action for the day $i$ with $ x_{i} \in \{-1,0,1 \}$, where $-1,0,1$ represent a sell, hold and buy signal respectively. 
+Each individual in the population represents a particular trading strategy for the given training period. This strategy is encoded as a vector $\mathbf{x} = \left(x_1, x_2, \ldots, x_t \right)$ whose components, $x_{i}$, represent the action for the day $i$ with $ x_{i} \in \{-1,0,1 \}$, where $-1,0$ and $1$ represent sell, hold and buy signals respectively. 
 
-We used \textit{excess return} over the buy-and-hold strategy as the fitness function and a population of $60$ individuals with $40$ generations.
+The fitness function used is \textit{excess return} over the buy-and-hold strategy.
 
 As shown in figure \ref{figure:Labelling}, this labelling methodology captures the basic intuition of "buying in lows and selling in highs".
 
@@ -194,7 +194,7 @@ As shown in figure \ref{figure:Labelling}, this labelling methodology captures t
 \end{figure}
 
 \subsection{Incremental learning}
-For both learning algorithms, AQ and CN2, we realized two type of experiments. The first of them is based on a \textit{learn-apply-discard} approach, in which we first induce a set of rules, apply them to the corresponding test set and then discard them for future test sets unless that the rules are induced again in future training sets.
+For both learning algorithms, AQ and CN2, we realized two type of experiments. The first of them is based on a \textit{learn-apply-discard} approach, in which, given a training set, we induce a set of rules and apply them to the closest test set. After that, we discard these set of rules (forget mechanism).
 
 The other approach is based on an \textit{incremental learning} methodology, in which we learn a set of rules and instead of discarding them we order them according to their performance over the training set from which they were induced for the first time and their performance over the test sets in which they were used, keeping just a \textit{top k} of buy rules and a \textit{top k} of sell rules.
 
@@ -202,17 +202,17 @@ For measuring rule's performance over a training set we use the sum of their \te
 
 On the other hand, for measuring rule's performance over a test set and in order to consider the non-stationary behaviour of stock markets, we reward (penalize) a pair of buy-sell rules, if their interaction involved a gain (loss).
 
-The reward(penalization) given to each pair of buy-sell rules, is the percentage gain (loss) they caused, that is:
+The reward (penalization) given to each pair of buy-sell rules in a buy-sell transaction, is the percentage gain (loss) they caused, that is:
 
 \begin{equation} \label{eqn:reward}
-reward(B,S) = \dfrac{P_{sell}  (1 - c) }{P_{buy}  (1 + c)} -1 
+reward(B,S) = \dfrac{P_{sell} }{P_{buy}} -1 
 \end{equation}
 
-where $reward(B,S)$ is the reward or loss for a pair of buy-sell rules acting together, $P_{sell}$ and $P_{buy}$, are the sell and buy price respectively and $c$ is the transaction cost per operation.
+where $reward(B,S)$ is the reward (or loss) for a pair of buy-sell rules in a buy-sell transaction and $P_{sell}$, $P_{buy}$, are the sell and buy price respectively.
 
-Finally for each rule that did not appear in the test set being evaluated, we penalize it with the average loss over that same test set, this is as a way of discarding rules due to the pass of time.
+Finally for each rule that did not appear in the test set being evaluated, we penalize it with the average loss over that same test set, this acts as a way for discarding rules due to the pass of time.
 
-Thus, the score for a rule, $R$, before the test set $M$ is given by:
+Thus, the score for a rule, $R$, before the test set $M$, is given by:
 
 \begin{equation} \label{eqn:rule-score}
 score_{t}(R) = support + Laplace + \sum_{i} rewards_{i}
@@ -220,12 +220,19 @@ score_{t}(R) = support + Laplace + \sum_{i} rewards_{i}
 
 where $support$ and $Laplace$ are, respectively, rule's support and its Laplace accuracy, both as measured in the training set from which it was induced for the first time. The sum in equation (\ref{eqn:rule-score}) includes all the test sets that appear after the first training set where the rule $R$ is induced and up to (excluding) the $M$-th test.
 
+In this way, we are able to keep past and present knowledge and also identify sets of useful rules while discarding the ones that caused losses.
+
 Figure \ref{figure:Incremental-learning} shows the process of incremental learning. For all the experiments the value of $K$ is set equal to $5$.
 \begin{figure}[h]
 \centering
 \scalebox{0.5}{\includegraphics[width=1\linewidth]{images/incremental-learning.png}}
 \caption{\label{figure:Incremental-learning} Incremental learning}
 \end{figure}
+
+\subsection{Trading assumptions}
+\label{susec:trading-assumptions}
+
+
 
 
 \section{Results}
