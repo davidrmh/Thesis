@@ -229,8 +229,26 @@ Figure \ref{figure:Incremental-learning} shows the process of incremental learni
 \caption{\label{figure:Incremental-learning} Incremental learning}
 \end{figure}
 
+\subsection{Stop loss and stop gain}
+\label{subsec:stop loss and stop gain}
+
 \subsection{Trading assumptions}
-\label{susec:trading-assumptions}
+\label{subsec:trading-assumptions}
+For every experiment the following trading assumptions are made:
+
+\begin{itemize}
+\item Given a buy or sell signal at time $t$, its execution is realized at time $t+1$ and the execution price is the mid price (average of low and high price) at $t+1$.
+
+\item The transaction cost per operation is set equal to $0.25\%$. Thus for a buy transaction we end up paying:
+$$ P_{buy} (1 + 0.0025)$$
+per share. Whereas for a sell transaction we receive:
+$$ P_{sell} (1 - 0.0025)$$ 
+per share.
+
+\item For a buy signal, we buy as many stocks as we can afford with our current capital. Likewise for a sell signal we sell all the stocks held at that time.
+
+\item We can only sell something that we own, that is, we don't allow short sales.
+\end{itemize}
 
 
 
