@@ -218,7 +218,7 @@ Thus, the score for a rule, $R$, before the test set $M$, is given by:
 score_{t}(R) = support + Laplace + \sum_{i} rewards_{i}
 \end{equation}
 
-where $support$ and $Laplace$ are, respectively, rule's support and its Laplace accuracy, both as measured in the training set from which it was induced for the first time. The sum in equation (\ref{eqn:rule-score}) includes all the test sets that appear after the first training set where the rule $R$ is induced and up to (excluding) the $M$-th test.
+where $support$ and $Laplace$ are, respectively, rule's support and its Laplace accuracy, both as measured in the training set from which the rule was induced for the first time. The sum in equation (\ref{eqn:rule-score}) includes all the test sets that appear after the first training set where the rule $R$ is induced and up to (excluding) the $M$-th test.
 
 In this way, we are able to keep past and present knowledge and also identify sets of useful rules while discarding the ones that caused losses.
 
@@ -229,8 +229,35 @@ Figure \ref{figure:Incremental-learning} shows the process of incremental learni
 \caption{\label{figure:Incremental-learning} Incremental learning}
 \end{figure}
 
-\subsection{Stop loss and stop gain}
-\label{subsec:stop loss and stop gain}
+\subsection{Sell limit orders}
+\label{subsec:limit orders}
+In addition to the sell rules induced by each algorithm, we add two more rules whose purpose is to capture investor's risk profile.
+
+These new rules are related to sell limit orders and work by setting two limits corresponding to rising and falling markets.
+
+The rules are triggered depending on the variation between the execution price and the achieved price of the most recent buy transaction as shown in equation (\ref{eqn:price-variation}).
+
+\begin{equation} \label{eqn:price-variation}
+variation = \dfrac{P_{exec}  (1 - c) }{P_{buy} (1 + c) } - 1
+\end{equation}
+
+where $c$ is the transaction cost percentage.
+
+Thus, a sell signal is triggered when one of the following conditions is met:
+
+\begin{align}
+R_{sell} \wedge (variation > UL) \label{eqn:Sell-rule 1}\\
+R_{sell} \wedge (variation < LL) \label{eqn:Sell-rule 2S}
+\end{align}
+
+where $R_{sell}$ is the sell rule induced by a learning algorithm and $UL$, $LL$ are the user defined upper and lower limits respectively.
+
+Figure \ref{figure:Sell limits} shows the sell limits for a specific buy order.
+\begin{figure}[h]
+\centering
+\scalebox{1}{\includegraphics[width=1\linewidth]{images/sell_limits.jpeg}}
+\caption{\label{figure:Sell limits} Sell limits}
+\end{figure}
 
 \subsection{Trading assumptions}
 \label{subsec:trading-assumptions}
@@ -241,13 +268,18 @@ For every experiment the following trading assumptions are made:
 
 \item The transaction cost per operation is set equal to $0.25\%$. Thus for a buy transaction we end up paying:
 $$ P_{buy} (1 + 0.0025)$$
-per share. Whereas for a sell transaction we receive:
+per stock. Whereas for a sell transaction we receive:
 $$ P_{sell} (1 - 0.0025)$$ 
-per share.
+per stock.
 
 \item For a buy signal, we buy as many stocks as we can afford with our current capital. Likewise for a sell signal we sell all the stocks held at that time.
 
 \item We can only sell something that we own, that is, we don't allow short sales.
+
+\item The upper sell limit is equal to 0.035 or $3.5\%$ relative to the most recent buy price.
+
+\item The lower sell limit is equal to -0.03 or $-3.0\%$ relative to the most recent buy price.
+
 \end{itemize}
 
 

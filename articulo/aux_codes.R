@@ -33,3 +33,25 @@ plot(datos$Date, datos$Mid, type = "l", lwd = 1.5, xlab = "Date", ylab = "Price"
 points(x = datos$Date[indices_compra], y = datos$Mid[indices_compra], cex = 2, pch = 17)
 points(x = datos$Date[indices_venta], y = datos$Mid[indices_venta], cex = 2, pch = 25)
 legend(locator(1), legend = c("Buy", "Sell"), pch = c(17, 25), bty = "n", cex = 1.5, y.intersp = 0.6)
+
+
+##==========================================================================================================
+## GRÁFICA DE BANDAS HORIZONTALES
+##==========================================================================================================
+# Guardar en JPEG tamaño 800 x 676
+banda_superior <- 0.035
+banda_inferior <- -0.03
+indice <- 2
+plot(datos$Date, datos$Mid, type = "l", lwd = 1.5, xlab = "Date", ylab = "Price", main = "Sell limits")
+points(x = datos$Date[indices_compra[indice]], y = datos$Mid[indices_compra[indice]], cex = 2, pch = 17)
+abline(h = datos$Mid[indices_compra[indice]]*(1 + banda_superior), lty = 6, lwd = 2)
+abline(h = datos$Mid[indices_compra[indice]]*(1 + banda_inferior), lty = 6, lwd = 2)
+legend(locator(1), legend = c("Buy"), pch = c(17), bty = "n", cex = 1.5, y.intersp = 0.6)
+
+
+
+
+
+
+
+
