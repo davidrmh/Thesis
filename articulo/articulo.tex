@@ -292,7 +292,11 @@ Using the methodology and trading assumptions explained in section \ref{sec:prop
 
 Each discretization method used both learning approaches, incremental learning (IL) and learn-apply-discard (LD).
 
-For every test set the excess return over the buy-and-hold strategy is calculated, obtaining the results shown in tables \ref{table:AQ results} and \ref{table:CN2 results}:
+For every test set the excess return over the buy-and-hold strategy and the total monetary gain for every \$100,000.00, are calculated. Tables \ref{table:AQ results} and \ref{table:CN2 results} show the results.
+
+As we can see, AQ algorithm is able to outperform buy-and-hold strategy when using incremental learning.
+
+On the other hand, CN2 algorithm performs poorly in all the scenarios, the reason behind this is because even when CN2 by default gives us an ordered set of rules, we're not preserving such order when rewarding (penalizing) rules performance over the test sets. 
 
 \begin{center}
 \begin{table*}[ht]
@@ -306,6 +310,7 @@ Average excess return & $0.37\%$ & $-0.39\%$ & $0.20\%$ & $-1.02\%$ \\
 \# Negative excess returns & $19$ & $16$ & $20$ & $17$ \\
 Max excess return & $34.64\%$ & $22.17\%$ & $29.72\%$ & $20.3\%$ \\
 Min excess return & $-11.23\%$ & $-12.94\%$ & $-3.86\%$ & $-11.47\%$ \\
+Monetary gain & $\$2,384.18$ & $\$1,620.11$ & $\$2,214.84$ & $\$ 994.96$ \\
 \hline
 \end{tabular}
 \caption{\label{table:AQ results} Results for AQ algorithm}
@@ -325,6 +330,8 @@ Average excess return & $-1.22\%$ & $-1.07\%$ & $-0.54\%$ & $-1.41\%$ \\
 \# Negative excess returns & $19$ & $20$ & $18$ & $22$ \\
 Max excess return & $15.69\%$ & $12.32\%$ & $11.81\%$ & $6.05\%$ \\
 Min excess return & $-12.87\%$ & $-9.43\%$ & $-6.48\%$ & $-8.33\%$ \\
+Monetary gain & $\$792.43$ & $\$946.07$ & $\$1,475.04$ & $\$ 604.99$ \\
+
 \hline
 \end{tabular}
 \caption{\label{table:CN2 results} Results for CN2 algorithm}
