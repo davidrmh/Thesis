@@ -10,6 +10,10 @@
 \usepackage{blindtext}
 \usepackage{wrapfig}
 
+%Tabla con 2008-05-12 y 2008-09-18
+%Imagen de la estrategia de  AQ exp 1 en 2008-05-12 y 2008-09-18
+%Tabla con los resultados omitiendo crisis 2008
+%Imagen de AQ exp 1 en un mercado bullish
 
 %For algorithms
 \newtheorem{algorithm}{Algorithm}[section]
@@ -290,13 +294,15 @@ per stock.
 \label{sec:results}
 Using the methodology and trading assumptions explained in section \ref{sec:proposed methodology}, we realized four experiments for each learning algorithm. These experiments explore two types of discretization methods, unsupervised intervals (UI) and unsupervised quantiles (UQ).
 
-Each discretization method used both learning approaches, incremental learning (IL) and learn-apply-discard (LD).
+Each discretization method uses both learning approaches, incremental learning (IL) and learn-apply-discard (LD).
 
-For every test set the excess return over the buy-and-hold strategy and the total monetary gain for every \$100,000.00, are calculated. Tables \ref{table:AQ results} and \ref{table:CN2 results} show the results.
+For every test set the excess return over the buy-and-hold strategy and the total monetary gain for every \$100,000.00 invested, are calculated. Tables \ref{table:AQ results} and \ref{table:CN2 results} show the results.
 
 As we can see, AQ algorithm is able to outperform buy-and-hold strategy when using incremental learning.
 
-On the other hand, CN2 algorithm performs poorly in all the scenarios, the reason behind this is because even when CN2 by default gives us an ordered set of rules, we're not preserving such order when rewarding (penalizing) rules performance over the test sets. 
+On the other hand, CN2 algorithm performs poorly in all the scenarios, the reason behind this, is because even when CN2 by default gives us an ordered set of rules, we're breaking that order when rewarding (penalizing) rules performance over the test sets.
+
+Despite these results, is important to notice that two test sets comprise the $2008$ financial crisis, namely, the test sets for the periods $2008/05/12$ - $2008/09/17$ and $2008/09/18$ - $2009/01/27$. The performance of every algorithm over these sets is given in tables \ref{table:AQ results for 2008} and \ref{table:CN2 results for 2008}.
 
 \begin{center}
 \begin{table*}[ht]
@@ -316,7 +322,6 @@ Monetary gain & $\$2,384.18$ & $\$1,620.11$ & $\$2,214.84$ & $\$ 994.96$ \\
 \caption{\label{table:AQ results} Results for AQ algorithm}
 \end{table*}
 \end{center}
-
 
 \begin{center}
 \begin{table*}[t]
@@ -338,6 +343,35 @@ Monetary gain & $\$792.43$ & $\$946.07$ & $\$1,475.04$ & $\$ 604.99$ \\
 \end{table*}
 \end{center}
 
+\begin{center}
+\begin{table*}[t]
+\centering
+\begin{tabular}{ccccc}
+\hline
+\textbf{AQ for 2008} & \textbf{IL-UI} & \textbf{LD-UI} & \textbf{IL-UQ} & \textbf{LD-UQ} \\
+\hline
+$2008/05/12$ - $2008/09/17$ & $8.13\%$ & $2.33\%$ & $6.14\%$ & $3.57\%$ \\
+$2008/09/18$ - $2009/01/27$ & $34.64\%$ & $22.17\%$ & $29.72\%$ & $20.37	\%$  \\
+\hline
+\end{tabular}
+\caption{\label{table:AQ results for 2008} Results for AQ algorithm, 2008 financial crisis period}
+\end{table*}
+\end{center}
+
+\begin{center}
+\begin{table*}[t]
+\centering
+\begin{tabular}{ccccc}
+\hline
+\textbf{CN2 for 2008} & \textbf{IL-UI} & \textbf{LD-UI} & \textbf{IL-UQ} & \textbf{LD-UQ} \\
+\hline
+$2008/05/12$ - $2008/09/17$ & $0.27\%$ & $-0.38\%$ & $5.06\%$ & $-2.81\%$ \\
+$2008/09/18$ - $2009/01/27$ & $15.69\%$ & $12.32\%$ & $11.81\%$ & $-0.62\%$  \\
+\hline
+\end{tabular}
+\caption{\label{table:CN2 results for 2008} Results for CN2 algorithm, 2008 financial crisis period}
+\end{table*}
+\end{center}
 
 \section{Discussion and conclusions}
 \label{sec:conclusions}
