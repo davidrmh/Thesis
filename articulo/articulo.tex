@@ -53,17 +53,23 @@ State of the art
 %Laplace accuracy
 \label{sec:background}
 
-\subsection{Efficient market}
+\subsection{Efficient market and buy-and-hold strategy}
 \label{subsec: efficient market}
 An efficient market is a market that can incorporate, quickly and rationally, all past and present information in its prices. \cite{Fama1965}, \cite{CFA2019}.
 
-Thus, in an efficient market it is pointless trying to predict price movements by exploiting past information or patterns. The best one can do is just buy a well diversified market portfolio and hold it for a long period of time, this is the so called buy-and-hold strategy, whose percentage gain is calculated as
+Thus, in an efficient market it is pointless trying to predict price movements by exploiting past information or patterns. The best one can do is just buy a well diversified market portfolio and hold it for a long period of time, this is the so called buy-and-hold strategy, whose percentage gain is calculated as:
 
-\begin{equation} \label{eqn: buy-and-hold gain}
-\%Gain_{BH} = \dfrac{P_{Sell}^{end}  (1 - c)}{P_{Buy}^{beginning}  (1 + c)} - 1
+\begin{equation} \label{eqn:buy-and-hold gain}
+\%Gain_{ \left[T_{B}, T_{E} \right]} (BH) = \dfrac{P_{T_{E}}^{sell}  (1 - c)}{P_{T_{B}}^{Buy}  (1 + c)} - 1
 \end{equation}
 
-where $P_{Sell}^{end}$ is the sell execution price at the end of a prespecified time period, $P_{Buy}^{beginning}$ is the buy execution price at the beginning of the prespecified time period and $c$ is the percentage transaction cost.
+where $\%Gain_{ \left[T_{B}, T_{E} \right]} (BH)$ is the percentage gain for the buy-and-hold strategy for the time period $\left[T_{B}, T_{E} \right]$, $P_{T_{E}}^{sell}$ is the sell execution price at time $T_{E}$, $P_{T_{B}}^{Buy}$ is the buy execution price at time $T_{B}$ and $c$ is the percentage transaction cost.
+
+Is this paper we will use the buy-and-hold strategy as a benchmark and our performance measure will be the excess return over by comparing it with an active investment strategy (buying in lows and selling in highs) that is:
+
+\begin{equation} \label{eqn:excess return}
+ExRet_{ \left[T_{B}, T_{E} \right]} (S) = \%Gain_{ \left[T_{B}, T_{E} \right]}(S)  - \%Gain_{ \left[T_{B}, T_{E} \right]}(BH)
+\end{equation}
 
 \subsection{AQ and CN2 algorithms}
 \label{subsec:algorithms}
@@ -265,7 +271,7 @@ R_{sell} \wedge (variation > UL) \label{eqn:Sell-rule 1}\\
 R_{sell} \wedge (variation < LL) \label{eqn:Sell-rule 2S}
 \end{align}
 
-where $R_{sell}$ is the sell rule induced by a learning algorithm and $UL$, $LL$ are the user defined upper and lower limits respectively.
+where $R_{sell}$ is a sell rule induced by a learning algorithm and $UL$, $LL$ are the user defined upper and lower limits respectively.
 
 Figure \ref{figure:Sell limits} shows the sell limits for a specific buy order.
 \begin{figure}[h]
