@@ -8,8 +8,8 @@
 \usepackage{graphicx}
 \usepackage{natbib}
 
-%Imagen de la estrategia de  AQ exp 1 en 2008-05-12 y 2008-09-18
-%Imagen de AQ exp 1 en un mercado bullish
+%Experimentos México
+%Tabla de los tipos de hipótesis de mercado eficiente.
 
 %For algorithms
 \newtheorem{algorithm}{Algorithm}[section]
@@ -52,6 +52,18 @@ State of the art
 %Technical indicators
 %Laplace accuracy
 \label{sec:background}
+
+\subsection{Efficient market}
+\label{subsec: efficient market}
+An efficient market is a market that can incorporate, quickly and rationally, all past and present information in its prices. \cite{Fama1965}, \cite{CFA2019}.
+
+Thus, in an efficient market it is pointless trying to predict price movements by exploiting past information or patterns. The best one can do is just buy a well diversified market portfolio and hold it for a long period of time, this is the so called buy-and-hold strategy, whose percentage gain is calculated as
+
+\begin{equation} \label{eqn: buy-and-hold gain}
+\%Gain_{BH} = \dfrac{P_{Sell}^{end}  (1 - c)}{P_{Buy}^{beginning}  (1 + c)} - 1
+\end{equation}
+
+where $P_{Sell}^{end}$ is the sell execution price at the end of a prespecified time period, $P_{Buy}^{beginning}$ is the buy execution price at the beginning of the prespecified time period and $c$ is the percentage transaction cost.
 
 \subsection{AQ and CN2 algorithms}
 \label{subsec:algorithms}
@@ -149,9 +161,9 @@ An example of our data split is represented in table \ref{table:data split}.
 
 \begin{table}[h]
 \centering
-\begin{tabular}{ll}
+\begin{tabular}{cc}
 \hline
-\textbf{Training set period} & \textbf{Test set period} \\
+\textbf{Training set} & \textbf{Test set} \\
 \hline
 2008/01/02 - 2008/05/09 & 2008/05/12 - 2008/09/17 \\
 2008/05/12 - 2008/09/17 & 2008/09/18 - 2009/01/27 \\
@@ -294,13 +306,13 @@ Each discretization method uses both learning approaches, incremental learning (
 
 For every test set the excess return over the buy-and-hold strategy and the total monetary gain for every \$100,000.00 invested, are calculated. Tables \ref{table:AQ results} and \ref{table:CN2 results} show the results.
 
-As we can see, AQ algorithm is able to outperform buy-and-hold strategy when using incremental learning.
+As we can see, AQ algorithm is able, on average, to outperform buy-and-hold strategy when using incremental learning.
 
 On the other hand, CN2 algorithm performs poorly in all the scenarios, the reason behind this, is because even when CN2 by default gives us an ordered set of rules, we're breaking that order when rewarding (penalizing) rules performance over the test sets.
 
 Despite these results, is important to notice that two test sets comprise the $2008$ financial crisis, namely, the test sets for the periods $2008/05/12$ - $2008/09/17$ and $2008/09/18$ - $2009/01/27$.
 
-As we can see from tables \ref{table:AQ results for 2008} and \ref{table:CN2 results for 2008}, specially for the period $2008/09/18$ - $2009/01/27$, we have very large excess returns but this fact is due merely to the bearish (trending down) nature of the market in that period, as signalled in (\cite{Lohpetch2010}), the real challenge is beating the buy-and-hold strategy when markets are trending up.
+As we can see from tables \ref{table:AQ results for 2008} and \ref{table:CN2 results for 2008}, specially for the period $2008/09/18$ - $2009/01/27$, we have very large excess returns but this fact is due merely to the bearish (trending down) nature of the market in that period, as signalled in \cite{Lohpetch2010}, the real challenge is beating the buy-and-hold strategy when markets are trending up.
 
 Thus we recalculated the performance of each algorithm by excluding $2008$ financial crisis period,  the results are shown in tables \ref{table:AQ results without 2008} and \ref{table:CN2 results without 2008}.
 
