@@ -1,4 +1,4 @@
-\documentclass[onesided, 12pt]{scrbook}
+\documentclass[12pt]{scrbook}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsthm} %Para definir ambientes con \newtheorem
@@ -7,6 +7,7 @@
 \usepackage{makeidx}
 \usepackage{graphicx}
 \usepackage{natbib}
+%\usepackage{float}
 
 \title{Aprendizaje automático de reglas para operar en los mercados accionarios}
 \publishers{Centro de Investigación en Computación, Instituto Politécnico Nacional}
@@ -111,9 +112,6 @@ Los objetivos particulares de este trabajo son:
 \section{Hipótesis del mercado eficiente.}
 \label{seccion:hipotesis mercado eficiente}
 
-\section{Costos de transacción}
-\label{seccion:costos de transaccion}
-
 \section{NAFTRAC.}
 \label{seccion:naftrac}
 
@@ -123,8 +121,6 @@ Los objetivos particulares de este trabajo son:
 \section{Análisis técnico}
 \label{seccion:analisisTecnico}
 
-\section{Supuestos del trabajo}
-\label{seccion:supuestos}
 
 
 %=============== AQ y CN2 ================= %
@@ -150,7 +146,7 @@ En este trabajo se utilizan precios diarios\footnote{Obtenidos de Yahoo Finance.
 
 Para el NAFTRAC, la información inicia el día 15 de febrero de 2013 y termina el 21 de enero de 2019. Para el SPDR S\&P 500 el periodo de tiempo abarcado es del 2 de enero de 2008 hasta  el 3 de marzo de 2019.
 
-La tabla \ref{tabla:Ejemplo datos diarios NAFTRAC} muestra la estructura de los datos para el NAFTRAC. Es importante señalar que los datos no incluyen días festivos y fines de semana.
+La tabla \ref{tabla:Ejemplo datos diarios NAFTRAC} muestra la estructura de los datos para el NAFTRAC, es importante señalar que los datos no incluyen días festivos ni fines de semana.
 
 \begin{table}[h]
 \centering
@@ -185,7 +181,7 @@ La tabla \ref{tabla:data split SP500} muestra la separación de los datos del SP
 \caption{\label{tabla:data split SP500} Separación de datos}
 \end{table}
 
-Observemos que con esta forma de separar los datos, un conjunto de prueba se convierte en un nuevo conjunto de entrenamiento, esto nos permite capturar el comportamiento dinámico de los mercados, es decir, su comportamiento no estacionario (las reglas que aprendimos en el pasado, no necesariamente funcionarán en el futuro).
+Observemos que con esta forma de separar los datos, un conjunto de prueba se convierte en un nuevo conjunto de entrenamiento, esto nos permite capturar el comportamiento dinámico de los mercados, en particular, su comportamiento no estacionario.
 
 Utilizando esta metodología, se obtienen 15 conjuntos de entrenamiento y 15 conjuntos de prueba con la información del NAFTRAC, por otra parte, con los datos del SPDR S\&P 500 se obtienen 30 conjuntos de entrenamiento y 30 conjuntos de prueba.
 
@@ -195,11 +191,11 @@ Utilizando esta metodología, se obtienen 15 conjuntos de entrenamiento y 15 con
 \label{seccion:proceso etiquetado}
 Ya que nuestros datos de entrenamiento no están etiquetados, utilizamos un algoritmo evolutivo para obtener un conjunto de etiquetas que nos permita entrenar cada modelo. La idea detrás del etiquetado se basa en encontrar las combinaciones de compras y ventas que nos generen la mayor ganancia una vez conocida toda la historia del periodo de entrenamiento.
 
-Este algoritmo evolutivo pertenece a la clase de algoritmos para la estimación de distribución (EDA por sus siglas en inglés \cite{simon2013evolutionary}). Cada individuo en la población representa una estrategia de inversión para un periodo de prueba dado. Esta estrategia está representada a través de un vector $\mathbf{x} = (x_1, x_2, \ldots, x_t)$ cuya componente $x_i$ representan la acción a tomar en el día $i$, $x_i \in \{-1,0,1\}$, en donde $-1$ representa una señal de venta, $0$ una señal de espera y $1$ una señal de compra. La función de aptitud utilizada fue el exceso de ganancia sobre la estrategia \buyhold.
+Este algoritmo evolutivo pertenece a la clase de algoritmos para la estimación de distribución (EDA por sus siglas en inglés \cite{simon2013evolutionary}). Cada individuo en la población representa una estrategia de inversión para un periodo de entrenamiento dado. Esta estrategia está representada a través de un vector $\mathbf{x} = (x_1, x_2, \ldots, x_t)$ cuya componente $x_i$ representan la acción a tomar en el día $i$, $x_i \in \{-1,0,1\}$, en donde $-1$ representa una señal de venta, $0$ una señal de espera y $1$ una señal de compra. La función de aptitud utilizada fue el exceso de ganancia sobre la estrategia \buyhold.
 
 En la imagen \ref{imagen:etiquetado} vemos el resultado del proceso de etiquetado para un conjunto de entrenamiento en particular.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \scalebox{0.8}{\includegraphics[width=1\linewidth]{imagenes/etiquetado.jpeg}}
 \caption{\label{imagen:etiquetado} Resultado del proceso de etiquetado}
@@ -225,19 +221,21 @@ Los indicadores utilizados son:
 
 \section{Aprendizaje incremental}
 \label{seccion:aprendizaje incremental}
-Tanto como para el algoritmo AQ como para el algoritmo CN2 se realizaron dos tipos de experimentos. El primero de ellos está basado en un enfoque de \textit{aprender-aplicar-descartar}, en el cual, dado un conjunto de entrenamiento, se induce un conjunto de reglas las cuales se aplican al conjunto de prueba más próximo. Después de esto, las reglas aprendidas se descartan (mecanismo de olvido).
+Tanto como para el algoritmo AQ como para el algoritmo CN2 se realizaron dos tipos de experimentos. El primero de ellos está basado en un enfoque de \textit{aprender-aplicar-descartar}, en el cual, dado un conjunto de entrenamiento, se induce un conjunto de reglas las cuales se aplican al conjunto de prueba más cercano. Después de esto, las reglas aprendidas se descartan (mecanismo de olvido).
 
 El otro experimento se basa en un \textit{aprendizaje incremental}, en este caso aprendemos un conjunto de reglas y en lugar de descartarlas, las ordenamos de acuerdo a su desempeño sobre el conjunto de entrenamiento del cual fueron inducidas por primera vez, así como su desempeño sobre los conjuntos de prueba en los cuales han sido aplicadas. En este enfoque mantenemos un conjunto de $k$-mejores reglas de compra y $k$-mejores reglas de venta.
 
-Para medir el desempeño de las reglas en los conjuntos de entrenamiento de los cuales se inducen por primera vez, utilizamos la suma de su \textit{soporte} y su \textit{exactitud de Laplace}.
+Para medir el desempeño de las reglas sobre los conjuntos de entrenamiento de los cuales se inducen por primera vez, utilizamos la suma de su \textit{soporte} y su \textit{exactitud de Laplace}.
 
 En cambio, para medir el desempeño de las reglas sobre los conjuntos de prueba, las agrupamos en pares de \textit{compra-venta}. Estos pares de reglas se forman a partir de las señales de compra y venta generadas durante el periodo de prueba y son recompensadas (penalizadas) de acuerdo a la ganancia (pérdida) que generan.
 
-Por ejemplo, consideremos un caso en el cual la regla de compra, $R_{C}$, nos indica que en el tiempo $t_1$ se debe de realizar una compra, la cual tendrá un precio de ejecución $P_{C}$. Conforme avanza el tiempo, notamos que la regla de venta, $R_{V}$, nos indica que en el tiempo $t_2 > t_1$, se debe de ejecutar una venta la cual tendrá precio de ejecución $P_{V}$. La recompensa (penalización) que se le asigna a cada regla en el par $\left(R_C, R_V\right)$ está dada por su ganancia (pérdida) porcentual, es decir:
+Por ejemplo, consideremos un caso en el cual la regla de compra, $R_{C}$, nos indica que en el tiempo $t_1$ se debe de comprar, esta compra tendrá un precio de ejecución $P_{C}$. Conforme avanza el tiempo, notamos que la regla de venta, $R_{V}$, nos indica que en el tiempo $t_2 > t_1$, se debe de vender, esta venta tendrá precio de ejecución $P_{V}$. La recompensa (penalización) que se le asigna a cada regla en el par $\left(R_C, R_V\right)$ está dada por su ganancia (pérdida) porcentual, es decir:
 
 \begin{equation}\label{eqn:recompensa reglas}
-Recompensa(R_C, R_V) = \dfrac{P_V}{P_C} - 1
+Recompensa(R_C, R_V) = \dfrac{P_V (1 - c)}{P_C (1 + c) } - 1
 \end{equation}
+
+en donde $c$ es el costo de transacción.
 
 Finalmente, cada regla que no aparece en el conjunto de prueba que se está evaluando, se penaliza con la pérdida promedio que se tiene sobre este mismo conjunto de prueba; esto se utiliza como un mecanismo para ir descartando reglas debido al paso del tiempo.
 
@@ -249,19 +247,71 @@ puntaje_{-M}(R) = soporte(R) + Laplace(R) + \sum Recompensas
 
 en la ecuación (\ref{eqn:puntaje de una regla}), el término $ \sum Recompensas$ hace referencia a la suma de recompensas o penalizaciones que ha obtenido la regla $R$ para cada conjunto de prueba anterior al conjunto $M$.
 
-De esta manera, ahora somos capaces de ordenar las reglas y por lo tanto acumular el aprendizaje, así como identificar reglas útiles y descartar aquellas que no han funcionado.
+De esta manera, ahora somos capaces de ordenar las reglas y por lo tanto acumular el aprendizaje así como identificar reglas útiles y descartar aquellas que no han funcionado.
 
-La imagen \ref{imagen:aprendizaje_incremental} muestra un esquema del aprendizaje incremental que se propone en este trabajo.
+La imagen \ref{imagen:aprendizaje_incremental} muestra el esquema del aprendizaje incremental que se propone en este trabajo.
 
-\begin{figure}[h]
+
+\begin{figure}[ht]
 \centering
-\scalebox{0.8}{\includegraphics[width=1\linewidth]{imagenes/aprendizaje-incremental.jpg}}
+\scalebox{1.0}{\includegraphics[width=1\linewidth]{imagenes/aprendizaje-incremental.jpg}}
 \caption{\label{imagen:aprendizaje_incremental} Aprendizaje incremental}
 \end{figure}
 
 
 \section{Límites para las señales de venta}
 \label{seccion:limites ventas}
+Además de las reglas inducidas por cada algoritmo, utilizamos dos reglas adicionales las cuales buscan capturar el perfil de riesgo de los inversionistas.
+
+Estas nuevas reglas establecen un límite superior (mercados a la alza) y un límite inferior (mercados a la baja) relativos a la última compra realizada. El primero de estos límites (límite superior) puede ser interpretado como el nivel de codicia que tiene un inversionista, mientras que el segundo (límite inferior) se interpreta como el nivel de aversión al riesgo.
+
+De esta manera, se recibe una señal de venta en el tiempo $t$ si alguna de las siguientes condiciones se cumple:
+
+\begin{align}
+R_{venta} \wedge (Var_{t} > LS) \label{eqn:Venta limite sup}\\
+R_{venta} \wedge (Var_{t} < LI) \label{eqn:Venta limite inf}
+\end{align}
+
+en donde $R_{venta}$ representa una regla de venta inducida por los algoritmos AQ o CN2, $LS$ es el límite superior expresado como un porcentaje relativo al último precio de compra, $LI$ es el límite inferior expresado como un porcentaje relativo al último precio de compra y $Var_{t}$ representa la variación porcentual del precio de ejecución en el tiempo $t$, $P_{t}^{ejec}$, respecto al último precio de compra, $P_{C}^{ult}$, como se muestra en la ecuación (\ref{eqn:variacion bandas})
+
+\begin{equation} \label{eqn:variacion bandas}
+Var_{t} = \dfrac{P_{t}^{ejec}}{P_{C}^{ult}} - 1
+\end{equation}
+
+La imagen \ref{imagen:bandas horizontales} muestra un ejemplo de los límites relativos a una señal de compra.
+
+\begin{figure}[ht]
+\centering
+\scalebox{0.66}{\includegraphics[width=1\linewidth]{imagenes/bandas_horizontales.jpeg}}
+\caption{\label{imagen:bandas horizontales} Límites para las señales de venta relativos a una señal de compra}
+\end{figure}
+
+\section{Supuestos del mercado}
+\label{sec:supuestos del mercado}
+Para cada experimento, se consideraron los siguientes supuestos:
+
+\begin{itemize}
+\item El precio de ejecución en el día $t$ será el promedio entre el precio máximo y el precio mínimo de ese día.
+
+\item Dada una señal de compra o venta en el día $t$, la acción se ejecuta en el día $t+1$ utilizando el precio de ejecución.
+
+\item El costo de cada transacción se fija en $0.25\%$. Así para cada compra con precio de ejecución $P_{C}$ terminamos pagando un total de 
+$$P_{C}(1 + 0.0025)$$
+por cada acción comprada.
+
+De la misma forma, por cada acción que vendemos a un precio $P_{V}$, recibimos 
+$$P_{V}(1 - 0.0025)$$
+
+\item En cada señal de compra, compramos tantas acciones podamos comprar con nuestro capital disponible (considerando el costo de transacción).
+
+\item Para cada señal de venta, vendemos todas las acciones que poseamos.
+
+\item Sólo podemos vender cuando tenemos acciones en nuestra posesión, es decir, no se permiten ventas en corto.
+
+\item El límite superior para las señales de venta, $LS$, se fija con un valor de $0.035$ o $3.5\%$ relativo al último precio de compra.
+
+\item El límite inferior para las señales de venta, $LI$, se fija con un valor de $-0.03$ o $-3.0\%$ relativo al último precio de compra. 
+\end{itemize}
 
 %=============== Resultados ================= %
 \chapter{Resultados experimentales}
