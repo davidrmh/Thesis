@@ -139,7 +139,7 @@ Las reglas toman la forma descrita en ecuación (\ref{eqn:reglas AQ})
 Premisa \rightarrow Consecuente
 \end{equation}
 
-en donde $Premisa$ es una conjunción de condiciones (esta conjunción recibe el nombre de complejo) y cada condición tiene la estructura dada en la ecuación 
+en donde $Premisa$ es una conjunción de selectores (esta conjunción recibe el nombre de complejo) y cada selector tiene la estructura dada en la ecuación 
 
 \begin{equation} \label{eqn:condicion AQ}
 \left[Atributo\,\, OP\,\, Valores \right]
@@ -149,12 +149,12 @@ en donde el término $OP$ depende del tipo de atributo que se está utilizando, 
 
 El $Consecuente$ en (\ref{eqn:reglas AQ}), es una sola condición, por ejemplo, comprar.
 
-El algoritmo AQ inicia su proceso de inducción seleccionando un ejemplo (semilla), $e$, de la clase positiva, el cual es generalizado creando todos los complejos que cubren $e$ y que son consistentes, es decir, que no cubren ningún ejemplo de la clase negativa. Este conjunto de complejos, $G(e,N)$, recibe el nombre de estrella. El mejor complejo en la estrella es seleccionado de acuerdo a un criterio previamente establecido, en este trabajo el criterio utilizado es maximizar el número de ejemplos positivos cubiertos. Este proceso es repetido hasta tener una disyunción de complejos que es completa y consistente, el algoritmo \ref{algo:AQ}
+El algoritmo AQ inicia su proceso de inducción seleccionando un ejemplo (semilla), $e$, de la clase positiva, el cual es generalizado creando todos los complejos que cubren $e$ y que son consistentes, es decir, que no cubren ningún ejemplo de la clase negativa. Este conjunto de complejos, $G(e,N)$, recibe el nombre de estrella. El mejor complejo en la estrella es seleccionado de acuerdo a un criterio previamente establecido, en este trabajo el criterio utilizado es maximizar el número de ejemplos positivos cubiertos. Este proceso es repetido hasta tener una disyunción de complejos que es completa y consistente (cobertura). El algoritmo \ref{algo:AQ} muestra un pseudocódigo para el algoritmo AQ.
 
 \begin{algoritmo}[Algoritmo AQ]
 \begin{tabbing}
-\\Sea $P$ el conjunto de ejemplos positivos de la clase C
-\\Sea $N$ el conjunto de ejemplos negativos de la clase C\\
+\\$P$ el conjunto de ejemplos positivos de la clase C
+\\$N$ el conjunto de ejemplos negativos de la clase C\\
 1. \=$Cobertura\leftarrow \emptyset $ \\
 2. Mientras $P \neq \emptyset$:\\
  \>3. Elige semilla $e$ en $P$\\
@@ -167,8 +167,25 @@ El algoritmo AQ inicia su proceso de inducción seleccionando un ejemplo (semill
 \label{algo:AQ}
 \end{algoritmo}
 
+\begin{algoritmo}[Genera estrella]
+\begin{tabbing}
+\\Sea $e$ la semilla correspondiente a un ejemplo en la clase positiva.
+\\Sea $N$ el conjunto de ejemplos negativos de la clase C\\
+1. \=$G(e,N)\leftarrow \emptyset$ (complejo vacío cubre todas las observaciones) \\
+2. Mientras $G(e,N)$ cubra algún ejemplo de $N$:\\
+ \>3. Elige un ejemplo negativo $E_{neg}$ cubierto por $G(e,N)$\\
+ \>4. \= Especializa los complejos en $G(e,N)$ con el fin de excluir $E_{neg}$\\
+ \>\>4.1 Sea $EX$ el conjunto de selectores que cubren $e$ pero no $E_{neg}$ \\
+ \>\>4.2 $G(e,N)=\{x \wedge y \vert x \in G(e,N), y \in EX \}$\\
+ \>5. Selecciona el mejor complejo de $G(e,N)$\\
+\=8. Regresa $G(e,N)$
+\end{tabbing}
+\label{algo:AQ genera estrella}
+\end{algoritmo}
+
 \subsection{Algoritmo CN2}
 \label{subseccion:algoritmo cn2}
+Como podemos observar en el algoritmo \ref{algo:AQ}, al momento de generar los complejos, el algoritmo AQ sólo considera especializaciones que excluyen 
 
 \subsection{Soporte y exactitud de Laplace}
 \label{subsec:Soport y exactitud de laplace}
