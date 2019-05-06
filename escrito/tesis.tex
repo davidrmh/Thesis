@@ -35,7 +35,7 @@
 \newtheorem{teorema}{Teorema}[chapter]
 
 %Algoritmo (Utiliza el ambiente tabbing)
-
+\theoremstyle{break}
 \newtheorem{algoritmo}{Algoritmo}[chapter]
 %=================================================%
 
@@ -106,13 +106,13 @@ Los objetivos particulares de este trabajo son:
 \chapter{Marco teórico}
 \label{capitulo:marco teorico}
 
-\section{Mecánica de un mercado accionario.}
+\section{Mecánica de un mercado accionario}
 \label{seccion:mecanica del mercado}
 
-\section{Hipótesis del mercado eficiente.}
+\section{Hipótesis del mercado eficiente}
 \label{seccion:hipotesis mercado eficiente}
 
-\section{NAFTRAC.}
+\section{NAFTRAC}
 \label{seccion:naftrac}
 
 \section{SPDR S\&P 500}
@@ -129,6 +129,43 @@ Los objetivos particulares de este trabajo son:
 
 \subsection{Algoritmo AQ}
 \label{subseccion:algoritmo aq}
+El algoritmo quasi-óptimo (AQ), is un algoritmo de aprendizaje supervisado, que induce un conjunto de reglas del tipo \textit{IF-THEN} (ver \cite{AQCervone2010}, \cite{AQMichalski1991} y \cite{AQWojtusiak2012} para un estudio detallado). 
+
+Dado un conjunto, $P$, con $n$ observaciones, $P_1, P_2, \ldots, P_n$ (ejemplos de la clase positiva)  y un conjunto, $N$, con $m$ observaciones, $Q_1, Q_2, \ldots, Q_m$ (ejemplos de la clase negativa), el algoritmo AQ encuentra un conjunto de reglas que son completas (cubren todos los ejemplos de la clase positiva) y consistentes (no cubren ejemplos de la clase negativa).
+
+Las reglas toman la forma descrita en ecuación (\ref{eqn:reglas AQ})
+
+\begin{equation} \label{eqn:reglas AQ}
+Premisa \rightarrow Consecuente
+\end{equation}
+
+en donde $Premisa$ es una conjunción de condiciones (esta conjunción recibe el nombre de complejo) y cada condición tiene la estructura dada en la ecuación 
+
+\begin{equation} \label{eqn:condicion AQ}
+\left[Atributo\,\, OP\,\, Valores \right]
+\end{equation}
+
+en donde el término $OP$ depende del tipo de atributo que se está utilizando, por ejemplo, para un atributo con valores continuos tenemos que $OP \in \{>, \geq, <, \leq\}$.
+
+El $Consecuente$ en (\ref{eqn:reglas AQ}), es una sola condición, por ejemplo, comprar.
+
+El algoritmo AQ inicia su proceso de inducción seleccionando un ejemplo (semilla), $e$, de la clase positiva, el cual es generalizado creando todos los complejos que cubren $e$ y que son consistentes, es decir, que no cubren ningún ejemplo de la clase negativa. Este conjunto de complejos, $G(e,N)$, recibe el nombre de estrella. El mejor complejo en la estrella es seleccionado de acuerdo a un criterio previamente establecido, en este trabajo el criterio utilizado es maximizar el número de ejemplos positivos cubiertos. Este proceso es repetido hasta tener una disyunción de complejos que es completa y consistente, el algoritmo \ref{algo:AQ}
+
+\begin{algoritmo}[Algoritmo AQ]
+\begin{tabbing}
+\\Sea $P$ el conjunto de ejemplos positivos de la clase C
+\\Sea $N$ el conjunto de ejemplos negativos de la clase C\\
+1. \=$Cobertura\leftarrow \emptyset $ \\
+2. Mientras $P \neq \emptyset$:\\
+ \>3. Elige semilla $e$ en $P$\\
+ \>4. Genera estrella $G(e,N)$\\
+ \>5. Selecciona el mejor complejo, $c$, en $G(e,N)$\\
+ \>6. Agrega $c$ a $Cobertura$\\
+ \>7. Elimina de $P$ los ejemplos cubiertos por $c$\\
+\=8. Regresa $Cobertura$
+\end{tabbing}
+\label{algo:AQ}
+\end{algoritmo}
 
 \subsection{Algoritmo CN2}
 \label{subseccion:algoritmo cn2}
