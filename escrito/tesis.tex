@@ -129,7 +129,7 @@ Los objetivos particulares de este trabajo son:
 
 \subsection{Algoritmo AQ}
 \label{subseccion:algoritmo aq}
-El algoritmo quasi-óptimo (AQ), is un algoritmo de aprendizaje supervisado, que induce un conjunto de reglas del tipo \textit{IF-THEN} (ver \cite{AQCervone2010}, \cite{AQMichalski1991} y \cite{AQWojtusiak2012} para un estudio detallado). 
+El algoritmo cuasi-óptimo (AQ), es un algoritmo de aprendizaje supervisado, que induce un conjunto de reglas del tipo \textit{IF-THEN} (ver \cite{AQCervone2010}, \cite{AQMichalski1991} y \cite{AQWojtusiak2012} para un estudio detallado). 
 
 Dado un conjunto, $P$, con $n$ observaciones, $P_1, P_2, \ldots, P_n$ (ejemplos de la clase positiva)  y un conjunto, $N$, con $m$ observaciones, $Q_1, Q_2, \ldots, Q_m$ (ejemplos de la clase negativa), el algoritmo AQ encuentra un conjunto de reglas que son completas (cubren todos los ejemplos de la clase positiva) y consistentes (no cubren ejemplos de la clase negativa).
 
@@ -149,7 +149,7 @@ en donde el término $OP$ depende del tipo de atributo que se está utilizando, 
 
 El $Consecuente$ en (\ref{eqn:reglas AQ}), es una sola condición, por ejemplo, comprar.
 
-El algoritmo AQ inicia su proceso de inducción seleccionando un ejemplo (semilla), $e$, de la clase positiva, el cual es generalizado creando todos los complejos que cubren $e$ y que son consistentes, es decir, que no cubren ningún ejemplo de la clase negativa. Este conjunto de complejos, $G(e,N)$, recibe el nombre de estrella. El mejor complejo en la estrella es seleccionado de acuerdo a un criterio previamente establecido, en este trabajo el criterio utilizado es maximizar el número de ejemplos positivos cubiertos. Este proceso es repetido hasta tener una disyunción de complejos que es completa y consistente (cobertura). El algoritmo \ref{algo:AQ} muestra un pseudocódigo para el algoritmo AQ.
+El algoritmo AQ inicia su proceso de inducción seleccionando un ejemplo (semilla), $S$, de la clase positiva, el cual es generalizado creando todos los complejos que cubren $S$ y que son consistentes, es decir, que no cubren ningún ejemplo de la clase negativa. Este conjunto de complejos, $G(S,N)$, recibe el nombre de estrella. El mejor complejo en la estrella es seleccionado de acuerdo a un criterio previamente establecido, en este trabajo el criterio utilizado es maximizar el número de ejemplos positivos cubiertos. Este proceso es repetido hasta tener una disyunción de complejos (llamada cobertura) que es completa y consistente. El algoritmo \ref{algo:AQ} muestra un pseudocódigo para el algoritmo AQ.
 
 \begin{algoritmo}[Algoritmo AQ]
 \begin{tabbing}
@@ -157,9 +157,9 @@ El algoritmo AQ inicia su proceso de inducción seleccionando un ejemplo (semill
 \\$N$ el conjunto de ejemplos negativos de la clase C\\
 1. \=$Cobertura\leftarrow \emptyset $ \\
 2. Mientras $P \neq \emptyset$:\\
- \>3. Elige semilla $e$ en $P$\\
- \>4. Genera estrella $G(e,N)$\\
- \>5. Selecciona el mejor complejo, $c$, en $G(e,N)$\\
+ \>3. Elige semilla $S$ en $P$\\
+ \>4. Genera estrella $G(S,N)$\\
+ \>5. Selecciona el mejor complejo, $c$, en $G(S,N)$\\
  \>6. Agrega $c$ a $Cobertura$\\
  \>7. Elimina de $P$ los ejemplos cubiertos por $c$\\
 \=8. Regresa $Cobertura$
@@ -169,23 +169,38 @@ El algoritmo AQ inicia su proceso de inducción seleccionando un ejemplo (semill
 
 \begin{algoritmo}[Genera estrella]
 \begin{tabbing}
-\\Sea $e$ la semilla correspondiente a un ejemplo en la clase positiva.
+\\Sea $S$ la semilla correspondiente a un ejemplo en la clase positiva.
 \\Sea $N$ el conjunto de ejemplos negativos de la clase C\\
-1. \=$G(e,N)\leftarrow \emptyset$ (complejo vacío cubre todas las observaciones) \\
-2. Mientras $G(e,N)$ cubra algún ejemplo de $N$:\\
- \>3. Elige un ejemplo negativo $E_{neg}$ cubierto por $G(e,N)$\\
- \>4. \= Especializa los complejos en $G(e,N)$ con el fin de excluir $E_{neg}$\\
- \>\>4.1 Sea $EX$ el conjunto de selectores que cubren $e$ pero no $E_{neg}$ \\
- \>\>4.2 $G(e,N)=\{x \wedge y \vert x \in G(e,N), y \in EX \}$\\
- \>5. Selecciona el mejor complejo de $G(e,N)$\\
-\=8. Regresa $G(e,N)$
+1. \=$G(S,N)\leftarrow \emptyset$ (complejo vacío cubre todas las observaciones) \\
+2. Mientras $G(S,N)$ cubra algún ejemplo de $N$:\\
+ \>3. Elige un ejemplo negativo $E_{neg}$ cubierto por $G(S,N)$\\
+ \>4. \= Especializa los complejos en $G(S,N)$ con el fin de excluir $E_{neg}$\\
+ \>\>4.1 Sea $EX$ el conjunto de selectores que cubren $S$ pero no $E_{neg}$ \\
+ \>\>4.2 $G(S,N)=\{x \wedge y \vert x \in G(S,N), y \in EX \}$\\
+\=6. Regresa $G(S,N)$
 \end{tabbing}
 \label{algo:AQ genera estrella}
 \end{algoritmo}
 
 \subsection{Algoritmo CN2}
 \label{subseccion:algoritmo cn2}
-Como podemos observar en el algoritmo \ref{algo:AQ}, al momento de generar los complejos, el algoritmo AQ sólo considera especializaciones que excluyen 
+Como podemos observar en el algoritmo \ref{algo:AQ genera estrella}, al momento de generar la estrella, el algoritmo AQ sólo considera especializaciones que excluyen un ejemplo negativo en particular mientras que al mismo tiempo se busca cubrir la semilla. Como se señala en \cite{CN2-Clark1989}, este tipo de búsqueda se limita al espacio de complejos que son consistentes con el conjunto de entrenamiento, limitando así la capacidad de generalización del algoritmo.
+
+En cambio, el algoritmo CN2 remueve esta dependencia en ejemplos específicos y extiende el espacio de búsqueda al examinar todas las especializaciones posibles de un complejo.
+
+Para encontrar el mejor complejo, el algoritmo CN2 utiliza dos heurísticas para guiar el proceso de creación de la estrella. La primera de ellas utiliza la entropía para medir la calidad de los complejos (entre menor entropía mejor es el complejo), así, dado un conjunto de ejemplos, $E$, cubiertos por el complejo $c$, si $p_i$ denota la probabilidad de la clase $i$ dentro de los ejemplos en $E$, entonces la entropía del complejo $c$ está dada por:
+
+\begin{equation} \label{eqn:entropia complejo}
+entrop(c) = - \sum_{i} p_i log_{2}(p_{i})
+\end{equation}
+
+La segunda heurística se utiliza para detectar complejos que son estadísticamente significativos. Dada una clase de ejemplos, $E$, cubiertos por un complejo $c$, esta heurística compara la distribución observada de las clases entre los ejemplos en $E$ y la distribución esperada de las clases en una muestra del mismo tamaño de $E$.
+
+Si $f_i$ es la frecuencia observada de la clase $i$ dentro de los ejemplos en $E$, $e_{i}$ es la frecuencia esperada de la clase $i$ para una muestra de tamaño $N=\vert E \vert$, es decir $e_i = N \times Prob\left[ Clase = i \right]$ y $k$ es el número de clases, entonces probamos la significancia del complejo $c$ utilizando la estadística dada en la ecuación\footnote{Esta estadística tiene una distribución $\chi^2$ con $k-1$ grados de libertad } (\ref{eqn:cn2 estadistica sig})
+
+\begin{equation} \label{eqn:cn2 estadistica sig}
+2 \sum_{i=1}^{k} f_{i} log\left(\frac{f_{i}} {e_{i}} \right)
+\end{equation}
 
 \subsection{Soporte y exactitud de Laplace}
 \label{subsec:Soport y exactitud de laplace}
