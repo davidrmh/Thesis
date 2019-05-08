@@ -79,7 +79,7 @@ El incremento en el poder de cómputo, la digitalización de los mercados financ
 
 A pesar de que la idea básica es comprar barato y vender caro, la incertidumbre y complejidad de los mercados financieros han dado lugar al uso de herramientas computacionales con el fin de guiar la toma de decisiones, concretamente, técnicas relacionadas a la inteligencia artificial han ganado notoriedad.
 
-El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas \textit{IF..THEN}. Estas reglas se utilizarán para obtener estrategias de inversión cuya ganancia, buscamos, sea superior a la ganancia generada por la estrategia de \textbf{compra y espera} (ver sección \ref{seccion:hipotesis mercado eficiente}).
+El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas \textit{IF..THEN}. Estas reglas se utilizarán para obtener estrategias de inversión cuya ganancia, buscamos, sea superior a la ganancia generada por la estrategia de \textbf{compra y espera} (ver sección \ref{seccion:mercado eficiente}).
 
 Una de las contribuciones de este trabajo es el análisis del mercado accionario mexicano, el cual está representado por el instrumento llamado \textbf{NAFTRAC ISHRS} (ver sección \ref{seccion:naftrac}).
 
@@ -114,6 +114,7 @@ Los objetivos particulares de este trabajo son:
 Cuando hablamos de un mercado eficiente, nos referimos a un mercado que es capaz de capturar, de forma rápida y racional, la información disponible más reciente. Esta información es reflejada en los precios de los instrumentos financieros y como consecuencia, en un mercado eficiente, los precios son informativos, lo que nos permite lograr una colocación eficiente de nuestros recursos \cite{CFA2019}.
 
 \subsection{Versiones de eficiencia en el mercado}
+\label{subseccion:versiones emh}
 Eugene Fama\footnote{Premio Nobel en economía en 2013} describe tres formas de eficiencia de un mercado: débil, semifuerte y fuerte \cite{Fama1965}.
 
 En la versión débil, los precios actuales reflejan toda la información histórica del mercado, es decir, la información del pasado relativa a precios y al volumen negociado. En consecuencia, bajo esta versión de eficiencia, no es posible utilizar datos históricos con el fin de predecir la tendencia futura de los precios (ver sección \ref{seccion:analisisTecnico}).
@@ -128,11 +129,28 @@ Observamos entonces que, la eficiencia de un mercado debe ser interpretada relat
 
 La imagen \ref{imagen:versiones emh} ilustra las distintas versiones de la eficiencia de un mercado.
 
+En este trabajo nos enfocamos únicamente a la versión débil de la eficiencia.
+
 \begin{figure}[ht]
 \centering
-\scalebox{1.0}{\includegraphics[width=.8\linewidth]{imagenes/versiones-emh.jpeg}}
+\scalebox{0.8}{\includegraphics[width=.8\linewidth]{imagenes/versiones-emh.jpeg}}
 \caption{\label{imagen:versiones emh} Versiones de la eficiencia de un mercado}
 \end{figure}
+
+
+\subsection{Estrategia \buyhold}
+\label{seccion:buy and hold}
+Como se señala en la sección \ref{subseccion:versiones emh}, de acuerdo a la hipótesis del mercado eficiente, no es posible utilizar información histórica con el fin de predecir los precios del futuro. Lo mejor que uno puede hacer es comprar un portafolio bien diversificado y mantenerlo por un periodo de tiempo predeterminado, esta estrategia recibe el nombre de estrategia \buyhold.
+
+Por lo tanto, en un mercado eficiente, utilizando la información del pasado, no es posible obtener, de manera consistente y sistemática, ganancias superiores a aquellas generadas por la estrategia \buyhold.
+
+Dado un plazo de tiempo fijo, $\left[T_{I}, T_{F}\right]$, la ganancia de la estrategia \buyhold está dada por la ecuación (\ref{eqn:ganancia BH})
+
+\begin{equation} \label{eqn:ganancia BH}
+G_{\left[T_{I}, T_{F}\right]} (BH) = \dfrac{P_{T_F} (1 - c) } { P_{T_I} (1 + c) } - 1
+\end{equation}
+
+en donde $P_{T_F}$ es el precio de ejecución al final del plazo, $P_{T_I}$ es el precio de ejecución al inicio de este y $c$ es el costo (porcentual) de cada transacción (ver sección \ref{sec:supuestos del mercado})
 
 
 \section{Análisis técnico}
@@ -141,10 +159,10 @@ La imagen \ref{imagen:versiones emh} ilustra las distintas versiones de la efici
 \section{Índices accionarios}
 \label{seccion:indices accionarios}
 \subsection{NAFTRAC}
-\label{subseccion:naftrac}
+\label{seccion:naftrac}
 
 \subsection{SPDR S\&P 500}
-\label{subseccion:sp500}
+\label{seccion:sp500}
 
 
 
