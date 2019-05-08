@@ -40,7 +40,7 @@
 %=================================================%
 
 %====================Macros=======================%
-\newcommand{\buyhold}{\textit{buy-and-hold}}
+\newcommand{\buyhold}{\textit{buy-and-hold }}
 %=================================================%
 
 \begin{document}
@@ -150,7 +150,15 @@ Dado un plazo de tiempo fijo, $\left[T_{I}, T_{F}\right]$, la ganancia de la est
 G_{\left[T_{I}, T_{F}\right]} (BH) = \dfrac{P_{T_F} (1 - c) } { P_{T_I} (1 + c) } - 1
 \end{equation}
 
-en donde $P_{T_F}$ es el precio de ejecución al final del plazo, $P_{T_I}$ es el precio de ejecución al inicio de este y $c$ es el costo (porcentual) de cada transacción (ver sección \ref{sec:supuestos del mercado})
+en donde $P_{T_F}$ es el precio de ejecución al final del plazo, $P_{T_I}$ es el precio de ejecución al inicio de este y $c$ es el costo (porcentual) de cada transacción (ver sección \ref{sec:supuestos del mercado}). 
+
+La imagen \ref{imagen:buy hold alza} ejemplifica esta estrategia en un periodo en el cual el mercado presenta una tendencia a la alza.\footnote{En la jerga financiera, un mercado bullish} Como podemos observar, vencer esta estrategia en mercados que presentan esta tendencia es todo un reto, esto se debe a que sólo se involucran dos operaciones, lo que implica un ahorro en costos de transacción.
+
+\begin{figure}[ht]
+\centering
+\scalebox{0.8}{\includegraphics[width=1\linewidth]{imagenes/buy-hold-alza.jpeg}}
+\caption{\label{imagen:buy hold alza} Estrategia \buyhold en un mercado a la alza}
+\end{figure}
 
 
 \section{Análisis técnico}
