@@ -119,17 +119,17 @@ Eugene Fama\footnote{Premio Nobel en economía en 2013} describe tres formas de 
 
 En la versión débil, los precios actuales reflejan toda la información histórica del mercado, es decir, la información del pasado relativa a precios y al volumen negociado. En consecuencia, bajo esta versión de eficiencia, no es posible utilizar datos históricos con el fin de predecir la tendencia futura de los precios (ver sección \ref{seccion:analisisTecnico}).
 
-La versión semifuerte de la eficiencia de un mercado incluye la versión débil y añade que, además de reflejar la información histórica del mercado, los precios actuales reflejan toda la información pública disponible. Por información pública disponible nos referimos a la información a la cual el público inversionista en general puede acceder, por ejemplo, noticias económicas o financieras transmitidas por algún medio de comunicación, estados de resultados de las empresas, reportes anuales o trimestrales de las mismas etc.
+La versión semifuerte incluye la versión débil y añade que, además de reflejar la información histórica del mercado, los precios actuales reflejan toda la información pública. Por información pública nos referimos a la información a la cual el público inversionista puede acceder, por ejemplo, noticias económicas o financieras, estados de resultados de las empresas, reportes anuales o trimestrales de las mismas, indicadores macroeconómicos etc.
 
-De acuerdo a esta versión, no es posible utilizar la información pública disponible con el fin de predecir la tendencia futura de los precios.
+De acuerdo a esta versión, no es posible utilizar la información pública con el fin de predecir la tendencia futura de los precios.
 
-Finalmente, la versión fuerte de la eficiencia de un mercado, nos dice que los precios actuales reflejan totalmente tanto la información pública disponible como la información privada que solamente algunas personas poseen. Por lo tanto, bajo esta versión, incluso tomando en cuenta la información privada, no es posible predecir la tendencia futura de los precios.
+Finalmente, la versión fuerte de la eficiencia de un mercado, nos dice que los precios actuales reflejan totalmente tanto la información pública como la información privada, es decir, aquella que solamente algunas personas poseen. Por lo tanto, bajo esta versión, incluso tomando en cuenta la información privada, no es posible predecir la tendencia futura de los precios.
 
 Observamos entonces que, la eficiencia de un mercado debe ser interpretada relativa al tipo de información que los inversionistas utilizan. Además, como se señala en \cite{CFA2019}, la eficiencia cae en un espectro continuo, que varía a través del tiempo, regiones geográficas y tipo de mercado.
 
 La imagen \ref{imagen:versiones emh} ilustra las distintas versiones de la eficiencia de un mercado.
 
-En este trabajo nos enfocamos únicamente a la versión débil de la eficiencia.
+En este trabajo nos enfocamos únicamente en la versión débil.
 
 \begin{figure}[ht]
 \centering
@@ -142,7 +142,7 @@ En este trabajo nos enfocamos únicamente a la versión débil de la eficiencia.
 \label{seccion:buy and hold}
 Como se señala en la sección \ref{subseccion:versiones emh}, de acuerdo a la hipótesis del mercado eficiente, no es posible utilizar información histórica con el fin de predecir los precios del futuro. Lo mejor que uno puede hacer es comprar un portafolio bien diversificado y mantenerlo por un periodo de tiempo predeterminado, esta estrategia recibe el nombre de estrategia \buyhold.
 
-Por lo tanto, en un mercado eficiente, utilizando la información del pasado, no es posible obtener, de manera consistente y sistemática, ganancias superiores a aquellas generadas por la estrategia \buyhold.
+De acuerdo a lo anterior tenemos entonces que, en un mercado eficiente, no es posible obtener, de manera consistente y sistemática, ganancias superiores a aquellas generadas por la estrategia \buyhold.
 
 Dado un plazo de tiempo fijo, $\left[T_{I}, T_{F}\right]$, la ganancia de la estrategia \buyhold está dada por la ecuación (\ref{eqn:ganancia BH})
 
@@ -152,7 +152,7 @@ G_{\left[T_{I}, T_{F}\right]} (BH) = \dfrac{P_{T_F} (1 - c) } { P_{T_I} (1 + c) 
 
 en donde $P_{T_F}$ es el precio de ejecución al final del plazo, $P_{T_I}$ es el precio de ejecución al inicio de este y $c$ es el costo (porcentual) de cada transacción (ver sección \ref{sec:supuestos del mercado}). 
 
-La imagen \ref{imagen:buy hold alza} ejemplifica esta estrategia en un periodo en el cual el mercado presenta una tendencia a la alza.\footnote{En la jerga financiera, un mercado bullish} Como podemos observar, vencer esta estrategia en mercados que presentan esta tendencia es todo un reto, esto se debe a que sólo se involucran dos operaciones, lo que implica un ahorro en costos de transacción.
+La imagen \ref{imagen:buy hold alza} ejemplifica la estrategia \buyhold en un periodo en el cual el mercado presenta una tendencia a la alza.\footnote{En la jerga financiera, un mercado bullish} Como podemos observar, vencer esta estrategia cuando se presenta este tipo de tendencia es todo un reto, esto se debe a que sólo se involucran dos operaciones, lo que implica un ahorro en costos de transacción.
 
 \begin{figure}[ht]
 \centering
@@ -160,6 +160,25 @@ La imagen \ref{imagen:buy hold alza} ejemplifica esta estrategia en un periodo e
 \caption{\label{imagen:buy hold alza} Estrategia \buyhold en un mercado a la alza}
 \end{figure}
 
+\subsection{Exceso de ganancia sobre \buyhold}
+
+Para comparar las estrategias propuestas en este trabajo contra la estrategia \buyhold, estaremos utilizando como métrica de desempeño el exceso de ganancia (porcentual).
+
+Esta métrica, compara la ganancia obtenida por una estrategia, $S$, con aquella obtenida por la estrategia \buyhold.
+
+Para un plazo fijo, $\left[T_{I}, T_{F}\right]$, el exceso de ganancia de una estrategia $S$, sobre la estrategia \buyhold, está dado por la ecuación (\ref{eqn:Exceso de ganancia})
+
+\begin{equation} \label{eqn:Exceso de ganancia}
+ExG_{\left[T_{I}, T_{F}\right]} = G_{\left[T_{I}, T_{F}\right]} (S) - G_{\left[T_{I}, T_{F}\right]} (BH)
+\end{equation}
+
+en donde la ganancia $G_{\left[T_{I}, T_{F}\right]} (BH)$, está dada por la ecuación (\ref{eqn:ganancia BH}) y la ganancia $G_{\left[T_{I}, T_{F}\right]} (S)$ es simplemente la variación porcentual entre el capital inicial disponible en el momento $T_{I}$ y el capital con el que se cuenta en el momento $T_{F}$.
+
+\begin{equation} \label{eqn:Ganancia estrategia S}
+G_{\left[T_{I}, T_{F}\right]}(S) = \dfrac{Capital_{T_F}}{Capital_{T_I} } - 1 
+\end{equation}
+
+Claramente buscamos que $ExG_{\left[T_{I}, T_{F}\right]}$ sea un número positivo.
 
 \section{Análisis técnico}
 \label{seccion:analisisTecnico}
