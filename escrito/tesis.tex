@@ -9,7 +9,7 @@
 \usepackage{natbib}
 %\usepackage{float}
 
-\title{Aprendizaje automático de reglas para operar en los mercados accionarios}
+\title{Aprendizaje automático de reglas para operar en los mercados de índices accionarios}
 \publishers{Centro de Investigación en Computación, Instituto Politécnico Nacional}
 \date{}
 \author{David Ricardo Montalván Hernández}
@@ -29,7 +29,7 @@
 
 \theoremstyle{break}
 %Definición
-\newtheorem{definicion}{Definicion}[chapter]
+\newtheorem{definicion}{Definición}[chapter]
 
 %Teorema
 \newtheorem{teorema}{Teorema}[chapter]
@@ -109,17 +109,44 @@ Los objetivos particulares de este trabajo son:
 \section{Mecánica de un mercado accionario}
 \label{seccion:mecanica del mercado}
 
-\section{Hipótesis del mercado eficiente}
-\label{seccion:hipotesis mercado eficiente}
+\section{Mercado eficiente}
+\label{seccion:mercado eficiente}
+Cuando hablamos de un mercado eficiente, nos referimos a un mercado que es capaz de capturar, de forma rápida y racional, la información disponible más reciente. Esta información es reflejada en los precios de los instrumentos financieros y como consecuencia, en un mercado eficiente, los precios son informativos, lo que nos permite lograr una colocación eficiente de nuestros recursos \cite{CFA2019}.
 
-\section{NAFTRAC}
-\label{seccion:naftrac}
+\subsection{Versiones de eficiencia en el mercado}
+Eugene Fama\footnote{Premio Nobel en economía en 2013} describe tres formas de eficiencia de un mercado: débil, semifuerte y fuerte \cite{Fama1965}.
 
-\section{SPDR S\&P 500}
-\label{seccion:sp500}
+En la versión débil, los precios actuales reflejan toda la información histórica del mercado, es decir, la información del pasado relativa a precios y al volumen negociado. En consecuencia, bajo esta versión de eficiencia, no es posible utilizar datos históricos con el fin de predecir la tendencia futura de los precios (ver sección \ref{seccion:analisisTecnico}).
+
+La versión semifuerte de la eficiencia de un mercado incluye la versión débil y añade que, además de reflejar la información histórica del mercado, los precios actuales reflejan toda la información pública disponible. Por información pública disponible nos referimos a la información a la cual el público inversionista en general puede acceder, por ejemplo, noticias económicas o financieras transmitidas por algún medio de comunicación, estados de resultados de las empresas, reportes anuales o trimestrales de las mismas etc.
+
+De acuerdo a esta versión, no es posible utilizar la información pública disponible con el fin de predecir la tendencia futura de los precios.
+
+Finalmente, la versión fuerte de la eficiencia de un mercado, nos dice que los precios actuales reflejan totalmente tanto la información pública disponible como la información privada que solamente algunas personas poseen. Por lo tanto, bajo esta versión, incluso tomando en cuenta la información privada, no es posible predecir la tendencia futura de los precios.
+
+Observamos entonces que, la eficiencia de un mercado debe ser interpretada relativa al tipo de información que los inversionistas utilizan. Además, como se señala en \cite{CFA2019}, la eficiencia cae en un espectro continuo, que varía a través del tiempo, regiones geográficas y tipo de mercado.
+
+La imagen \ref{imagen:versiones emh} ilustra las distintas versiones de la eficiencia de un mercado.
+
+\begin{figure}[ht]
+\centering
+\scalebox{1.0}{\includegraphics[width=.8\linewidth]{imagenes/versiones-emh.jpeg}}
+\caption{\label{imagen:versiones emh} Versiones de la eficiencia de un mercado}
+\end{figure}
+
 
 \section{Análisis técnico}
 \label{seccion:analisisTecnico}
+
+\section{Índices accionarios}
+\label{seccion:indices accionarios}
+\subsection{NAFTRAC}
+\label{subseccion:naftrac}
+
+\subsection{SPDR S\&P 500}
+\label{subseccion:sp500}
+
+
 
 
 
