@@ -7,9 +7,10 @@
 \usepackage{makeidx}
 \usepackage{graphicx}
 \usepackage{natbib}
+\usepackage{url}
 %\usepackage{float}
 
-\title{Aprendizaje automático de reglas para operar en los mercados de índices accionarios}
+\title{Aprendizaje automático de reglas para operar en los mercados de índices }
 \publishers{Centro de Investigación en Computación, Instituto Politécnico Nacional}
 \date{}
 \author{David Ricardo Montalván Hernández}
@@ -33,6 +34,9 @@
 
 %Teorema
 \newtheorem{teorema}{Teorema}[chapter]
+
+%Notas importantes
+\newtheorem{nota}{Nota}[chapter]
 
 %Algoritmo (Utiliza el ambiente tabbing)
 \theoremstyle{break}
@@ -81,7 +85,7 @@ A pesar de que la idea básica es comprar barato y vender caro, la incertidumbre
 
 El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas \textit{IF..THEN}. Estas reglas se utilizarán para obtener estrategias de inversión cuya ganancia, buscamos, sea superior a la ganancia generada por la estrategia de \textbf{compra y espera} (ver sección \ref{seccion:mercado eficiente}).
 
-Una de las contribuciones de este trabajo es el análisis del mercado accionario mexicano, el cual está representado por el instrumento llamado \textbf{NAFTRAC ISHRS} (ver sección \ref{seccion:naftrac}).
+Una de las contribuciones de este trabajo es el análisis del mercado accionario mexicano, el cual está representado por el instrumento llamado \textbf{NAFTRAC ISHRS} (ver sección \ref{seccion:indices accionarios}).
 
 Además, la metodología propuesta busca obtener un modelo interpretable, contrastando con la tendencia actual que se caracteriza por el uso de las llamadas \textit{cajas negras}, e.g., redes neuronales (ver capítulo \ref{capitulo:antecedentes}).
 
@@ -106,8 +110,31 @@ Los objetivos particulares de este trabajo son:
 \chapter{Marco teórico}
 \label{capitulo:marco teorico}
 
-\section{Mecánica de un mercado accionario}
-\label{seccion:mecanica del mercado}
+\section{Mercado de índices accionarios}
+\label{seccion:indices accionarios}
+
+Debido a la diversidad de los tipos de mercados financieros (, deuda, tipo de cambio, derivados, etc.) así como al funcionamiento particular de cada uno de ellos, fue necesario restringir este estudio a un mercado en particular. Siendo concretos, este trabajo únicamente analiza el mercado de índices .
+
+Un índice accionario, busca representar el comportamiento de un segmento específico del mercado accionario, por ejemplo un sector o un área geográfica en particular \cite{CFA2019-market-index}.
+
+Así pues, el propósito principal de este tipo de índices es representar la opinión colectiva que se tiene respecto a un conjunto de acciones.
+
+En este trabajo consideraremos lo siguientes índices :
+
+\begin{itemize}
+\item Índice de precios y cotizaciones (S\&P/BMV IPC)
+\item Índice Standard and Poors 500 (S\&P 500)
+\end{itemize}
+
+El índice de precios y cotizaciones es el principal indicador del mercado accionario mexicano. Este índice busca medir el desempeño de las acciones listadas en la Bolsa Mexicana de Valores utilizando una muestra con las 35 series accionarias de mayor tamaño y liquidez listadas en dicha bolsa.\footnote{https://espanol.spindices.com/indices/equity/sp-bmv-ipc}
+
+Por otro lado, el índice Standard and Poors 500 es considerado como el mejor indicador para el mercado accionario de Estados Unidos. Este índice está compuesto por las 500 empresas de mayor capitalización las cuales capturan alrededor del $80\%$ de la capitalización del mercado\footnote{https://us.spindices.com/indices/equity/sp-500}
+
+\begin{nota} \label{nota:ETF}
+En la práctica los inversionistas no pueden comprar los índices accionarios, en cambio, los instrumentos negociados reciben el nombre de Títulos Referenciados a Acciones (TRACS\footnote{En inglés Exchange Traded Funds o ETF}). Estos instrumentos buscan replicar el comportamiento de las acciones o portafolio al que están referenciados.
+
+En nuestro caso, el instrumento que busca replicar el índice de precios y cotizaciones recibe el nombre de iShares NAFTRAC (o simplemente NAFTRAC), mientras que para el índice Standard and Poors 500 el instrumento relacionado es el SPDR S\&P 500.
+\end{nota}
 
 \section{Mercado eficiente}
 \label{seccion:mercado eficiente}
@@ -182,16 +209,6 @@ Claramente buscamos que $ExG_{\left[T_{I}, T_{F}\right]}$ sea un número positiv
 
 \section{Análisis técnico}
 \label{seccion:analisisTecnico}
-
-\section{Índices accionarios}
-\label{seccion:indices accionarios}
-\subsection{NAFTRAC}
-\label{seccion:naftrac}
-
-\subsection{SPDR S\&P 500}
-\label{seccion:sp500}
-
-
 
 
 
@@ -297,7 +314,7 @@ Si $f_i$ es la frecuencia observada de la clase $i$ dentro de los ejemplos en $E
 
 \section{Separación de datos}
 \label{seccion:separacion de datos}
-En este trabajo se utilizan precios diarios\footnote{Obtenidos de Yahoo Finance. https://finance.yahoo.com} de los instrumentos NAFTRAC y SPDR S\&P 500 (ver secciones \ref{seccion:naftrac} y \ref{seccion:sp500}).
+En este trabajo se utilizan precios diarios\footnote{Obtenidos de Yahoo Finance. https://finance.yahoo.com} de los instrumentos NAFTRAC y SPDR S\&P 500 (ver sección \ref{seccion:indices accionarios}).
 
 Para el NAFTRAC, la información inicia el día 15 de febrero de 2013 y termina el 21 de enero de 2019. Para el SPDR S\&P 500 el periodo de tiempo abarcado es del 2 de enero de 2008 hasta  el 3 de marzo de 2019.
 
