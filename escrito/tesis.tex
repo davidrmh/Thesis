@@ -10,7 +10,7 @@
 \usepackage{url}
 %\usepackage{float}
 
-\title{Aprendizaje automático de reglas para operar en los mercados de índices }
+\title{Aprendizaje automático de reglas para operar en los mercados de índices accionarios}
 \publishers{Centro de Investigación en Computación, Instituto Politécnico Nacional}
 \date{}
 \author{David Ricardo Montalván Hernández}
@@ -209,19 +209,48 @@ Claramente buscamos que $ExG_{\left[T_{I}, T_{F}\right]}$ sea un número positiv
 
 \section{Análisis técnico}
 \label{seccion:analisisTecnico}
-Contrario a lo que estable la hipótesis del mercado eficiente (sección \ref{seccion:mercado eficiente}), el análisis técnico busca predecir la tendencia futura en los precios utilizando la información histórica del mercado (precios y volumen) \cite{murphy1999technical}.
+Contrario a lo que establece la hipótesis del mercado eficiente (sección \ref{seccion:mercado eficiente}), el análisis técnico busca predecir la tendencia futura en los precios utilizando la información histórica del mercado (precios y volumen) \cite{murphy1999technical}.
 
 Los tres supuestos en los que se basa este tipo de análisis son los siguientes:
 
 \begin{itemize}
-\item La información de todos los factores que afectan a la oferta y a la demanda se encuentre reflejada en el precio de los instrumentos financieros. En consecuencia, basta centrarse en el estudio de los precios para poder analizar el mercado.
+\item La información de todos los factores que afectan a la oferta y a la demanda se encuentra reflejada en el precio de los instrumentos financieros. En consecuencia, basta centrarse en el estudio de los precios para poder analizar el mercado.
 
-\item 
+\item Los precios se mueven siguiendo tendencias (a la alza o a la baja). El objetivo del análisis técnico es detectar, lo más pronto posible, el inicio y el final de estas tendencias.
+
+\item Los patrones en los precios se repiten a lo largo del tiempo.
 \end{itemize}
+
 
 \subsection{Indicadores técnicos}
 \label{subseccion:indicadores tecnicos}
+Para realizar el pronóstico de las tendencias, el análisis técnico se vale del uso de indicadores técnicos. Estos indicadores son transformaciones aplicadas a la información histórica para una ventana (deslizante) de tiempo determinada \cite{murphy1999technical}, \cite{technicalAnalysisKirkPatrick}, \cite{encycoplediaTechnicalIndicators}.
 
+Los indicadores técnicos utilizados en este trabajo, serán:
+
+\begin{itemize}
+\item Oscilador Aroon.
+
+\item Relative Strength Index (RSI).
+
+\item Money Flow Index (MFI).
+
+\item Williams \%R.
+
+\item Commodity Channel Index (CCI).
+\end{itemize}
+
+\subsubsection{Oscilador Aroon}
+\label{subsubseccion:Oscilador Aroon}
+Este indicador mide el número de periodos, dentro de una ventana de tiempo de tamaño $n$, que han transcurrido desde el máximo y el mínimo más reciente. El cálculo de este indicador está dado en la ecuación \ref{eqn:oscilador aroon}
+
+\begin{equation} \label{eqn:oscilador aroon}
+OsAroon = 100 \left( \dfrac{  n - H  } { n } - \dfrac{  n - L  } { n } \right)
+\end{equation}
+
+en donde $n$ es el número de periodos que comprende la ventana de tiempo, $H$ es el número de periodos transcurridos desde el último máximo registrado dentro de la ventana de tamaño $n$ y $L$ es el número de periodos transcurridos desde el último mínimo registrado dentro de la ventana de tamaño $n$.
+
+Vemos entonces que, de acuerdo a la ecuación (\ref{eqn:oscilador aroon}), si $OsAroon$ es un número positivo, los precios muestran una tendencia a la alza (debemos de prepararnos para comprar). En cambio cuando $OsAroon$ es un número negativo, los precios muestran una tendencia a la baja (debemos de prepararnos para vender).
 
 
 %=============== AQ y CN2 ================= %
@@ -387,9 +416,9 @@ En la imagen \ref{imagen:etiquetado} vemos el resultado del proceso de etiquetad
 
 \section{Atributos utilizados}
 \label{seccion:atributos}
-Los atributos utilizados en cada uno de los experimentos, son un conjunto de indicadores técnicos financieros (ver sección \ref{seccion:analisisTecnico}). Utilizamos estos indicadores ya que en ellos se refleja el conocimiento de los expertos, así como patrones que han demostrado ser útiles en la práctica.
+Los atributos utilizados en cada uno de los experimentos, son el conjunto de indicadores técnicos descritos en la sección \ref{subseccion:indicadores tecnicos}. Los parámetros utilizados para cada uno de ellos se describen a continuación.
 
-Los indicadores utilizados son:
+
 \begin{itemize}
 \item Oscilador Aroon con una ventana de tiempo de 25 días para cada cada indicador Aroon.
 
