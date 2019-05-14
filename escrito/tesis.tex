@@ -229,20 +229,20 @@ Para realizar el pronóstico de las tendencias, el análisis técnico se vale de
 Los indicadores técnicos utilizados en este trabajo, serán:
 
 \begin{itemize}
-\item Oscilador Aroon.
+\item Oscilador aroon.
 
-\item Relative Strength Index (RSI).
+\item Relative strength index (RSI).
 
-\item Money Flow Index (MFI).
+\item Money flow index (MFI).
 
 \item Williams \%R.
 
-\item Commodity Channel Index (CCI).
+\item Commodity channel index (CCI).
 \end{itemize}
 
-\subsubsection{Oscilador Aroon}
+\subsubsection{Oscilador aroon}
 \label{subsubseccion:Oscilador Aroon}
-Este indicador mide el número de periodos, dentro de una ventana de tiempo de tamaño $n$, que han transcurrido desde el máximo y el mínimo más reciente. El cálculo de este indicador está dado en la ecuación \ref{eqn:oscilador aroon}
+Este indicador mide el número de periodos, dentro de una ventana de tiempo de tamaño $n$, que han transcurrido desde el máximo y el mínimo más reciente. El cálculo de este indicador está dado en la ecuación (\ref{eqn:oscilador aroon})
 
 \begin{equation} \label{eqn:oscilador aroon}
 OsAroon = 100 \left( \dfrac{  n - H  } { n } - \dfrac{  n - L  } { n } \right)
@@ -251,6 +251,26 @@ OsAroon = 100 \left( \dfrac{  n - H  } { n } - \dfrac{  n - L  } { n } \right)
 en donde $n$ es el número de periodos que comprende la ventana de tiempo, $H$ es el número de periodos transcurridos desde el último máximo registrado dentro de la ventana de tamaño $n$ y $L$ es el número de periodos transcurridos desde el último mínimo registrado dentro de la ventana de tamaño $n$.
 
 Vemos entonces que, de acuerdo a la ecuación (\ref{eqn:oscilador aroon}), si $OsAroon$ es un número positivo, los precios muestran una tendencia a la alza (debemos de prepararnos para comprar). En cambio cuando $OsAroon$ es un número negativo, los precios muestran una tendencia a la baja (debemos de prepararnos para vender).
+
+\subsubsection{Relative strength index (RSI)}
+\label{subsubseccion:RSI}
+Este indicador busca predecir la tendencia en los precios analizando el promedio de ganancias y pérdidas obtenidas para una ventana de tiempo de tamaño $n$. La fórmula para calcular el RSI está dada en la ecuación (\ref{eqn:RSI})
+
+\begin{equation} \label{eqn:RSI}
+RSI = 100 - \left( \frac{100}{1 + RS} \right)
+\end{equation}
+
+en donde 
+
+\begin{equation} \label{eqn:RSI RS}
+RS = \frac{Ganancia\,promedio\,en\,n\,periodos}{P\acute{e}rdida\,promedio\,en\,n\,periodos}
+\end{equation}
+
+Típicamente, en la literatura financiera (\cite{technicalAnalysisKirkPatrick}, \cite{encycoplediaTechnicalIndicators}) una señal de venta se genera cuando $RSI > 70$; por otra parte, una señal de compra se genera si $RSI < 30$.
+
+\subsubsection{Money flow index (MFI)}
+\label{subsubseccion:money flow index}
+
 
 
 %=============== AQ y CN2 ================= %
