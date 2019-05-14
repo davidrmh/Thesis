@@ -226,7 +226,7 @@ Los tres supuestos en los que se basa este tipo de análisis son los siguientes:
 \label{subseccion:indicadores tecnicos}
 Para realizar el pronóstico de las tendencias, el análisis técnico se vale del uso de indicadores técnicos. Estos indicadores son transformaciones aplicadas a la información histórica para una ventana (deslizante) de tiempo determinada \cite{murphy1999technical}, \cite{technicalAnalysisKirkPatrick}, \cite{encycoplediaTechnicalIndicators}.
 
-Los indicadores técnicos utilizados en este trabajo, serán:
+Los indicadores técnicos utilizados en este trabajo, serán\footnote{Aunque en las fórmulas no se indica, cada indicador se calcula para cada periodo $t$ utilizando la información en el intervalo $\left[t-n + 1, t\right]$, es decir, la información contenida en una ventana deslizante de tamaño $n$. }:
 
 \begin{itemize}
 \item Oscilador aroon.
@@ -239,6 +239,7 @@ Los indicadores técnicos utilizados en este trabajo, serán:
 
 \item Commodity channel index (CCI).
 \end{itemize}
+
 
 \subsubsection{Oscilador aroon}
 \label{subsubseccion:Oscilador Aroon}
@@ -270,8 +271,37 @@ Típicamente, en la literatura financiera (\cite{technicalAnalysisKirkPatrick}, 
 
 \subsubsection{Money flow index (MFI)}
 \label{subsubseccion:money flow index}
+Este indicador es similar al RSI. Considera el número de periodos en los que se han presentado ganancias o pérdidas tomando en cuenta tanto los precios como el volumen del periodo (en comparación con el RSI que sólo considera los precios).
 
+Para el cálculo del MFI se necesita primero calcular el precio promedio del periodo $t$, el cual está dado por la ecuación (\ref{eqn:precio tipico})
 
+\begin{equation} \label{eqn:precio tipico}
+Precio\, \, promedio_t = \dfrac{H_{t} + L_{t} + C_{t}}{3}
+\end{equation}
+
+en donde $H_{t}, L_t, C_t$ representan, respectivamente, el precio máximo, mínimo y de cierre en el periodo $t$.
+
+Una vez calculado el precio promedio, se calcula el flujo de efectivo del periodo, como se muestra en la ecuación (\ref{eqn:flujo de efectivo})
+
+\begin{equation} \label{eqn:flujo de efectivo}
+MF_t = Precio\, \, promedio_t \times Volumen_t \times F_t
+\end{equation}
+
+en donde $F_t = 1$, si el precio promedio del periodo $t$ es mayor al precio promedio del periodo $t-1$, y $F_t = -1$ en el caso contrario.
+
+Así, dada una ventana de tiempo de tamaño $n$, el MFI se calcula de acuerdo a la ecuación (\ref{eqn:MFI})
+
+\begin{equation} \label{eqn:MFI}
+MFI = 100 - \left( \frac{100}{1 + MFR} \right)
+\end{equation}
+
+en donde $MFR$ está dado por 
+
+\begin{equation} \label{eqn:MFR}
+MFR = \dfrac{\sum_{MF_t > 0} MF_t  }{\sum_{MF_t < 0} MF_t}
+\end{equation}
+
+con $t$ dentro del periodo de la ventana $n$.
 
 %=============== AQ y CN2 ================= %
 \section{Algoritmos AQ y CN2}
