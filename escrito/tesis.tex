@@ -44,7 +44,7 @@
 %=================================================%
 
 %====================Macros=======================%
-\newcommand{\buyhold}{\textit{buy-and-hold }}
+\newcommand{\buyhold}{\textit{buy-and-hold} }
 %=================================================%
 
 \begin{document}
@@ -191,7 +191,7 @@ La imagen \ref{imagen:buy hold alza} ejemplifica la estrategia \buyhold en un pe
 
 Para comparar las estrategias propuestas en este trabajo contra la estrategia \buyhold, estaremos utilizando como métrica de desempeño el exceso de ganancia (porcentual).
 
-Esta métrica, compara la ganancia obtenida por una estrategia, $S$, con aquella obtenida por la estrategia \buyhold.
+Esta métrica compara la ganancia obtenida por una estrategia, $S$, con aquella obtenida por la estrategia \buyhold.
 
 Para un plazo fijo, $\left[T_{I}, T_{F}\right]$, el exceso de ganancia de una estrategia $S$, sobre la estrategia \buyhold, está dado por la ecuación (\ref{eqn:Exceso de ganancia})
 
@@ -226,7 +226,7 @@ Los tres supuestos en los que se basa este tipo de análisis son los siguientes:
 \label{subseccion:indicadores tecnicos}
 Para realizar el pronóstico de las tendencias, el análisis técnico se vale del uso de indicadores técnicos. Estos indicadores son transformaciones aplicadas a la información histórica para una ventana (deslizante) de tiempo determinada \cite{murphy1999technical}, \cite{technicalAnalysisKirkPatrick}, \cite{encycoplediaTechnicalIndicators}.
 
-Los indicadores técnicos utilizados en este trabajo, serán\footnote{Aunque en las fórmulas no se indica, cada indicador se calcula para cada periodo $t$ utilizando la información en el intervalo $\left[t-n + 1, t\right]$, es decir, la información contenida en una ventana deslizante de tamaño $n$. }:
+Los indicadores técnicos utilizados en este trabajo, serán\footnote{Aunque en las fórmulas no se indica, cada indicador se calcula en cada periodo $t$ utilizando la información en el intervalo $\left[t-n + 1, t\right]$, es decir, la información contenida en una ventana deslizante de tamaño $n$. }:
 
 \begin{itemize}
 \item Oscilador aroon.
@@ -246,10 +246,10 @@ Los indicadores técnicos utilizados en este trabajo, serán\footnote{Aunque en 
 Este indicador mide el número de periodos, dentro de una ventana de tiempo de tamaño $n$, que han transcurrido desde el máximo y el mínimo más reciente. El cálculo de este indicador está dado en la ecuación (\ref{eqn:oscilador aroon})
 
 \begin{equation} \label{eqn:oscilador aroon}
-OsAroon = 100 \left( \dfrac{  n - H  } { n } - \dfrac{  n - L  } { n } \right)
+OsAroon = 100 \left( \dfrac{  n - T_H  } { n } - \dfrac{  n - T_L  } { n } \right)
 \end{equation}
 
-en donde $n$ es el número de periodos que comprende la ventana de tiempo, $H$ es el número de periodos transcurridos desde el último máximo registrado dentro de la ventana de tamaño $n$ y $L$ es el número de periodos transcurridos desde el último mínimo registrado dentro de la ventana de tamaño $n$.
+en donde $n$ es el número de periodos que comprende la ventana de tiempo, $T_H$ es el número de periodos transcurridos desde el último máximo registrado dentro de la ventana de tamaño $n$ y $T_L$ es el número de periodos transcurridos desde el último mínimo registrado dentro de la ventana de tamaño $n$.
 
 Vemos entonces que, de acuerdo a la ecuación (\ref{eqn:oscilador aroon}), si $OsAroon$ es un número positivo, los precios muestran una tendencia a la alza (debemos de prepararnos para comprar). En cambio cuando $OsAroon$ es un número negativo, los precios muestran una tendencia a la baja (debemos de prepararnos para vender).
 
@@ -302,6 +302,22 @@ MFR = \dfrac{\sum_{MF_t > 0} MF_t  }{\sum_{MF_t < 0} MF_t}
 \end{equation}
 
 con $t$ dentro del periodo de la ventana $n$.
+
+En la práctica, es común considerar que una señal de venta se da cuando $MFI > 80$, mientras que una señal de compra se da cuando $MFI < 20$.
+
+\subsubsection{Williams \%R}
+\label{subsubseccion:Williams R}
+Este indicador busca reflejar el precio de cierre relativo al precio máximo dentro de una ventana de tiempo dada.
+
+Su cálculo está dado por la ecuación (\ref{eqn:williams R})
+
+\begin{equation} \label{eqn:williams R}
+Williams \%R_t = -100 \times \dfrac{HH - C_t}{HH - LL}
+\end{equation}
+
+en donde $HH$ es el máximo entre los precios máximos de cada periodo que comprende la ventana de tiempo, de manera similar $LL$ es el mínimo de los precios mínimos de cada periodo en la ventana de tiempo y $C_t$ es el precio de cierre en el tiempo $t$.
+
+Se considera típicamente que si este indicador se encuentra entre $0$ y $-20$, es un momento apropiado para vender, mientras que si se encuentra dentro del rango de $-80$ a $-100$, es un momento adecuado para comprar.
 
 %=============== AQ y CN2 ================= %
 \section{Algoritmos AQ y CN2}
