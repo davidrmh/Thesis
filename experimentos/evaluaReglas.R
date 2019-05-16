@@ -269,6 +269,15 @@ evaluaReglas <- function(reglas, atributos, etiquetado, tipoEjec = 'open', h = 0
       decision <- obtenDecision(reglasVenta, observacion)
       
       #INFORMACIÓN CONTEXTUAL (BANDAS HORIZONTALES CONSIDERANDO COMISIÓN)
+      
+      ########################################### IMPORTANTE ###########################################################
+      ## La señal de venta de acuerdo a las reglas, utiliza información del tiempo t
+      ## La señal de venta de acuerdo a las bandas, utiliza el precio de ejecución en t + h (futuro)
+      ## Una señal de venta se interpreta entonces como:
+      ## 1. En el día t, las reglas me dicen que venta
+      ## 2. En el transcurso del día t + h, espero que el precio de ejecución rebase las bandas horizontales
+      ## si este es el caso, la venta se ejectua. (Esto se interpreta como una confirmación de la señal de las reglas)
+      ##################################################################################################################
       diferencia_porcentual <- ( precioEjec * (1 - comision) ) / ( (ultimoPrecioCompra * (1 + comision) ) ) - 1
       
       if(is.character(decision) && ((diferencia_porcentual > glob_bandaSuperior) 
