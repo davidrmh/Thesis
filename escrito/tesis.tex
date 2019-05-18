@@ -631,6 +631,27 @@ $$P_{V}(1 - 0.0025)$$
 %=============== Resultados ================= %
 \chapter{Resultados experimentales}
 \label{capitulo:resultados experimentales}
+Utilizando la metodología descrita en el capítulo \ref{capitulo:solucion propuesta}, para cada TRAC (ver sección \ref{seccion:indices accionarios}) se realizaron cuatro experimentos distintos. Estos experimentos exploran dos alternativas distintas para discretizar los atributos continuos, \cite{dataMiningUsingR}, así como el tipo de aprendizaje aplicado (incremental o no incremental, ver sección \ref{seccion:aprendizaje incremental}).
+
+El primero de los métodos de discretización (al cual denotaremos como DI), se basa en crear intervalos con el mismo tamaño, sin importar la distribución de los valores de cada atributo; por otro lado, el segundo método (denotado como DC) está basado en los cuantiles de la distribución de los datos de cada atributo, así este método crea intervalos con la misma probabilidad.
+
+Así pues, tenemos los siguiente experimentos:
+
+\begin{itemize}
+\item Aprendizaje incremental con discretización por intervalos de mismo tamaño.
+
+\item Aprendizaje no incremental con discretización por intervalos de mismo tamaño.
+
+\item Aprendizaje incremental con discretización por cuantiles.
+
+\item Aprendizaje no incremental con discretización por cuantiles.
+
+\end{itemize}
+
+
+
+
+
 
 %=============== Conclusión ================= %
 \chapter{Conclusiones y trabajo futuro}
