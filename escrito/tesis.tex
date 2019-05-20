@@ -633,7 +633,7 @@ $$P_{V}(1 - 0.0025)$$
 \label{capitulo:resultados experimentales}
 Utilizando la metodología descrita en el capítulo \ref{capitulo:solucion propuesta}, para cada TRAC (ver sección \ref{seccion:indices accionarios}) se realizaron cuatro experimentos distintos. Estos experimentos exploran dos alternativas distintas para discretizar los atributos continuos, \cite{dataMiningUsingR}, así como el tipo de aprendizaje aplicado (incremental o no incremental, ver sección \ref{seccion:aprendizaje incremental}).
 
-El primero de los métodos de discretización (al cual denotaremos como DI), se basa en crear intervalos con el mismo tamaño, sin importar la distribución de los valores de cada atributo; por otro lado, el segundo método (denotado como DC) está basado en los cuantiles de la distribución de los datos de cada atributo, así este método crea intervalos con la misma probabilidad.
+El primero de los métodos de discretización (al cual denotaremos como DI), se basa en crear intervalos con el mismo tamaño, sin importar la distribución de los valores de cada atributo; por otro lado, el segundo método (denotado como DC) utiliza los cuantiles de la distribución de los valores de cada atributo, con el fin de crear intervalos equiprobables.
 
 Así pues, tenemos los siguiente experimentos:
 
@@ -647,6 +647,10 @@ Así pues, tenemos los siguiente experimentos:
 \item Aprendizaje no incremental con discretización por cuantiles (AN-DC).
 
 \end{itemize}
+
+Las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, muestran un resumen de los resultados obtenidos para los $30$ conjuntos de prueba con la información del SPDR S\&P 500.
+
+Como podemos observar en la tabla \ref{tabla:AQ-SP500}, el aprendizaje incremental resulta superior al no incremental para ambos métodos de discretización, obteniendo un exceso de ganancia promedio positivo.
 
 \begin{center}
 \begin{table}[h]
@@ -663,7 +667,7 @@ Exceso de ganancia mínima & $-11.23\%$ & $-12.94\%$ & $-3.86\%$ & $-11.47\%$ \\
 Ganancia monetaria promedio & $\$2,384.18$ & $\$1,620.11$ & $\$2,214.84$ & $\$ 994.96$ \\
 \hline
 \end{tabular}
-\caption{\label{tabla:AQ-SP500} Resultados del algoritmo AQ para SPDR S\&P 500}
+\caption{\label{tabla:AQ-SP500} Resultados del algoritmo AQ para el SPDR S\&P 500}
 \end{table}
 \end{center}
 
@@ -684,7 +688,7 @@ Ganancia monetaria promedio & $\$792.43$ & $\$946.07$ & $\$1,475.04$ & $\$ 604.9
 
 \hline
 \end{tabular}
-\caption{\label{tabla:CN2-SP500}Resultados del algoritmo CN2 para SPDR S\&P 500}
+\caption{\label{tabla:CN2-SP500}Resultados del algoritmo CN2 para el SPDR S\&P 500}
 \end{table}
 \end{center}
 
@@ -700,10 +704,29 @@ Casos mejores que \buyhold & $11$ & $8$ & $9$ & $7$  \\
 Casos peores que \buyhold & $14$ & $7$ & $6$ & $8$ \\
 Exceso de ganancia máxima & $6.74\%$ & $5.16\%$ & $4.60\%$ & $1.85\%$ \\
 Exceso de ganancia mínima & $-6.78\%$ & $-6.27\%$ & $-3.44\%$ & $-3.46\%$ \\
-Ganancia monetaria promedio & $\$$ & $\$$ & $\$$ & $\$$ \\
+Ganancia monetaria promedio & $\$1,697.77$ & $\$530.62$ & $\$993.49$ & $\$103.29$ \\
 \hline
 \end{tabular}
-\caption{\label{tabla:AQ-NAFTRAC} Resultados del algoritmo AQ para NAFTRAC}
+\caption{\label{tabla:AQ-NAFTRAC} Resultados del algoritmo AQ para el NAFTRAC}
+\end{table}
+\end{center}
+
+\begin{center}
+\begin{table}[h]
+\centering
+\begin{tabular}{ccccc}
+\hline
+\textbf{CN2} & \textbf{AI-DI} & \textbf{AN-DI} & \textbf{AI-DC} & \textbf{AN-DC} \\
+\hline
+Exceso de ganancia promedio & $-0.68\%$ & $0.17\%$ & $0.20\%$ & $0.06\%$ \\
+Casos mejores que \buyhold & $7$ & $10$ & $8$ & $9$  \\
+Casos peores que \buyhold & $8$ & $5$ & $7$ & $6$ \\
+Exceso de ganancia máxima & $3.41\%$ & $4.33\%$ & $4.60\%$ & $4.00\%$ \\
+Exceso de ganancia mínima & $-4.87\%$ & $-6.00\%$ & $-3.44\%$ & $-6.46\%$ \\
+Ganancia monetaria promedio & $\$-273.29$ & $\$578.85$ & $\$602.01$ & $\$461.66$ \\
+\hline
+\end{tabular}
+\caption{\label{tabla:CN2-NAFTRAC} Resultados del algoritmo CN2 para el NAFTRAC}
 \end{table}
 \end{center}
 
