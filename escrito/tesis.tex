@@ -595,7 +595,7 @@ Var(t_{ejec}, P_{t_{ejec}}, P_{C}^{ult} ) = \dfrac{P_{t_{ejec}}} {P_{C}^{ult}} -
 
 La imagen \ref{imagen:bandas horizontales} muestra un ejemplo de los límites relativos a una señal de compra.
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
 \centering
 \scalebox{0.8}{\includegraphics[width=1\linewidth]{imagenes/bandas_horizontales.jpeg}}
 \caption{\label{imagen:bandas horizontales} Límites para las señales de venta relativos a una señal de compra}
@@ -625,7 +625,9 @@ $$P_{V}(1 - 0.0025)$$
 
 \item El límite superior para las señales de venta, $LS$, se fija con un valor de $0.035$ o $3.5\%$ relativo al último precio de compra.
 
-\item El límite inferior para las señales de venta, $LI$, se fija con un valor de $-0.03$ o $-3.0\%$ relativo al último precio de compra. 
+\item El límite inferior para las señales de venta, $LI$, se fija con un valor de $-0.03$ o $-3.0\%$ relativo al último precio de compra.
+
+\item El capital inicial es de $\$100,000$ unidades monetarias (pesos en el caso del NAFTRAC y dólares de Estados Unidos para el SPDR S\&P 500).
 \end{itemize}
 
 %=============== Resultados ================= %
@@ -650,10 +652,9 @@ Así pues, tenemos los siguiente experimentos:
 
 Las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, muestran un resumen de los resultados obtenidos para los $30$ conjuntos de prueba con la información del SPDR S\&P 500.
 
-Como podemos observar en la tabla \ref{tabla:AQ-SP500}, el aprendizaje incremental resulta superior al no incremental para ambos métodos de discretización, obteniendo un exceso de ganancia promedio positivo.
 
 \begin{center}
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \begin{tabular}{ccccc}
 \hline
@@ -662,8 +663,8 @@ Como podemos observar en la tabla \ref{tabla:AQ-SP500}, el aprendizaje increment
 Exceso de ganancia promedio & $0.37\%$ & $-0.39\%$ & $0.20\%$ & $-1.02\%$ \\
 Casos mejores que \buyhold & $11$ & $14$ & $10$ & $13$  \\
 Casos peores que \buyhold & $19$ & $16$ & $20$ & $17$ \\
-Exceso de ganancia máxima & $34.64\%$ & $22.17\%$ & $29.72\%$ & $20.3\%$ \\
-Exceso de ganancia mínima & $-11.23\%$ & $-12.94\%$ & $-3.86\%$ & $-11.47\%$ \\
+Exceso de ganancia máximo & $34.64\%$ & $22.17\%$ & $29.72\%$ & $20.3\%$ \\
+Exceso de ganancia mínimo & $-11.23\%$ & $-12.94\%$ & $-3.86\%$ & $-11.47\%$ \\
 Ganancia monetaria promedio & $\$2,384.18$ & $\$1,620.11$ & $\$2,214.84$ & $\$ 994.96$ \\
 \hline
 \end{tabular}
@@ -673,7 +674,7 @@ Ganancia monetaria promedio & $\$2,384.18$ & $\$1,620.11$ & $\$2,214.84$ & $\$ 9
 
 
 \begin{center}
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \begin{tabular}{ccccc}
 \hline
@@ -682,8 +683,8 @@ Ganancia monetaria promedio & $\$2,384.18$ & $\$1,620.11$ & $\$2,214.84$ & $\$ 9
 Exceso de ganancia promedio & $-1.22\%$ & $-1.07\%$ & $-0.54\%$ & $-1.41\%$ \\
 Casos mejores que \buyhold & $11$ & $10$ & $12$ & $8$  \\
 Casos peores que \buyhold & $19$ & $20$ & $18$ & $22$ \\
-Exceso de ganancia máxima & $15.69\%$ & $12.32\%$ & $11.81\%$ & $6.05\%$ \\
-Exceso de ganancia mínima & $-12.87\%$ & $-9.43\%$ & $-6.48\%$ & $-8.33\%$ \\
+Exceso de ganancia máximo & $15.69\%$ & $12.32\%$ & $11.81\%$ & $6.05\%$ \\
+Exceso de ganancia mínimo & $-12.87\%$ & $-9.43\%$ & $-6.48\%$ & $-8.33\%$ \\
 Ganancia monetaria promedio & $\$792.43$ & $\$946.07$ & $\$1,475.04$ & $\$ 604.99$ \\
 
 \hline
@@ -692,8 +693,99 @@ Ganancia monetaria promedio & $\$792.43$ & $\$946.07$ & $\$1,475.04$ & $\$ 604.9
 \end{table}
 \end{center}
 
+Como se observa en la tabla \ref{tabla:AQ-SP500}, el aprendizaje incremental resulta superior al no incremental para ambos métodos de discretización, obteniendo un exceso de ganancia promedio positivo (aunque muy pequeño).
+
+Por otro lado, como se muestra en la tabla \ref{tabla:CN2-SP500}, el algoritmo CN2 se desempeña pobremente en todos los experimentos, obteniendo el mejor resultado utilizando un algoritmo de aprendizaje incremental.
+
+Es importante señalar que estamos considerando dos periodos correspondientes a la crisis financiera de 2008, como se ilustra en las imágenes \ref{imagen:sp500-2008-05-12} y \ref{imagen:sp500-2008-09-18}, durante estos periodos el precio mostró una fuerte tendencia a la baja, en consecuencia, superar la ganancia de la estrategia \buyhold no implica reto alguno como se puede constatar analizando las tablas \ref{tabla:AQ-SP500-2008} y \ref{tabla:CN2-SP500-2008}. Con estas tablas y las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, podemos comprobar que, en la mayoría de los casos, el exceso de ganancia máximo corresponde precisamente a estos periodos.
+
+\begin{figure}[htbp]
+\centering
+\scalebox{0.8}{\includegraphics[width=1\linewidth]{imagenes/sp500-2008-05-12.jpeg}}
+\caption{\label{imagen:sp500-2008-05-12} Gráfica del precio del SPDR S\&P 500, 2008/05/12 - 2008/09/17}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\scalebox{0.8}{\includegraphics[width=1\linewidth]{imagenes/sp500-2008-09-18.jpeg}}
+\caption{\label{imagen:sp500-2008-09-18} Gráfica del precio del SPDR S\&P 500, 2008/09/18 - 2009/01/27}
+\end{figure}
+
 \begin{center}
-\begin{table}[h]
+\begin{table*}[htbp]
+\centering
+\begin{tabular}{ccccc}
+\hline
+\textbf{AQ periodo 2008} & \textbf{AI-DI} & \textbf{AN-DI} & \textbf{AI-DC} & \textbf{AN-DC} \\
+\hline
+$2008/05/12$ - $2008/09/17$ & $8.13\%$ & $2.33\%$ & $6.14\%$ & $3.57\%$ \\
+$2008/09/18$ - $2009/01/27$ & $34.64\%$ & $22.17\%$ & $29.72\%$ & $20.37	\%$  \\
+\hline
+\end{tabular}
+\caption{\label{tabla:AQ-SP500-2008} Exceso de ganancia del algoritmo AQ en la crisis financiera de 2008}
+\end{table*}
+\end{center}
+
+\begin{center}
+\begin{table*}[htbp]
+\centering
+\begin{tabular}{ccccc}
+\hline
+\textbf{CN2 periodo 2008} & \textbf{AI-DI} & \textbf{AN-DI} & \textbf{AI-DC} & \textbf{AN-DC} \\
+\hline
+$2008/05/12$ - $2008/09/17$ & $0.27\%$ & $-0.38\%$ & $5.06\%$ & $-2.81\%$ \\
+$2008/09/18$ - $2009/01/27$ & $15.69\%$ & $12.32\%$ & $11.81\%$ & $-0.62\%$  \\
+\hline
+\end{tabular}
+\caption{\label{tabla:CN2-SP500-2008} Exceso de ganancia del algoritmo CN2 en la crisis financiera de 2008}
+\end{table*}
+\end{center}
+
+Como se señala en \cite{Lohpetch2010}, el verdadero desafío se encuentra en superar a la estrategia \buyhold en mercados con una tendencia alcista en los precios. Así pues, calculamos el desempeño de cada algoritmo únicamente en periodos en donde se hace presente esta característica. Estos resultados se muestran en las tablas \ref{tabla:AQ-SP500-alza} y \ref{tabla:CN2-SP500-alza}, en total se detectaron 16 periodos con tendencia a la alza.
+
+\begin{center}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{ccccc}
+\hline
+\textbf{AQ periodos a la alza} & \textbf{AI-DI} & \textbf{AN-DI} & \textbf{AI-DC} & \textbf{AN-DC} \\
+\hline
+Exceso de ganancia promedio & $-0.85\%$ & $-2.07\%$ & $-0.59\%$ & $-2.39\%$ \\
+Casos mejores que \buyhold & $5$ & $5$ & $6$ & $5$  \\
+Casos peores que \buyhold & $11$ & $11$ & $10$ & $11$ \\
+Exceso de ganancia máximo & $2.33\%$ & $3.86\%$ & $2.30\%$ & $0.85\%$ \\
+Exceso de ganancia mínimo & $-3.83\%$ & $-12.94\%$ & $-3.85\%$ & $-11.47\%$ \\
+Ganancia monetaria promedio & $\$7,051.72$ & $\$5,830.17$ & $\$7,312.90$ & $\$5,514.90$ \\
+\hline
+\end{tabular}
+\caption{\label{tabla:AQ-SP500-alza}Resultados del algoritmo AQ para el SPDR S\&P 500 en periodos a la alza}
+\end{table}
+\end{center}
+
+
+\begin{center}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{ccccc}
+\hline
+\textbf{CN2 periodos a la alza} & \textbf{AI-DI} & \textbf{AN-DI} & \textbf{AI-DC} & \textbf{AN-DC} \\
+\hline
+Exceso de ganancia promedio & $-2.55\%$ & $-1.84\%$ & $-1.28\%$ & $-2.37\%$ \\
+Casos mejores que \buyhold & $5$ & $6$ & $6$ & $3$  \\
+Casos peores que \buyhold & $11$ & $10$ & $10$ & $13$ \\
+Exceso de ganancia máximo & $0.52\%$ & $9.52\%$ & $1.00\%$ & $0.80\%$ \\
+Exceso de ganancia mínimo & $-12.87\%$ & $-9.43\%$ & $-6.48\%$ & $-8.33\%$ \\
+Ganancia monetaria promedio & $\$5,346.94$ & $\$6,059.76$ & $\$6,624.75$ & $\$5,529.46$ \\
+\hline
+\end{tabular}
+\caption{\label{tabla:CN2-SP500-alza}Resultados del algoritmo CN2 para el SPDR S\&P 500 en periodos a la alza}
+\end{table}
+\end{center}
+
+
+
+\begin{center}
+\begin{table}[htbp]
 \centering
 \begin{tabular}{ccccc}
 \hline
@@ -702,8 +794,8 @@ Ganancia monetaria promedio & $\$792.43$ & $\$946.07$ & $\$1,475.04$ & $\$ 604.9
 Exceso de ganancia promedio & $1.29\%$ & $0.13\%$ & $0.59\%$ & $-0.30\%$ \\
 Casos mejores que \buyhold & $11$ & $8$ & $9$ & $7$  \\
 Casos peores que \buyhold & $14$ & $7$ & $6$ & $8$ \\
-Exceso de ganancia máxima & $6.74\%$ & $5.16\%$ & $4.60\%$ & $1.85\%$ \\
-Exceso de ganancia mínima & $-6.78\%$ & $-6.27\%$ & $-3.44\%$ & $-3.46\%$ \\
+Exceso de ganancia máximo & $6.74\%$ & $5.16\%$ & $4.60\%$ & $1.85\%$ \\
+Exceso de ganancia mínimo & $-6.78\%$ & $-6.27\%$ & $-3.44\%$ & $-3.46\%$ \\
 Ganancia monetaria promedio & $\$1,697.77$ & $\$530.62$ & $\$993.49$ & $\$103.29$ \\
 \hline
 \end{tabular}
@@ -712,7 +804,7 @@ Ganancia monetaria promedio & $\$1,697.77$ & $\$530.62$ & $\$993.49$ & $\$103.29
 \end{center}
 
 \begin{center}
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \begin{tabular}{ccccc}
 \hline
@@ -722,7 +814,7 @@ Exceso de ganancia promedio & $-0.68\%$ & $0.17\%$ & $0.20\%$ & $0.06\%$ \\
 Casos mejores que \buyhold & $7$ & $10$ & $8$ & $9$  \\
 Casos peores que \buyhold & $8$ & $5$ & $7$ & $6$ \\
 Exceso de ganancia máxima & $3.41\%$ & $4.33\%$ & $4.60\%$ & $4.00\%$ \\
-Exceso de ganancia mínima & $-4.87\%$ & $-6.00\%$ & $-3.44\%$ & $-6.46\%$ \\
+Exceso de ganancia mínimo & $-4.87\%$ & $-6.00\%$ & $-3.44\%$ & $-6.46\%$ \\
 Ganancia monetaria promedio & $\$-273.29$ & $\$578.85$ & $\$602.01$ & $\$461.66$ \\
 \hline
 \end{tabular}
@@ -734,6 +826,14 @@ Ganancia monetaria promedio & $\$-273.29$ & $\$578.85$ & $\$602.01$ & $\$461.66$
 
 %=============== Conclusión ================= %
 \chapter{Conclusiones y trabajo futuro}
+%Aprendizaje incremental no es apropiado para CN2 pero si para AQ
+%¿Como establecer las bandas horizontales?
+%Parámetros de los indicadores técnicos
+%Medida de riesgo
+%Otras formas de dar puntajes de las reglas
+%Supuestos del precio de ejecución
+%Otros atributos
+%Incorporar información relativa a la versión semifuerte de la HME
 \label{capitulo:conclusiones}
 
 \section{Conclusiones}
