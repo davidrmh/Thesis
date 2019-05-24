@@ -79,22 +79,37 @@ Agradezco también a cada uno de los miembros de mi comité tutorial por sus val
 %Motivación y ¿qué es lo que se busca con este trabajo?
 %Objetivo general y objetivos particulares.
 %Estructura del trabajo.
-El incremento en el poder de cómputo, la digitalización de los mercados financieros (en particular el mercado accionario) y la oportunidad de ganar dinero, son algunos de los factores que han motivado la investigación y desarrollo de algoritmos computacionales enfocados a guiar la toma de decisiones de inversión, en particular, determinar los momentos adecuados para realizar compras o ventas.
+El incremento en el poder de cómputo, la digitalización de los mercados financieros y la oportunidad de obtener grandes ganancias, son algunos de los factores que han motivado la investigación y desarrollo de algoritmos computacionales enfocados a guiar la toma de decisiones de inversión, en particular, determinar los momentos adecuados para realizar compras o ventas.
 
-A pesar de que la idea básica es comprar barato y vender caro, la incertidumbre y complejidad de los mercados financieros han dado lugar al uso de herramientas computacionales con el fin de guiar la toma de decisiones, concretamente, técnicas relacionadas a la inteligencia artificial han ganado notoriedad.
+A pesar de que la idea básica es comprar barato y vender caro, la incertidumbre y complejidad de los mercados financieros han dado lugar al uso de herramientas computacionales con el fin de guiar la toma de decisiones, concretamente, técnicas relacionadas al aprendizaje de máquina han ganado notoriedad \cite{AdvancesMLFinance}.
 
-El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas \textit{IF..THEN}. Estas reglas se utilizarán para obtener estrategias de inversión cuya ganancia, buscamos, sea superior a la ganancia generada por la estrategia de \textbf{compra y espera} (ver sección \ref{seccion:mercado eficiente}).
+El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas \textit{si...entonces}. Estas reglas se utilizarán para obtener estrategias de inversión cuya ganancia, buscamos, sea superior a la ganancia generada por la estrategia de \buyhold, la cual es usada comúnmente como una estrategia de referencia (ver sección \ref{seccion:mercado eficiente}).
 
-Una de las contribuciones de este trabajo es el análisis del mercado accionario mexicano, el cual está representado por el instrumento llamado \textbf{NAFTRAC ISHRS} (ver sección \ref{seccion:indices accionarios}).
-
-Además, la metodología propuesta busca obtener un modelo interpretable, contrastando con la tendencia actual que se caracteriza por el uso de las llamadas \textit{cajas negras}, e.g., redes neuronales (ver capítulo \ref{capitulo:antecedentes}).
+Además, la metodología propuesta busca obtener un modelo interpretable, contrastando con la tendencia actual que se caracteriza por el uso de las llamadas \textit{cajas negras}, e.g., redes neuronales (ver sección \ref{capitulo:antecedentes}).
 
 Los objetivos particulares de este trabajo son:
 \begin{itemize}
-\item Selección de atributos.
 
-\item Etiquetado de datos.
+\item Proponer una metodología para etiquetar los datos y así poder aplicar algoritmos de aprendizaje supervisado.
+
+\item Proponer una forma de separar los conjuntos de entrenamiento y prueba.
+
+\item Proponer un metodología para poder aplicar un aprendizaje incremental. Esta metodología nos permitirá capturar el comportamiento no estacionario de los mercados, así como aprender de nuestros errores.
 \end{itemize}
+
+Finalmente, una de nuestras principales contribuciones es el análisis del mercado accionario mexicano desde una enfoque basado en reglas. Hasta donde sabemos, esta es la primera vez que se analiza este mercado utilizando este enfoque.
+
+La estructura de este trabajo es la siguiente:
+
+En la sección \ref{capitulo:antecedentes}, se dan los antecedentes del problema y se exploran las distintas metodologías que han sido empleadas con el fin de generar estrategias de inversión. Se hace un comparativo entre los enfoques utilizados así como los tipo de mercado analizados.
+
+En la sección \ref{capitulo:marco teorico}, se da un panorama general sobre el funcionamiento de los mercados de índices accionarios, se explica la hipótesis del mercado eficiente así como sus posibles versiones y el tipo de información relacionada a cada una de ellas. Se explica la estrategia \buyhold y la métrica de desempeño que se utilizará para evaluar nuestras estrategias. En la sección \ref{subseccion:indicadores tecnicos} se explican los atributos que se utilizarán y en la sección \ref{seccion:algoritmos aq cn2} los algoritmos de inducción de reglas utilizados.
+
+La sección \ref{capitulo:solucion propuesta}, explica los datos utilizados y la metodología propuesta, se establece la metodología de etiquetado y la forma de separar los conjuntos de entrenamiento y prueba. Finalmente se explica la forma en que se realiza el aprendizaje incremental propuesto, así como los supuestos bajo los cuales trabajaremos.
+
+La sección \ref{capitulo:resultados experimentales} contiene los resultados experimentales de cada uno de los experimentos.
+
+Para finalizar, la sección \ref{capitulo:conclusiones} trata las conclusiones obtenidas así como las posibles direcciones para extender este trabajo.
 
 
 
@@ -338,7 +353,7 @@ Las señales de compra y venta del indicador CCI se basan en la hipótesis de qu
 
 \subsection{Algoritmo AQ}
 \label{subseccion:algoritmo aq}
-El algoritmo cuasi-óptimo (AQ), es un algoritmo de aprendizaje supervisado, que induce un conjunto de reglas del tipo \textit{Si-entonces} (ver \cite{AQCervone2010}, \cite{AQMichalski1991} y \cite{AQWojtusiak2012} para un estudio detallado). 
+El algoritmo cuasi-óptimo (AQ), es un algoritmo de aprendizaje supervisado, que induce un conjunto de reglas del tipo \textit{si...entonces} (ver \cite{AQCervone2010}, \cite{AQMichalski1991} y \cite{AQWojtusiak2012} para un estudio detallado). 
 
 Dado un conjunto, $P$, con $n$ observaciones, $P_1, P_2, \ldots, P_n$ (ejemplos de la clase positiva)  y un conjunto, $N$, con $m$ observaciones, $Q_1, Q_2, \ldots, Q_m$ (ejemplos de la clase negativa), el algoritmo AQ encuentra un conjunto de reglas que son completas (cubren todos los ejemplos de la clase positiva) y consistentes (no cubren ejemplos de la clase negativa).
 
