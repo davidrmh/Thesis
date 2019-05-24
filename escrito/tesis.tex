@@ -633,7 +633,7 @@ $$P_{V}(1 - 0.0025)$$
 %=============== Resultados ================= %
 \chapter{Resultados experimentales}
 \label{capitulo:resultados experimentales}
-Utilizando la metodología descrita en el capítulo \ref{capitulo:solucion propuesta}, para cada TRAC (ver sección \ref{seccion:indices accionarios}) se realizaron cuatro experimentos distintos. Estos experimentos exploran dos alternativas distintas para discretizar los atributos continuos, \cite{dataMiningUsingR}, así como el tipo de aprendizaje aplicado (incremental o no incremental, ver sección \ref{seccion:aprendizaje incremental}).
+Utilizando la metodología descrita en el capítulo \ref{capitulo:solucion propuesta}, para cada TRAC (ver sección \ref{seccion:indices accionarios}) se realizaron cuatro experimentos distintos. Estos experimentos exploran dos alternativas distintas para discretizar los atributos continuos, \cite{dataMiningUsingR}, así como el tipo de aprendizaje aplicado (incremental o no incremental).
 
 El primero de los métodos de discretización (al cual denotaremos como DI), se basa en crear intervalos con el mismo tamaño, sin importar la distribución de los valores de cada atributo; por otro lado, el segundo método (denotado como DC) utiliza los cuantiles de cada atributo con el fin de crear intervalos equiprobables.
 
@@ -650,7 +650,9 @@ Así pues, tenemos los siguiente experimentos:
 
 \end{itemize}
 
-Las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, muestran un resumen de los resultados obtenidos para los $30$ conjuntos de prueba con la información del SPDR S\&P 500.
+\section{Resultados para el SPDR S\&P 500}
+\label{seccion:resultados sp500}
+Las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, muestran un resumen de los resultados obtenidos en los $30$ conjuntos de prueba con la información del SPDR S\&P 500.
 
 
 \begin{center}
@@ -693,17 +695,17 @@ Ganancia monetaria promedio & $\$792.43$ & $\$946.07$ & $\$1,475.04$ & $\$ 604.9
 \end{table}
 \end{center}
 
-Como se observa en la tabla \ref{tabla:AQ-SP500}, para el algortimo AQ, el aprendizaje incremental resulta superior al no incremental para ambos métodos de discretización, obteniendo un exceso de ganancia promedio positivo (aunque muy pequeño).
+Como se observa en la tabla \ref{tabla:AQ-SP500}, para el algortimo AQ, el aprendizaje incremental resulta superior al no incremental en ambos métodos de discretización, obteniendo un exceso de ganancia promedio positivo (aunque muy pequeño).
 
 Por otro lado, como se muestra en la tabla \ref{tabla:CN2-SP500}, el algoritmo CN2 se desempeña pobremente en todos los experimentos, aunque se obtiene el mejor resultado utilizando un algoritmo de aprendizaje incremental.
-
-Es importante señalar que estamos considerando dos periodos correspondientes a la crisis financiera de 2008\footnote{Crisis hipotecaria en Estados Unidos}, como se ilustra en las imágenes \ref{imagen:sp500-2008-05-12} y \ref{imagen:sp500-2008-09-18}, durante estos periodos el precio mostró una fuerte tendencia a la baja, en consecuencia, superar la ganancia de la estrategia \buyhold no implica reto alguno como se puede constatar analizando las tablas \ref{tabla:AQ-SP500-2008} y \ref{tabla:CN2-SP500-2008}. Con estas tablas y las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, podemos comprobar que, en la mayoría de los casos, el exceso de ganancia máximo corresponde precisamente a estos periodos.
 
 \begin{figure}[htbp]
 \centering
 \scalebox{0.8}{\includegraphics[width=1\linewidth]{imagenes/sp500-2008-05-12.jpeg}}
 \caption{\label{imagen:sp500-2008-05-12} Gráfica del precio del SPDR S\&P 500, 2008/05/12 - 2008/09/17}
 \end{figure}
+
+Es importante señalar que estamos considerando dos periodos correspondientes a la crisis financiera de 2008\footnote{Crisis hipotecaria en Estados Unidos}, como se ilustra en las imágenes \ref{imagen:sp500-2008-05-12} y \ref{imagen:sp500-2008-09-18}, durante estos periodos el precio mostró una fuerte tendencia a la baja, en consecuencia, superar la ganancia de la estrategia \buyhold no implica reto alguno como se puede constatar analizando las tablas \ref{tabla:AQ-SP500-2008} y \ref{tabla:CN2-SP500-2008}. Con estas tablas y las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, podemos comprobar que, en la mayoría de los casos, el exceso de ganancia máximo corresponde precisamente a estos periodos.
 
 \begin{figure}[htbp]
 \centering
@@ -742,8 +744,6 @@ $2008/09/18$ - $2009/01/27$ & $15.69\%$ & $12.32\%$ & $11.81\%$ & $-0.62\%$  \\
 \end{center}
 
 Así pues, como se señala en \cite{Lohpetch2010}, el verdadero desafío se encuentra en superar a la estrategia \buyhold en mercados con una tendencia alcista en los precios. Por lo tanto, calculamos el desempeño de cada algoritmo únicamente en periodos en donde se hace presente este tipo de tendencia. En total se detectaron 16 periodos con tendencia a la alza, los resultados se muestran en las tablas \ref{tabla:AQ-SP500-alza} y \ref{tabla:CN2-SP500-alza}.
-
-De acuerdo a estas tablas, en ningún caso los algoritmos fueron capaces de vencer a la estrategia \buyhold. Sin embargo, nuevamente para el algoritmo AQ los mejores resultados se obtienen con un aprendizaje incremental.
 
 \begin{center}
 \begin{table}[htbp]
@@ -784,11 +784,11 @@ Ganancia monetaria promedio & $\$5,346.94$ & $\$6,059.76$ & $\$6,624.75$ & $\$5,
 \end{table}
 \end{center}
 
-Por otro lado, analizando los 15 conjuntos de prueba con la información del NAFTRAC obtenemos los resultados de las tablas  \ref{tabla:AQ-NAFTRAC} y \ref{tabla:CN2-NAFTRAC}.
+De acuerdo a estas tablas, en ningún caso los algoritmos fueron capaces de vencer a la estrategia \buyhold. Sin embargo, nuevamente para el algoritmo AQ los mejores resultados se obtienen con un aprendizaje incremental.
 
-De la misma forma que en los experimentos anteriores, el algoritmo AQ con aprendizaje incremental obtiene los mejores resultados para cada método de discretización, mientras que el algoritmo CN2 nuevamente presenta un desempeño pobre.
-
-Ahora, enfocándonos en los periodos a la alza (se detectaron un total de 7 periodos con esta tendencia), como se muestra en las tablas \ref{tabla:AQ-NAFTRAC-alza} y \ref{tabla:CN2-NAFTRAC-alza} ambos algoritmos fueron capaces de vencer a la estrategia \buyhold en 3 de 4 experimentos obteniéndose el mejor resultado con el algoritmo AQ utilizando un aprendizaje incremental y una discretización basada en cuantiles.
+\section{Resultados para el NAFTRAC}
+\label{seccion:resultados NAFTRAC}
+Analizando los 15 conjuntos de prueba con la información del NAFTRAC obtenemos los resultados de las tablas  \ref{tabla:AQ-NAFTRAC} y \ref{tabla:CN2-NAFTRAC}.
 
 \begin{center}
 \begin{table}[h]
@@ -828,6 +828,10 @@ Ganancia monetaria promedio & $\$-273.29$ & $\$578.85$ & $\$602.01$ & $\$461.66$
 \end{table}
 \end{center}
 
+De la misma forma que en los experimentos anteriores, el algoritmo AQ con aprendizaje incremental obtiene los mejores resultados para cada método de discretización, mientras que el algoritmo CN2 nuevamente presenta un desempeño pobre.
+
+Enfocándonos en los periodos a la alza (se detectaron un total de 7 periodos con esta tendencia), como se muestra en las tablas \ref{tabla:AQ-NAFTRAC-alza} y \ref{tabla:CN2-NAFTRAC-alza} ambos algoritmos fueron capaces de vencer a la estrategia \buyhold en 3 de 4 experimentos, obteniéndose el mejor resultado con el algoritmo AQ utilizando un aprendizaje incremental y una discretización basada en cuantiles.
+
 \begin{center}
 \begin{table}[h]
 \centering
@@ -847,6 +851,8 @@ Ganancia monetaria promedio & $\$5,201.07$ & $\$5,895.67$ & $\$6,562.47$ & $\$4,
 \end{table}
 \end{center}
 
+Finalmente, observemos que sólo en un caso obtuvimos una ganancia monetaria promedio negativa (algoritmo CN2 experimento AI-DI, tabla \ref{tabla:CN2-NAFTRAC}), en el resto de los experimentos, aún cuando no vencemos a la estrategia \buyhold, en promedio, no perdemos dinero, una características claramente deseable.
+
 \begin{center}
 \begin{table}[htbp]
 \centering
@@ -865,6 +871,7 @@ Ganancia monetaria promedio & $\$4,605.01$ & $\$6,079.97$ & $\$5,294.73$ & $\$5,
 \caption{\label{tabla:CN2-NAFTRAC-alza} Resultados del algoritmo CN2 para el NAFTRAC en periodos a la alza}
 \end{table}
 \end{center}
+
 
 
 %=============== Conclusión ================= %
