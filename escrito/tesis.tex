@@ -851,8 +851,6 @@ Ganancia monetaria promedio & $\$5,201.07$ & $\$5,895.67$ & $\$6,562.47$ & $\$4,
 \end{table}
 \end{center}
 
-Finalmente, observemos que sólo en un caso obtuvimos una ganancia monetaria promedio negativa (algoritmo CN2 experimento AI-DI, tabla \ref{tabla:CN2-NAFTRAC}), en el resto de los experimentos, aún cuando no vencemos a la estrategia \buyhold, en promedio, no perdemos dinero, una características claramente deseable.
-
 \begin{center}
 \begin{table}[htbp]
 \centering
@@ -876,7 +874,19 @@ Ganancia monetaria promedio & $\$4,605.01$ & $\$6,079.97$ & $\$5,294.73$ & $\$5,
 
 %=============== Conclusión ================= %
 \chapter{Conclusiones y trabajo futuro}
+\label{capitulo:conclusiones}
+%Las reglas aprendidas tienen sentido financiero?
 %Aprendizaje incremental no es apropiado para CN2 pero si para AQ
+\section{Conclusiones}
+\label{seccion:conclusiones}
+De acuerdo a los resultados de la sección \ref{capitulo:resultados experimentales}, tanto como para el mercado mexicano como para el estadounidense, el algoritmo AQ con aprendizaje incremental, es superior a cualquier versión del algoritmo CN2. Más aún, para el caso del mercado mexicano, este algoritmo logra vencer (en promedio) a la estrategia \buyhold aún en mercados que presentan una tendencia a la alza. 
+
+Es importante señalar que, a pesar de que no siempre vencemos a la estrategia \buyhold, únicamente en un caso obtuvimos una ganancia monetaria promedio negativa (algoritmo CN2 experimento AI-DI, tabla \ref{tabla:CN2-NAFTRAC}), en el resto de los experimentos, en promedio, no perdemos dinero, una característica claramente deseable para cualquier algoritmo de inversión.
+
+Finalmente, desde el punto de vista de la teoría económica, nuestros resultados experimentales indican que el mercado mexicano es menos eficiente que el mercado estadounidense. Esto está en línea con lo que se expone en \cite{CFA2019}, en donde se señala que uno de los factores que contribuye a la eficiencia del mercado, es el número de participantes que hay en este (a mayor número de participantes, mayor eficiencia hay).
+
+\section{Trabajo futuro}
+\label{seccion:trabajo futuro}
 %¿Como establecer las bandas horizontales?
 %Parámetros de los indicadores técnicos
 %Medida de riesgo
@@ -884,13 +894,19 @@ Ganancia monetaria promedio & $\$4,605.01$ & $\$6,079.97$ & $\$5,294.73$ & $\$5,
 %Supuestos del precio de ejecución
 %Otros atributos
 %Incorporar información relativa a la versión semifuerte de la HME
-\label{capitulo:conclusiones}
+Entre las posibles líneas de extensión de este trabajo, se encuentran:
 
-\section{Conclusiones}
-\label{seccion:conclusiones}
+\begin{itemize}
+\item Incorporar otro tipo de información pública, esto es, extender este trabajo con el fin de vencer la versión semifuerte de la hipótesis del mercado eficiente.
 
-\section{Trabajo futuro}
-\label{seccion:trabajo futuro}
+\item Investigar el uso de otros indicadores técnicos, así como los parámetros de estos.
+
+\item Analizar el desempeño de las estrategias considerando alguna medida de riesgo utilizada las finanzas.
+
+\item Investigar la posición óptima para los límites de las señales de venta.
+
+\item Probar con datos en escalas de tiempo más finas, por ejemplo, datos de cada 5 minutos.
+\end{itemize}
 
 
 \bibliography{references}
