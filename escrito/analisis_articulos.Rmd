@@ -1,0 +1,27 @@
+---
+title: "Análisis de artículos"
+author: David Montalván
+output: revealjs::revealjs_presentation
+---
+
+# Using genetic algorithms to find technical trading rules
+
+##  Using genetic algorithms to find technical trading rules
+
+- **Autor(es):** Franklin Allen y Risto Karjalainen (1999)
+
+- **Metodología:** Programación genética.
+
+- **Datos:** Datos diarios del S&P500 de 1928 a 1995
+
+- **Métrica de desempeño:** Exceso de ganancia sobre *buy-and-hold*.
+
+- **Considera costos de transacción:** Si.
+
+## Puntos interesantes
+
+- Se realiza un análisis de que tan sensible es la metodología respecto a los costos de transacción.
+
+## Críticas
+
+- Los conjuntos de entrenamiento y prueba abarcan un periodo amplio de tiempo, parece que se espera que las reglas encontradas entrenando con datos de, digamos 10 años, funcionen para un periodo de 50 años.
