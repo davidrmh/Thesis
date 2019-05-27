@@ -92,3 +92,30 @@ output: revealjs::revealjs_presentation
 - A pesar de que para 9 de las 14 acciones consideradas se vence *buy-and-hold*, no se consideran costos de transacción.
 
 - Los conjuntos de entrenamiento, aún en su versión de corto plazo, considera un periodo de tiempo grande. En mi opinión, se espera que las reglas de hace un año funcionen para el siguiente año, es decir, no se considera la no estacionariedad de los mercados y el hecho de que las noticias del pasado no impactan de la misma forma que las noticias más recientes.
+
+
+# Trading in Financial Markets using Pattern Recognition Optimized by Genetic Algorithms (12th Annual Genetic and Evolutionary Computation Conference, GECCO-2010)
+
+## Trading in Financial Markets using Pattern Recognition Optimized by Genetic Algorithms
+
+- **Metodología:** Emparejamiento de patrones y algoritmos genéticos
+
+- **Datos:** Datos diarios del S&P 500, Dow Jones y NYSE Composite 1998 2010.
+
+- **Métrica de desempeño:** Exceso de ganancia sobre *buy-and-hold*.
+
+- **Obtiene resultados favorables de acuerdo a su métrica**: Si
+
+- **Considera costos de transacción:** No
+
+- **Se permiten ventas en corto:** No
+
+## Aspectos interesantes
+
+- Este trabajo es similar al trabajo de *Stock market trading rule discovery using technical charting heuristics*, sólo que se agrega un algoritmo genético el cual optimiza los parámetros que antes se consideraban fijos.
+
+## Críticas
+
+- No considera costos de transacción.
+
+- La redacción del artículo es pésima.
