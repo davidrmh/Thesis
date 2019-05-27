@@ -4,24 +4,91 @@ author: David Montalván
 output: revealjs::revealjs_presentation
 ---
 
-# Using genetic algorithms to find technical trading rules
+# Using genetic algorithms to find technical trading rules (journal of economics finance - 1999)
 
 ##  Using genetic algorithms to find technical trading rules
 
-- **Autor(es):** Franklin Allen y Risto Karjalainen (1999)
+- **Metodología:** Programación genética (aprendizaje no supervisado)
 
-- **Metodología:** Programación genética.
-
-- **Datos:** Datos diarios del S&P500 de 1928 a 1995
+- **Datos:** Datos diarios del S&P500 de 1928 a 1995.
 
 - **Métrica de desempeño:** Exceso de ganancia sobre *buy-and-hold*.
 
+- **Obtiene resultados favorables de acuerdo a su métrica**: No
+
 - **Considera costos de transacción:** Si.
 
-## Puntos interesantes
+- **Se permiten ventas en corto:** No
+
+## Aspectos interesantes
 
 - Se realiza un análisis de que tan sensible es la metodología respecto a los costos de transacción.
-
+  
 ## Críticas
 
 - Los conjuntos de entrenamiento y prueba abarcan un periodo amplio de tiempo, parece que se espera que las reglas encontradas entrenando con datos de, digamos 10 años, funcionen para un periodo de 50 años.
+
+- Se utiliza un número limitado de indicadores técnicos, concretamente, promedios, máximos y mínimos.
+
+# Stock market trading rule discovery using technical charting heuristics (Expert Systems with Applications - 2002)
+
+## Stock market trading rule discovery using technical charting heuristics
+
+- **Metodología:** Emparejamiento de patrones (template match, aprendizaje no supervisado)
+
+- **Datos:** Datos diarios del NYSE Composite 1980 - 1999.
+
+- **Métrica de desempeño:** Exceso de ganancia sobre *buy-and-hold* (ver críticas)
+
+- **Obtiene resultados favorables de acuerdo a su métrica**: Si
+
+- **Considera costos de transacción:** No
+
+- **Se permiten ventas en corto:** No se explica.
+
+## Aspectos interesantes
+
+- Esta metodología nos permite obtener reglas claras de cuando comprar y cuando vender.
+
+- De acuerdo a los resultados, parece ser que los patrones en las gráficas son de utilidad para predecir el movimiento del mercado.
+
+- La metodología para separar los conjuntos de entrenamiento y prueba involucra una ventana de tiempo deslizante.
+
+## Críticas
+- No se consideran costos de transacción.
+
+- La metodología no es interpretable ya que está basada en un emparejamiento de patrones.
+
+- El consecuente de las reglas nos dice *vender 100 días después de la señal de compra*, ¿por qué 100 días?
+
+- Sólamente se considera un tipo de patrón para realizar el emparejamiento (bull flag)
+
+- El cálculo de *buy-and-hold* se basa en el promedio de las ganancias, no en comprar en $t=0$ vender en $t=T$.
+
+# Generating trading rules on the stock markets with genetic programming (computers & operations research - 2004)
+
+## Generating trading rules on the stock markets with genetic programming
+
+- **Metodología:** Programación genética (aprendizaje no supervisado)
+
+- **Datos:** Datos diarios 14 compañias canadienses que forman paret del índice TSE 300.
+
+- **Métrica de desempeño:** Exceso de ganancia sobre *buy-and-hold*.
+
+- **Obtiene resultados favorables de acuerdo a su métrica**: Sólo en mercados a la baja o estables.
+
+- **Considera costos de transacción:** No
+
+- **Se permiten ventas en corto:** Si
+
+## Aspectos interesantes
+
+- Se utilizan dos métodos para inicializar la población (árboles). Uno está basado en crear árboles con una longitud máxima especificada, mientras que el otro crea árboles con a lo más cierta profundidad.
+
+- Se consideran dos conjuntos de entrenamiento, uno de corto plazo (datos de un año) y otro de largo plazo (datos de 6 años).
+
+## Críticas
+
+- A pesar de que para 9 de las 14 acciones consideradas se vence *buy-and-hold*, no se consideran costos de transacción.
+
+- Los conjuntos de entrenamiento, aún en su versión de corto plazo, considera un periodo de tiempo grande. En mi opinión, se espera que las reglas de hace un año funcionen para el siguiente año, es decir, no se considera la no estacionariedad de los mercados y el hecho de que las noticias del pasado no impactan de la misma forma que las noticias más recientes.
