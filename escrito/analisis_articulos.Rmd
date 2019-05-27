@@ -119,3 +119,35 @@ output: revealjs::revealjs_presentation
 - No considera costos de transacción.
 
 - La redacción del artículo es pésima.
+
+# Investment using evolutionary learning methods and technical rules (European Journal of Operational Research - 2010)
+
+## Investment using evolutionary learning methods and technical rules
+
+- **Metodología:** Aprendizaje evolutivo
+
+- **Datos:** Datos diarios del S&P 500, 2000 - 2006
+
+- **Métrica de desempeño:** Exceso de ganancia sobre *buy-and-hold*.
+
+- **Obtiene resultados favorables de acuerdo a su métrica**: Sólo en mercados a la baja o estables
+
+- **Considera costos de transacción:** Si
+
+- **Se permiten ventas en corto:** No
+
+## Aspectos interesantes
+
+- Este trabajo considera dos funciones objetivo, una de sentido estadístico y otra de sentido económico.
+
+- Se considera una medida de riesgo (desviación estándar) para medir el desempeño de las estrategias.
+
+- La metodología está basada en elegir el mejor conjunto de indicadores técnicos y no en la inducción de reglas.
+Se utilizan las reglas de la literatura financiera.
+
+- Separan los datos de acuerdo al tipo de tendencia presente en el mercado.
+
+## Críticas
+
+- Aunque en la metodología se involucra un conjunto de datos etiquetados, no se explica como se obtiene dicho etiquetado.
+
