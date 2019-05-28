@@ -40,7 +40,7 @@ output: revealjs::revealjs_presentation
 
 - **Métrica de desempeño:** Exceso de ganancia sobre *buy-and-hold* (ver críticas)
 
-- **Obtiene resultados favorables de acuerdo a su métrica**: Si
+- **Obtiene resultados favorables de acuerdo a su métrica**: Si (intentar replicar)
 
 - **Considera costos de transacción:** No
 
@@ -53,6 +53,7 @@ output: revealjs::revealjs_presentation
 - De acuerdo a los resultados, parece ser que los patrones en las gráficas son de utilidad para predecir el movimiento del mercado.
 
 - La metodología para separar los conjuntos de entrenamiento y prueba involucra una ventana de tiempo deslizante.
+
 
 ## Críticas
 - No se consideran costos de transacción.
@@ -150,4 +151,62 @@ Se utilizan las reglas de la literatura financiera.
 ## Críticas
 
 - Aunque en la metodología se involucra un conjunto de datos etiquetados, no se explica como se obtiene dicho etiquetado.
+
+
+# Outperforming Buy-and-Hold with Evolved Technical Trading Rules: Daily, Weekly and Monthly Trading (Applications of Evolutionary Computation - 2010)
+
+## Outperforming Buy-and-Hold with Evolved Technical Trading Rules: Daily, Weekly and Monthly Trading
+
+- **Metodología:** Programación genética
+
+- **Datos:** Datos diarios del S&P 500
+
+- **Métrica de desempeño:** Exceso de ganancia sobre *buy-and-hold*.
+
+- **Obtiene resultados favorables de acuerdo a su métrica**: Si
+
+- **Considera costos de transacción:** Si
+
+- **Se permiten ventas en corto:** No
+
+## Aspectos interesantes
+
+- Se analizan datos semanales y mensuales, no sólamente diarios como es lo usual.
+
+- Este trabajo considera dos formas de separar los datos
+
+- La función de aptitud es diferente y busca considerar tanto la profundidad de los árboles como su desempeño.
+
+## Críticas
+
+- El costo de transacción considerado ($0.05\%$) es menor al de otros trabajos ($0.25\%$)
+
+
+# A method for automatic stock trading combining technical analysis and nearest neighbor classification (Expert Systems with Applications journal - 2010)
+
+## A method for automatic stock trading combining technical analysis and nearest neighbor classification
+
+- **Metodología:** K-NN
+
+- **Datos:** Datos diarios 15 series accionarias brasileñas
+
+- **Métrica de desempeño:** Exceso de ganancia sobre *buy-and-hold*.
+
+- **Obtiene resultados favorables de acuerdo a su métrica**: Si (replicar)
+
+- **Considera costos de transacción:** Si
+
+- **Se permiten ventas en corto:** No
+
+## Aspectos interesantes
+
+- Con un método simple obtienen buenos resultados.
+
+- Consideran bandas horizontales de stop loss y stop gain.
+
+- Separación de datos con una ventana deslizante.
+
+## Críticas
+
+- Utilizan un método de aprendizaje supervisado pero no explican como se etiquetan los datos.
 
