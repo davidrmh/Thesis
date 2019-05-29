@@ -14,7 +14,7 @@
 \publishers{Centro de Investigación en Computación, Instituto Politécnico Nacional}
 \date{}
 \author{David Ricardo Montalván Hernández}
-
+	
 %=========Define los ambientes a utilizar =======%
 %Define estilo para dar un salto de línea en el encabezado
 %del 'teorema'
@@ -120,19 +120,23 @@ Para finalizar, la sección \ref{capitulo:conclusiones} trata las conclusiones o
 %orden cronológico
 %Tabla con referencia, mercado, metodologia
 %Tabla con referencia, vence bh, considera costos de transacción
-Uno de los primeros artículos en los cuales se utilizan técnicas relacionadas al aprendizaje de reglas es \cite{Allen1999}, en este trabajo se utiliza una metodología basada en programación genética, obteniéndose de esta manera un conjunto de reglas \textit{si...entonces} para operar en el mercado. Los autores analizan el mercado accionario de Estados Unidos utilizando la información del índice accionario S\&P 500 (ver sección \ref{seccion:indices accionarios}) y comparándose contra la estrategia \buyhold (ver sección \ref{seccion:buy and hold}) obteniendo resultados poco favorecedores.
+Uno de los primeros artículos en los cuales se utilizan técnicas relacionadas al aprendizaje de reglas es \cite{Allen1999}, en este trabajo se utiliza una metodología basada en programación genética, obteniéndose de esta manera un conjunto de reglas \textit{si...entonces}, para operar en el mercado. Los autores analizan el mercado accionario de Estados Unidos utilizando la información del índice accionario S\&P 500 (ver sección \ref{seccion:indices accionarios}) y comparándose contra la estrategia \buyhold (ver sección \ref{seccion:buy and hold}) obteniendo resultados poco favorecedores.
 
 En \cite{Leigh2002}, se utiliza un enfoque basado en emparejamiento de patrones (template match) a partir del cual se obtienen un conjunto de reglas \textit{si...entonces}. Esta metodología se basa en detectar patrones en las gráficas de los precios, concretamente, se busca el patrón llamado \textit{bull flag} el cual es considerado como un patrón que indica el inicio de una tendencia a la alza en los precios. Este artículo utiliza la estrategia \buyhold como estrategia de referencia, obteniendo mayores ganancias que esta, sin embargo, cabe señalar que no se consideran costos de transacción, haciendo que la metodología se vuelva poco realista. El mercado analizado es el mercado de Estados Unidos a través del índice accionario NYSE Composite.
 
-Los autores en \cite{Potvin2004}, retoma el trabajo de \cite{Allen1999} modificando la forma de en que se crean los árboles y considerando $14$ compañías canadienses que forman parte del índice accionario TSE $300$. A pesar de que vencen a la estrategia \buyhold en $9$ de las $14$ compañías, no se consideran costos de transacción.
+Los autores en \cite{Potvin2004}, retoman el trabajo de \cite{Allen1999} modificando la forma en que se crean los árboles y considerando $14$ compañías canadienses que forman parte del índice accionario TSE $300$. A pesar de que vencen a la estrategia \buyhold en $9$ de las $14$ compañías, no se consideran costos de transacción.
 
-En \cite{Parracho2010}, se retoma el trabajo de \cite{Leigh2002} introduciendo un algoritmo genético para realizar un proceso de optimización sobre parámetros que antes se consideraban fijos. Nuevamente el patrón \textit{bull flag} es el único considerado y, a pesar de vencer a la estrategia \buyhold, no se consideran costos de transacción.
+En \cite{Parracho2010}, se retoma el trabajo de \cite{Leigh2002} introduciendo un algoritmo genético para realizar un proceso de optimización sobre parámetros que antes se consideraban fijos. Se obtienen resultados favorecedores pero sin considerar costos de transacción.
 
-Una línea totalmente distinta a los artículos anteriores, es el trabajo de \cite{Kaucic2010}. En este trabajo no se busca obtener un conjunto de reglas \textit{si...entonces}, si no que busca encontrar, a través de un aprendizaje evolutivo, la mejor combinación de indicadores técnicos (ver sección \ref{seccion:analisisTecnico}) con los cuales se busca determinar los momentos adecuados para comprar o vender. Únicamente se logra vencer a la estrategia \buyhold en mercados a la baja o estables (considerando costos de transacción). Se analiza el mercado accionario de Estados Unidos.
+Una línea totalmente distinta a los artículos anteriores es el trabajo de \cite{Kaucic2010}. En este, no se busca obtener un conjunto de reglas \textit{si...entonces}, si no que busca encontrar, a través de un aprendizaje evolutivo, la mejor combinación de indicadores técnicos (ver sección \ref{seccion:analisisTecnico}) con la cual se busca determinar los momentos adecuados para comprar o vender. Únicamente se logra vencer a la estrategia \buyhold en mercados a la baja o estables (considerando costos de transacción). Se analiza el mercado accionario de Estados Unidos.
 
 Los trabajos \cite{Allen1999} y \cite{Potvin2004}, se retoman en \cite{Lohpetch2010}, en donde no sólo se usan precios diarios, si no que también se utilizan precios semanales y mensuales, además, en el proceso evolutivo que crea los árboles, se utiliza una función de aptitud que penaliza la complejidad de estos, evitando así un sobre ajuste en los datos de entrenamiento. En este trabajo se logra vencer a la estrategia \buyhold aún considerando costos de transacción.
 
-En \cite{Teixeira2010}, se logra vencer a la estrategia \buyhold (considerando costos de transacción) utilizando una metodología basada en el algoritmo \textit{k nearest neighbors} (K-NN). Se analizan $15$ series accionarias pertenecientes al mercado brasileño.
+En \cite{Teixeira2010}, se logra vencer a la estrategia \buyhold (considerando costos de transacción) utilizando una metodología basada en el algoritmo \textit{k nearest neighbors} (K-NN). Se analizan $15$ series accionarias pertenecientes al mercado brasileño. Una propuesta interesante de este artículo, es el uso de límites que capturan el perfil de riesgo de los inversionistas\footnote{En finanzas estos límites son llamados stop loss y take profits} (ver sección \ref{seccion:limites ventas}).
+
+\nocite{Preen2010}
+
+La serie de artículos \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016}; desarrolla una metodología en la cual se busca reducir la dimensión de la serie de tiempo al identificar los llamados "puntos perceptualmente importantes" (perceptually important points, PIPs), una vez identificados estos puntos se calcula la variación porcentual entre ellos y de acuerdo a esta cantidad la serie de tiempo es convertida a cadena de símbolos. Estos símbolos son comparados con un patrón base obtenido a través de un algoritmo genético y de acuerdo a esta comparación se obtienen las señales de compra. Se vence a la estrategia \buyhold pero no se consideran costos de transacción.
 
 %=============== Marco teórico ================= %
 \chapter{Marco teórico}

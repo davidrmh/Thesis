@@ -210,3 +210,30 @@ Se utilizan las reglas de la literatura financiera.
 
 - Utilizan un método de aprendizaje supervisado pero no explican como se etiquetan los datos.
 
+
+# Combining rules between PIPs and SAX to identify patterns in financial markets (Expert Systems With Applications - 2016)
+
+## Combining rules between PIPs and SAX to identify patterns in financial markets
+
+- **Metodología:** PIP y SAX
+
+- **Datos:** Datos diarios de 422 acciones del  S&P 500
+
+- **Métrica de desempeño:** Exceso de ganancia sobre *buy-and-hold*.
+
+- **Obtiene resultados favorables de acuerdo a su métrica**: Si (replicar)
+
+- **Considera costos de transacción:** No
+
+- **Se permiten ventas en corto:** No
+
+## Aspectos interesantes
+
+- Además de encontrar reglas de compra, se encuentran patrones gráficos relacionadas a estas.
+
+- Se consideran tres métodos para tomar una decisión de venta, entre ellos se consideran bandas de stop loss y take proftis.
+
+
+## Críticas
+
+- No se consideran costos de transacción, aunque en el artículo que se una justificación de esto.
