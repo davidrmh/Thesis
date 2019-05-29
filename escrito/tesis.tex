@@ -6,9 +6,11 @@
 \usepackage{amssymb}
 \usepackage{makeidx}
 \usepackage{graphicx}
-\usepackage{natbib}
+\usepackage[square,sort,comma,numbers]{natbib}
 \usepackage{url}
 %\usepackage{float}
+
+\bibliographystyle{elsarticle-harv}
 
 \title{Aprendizaje automático de reglas para operar en los mercados de índices accionarios}
 \publishers{Centro de Investigación en Computación, Instituto Politécnico Nacional}
@@ -69,6 +71,12 @@ Agradezco a mi director de tesis el doctor Salvador Godoy Calderón por enseñar
 Agradezco también a cada uno de los miembros de mi comité tutorial por sus valiosas observaciones.
 
 \chapter*{Resumen}
+El incremento en el poder de cómputo, la digitalización de los mercados financieros y la oportunidad de obtener grandes ganancias, son algunos de los factores que han motivado la investigación y desarrollo de algoritmos computacionales enfocados a guiar la toma de decisiones de inversión, en particular, determinar los momentos adecuados para realizar compras o ventas.
+
+En este trabajo se propone una metodología para aprender, de manera automática, un conjunto de reglas de la forma \textit{si...entonces}, las cuales nos permitirán generar estrategias de inversión en el mercado accionario mexicano.
+
+Además de analizar
+
 \chapter*{Abstract}
 
 \pagenumbering{arabic} %Numeración árabe
@@ -134,7 +142,7 @@ Los trabajos \cite{Allen1999} y \cite{Potvin2004}, se retoman en \cite{Lohpetch2
 
 En \cite{Teixeira2010}, se logra vencer a la estrategia \buyhold (considerando costos de transacción) utilizando una metodología basada en el algoritmo \textit{k nearest neighbors} (K-NN). Se analizan $15$ series accionarias pertenecientes al mercado brasileño. Una propuesta interesante de este artículo, es el uso de límites que capturan el perfil de riesgo de los inversionistas\footnote{En finanzas estos límites son llamados stop loss y take profits} (ver sección \ref{seccion:limites ventas}).
 
-\nocite{Preen2010}
+
 
 La serie de artículos \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016}; desarrolla una metodología en la cual se busca reducir la dimensión de la serie de tiempo al identificar los llamados "puntos perceptualmente importantes" (perceptually important points, PIPs), una vez identificados estos puntos se calcula la variación porcentual entre ellos y de acuerdo a esta cantidad la serie de tiempo es convertida a cadena de símbolos. Estos símbolos son comparados con un patrón base obtenido a través de un algoritmo genético y de acuerdo a esta comparación se obtienen las señales de compra. Se vence a la estrategia \buyhold pero no se consideran costos de transacción.
 
@@ -945,12 +953,11 @@ Entre las posibles líneas de extensión de este trabajo, se encuentran:
 
 \bibliography{references}
 \addcontentsline{toc}{chapter}{Referencias}
-\bibliographystyle{plain}
 
-
-
-
-
+%no citados en antecedentes ya que se desvían de la metodología propuesta pero fueron consultados para obtener un panorama más ámplio
+\nocite{Preen2010}
+\nocite{Kuo2013}
+\nocite{Wang2014}
 
 
 \end{document}
