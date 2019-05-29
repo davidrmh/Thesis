@@ -164,6 +164,76 @@ En \cite{Teixeira2010}, se logra vencer a la estrategia \buyhold (considerando c
 
 La serie de artículos \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016}; desarrolla una metodología en la cual se busca reducir la dimensión de la serie de tiempo al identificar los llamados "puntos perceptualmente importantes" (perceptually important points, PIPs), una vez identificados estos puntos se calcula la variación porcentual entre ellos y de acuerdo a esta cantidad la serie de tiempo es convertida a cadena de símbolos. Estos símbolos son comparados con un patrón base obtenido a través de un algoritmo genético y de acuerdo a esta comparación se obtienen las señales de compra. Se vence a la estrategia \buyhold pero no se consideran costos de transacción.
 
+En \cite{Hu2015-XCS}, se utiliza aprendizaje reforzado junto con un algoritmo evolutivo para obtener un conjunto de reglas \textit{si..entonces}.\footnote{Extended Classifier System, XCS} Estas reglas son aplicadas para operar en el mercado de índices accionarios de la bolsa de Shangai, se vence a la estrategia \buyhold aún considerando costos de transacción.
+
+Al analizar el estado del arte, se puede observar que las heurísticas evolutivas juegan un papel esencial para obtener las reglas con las cuales se opera en el mercado. Se observa además, que los atributos utilizados en la mayoría de los trabajos, son un conjunto de indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
+
+Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceBH} muestran un resumen del estado del arte recolectado para este trabajo, como se puede observar existen resultados mixtos respecto a la estrategia \buyhold, que comúnmente es utilizada como estrategia de referencia.
+\begin{center}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{ccc}
+\hline
+\textbf{Referencia} & \textbf{Mercado} & \textbf{Técnica} \\
+\hline
+\cite{Allen1999} & Estados Unidos & Programación genética \\
+\cite{Leigh2002} & Estados Unidos & Emparejamiento de patrones\\
+\cite{Potvin2004} & Canadá & Programación genética\\
+\cite{Parracho2010} & Estados Unidos & Emparejamiento de patrones\\
+\cite{Kaucic2010} & Estados Unidos & Aprendizaje evolutivo\\
+\cite{Lohpetch2010} & Estados Unidos & Programación genética\\
+\cite{Teixeira2010} & Brasil & K-NN\\
+\cite{Preen2010} & Estados Unidos & Aprendizaje evolutivo\\
+\cite{Esfahanipour2011} & Irán & Programación genética\\
+\cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016} & Estados Unidos & PIP-SAX \\
+\cite{Kuo2013} & Taiwan & Búsqueda tabú \\
+\cite{Wang2014} & Estados Unidos & Enjambre de partículas \\
+\cite{Hu2015-XCS} & Shangai & XCS \\
+\cite{Huang2015} & Varios & Biagrupamiento \\
+\cite{Kim2016} & Corea & Conjuntos rugosos \\
+\cite{Kampouridis2017} & Tipo de cambio & Aprendizaje evolutivo\\
+\cite{Sezer2017} & Estados Unidos & Redes neuronales\\
+\cite{Alimoradi2018} & Irán & Q-learning\\
+\hline
+\end{tabular}
+\caption{\label{tabla:referencia-mercado-tecnica} Comparativo del estado del arte por mercado y técnica utilizada}
+\end{table}
+\end{center}
+
+\begin{center}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{ccc}
+\hline
+\textbf{Referencia} & \textbf{Vence \buyhold} & \textbf{Considera costos de transacción} \\
+\hline
+\cite{Allen1999} & No & Si \\
+\cite{Leigh2002} & Si & No\\
+\cite{Potvin2004} & Si (periodos estables o a la baja)  & No\\
+\cite{Parracho2010} & Si & No\\
+\cite{Kaucic2010} & Si (periodos estables o a la baja) & Si\\
+\cite{Lohpetch2010} & Si & Si\\
+\cite{Teixeira2010} & Si & Si\\
+\cite{Preen2010} & Si (mayoría de los casos) & Si\\
+\cite{Esfahanipour2011} & Si & Si\\
+\cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016} & Si & No \\
+\cite{Kuo2013} & Si & Si \\
+\cite{Wang2014} & No hay comparación & Si \\
+\cite{Hu2015-XCS} & Si & Si \\
+\cite{Huang2015} & Si & No \\
+\cite{Kim2016} & Si & No \\
+\cite{Kampouridis2017} & Si & Si\\
+\cite{Sezer2017} & Resultados mixtos & Si\\
+\cite{Alimoradi2018} & Si & Si\\
+\hline
+\end{tabular}
+\caption{\label{tabla:referencia-venceBH} Comparativo del estado del arte por desempeño respecto a \buyhold}
+\end{table}
+\end{center}
+
+
+
+
 %=============== Marco teórico ================= %
 \chapter{Marco teórico}
 \label{capitulo:marco teorico}
@@ -976,6 +1046,7 @@ Entre las posibles líneas de extensión de este trabajo, se encuentran:
 \nocite{Preen2010}
 \nocite{Kuo2013}
 \nocite{Wang2014}
+\nocite{Hu2015} %artículo de revisión de la literatura
 
 
 \end{document}
