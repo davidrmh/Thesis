@@ -1,4 +1,4 @@
-\documentclass[12pt]{scrbook}
+\documentclass[12pt]{report}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsthm} %Para definir ambientes con \newtheorem
@@ -8,12 +8,13 @@
 \usepackage{graphicx}
 \usepackage[square,sort,comma,numbers]{natbib}
 \usepackage{url}
+%\usepackage{titlesec}
 %\usepackage{float}
 
 \bibliographystyle{elsarticle-harv}
 
 \title{Aprendizaje de reglas para operaciones en el mercado accionario}
-\publishers{Centro de Investigación en Computación, Instituto Politécnico Nacional}
+%\publishers{Centro de Investigación en Computación, Instituto Politécnico Nacional}
 \date{}
 \author{David Ricardo Montalván Hernández}
 	
@@ -59,14 +60,15 @@
 \renewcommand{\listtablename}{Lista de tablas}
 \renewcommand\tablename{Tabla}
 \renewcommand{\bibname}{Referencias}
-\renewcommand{\figurename}{Imagen}
+\renewcommand{\figurename}{Figura}
+\renewcommand{\chaptername}{Capítulo}
 \listoftables
 
 \chapter*{Dedicatoria}
-A mis padres y amigos, quienes seguramente se reirán de esta dedicatoria y su "gran emotividad".
+A mis padres y amigos.
 
 \chapter*{Agradecimientos}
-Agradezco a mi director de tesis el doctor Salvador Godoy Calderón por enseñarme el enfoque simbólico del aprendizaje de máquina y por tener la paciencia suficiente para  intentar librarme (desafortunadamente sin éxito) de mis "manías estadísticas".
+Agradezco a mi director de tesis el doctor Salvador Godoy Calderón por su apoyo en la realización de este trabajo.
 
 Agradezco también a cada uno de los miembros de mi comité tutorial por sus valiosas observaciones.
 
@@ -84,23 +86,22 @@ In this work, we propose a methodology for automatically learning a set of \text
 
 From the point of view of economic theory, this work investigates the weak version of the efficient market hypothesis.
 
-\chapter*{The modeler's hippocratic oath}
-\begin{itemize}
-\item I will remember that I didn’t make the world, and it doesn’t satisfy my equations.
-\item Though I will use models boldly to estimate value, I will not be overly impressed by mathematics.
-\item I will never sacrifice reality for elegance without explaining why I have done so.
-\item Nor will I give the people who use my model false comfort about its accuracy. Instead, I will make explicit its assumptions and oversights.
-\item I understand that my work may have enormous effects on society and the economy, many of them beyond my comprehension.
-\end{itemize}
+%\chapter*{The modeler's hippocratic oath}
+%\begin{itemize}
+%\item I will remember that I didn’t make the world, and it doesn’t satisfy my equations.
+%\item Though I will use models boldly to estimate value, I will not be overly impressed by mathematics.
+%\item I will never sacrifice reality for elegance without explaining why I have done so.
+%\item Nor will I give the people who use my model false comfort about its accuracy. Instead, I will make explicit its assumptions and oversights.
+%\item I understand that my work may have enormous effects on society and the economy, many of them beyond my comprehension.
+%\end{itemize}
 
-\begin{center}
-\textit{Paul Wilmott y Emmanuel Derman.}
-\end{center}
-
-\pagenumbering{arabic} %Numeración árabe
+%\begin{center}
+%\textit{Paul Wilmott y Emmanuel Derman.}
+%\end{center}
 
 %=============== INTRODUCCIÓN ================= %
 \chapter{Introducción}
+\pagenumbering{arabic} %Numeración árabe
 \label{capitulo:introduccion}
 %Motivación y ¿qué es lo que se busca con este trabajo?
 %Objetivo general y objetivos particulares.
@@ -141,7 +142,7 @@ Para finalizar, la sección \ref{capitulo:conclusiones} trata las conclusiones o
 
 
 %=============== Antecedentes ================= %
-\chapter{Antecedentes}
+\chapter{Revisión del estado del arte}
 \label{capitulo:antecedentes}
 %orden cronológico
 %Tabla con referencia, mercado, metodologia
