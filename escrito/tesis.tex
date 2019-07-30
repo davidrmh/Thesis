@@ -1,5 +1,6 @@
 \documentclass[12pt]{report}
 \usepackage[utf8]{inputenc}
+\usepackage[none]{hyphenat} %Para evitar el corte de palabras
 \usepackage{amsmath}
 \usepackage{amsthm} %Para definir ambientes con \newtheorem
 \usepackage{amsfonts}
@@ -47,10 +48,11 @@
 %=================================================%
 
 %====================Macros=======================%
-\newcommand{\buyhold}{\textit{compra y espera} }
+%\newcommand{\buyhold}{\textit{compra y espera}}
 %=================================================%
 
 \begin{document}
+\sloppy %Para justificar correctamente (tiene que ver con \usepackage[none]{hyphenat})
 \maketitle
 \pagenumbering{Roman} %numeración romana con mayúsculas
 
@@ -107,40 +109,41 @@ Added to this, from the point of view of economic theory, this work investigates
 %Motivación y ¿qué es lo que se busca con este trabajo?
 %Objetivo general y objetivos particulares.
 %Estructura del trabajo.
-El incremento en el poder de cómputo, la digitalización de los mercados financieros y la oportunidad de obtener grandes ganancias, son algunos de los factores que han motivado la investigación y desarrollo de algoritmos computacionales enfocados a guiar la toma de decisiones de inversión, en particular, determinar los momentos adecuados para realizar compras o ventas.
+El incremento en el poder de cómputo, la digitalización de los mercados financieros y la oportunidad de obtener grandes ganancias, son algunos de los factores que han motivado la investigación y desarrollo de algoritmos computacionales enfocados a guiar la toma de decisiones de inversión, en particular, determinar los momentos adecuados para realizar compras o ventas de instrumentos financieros.
 
 A pesar de que la idea básica es comprar barato y vender caro, la incertidumbre y complejidad de los mercados financieros han dado lugar al uso de herramientas computacionales con el fin de guiar la toma de decisiones, concretamente, técnicas relacionadas al aprendizaje de máquina han ganado notoriedad \cite{AdvancesMLFinance}.
 
-El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas \textit{si...entonces}. Estas reglas se utilizarán para obtener estrategias de inversión cuya ganancia, buscamos, sea superior a la ganancia generada por la estrategia de \buyhold, la cual es usada comúnmente como una estrategia de referencia (ver sección \ref{seccion:mercado eficiente}).
+El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas \textit{si...entonces}. Estas reglas se utilizarán para obtener estrategias de inversión cuya ganancia, buscamos, sea superior a la ganancia generada por la estrategia de \textit{compra y espera}, la cual es usada comúnmente como una estrategia de referencia (ver sección \ref{seccion:mercado eficiente}).
 
-Además, la metodología propuesta busca obtener un modelo interpretable, contrastando con la tendencia actual que se caracteriza por el uso de las llamadas \textit{cajas negras}, e.g., redes neuronales (ver sección \ref{capitulo:antecedentes}).
+Además, la metodología propuesta busca obtener un modelo interpretable, contrastando con la tendencia actual que se caracteriza por el uso de las llamadas \textit{cajas negras}, por ejemplo redes neuronales (ver sección \ref{capitulo:antecedentes}).
 
 Los objetivos particulares de este trabajo son:
 \begin{itemize}
 
+\item Selección de las fuentes de datos.
+
 \item Proponer una metodología para etiquetar los datos y así poder aplicar algoritmos de aprendizaje supervisado.
 
-\item Proponer una forma de separar los conjuntos de entrenamiento y prueba.
+\item Seleccionar la forma de separar los conjuntos de entrenamiento y prueba.
 
-\item Proponer un metodología para poder aplicar un aprendizaje incremental. Esta metodología nos permitirá capturar el comportamiento no estacionario de los mercados, así como aprender de nuestros errores.
+\item Proponer una metodología para aplicar un aprendizaje incremental. Esta metodología permitirá que el modelo aprenda de los errores cometidos.
 \end{itemize}
-
-Finalmente, una de nuestras principales contribuciones es el análisis del mercado accionario mexicano desde una enfoque basado en reglas. Hasta donde sabemos, esta es la primera vez que se analiza este mercado utilizando este enfoque.
 
 La estructura de este trabajo es la siguiente:
 
-En la sección \ref{capitulo:antecedentes}, se dan los antecedentes del problema y se exploran las distintas metodologías que han sido empleadas con el fin de generar estrategias de inversión. Se hace un comparativo entre los enfoques utilizados así como los tipo de mercado analizados.
+En la sección \ref{capitulo:antecedentes}, se dan los antecedentes del problema y se exploran las distintas metodologías que han sido empleadas con el fin de generar estrategias de inversión. Se hace un análisis comparativo entre los enfoques utilizados así como los tipo de mercado analizados.
 
-En la sección \ref{capitulo:marco teorico}, se da un panorama general sobre el funcionamiento de los mercados de índices accionarios, se explica la hipótesis del mercado eficiente así como sus posibles versiones y el tipo de información relacionada a cada una de ellas. Se explica la estrategia \buyhold y la métrica de desempeño que se utilizará para evaluar nuestras estrategias. En la sección \ref{subseccion:indicadores tecnicos} se explican los atributos que se utilizarán y en la sección \ref{seccion:algoritmos aq cn2} los algoritmos de inducción de reglas utilizados.
+En la sección \ref{capitulo:marco teorico}, se da un panorama general sobre el funcionamiento de los mercados de índices accionarios, se explica la hipótesis del mercado eficiente así como sus posibles versiones y el tipo de información relacionada a cada una de ellas. Se explica la estrategia \textit{compra y espera} y la métrica de desempeño que se utilizará para evaluar nuestras estrategias. En la sección \ref{subseccion:indicadores tecnicos} se explican los atributos que se utilizarán y en la sección \ref{seccion:algoritmos aq cn2} los algoritmos de inducción de reglas utilizados.
 
-La sección \ref{capitulo:solucion propuesta}, explica los datos utilizados y la metodología propuesta, se establece la metodología de etiquetado y la forma de separar los conjuntos de entrenamiento y prueba. Finalmente se explica la forma en que se realiza el aprendizaje incremental propuesto, así como los supuestos bajo los cuales trabajaremos.
+En la sección \ref{capitulo:solucion propuesta}, se explican los datos utilizados y la metodología propuesta, se establece además, la metodología de etiquetado y la forma de separar los conjuntos de entrenamiento y prueba. Finalmente se explica la forma en que se realiza el aprendizaje incremental propuesto, así como los supuestos bajo los cuales se trabajó.
 
 La sección \ref{capitulo:resultados experimentales} contiene los resultados experimentales de cada uno de los experimentos.
 
 Para finalizar, la sección \ref{capitulo:conclusiones} trata las conclusiones obtenidas así como las posibles direcciones para extender este trabajo.
 
-
-
+\section{Contribuciones}
+\label{seccion:contribuciones}
+Una de las principales contribuciones es el análisis del mercado accionario mexicano desde una enfoque basado en reglas. El análisis del estado del arte indica que esta es la primera vez que se analiza este mercado utilizando dicho enfoque.
 
 %=============== Antecedentes ================= %
 \chapter[Capítulo \thechapter: Revisión del estado del arte]{Revisión del estado del arte}
@@ -148,29 +151,29 @@ Para finalizar, la sección \ref{capitulo:conclusiones} trata las conclusiones o
 %orden cronológico
 %Tabla con referencia, mercado, metodologia
 %Tabla con referencia, vence bh, considera costos de transacción
-Uno de los primeros artículos en los cuales se utilizan técnicas relacionadas al aprendizaje de reglas es \cite{Allen1999}, en este trabajo se utiliza una metodología basada en programación genética, obteniéndose de esta manera un conjunto de reglas \textit{si...entonces}, para operar en el mercado. Los autores analizan el mercado accionario de Estados Unidos utilizando la información del índice accionario S\&P 500 (ver sección \ref{seccion:indices accionarios}) y comparándose contra la estrategia \buyhold (ver sección \ref{seccion:buy and hold}) obteniendo resultados poco favorecedores.
+Uno de los primeros artículos en los cuales se utilizan técnicas relacionadas al aprendizaje de reglas es \cite{Allen1999}, en este trabajo se utiliza una metodología basada en programación genética, obteniéndose de esta manera un conjunto de reglas \textit{si...entonces}, para operar en el mercado. Los autores analizan el mercado accionario de Estados Unidos utilizando la información del índice accionario S\&P 500 (ver sección \ref{seccion:indices accionarios}) y comparándose contra la estrategia \textit{compra y espera} (ver sección \ref{seccion:buy and hold}) obteniendo resultados poco favorecedores.
 
-En \cite{Leigh2002}, se utiliza un enfoque basado en emparejamiento de patrones (template match) a partir del cual se obtienen un conjunto de reglas \textit{si...entonces}. Esta metodología se basa en detectar patrones en las gráficas de los precios, concretamente, se busca el patrón llamado \textit{bull flag} el cual es considerado como un patrón que indica el inicio de una tendencia a la alza en los precios. Este artículo utiliza la estrategia \buyhold como estrategia de referencia, obteniendo mayores ganancias que esta, sin embargo, cabe señalar que no se consideran costos de transacción, haciendo que la metodología se vuelva poco realista. El mercado analizado es el mercado de Estados Unidos a través del índice accionario NYSE Composite.
+En \cite{Leigh2002}, se utiliza un enfoque basado en emparejamiento de patrones (template match) a partir del cual se obtienen un conjunto de reglas \textit{si...entonces}. Esta metodología se basa en detectar patrones en las gráficas de los precios, concretamente, se busca el patrón llamado \textit{bull flag} el cual es considerado como un patrón que indica el inicio de una tendencia a la alza en los precios. Este artículo utiliza la estrategia \textit{compra y espera} como estrategia de referencia, obteniendo mayores ganancias que esta, sin embargo, cabe señalar que no se consideran costos de transacción, haciendo que la metodología se vuelva poco realista. El mercado analizado es el mercado de Estados Unidos a través del índice accionario NYSE Composite.
 
-Los autores en \cite{Potvin2004}, retoman el trabajo de \cite{Allen1999} modificando la forma en que se crean los árboles y considerando $14$ compañías canadienses que forman parte del índice accionario TSE $300$. A pesar de que vencen a la estrategia \buyhold en $9$ de las $14$ compañías, no se consideran costos de transacción.
+Los autores en \cite{Potvin2004}, retoman el trabajo de \cite{Allen1999} modificando la forma en que se crean los árboles y considerando $14$ compañías canadienses que forman parte del índice accionario TSE $300$. A pesar de que vencen a la estrategia \textit{compra y espera} en $9$ de las $14$ compañías, no se consideran costos de transacción.
 
 En \cite{Parracho2010}, se retoma el trabajo de \cite{Leigh2002} introduciendo un algoritmo genético para realizar un proceso de optimización sobre parámetros que antes se consideraban fijos. Se obtienen resultados favorecedores pero sin considerar costos de transacción.
 
-Una línea totalmente distinta a los artículos anteriores es el trabajo de \cite{Kaucic2010}. En este, no se busca obtener un conjunto de reglas \textit{si...entonces}, si no que busca encontrar, a través de un aprendizaje evolutivo, la mejor combinación de indicadores técnicos (ver sección \ref{seccion:analisisTecnico}) con la cual se busca determinar los momentos adecuados para comprar o vender. Únicamente se logra vencer a la estrategia \buyhold en mercados a la baja o estables (considerando costos de transacción). Se analiza el mercado accionario de Estados Unidos.
+Una línea totalmente distinta a los artículos anteriores es el trabajo de \cite{Kaucic2010}. En este, no se busca obtener un conjunto de reglas \textit{si...entonces}, si no que busca encontrar, a través de un aprendizaje evolutivo, la mejor combinación de indicadores técnicos (ver sección \ref{seccion:analisisTecnico}) con la cual se busca determinar los momentos adecuados para comprar o vender. Únicamente se logra vencer a la estrategia \textit{compra y espera} en mercados a la baja o estables (considerando costos de transacción). Se analiza el mercado accionario de Estados Unidos.
 
-Los trabajos \cite{Allen1999} y \cite{Potvin2004}, se retoman en \cite{Lohpetch2010}, en donde no sólo se usan precios diarios, si no que también se utilizan precios semanales y mensuales, además, en el proceso evolutivo que crea los árboles, se utiliza una función de aptitud que penaliza la complejidad de estos, evitando así un sobre ajuste en los datos de entrenamiento. En este trabajo se logra vencer a la estrategia \buyhold aún considerando costos de transacción.
+Los trabajos \cite{Allen1999} y \cite{Potvin2004}, se retoman en \cite{Lohpetch2010}, en donde no sólo se usan precios diarios, si no que también se utilizan precios semanales y mensuales, además, en el proceso evolutivo que crea los árboles, se utiliza una función de aptitud que penaliza la complejidad de estos, evitando así un sobre ajuste en los datos de entrenamiento. En este trabajo se logra vencer a la estrategia \textit{compra y espera} aún considerando costos de transacción.
 
-En \cite{Teixeira2010}, se logra vencer a la estrategia \buyhold (considerando costos de transacción) utilizando una metodología basada en el algoritmo \textit{k nearest neighbors} (K-NN). Se analizan $15$ series accionarias pertenecientes al mercado brasileño. Una propuesta interesante de este artículo, es el uso de límites que capturan el perfil de riesgo de los inversionistas\footnote{En finanzas estos límites son llamados stop loss y take profits} (ver sección \ref{seccion:limites ventas}).
+En \cite{Teixeira2010}, se logra vencer a la estrategia \textit{compra y espera} (considerando costos de transacción) utilizando una metodología basada en el algoritmo \textit{k nearest neighbors} (K-NN). Se analizan $15$ series accionarias pertenecientes al mercado brasileño. Una propuesta interesante de este artículo, es el uso de límites que capturan el perfil de riesgo de los inversionistas\footnote{En finanzas estos límites son llamados stop loss y take profits} (ver sección \ref{seccion:limites ventas}).
 
 
 
-La serie de artículos \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016}; desarrolla una metodología en la cual se busca reducir la dimensión de la serie de tiempo al identificar los llamados "puntos perceptualmente importantes" (perceptually important points, PIPs), una vez identificados estos puntos se calcula la variación porcentual entre ellos y de acuerdo a esta cantidad la serie de tiempo es convertida a cadena de símbolos. Estos símbolos son comparados con un patrón base obtenido a través de un algoritmo genético y de acuerdo a esta comparación se obtienen las señales de compra. Se vence a la estrategia \buyhold pero no se consideran costos de transacción.
+La serie de artículos \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016}; desarrolla una metodología en la cual se busca reducir la dimensión de la serie de tiempo al identificar los llamados "puntos perceptualmente importantes" (perceptually important points, PIPs), una vez identificados estos puntos se calcula la variación porcentual entre ellos y de acuerdo a esta cantidad la serie de tiempo es convertida a cadena de símbolos. Estos símbolos son comparados con un patrón base obtenido a través de un algoritmo genético y de acuerdo a esta comparación se obtienen las señales de compra. Se vence a la estrategia \textit{compra y espera} pero no se consideran costos de transacción.
 
-En \cite{Hu2015-XCS}, se utiliza aprendizaje reforzado junto con un algoritmo evolutivo para obtener un conjunto de reglas \textit{si..entonces}.\footnote{Extended Classifier System, XCS} Estas reglas son aplicadas para operar en el mercado de índices accionarios de la bolsa de Shangai, se vence a la estrategia \buyhold aún considerando costos de transacción.
+En \cite{Hu2015-XCS}, se utiliza aprendizaje reforzado junto con un algoritmo evolutivo para obtener un conjunto de reglas \textit{si..entonces}.\footnote{Extended Classifier System, XCS} Estas reglas son aplicadas para operar en el mercado de índices accionarios de la bolsa de Shangai, se vence a la estrategia \textit{compra y espera} aún considerando costos de transacción.
 
 Al analizar el estado del arte, se puede observar que las heurísticas evolutivas juegan un papel esencial para obtener las reglas con las cuales se opera en el mercado. Se observa además, que los atributos utilizados en la mayoría de los trabajos, son un conjunto de indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
 
-Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceBH} muestran un resumen del estado del arte recolectado para este trabajo, como se puede observar existen resultados mixtos respecto a la estrategia \buyhold, que comúnmente es utilizada como estrategia de referencia.
+Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceBH} muestran un resumen del estado del arte recolectado para este trabajo, como se puede observar existen resultados mixtos respecto a la estrategia \textit{compra y espera}, que comúnmente es utilizada como estrategia de referencia.
 \begin{center}
 \begin{table}[htbp]
 \centering
@@ -207,7 +210,7 @@ Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceB
 \centering
 \begin{tabular}{ccc}
 \hline
-\textbf{Referencia} & \textbf{Vence \buyhold} & \textbf{Considera costos de transacción} \\
+\textbf{Referencia} & \textbf{Vence \textit{compra y espera}} & \textbf{Considera costos de transacción} \\
 \hline
 \cite{Allen1999} & No & Si \\
 \cite{Leigh2002} & Si & No\\
@@ -229,7 +232,7 @@ Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceB
 \cite{Alimoradi2018} & Si & Si\\
 \hline
 \end{tabular}
-\caption{\label{tabla:referencia-venceBH} Comparativo del estado del arte por desempeño respecto a \buyhold}
+\caption{\label{tabla:referencia-venceBH} Comparativo del estado del arte por desempeño respecto a \textit{compra y espera}}
 \end{table}
 \end{center}
 
@@ -295,13 +298,13 @@ En este trabajo nos enfocamos únicamente en la versión débil.
 \end{figure}
 
 
-\subsection{Estrategia \buyhold}
+\subsection{Estrategia \textit{compra y espera}}
 \label{seccion:buy and hold}
-Como se señala en la sección \ref{subseccion:versiones emh}, de acuerdo a la hipótesis del mercado eficiente, no es posible utilizar información histórica con el fin de predecir los precios del futuro. Lo mejor que uno puede hacer es comprar un portafolio bien diversificado y mantenerlo por un periodo de tiempo predeterminado, esta estrategia recibe el nombre de estrategia \buyhold.
+Como se señala en la sección \ref{subseccion:versiones emh}, de acuerdo a la hipótesis del mercado eficiente, no es posible utilizar información histórica con el fin de predecir los precios del futuro. Lo mejor que uno puede hacer es comprar un portafolio bien diversificado y mantenerlo por un periodo de tiempo predeterminado, esta estrategia recibe el nombre de estrategia \textit{compra y espera}.
 
-De acuerdo a lo anterior tenemos entonces que, en un mercado eficiente, no es posible obtener, de manera consistente y sistemática, ganancias superiores a aquellas generadas por la estrategia \buyhold.
+De acuerdo a lo anterior tenemos entonces que, en un mercado eficiente, no es posible obtener, de manera consistente y sistemática, ganancias superiores a aquellas generadas por la estrategia \textit{compra y espera}.
 
-Dado un plazo de tiempo fijo, $\left[T_{I}, T_{F}\right]$, la ganancia de la estrategia \buyhold está dada por la ecuación (\ref{eqn:ganancia BH})
+Dado un plazo de tiempo fijo, $\left[T_{I}, T_{F}\right]$, la ganancia de la estrategia \textit{compra y espera} está dada por la ecuación (\ref{eqn:ganancia BH})
 
 \begin{equation} \label{eqn:ganancia BH}
 G_{\left[T_{I}, T_{F}\right]} (BH) = \dfrac{P_{T_F} (1 - c) } { P_{T_I} (1 + c) } - 1
@@ -309,22 +312,22 @@ G_{\left[T_{I}, T_{F}\right]} (BH) = \dfrac{P_{T_F} (1 - c) } { P_{T_I} (1 + c) 
 
 en donde $P_{T_F}$ es el precio de ejecución al final del plazo, $P_{T_I}$ es el precio de ejecución al inicio de este y $c$ es el costo (porcentual) de cada transacción (ver sección \ref{sec:supuestos del mercado}). 
 
-La imagen \ref{imagen:buy hold alza} ejemplifica la estrategia \buyhold en un periodo en el cual el mercado presenta una tendencia a la alza.\footnote{En la jerga financiera, un mercado bullish} Como podemos observar, vencer esta estrategia cuando se presenta este tipo de tendencia es todo un reto, esto se debe a que sólo se involucran dos operaciones, lo que implica un ahorro en costos de transacción.
+La imagen \ref{imagen:buy hold alza} ejemplifica la estrategia \textit{compra y espera} en un periodo en el cual el mercado presenta una tendencia a la alza.\footnote{En la jerga financiera, un mercado bullish} Como podemos observar, vencer esta estrategia cuando se presenta este tipo de tendencia es todo un reto, esto se debe a que sólo se involucran dos operaciones, lo que implica un ahorro en costos de transacción.
 
 \begin{figure}[ht]
 \centering
 \scalebox{0.8}{\includegraphics[width=1\linewidth]{imagenes/buy-hold-alza.jpeg}}
-\caption{\label{imagen:buy hold alza} Estrategia \buyhold en un mercado a la alza}
+\caption{\label{imagen:buy hold alza} Estrategia \textit{compra y espera} en un mercado a la alza}
 \end{figure}
 
 \subsection{Exceso de ganancia sobre buy-and-hold}
 \label{subseccion:exceso de ganancia}
 
-Para comparar las estrategias propuestas en este trabajo contra la estrategia \buyhold, estaremos utilizando como métrica de desempeño el exceso de ganancia (porcentual).
+Para comparar las estrategias propuestas en este trabajo contra la estrategia \textit{compra y espera}, estaremos utilizando como métrica de desempeño el exceso de ganancia (porcentual).
 
-Esta métrica compara la ganancia obtenida por una estrategia, $S$, con aquella obtenida por la estrategia \buyhold.
+Esta métrica compara la ganancia obtenida por una estrategia, $S$, con aquella obtenida por la estrategia \textit{compra y espera}.
 
-Para un plazo fijo, $\left[T_{I}, T_{F}\right]$, el exceso de ganancia de una estrategia $S$, sobre la estrategia \buyhold, está dado por la ecuación (\ref{eqn:Exceso de ganancia})
+Para un plazo fijo, $\left[T_{I}, T_{F}\right]$, el exceso de ganancia de una estrategia $S$, sobre la estrategia \textit{compra y espera}, está dado por la ecuación (\ref{eqn:Exceso de ganancia})
 
 \begin{equation} \label{eqn:Exceso de ganancia}
 ExG_{\left[T_{I}, T_{F}\right]} = G_{\left[T_{I}, T_{F}\right]} (S) - G_{\left[T_{I}, T_{F}\right]} (BH)
@@ -612,7 +615,7 @@ Utilizando esta metodología, se obtienen 15 conjuntos de entrenamiento y 15 con
 \label{seccion:proceso etiquetado}
 Ya que nuestros datos de entrenamiento no están etiquetados, utilizamos un algoritmo evolutivo para obtener un conjunto de etiquetas que nos permita entrenar cada modelo. La idea detrás del etiquetado se basa en encontrar las combinaciones de compras y ventas que nos generen la mayor ganancia una vez conocida toda la historia del periodo de entrenamiento.
 
-Este algoritmo evolutivo pertenece a la clase de algoritmos para la estimación de distribución (EDA por sus siglas en inglés \cite{simon2013evolutionary}). Cada individuo en la población representa una estrategia de inversión para un periodo de entrenamiento dado. Esta estrategia se representa a través de un vector $\mathbf{x} = (x_1, x_2, \ldots, x_t)$ cuya componente $x_i$ representan la acción a tomar en el día $i$, $x_i \in \{-1,0,1\}$, en donde $-1$ representa una señal de venta, $0$ una señal de espera y $1$ una señal de compra. La función de aptitud utilizada fue el exceso de ganancia sobre la estrategia \buyhold (ver sección \ref{subseccion:exceso de ganancia}).
+Este algoritmo evolutivo pertenece a la clase de algoritmos para la estimación de distribución (EDA por sus siglas en inglés \cite{simon2013evolutionary}). Cada individuo en la población representa una estrategia de inversión para un periodo de entrenamiento dado. Esta estrategia se representa a través de un vector $\mathbf{x} = (x_1, x_2, \ldots, x_t)$ cuya componente $x_i$ representan la acción a tomar en el día $i$, $x_i \in \{-1,0,1\}$, en donde $-1$ representa una señal de venta, $0$ una señal de espera y $1$ una señal de compra. La función de aptitud utilizada fue el exceso de ganancia sobre la estrategia \textit{compra y espera} (ver sección \ref{subseccion:exceso de ganancia}).
 
 En la imagen \ref{imagen:etiquetado} podemos observar que el proceso de etiquetado es capaz de localizar los mínimos y máximos locales presentes en el conjunto de entrenamiento.
 
@@ -793,8 +796,8 @@ Las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, muestran un resumen de 
 \textbf{AQ} & \textbf{AI-DI} & \textbf{AN-DI} & \textbf{AI-DC} & \textbf{AN-DC} \\
 \hline
 Exceso de ganancia promedio & $0.37\%$ & $-0.39\%$ & $0.20\%$ & $-1.02\%$ \\
-Casos mejores que \buyhold & $11$ & $14$ & $10$ & $13$  \\
-Casos peores que \buyhold & $19$ & $16$ & $20$ & $17$ \\
+Casos mejores que \textit{compra y espera} & $11$ & $14$ & $10$ & $13$  \\
+Casos peores que \textit{compra y espera} & $19$ & $16$ & $20$ & $17$ \\
 Exceso de ganancia máximo & $34.64\%$ & $22.17\%$ & $29.72\%$ & $20.3\%$ \\
 Exceso de ganancia mínimo & $-11.23\%$ & $-12.94\%$ & $-3.86\%$ & $-11.47\%$ \\
 Ganancia monetaria promedio & $\$2,384.18$ & $\$1,620.11$ & $\$2,214.84$ & $\$ 994.96$ \\
@@ -813,8 +816,8 @@ Ganancia monetaria promedio & $\$2,384.18$ & $\$1,620.11$ & $\$2,214.84$ & $\$ 9
 \textbf{CN2} & \textbf{AI-DI} & \textbf{AN-DI} & \textbf{AI-DC} & \textbf{AN-DC} \\
 \hline
 Exceso de ganancia promedio & $-1.22\%$ & $-1.07\%$ & $-0.54\%$ & $-1.41\%$ \\
-Casos mejores que \buyhold & $11$ & $10$ & $12$ & $8$  \\
-Casos peores que \buyhold & $19$ & $20$ & $18$ & $22$ \\
+Casos mejores que \textit{compra y espera} & $11$ & $10$ & $12$ & $8$  \\
+Casos peores que \textit{compra y espera} & $19$ & $20$ & $18$ & $22$ \\
 Exceso de ganancia máximo & $15.69\%$ & $12.32\%$ & $11.81\%$ & $6.05\%$ \\
 Exceso de ganancia mínimo & $-12.87\%$ & $-9.43\%$ & $-6.48\%$ & $-8.33\%$ \\
 Ganancia monetaria promedio & $\$792.43$ & $\$946.07$ & $\$1,475.04$ & $\$ 604.99$ \\
@@ -835,7 +838,7 @@ Por otro lado, como se muestra en la tabla \ref{tabla:CN2-SP500}, el algoritmo C
 \caption{\label{imagen:sp500-2008-05-12} Gráfica del precio del SPDR S\&P 500, 2008/05/12 - 2008/09/17}
 \end{figure}
 
-Es importante señalar que estamos considerando dos periodos correspondientes a la crisis financiera de 2008\footnote{Crisis hipotecaria en Estados Unidos}, como se ilustra en las imágenes \ref{imagen:sp500-2008-05-12} y \ref{imagen:sp500-2008-09-18}, durante estos periodos el precio mostró una fuerte tendencia a la baja, en consecuencia, superar la ganancia de la estrategia \buyhold no implica reto alguno como se puede constatar analizando las tablas \ref{tabla:AQ-SP500-2008} y \ref{tabla:CN2-SP500-2008}. Con estas tablas y las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, podemos comprobar que, en la mayoría de los casos, el exceso de ganancia máximo corresponde precisamente a estos periodos.
+Es importante señalar que estamos considerando dos periodos correspondientes a la crisis financiera de 2008\footnote{Crisis hipotecaria en Estados Unidos}, como se ilustra en las imágenes \ref{imagen:sp500-2008-05-12} y \ref{imagen:sp500-2008-09-18}, durante estos periodos el precio mostró una fuerte tendencia a la baja, en consecuencia, superar la ganancia de la estrategia \textit{compra y espera} no implica reto alguno como se puede constatar analizando las tablas \ref{tabla:AQ-SP500-2008} y \ref{tabla:CN2-SP500-2008}. Con estas tablas y las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, podemos comprobar que, en la mayoría de los casos, el exceso de ganancia máximo corresponde precisamente a estos periodos.
 
 \begin{figure}[htbp]
 \centering
@@ -873,7 +876,7 @@ $2008/09/18$ - $2009/01/27$ & $15.69\%$ & $12.32\%$ & $11.81\%$ & $-0.62\%$  \\
 \end{table*}
 \end{center}
 
-Así pues, como se señala en \cite{Lohpetch2010}, el verdadero desafío se encuentra en superar a la estrategia \buyhold en mercados con una tendencia alcista en los precios. Por lo tanto, calculamos el desempeño de cada algoritmo únicamente en periodos en donde se hace presente este tipo de tendencia. En total se detectaron 16 periodos con tendencia a la alza, los resultados se muestran en las tablas \ref{tabla:AQ-SP500-alza} y \ref{tabla:CN2-SP500-alza}.
+Así pues, como se señala en \cite{Lohpetch2010}, el verdadero desafío se encuentra en superar a la estrategia \textit{compra y espera} en mercados con una tendencia alcista en los precios. Por lo tanto, calculamos el desempeño de cada algoritmo únicamente en periodos en donde se hace presente este tipo de tendencia. En total se detectaron 16 periodos con tendencia a la alza, los resultados se muestran en las tablas \ref{tabla:AQ-SP500-alza} y \ref{tabla:CN2-SP500-alza}.
 
 \begin{center}
 \begin{table}[htbp]
@@ -883,8 +886,8 @@ Así pues, como se señala en \cite{Lohpetch2010}, el verdadero desafío se encu
 \textbf{AQ periodos a la alza} & \textbf{AI-DI} & \textbf{AN-DI} & \textbf{AI-DC} & \textbf{AN-DC} \\
 \hline
 Exceso de ganancia promedio & $-0.85\%$ & $-2.07\%$ & $-0.59\%$ & $-2.39\%$ \\
-Casos mejores que \buyhold & $5$ & $5$ & $6$ & $5$  \\
-Casos peores que \buyhold & $11$ & $11$ & $10$ & $11$ \\
+Casos mejores que \textit{compra y espera} & $5$ & $5$ & $6$ & $5$  \\
+Casos peores que \textit{compra y espera} & $11$ & $11$ & $10$ & $11$ \\
 Exceso de ganancia máximo & $2.33\%$ & $3.86\%$ & $2.30\%$ & $0.85\%$ \\
 Exceso de ganancia mínimo & $-3.83\%$ & $-12.94\%$ & $-3.85\%$ & $-11.47\%$ \\
 Ganancia monetaria promedio & $\$7,051.72$ & $\$5,830.17$ & $\$7,312.90$ & $\$5,514.90$ \\
@@ -903,8 +906,8 @@ Ganancia monetaria promedio & $\$7,051.72$ & $\$5,830.17$ & $\$7,312.90$ & $\$5,
 \textbf{CN2 periodos a la alza} & \textbf{AI-DI} & \textbf{AN-DI} & \textbf{AI-DC} & \textbf{AN-DC} \\
 \hline
 Exceso de ganancia promedio & $-2.55\%$ & $-1.84\%$ & $-1.28\%$ & $-2.37\%$ \\
-Casos mejores que \buyhold & $5$ & $6$ & $6$ & $3$  \\
-Casos peores que \buyhold & $11$ & $10$ & $10$ & $13$ \\
+Casos mejores que \textit{compra y espera} & $5$ & $6$ & $6$ & $3$  \\
+Casos peores que \textit{compra y espera} & $11$ & $10$ & $10$ & $13$ \\
 Exceso de ganancia máximo & $0.52\%$ & $9.52\%$ & $1.00\%$ & $0.80\%$ \\
 Exceso de ganancia mínimo & $-12.87\%$ & $-9.43\%$ & $-6.48\%$ & $-8.33\%$ \\
 Ganancia monetaria promedio & $\$5,346.94$ & $\$6,059.76$ & $\$6,624.75$ & $\$5,529.46$ \\
@@ -914,7 +917,7 @@ Ganancia monetaria promedio & $\$5,346.94$ & $\$6,059.76$ & $\$6,624.75$ & $\$5,
 \end{table}
 \end{center}
 
-De acuerdo a estas tablas, en ningún caso los algoritmos fueron capaces de vencer a la estrategia \buyhold. Sin embargo, nuevamente para el algoritmo AQ los mejores resultados se obtienen con un aprendizaje incremental.
+De acuerdo a estas tablas, en ningún caso los algoritmos fueron capaces de vencer a la estrategia \textit{compra y espera}. Sin embargo, nuevamente para el algoritmo AQ los mejores resultados se obtienen con un aprendizaje incremental.
 
 \section{Resultados para el NAFTRAC}
 \label{seccion:resultados NAFTRAC}
@@ -928,8 +931,8 @@ Analizando los 15 conjuntos de prueba con la información del NAFTRAC obtenemos 
 \textbf{AQ} & \textbf{AI-DI} & \textbf{AN-DI} & \textbf{AI-DC} & \textbf{AN-DC} \\
 \hline
 Exceso de ganancia promedio & $1.29\%$ & $0.13\%$ & $0.59\%$ & $-0.30\%$ \\
-Casos mejores que \buyhold & $11$ & $8$ & $9$ & $7$  \\
-Casos peores que \buyhold & $14$ & $7$ & $6$ & $8$ \\
+Casos mejores que \textit{compra y espera} & $11$ & $8$ & $9$ & $7$  \\
+Casos peores que \textit{compra y espera} & $14$ & $7$ & $6$ & $8$ \\
 Exceso de ganancia máximo & $6.74\%$ & $5.16\%$ & $4.60\%$ & $1.85\%$ \\
 Exceso de ganancia mínimo & $-6.78\%$ & $-6.27\%$ & $-3.44\%$ & $-3.46\%$ \\
 Ganancia monetaria promedio & $\$1,697.77$ & $\$530.62$ & $\$993.49$ & $\$103.29$ \\
@@ -947,8 +950,8 @@ Ganancia monetaria promedio & $\$1,697.77$ & $\$530.62$ & $\$993.49$ & $\$103.29
 \textbf{CN2} & \textbf{AI-DI} & \textbf{AN-DI} & \textbf{AI-DC} & \textbf{AN-DC} \\
 \hline
 Exceso de ganancia promedio & $-0.68\%$ & $0.17\%$ & $0.20\%$ & $0.06\%$ \\
-Casos mejores que \buyhold & $7$ & $10$ & $8$ & $9$  \\
-Casos peores que \buyhold & $8$ & $5$ & $7$ & $6$ \\
+Casos mejores que \textit{compra y espera} & $7$ & $10$ & $8$ & $9$  \\
+Casos peores que \textit{compra y espera} & $8$ & $5$ & $7$ & $6$ \\
 Exceso de ganancia máxima & $3.41\%$ & $4.33\%$ & $4.60\%$ & $4.00\%$ \\
 Exceso de ganancia mínimo & $-4.87\%$ & $-6.00\%$ & $-3.44\%$ & $-6.46\%$ \\
 Ganancia monetaria promedio & $\$-273.29$ & $\$578.85$ & $\$602.01$ & $\$461.66$ \\
@@ -960,7 +963,7 @@ Ganancia monetaria promedio & $\$-273.29$ & $\$578.85$ & $\$602.01$ & $\$461.66$
 
 De la misma forma que en los experimentos anteriores, el algoritmo AQ con aprendizaje incremental obtiene los mejores resultados para cada método de discretización, mientras que el algoritmo CN2 nuevamente presenta un desempeño pobre.
 
-Enfocándonos en los periodos a la alza (se detectaron un total de 7 periodos con esta tendencia), como se muestra en las tablas \ref{tabla:AQ-NAFTRAC-alza} y \ref{tabla:CN2-NAFTRAC-alza} ambos algoritmos fueron capaces de vencer a la estrategia \buyhold en 3 de 4 experimentos, obteniéndose el mejor resultado con el algoritmo AQ utilizando un aprendizaje incremental y una discretización basada en cuantiles.
+Enfocándonos en los periodos a la alza (se detectaron un total de 7 periodos con esta tendencia), como se muestra en las tablas \ref{tabla:AQ-NAFTRAC-alza} y \ref{tabla:CN2-NAFTRAC-alza} ambos algoritmos fueron capaces de vencer a la estrategia \textit{compra y espera} en 3 de 4 experimentos, obteniéndose el mejor resultado con el algoritmo AQ utilizando un aprendizaje incremental y una discretización basada en cuantiles.
 
 \begin{center}
 \begin{table}[h]
@@ -970,8 +973,8 @@ Enfocándonos en los periodos a la alza (se detectaron un total de 7 periodos co
 \textbf{AQ periodos a la alza} & \textbf{AI-DI} & \textbf{AN-DI} & \textbf{AI-DC} & \textbf{AN-DC} \\
 \hline
 Exceso de ganancia promedio & $0.18\%$ & $0.87\%$ & $1.54\%$ & $-0.07\%$ \\
-Casos mejores que \buyhold & $4$ & $4$ & $5$ & $5$  \\
-Casos peores que \buyhold & $3$ & $3$ & $2$ & $2$ \\
+Casos mejores que \textit{compra y espera} & $4$ & $4$ & $5$ & $5$  \\
+Casos peores que \textit{compra y espera} & $3$ & $3$ & $2$ & $2$ \\
 Exceso de ganancia máximo & $5.03\%$ & $5.16\%$ & $4.60\%$ & $1.39\%$ \\
 Exceso de ganancia mínimo & $-6.78\%$ & $-2.68\%$ & $-2.86\%$ & $-3.20\%$ \\
 Ganancia monetaria promedio & $\$5,201.07$ & $\$5,895.67$ & $\$6,562.47$ & $\$4,950.47$ \\
@@ -989,8 +992,8 @@ Ganancia monetaria promedio & $\$5,201.07$ & $\$5,895.67$ & $\$6,562.47$ & $\$4,
 \textbf{CN2 periodos a la alza} & \textbf{AI-DI} & \textbf{AN-DI} & \textbf{AI-DC} & \textbf{AN-DC} \\
 \hline
 Exceso de ganancia promedio & $-0.42\%$ & $1.06\%$ & $0.27\%$ & $0.87\%$ \\
-Casos mejores que \buyhold & $4$ & $6$ & $4$ & $5$  \\
-Casos peores que \buyhold & $3$ & $1$ & $3$ & $2$ \\
+Casos mejores que \textit{compra y espera} & $4$ & $6$ & $4$ & $5$  \\
+Casos peores que \textit{compra y espera} & $3$ & $1$ & $3$ & $2$ \\
 Exceso de ganancia máximo & $2.98\%$ & $3.91\%$ & $4.60\%$ & $4.00\%$ \\
 Exceso de ganancia mínimo & $-3.11\%$ & $-0.77\%$ & $-3.11\%$ & $-1.45\%$ \\
 Ganancia monetaria promedio & $\$4,605.01$ & $\$6,079.97$ & $\$5,294.73$ & $\$5,892.17$ \\
@@ -1009,9 +1012,9 @@ Ganancia monetaria promedio & $\$4,605.01$ & $\$6,079.97$ & $\$5,294.73$ & $\$5,
 %Aprendizaje incremental no es apropiado para CN2 pero si para AQ
 \section{Conclusiones}
 \label{seccion:conclusiones}
-De acuerdo a los resultados de la sección \ref{capitulo:resultados experimentales}, tanto como para el mercado mexicano como para el estadounidense, el algoritmo AQ con aprendizaje incremental, es superior a cualquier versión del algoritmo CN2. Más aún, para el caso del mercado mexicano, este algoritmo logra vencer (en promedio) a la estrategia \buyhold aún en mercados que presentan una tendencia a la alza. 
+De acuerdo a los resultados de la sección \ref{capitulo:resultados experimentales}, tanto como para el mercado mexicano como para el estadounidense, el algoritmo AQ con aprendizaje incremental, es superior a cualquier versión del algoritmo CN2. Más aún, para el caso del mercado mexicano, este algoritmo logra vencer (en promedio) a la estrategia \textit{compra y espera} aún en mercados que presentan una tendencia a la alza. 
 
-Es importante señalar que, a pesar de que no siempre vencemos a la estrategia \buyhold, únicamente en un caso obtuvimos una ganancia monetaria promedio negativa (algoritmo CN2 experimento AI-DI, tabla \ref{tabla:CN2-NAFTRAC}), en el resto de los experimentos, en promedio, no perdemos dinero, una característica claramente deseable para cualquier algoritmo de inversión.
+Es importante señalar que, a pesar de que no siempre vencemos a la estrategia \textit{compra y espera}, únicamente en un caso obtuvimos una ganancia monetaria promedio negativa (algoritmo CN2 experimento AI-DI, tabla \ref{tabla:CN2-NAFTRAC}), en el resto de los experimentos, en promedio, no perdemos dinero, una característica claramente deseable para cualquier algoritmo de inversión.
 
 Finalmente, desde el punto de vista de la teoría económica, nuestros resultados experimentales indican que el mercado mexicano es menos eficiente que el mercado estadounidense. Esto está en línea con lo que se expone en \cite{CFA2019}, en donde se señala que uno de los factores que contribuye a la eficiencia del mercado, es el número de participantes que hay en este (a mayor número de participantes, mayor eficiencia hay).
 
