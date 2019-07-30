@@ -47,12 +47,21 @@
 %=================================================%
 
 %====================Macros=======================%
-\newcommand{\buyhold}{\textit{buy-and-hold} }
+\newcommand{\buyhold}{\textit{compra y espera} }
 %=================================================%
 
 \begin{document}
 \maketitle
 \pagenumbering{Roman} %numeración romana con mayúsculas
+
+\chapter*{Dedicatoria}
+A mis padres y amigos.
+
+\chapter*{Agradecimientos}
+Agradezco a mi director de tesis el doctor Salvador Godoy Calderón por su apoyo en la realización de este trabajo.
+
+Agradezco también a cada uno de los miembros de mi comité tutorial por sus valiosas observaciones.
+
 \renewcommand{\contentsname}{Contenido}
 \tableofcontents
 \renewcommand{\listfigurename}{Lista de figuras}
@@ -63,14 +72,6 @@
 \renewcommand{\figurename}{Figura}
 \renewcommand{\chaptername}{Capítulo}
 \listoftables
-
-\chapter*{Dedicatoria}
-A mis padres y amigos.
-
-\chapter*{Agradecimientos}
-Agradezco a mi director de tesis el doctor Salvador Godoy Calderón por su apoyo en la realización de este trabajo.
-
-Agradezco también a cada uno de los miembros de mi comité tutorial por sus valiosas observaciones.
 
 \chapter*{Resumen}
 El incremento en el poder de cómputo, la digitalización de los mercados financieros y la oportunidad de obtener grandes ganancias, son algunos de los factores que han motivado la investigación y desarrollo de algoritmos computacionales enfocados a guiar la toma de decisiones de inversión. En particular, se busca que estos algoritmos sean capaces de determinar los momentos adecuados para realizar compras o ventas de un activo financiero.
@@ -294,7 +295,7 @@ En este trabajo nos enfocamos únicamente en la versión débil.
 \end{figure}
 
 
-\subsection{Estrategia buy-and-hold}
+\subsection{Estrategia \buyhold}
 \label{seccion:buy and hold}
 Como se señala en la sección \ref{subseccion:versiones emh}, de acuerdo a la hipótesis del mercado eficiente, no es posible utilizar información histórica con el fin de predecir los precios del futuro. Lo mejor que uno puede hacer es comprar un portafolio bien diversificado y mantenerlo por un periodo de tiempo predeterminado, esta estrategia recibe el nombre de estrategia \buyhold.
 
