@@ -547,9 +547,9 @@ El algoritmo AQ inicia su proceso de inducción seleccionando un ejemplo (la sem
 
 \subsection{Algoritmo CN2}
 \label{subseccion:algoritmo cn2}
-Como podemos observar en el algoritmo \ref{algo:AQ genera estrella}, al momento de generar la estrella, el algoritmo AQ sólo considera especializaciones que excluyen un ejemplo negativo en particular mientras que al mismo tiempo se busca cubrir la semilla. Como se señala en \cite{CN2-Clark1989}, este tipo de búsqueda se limita al espacio de complejos que son consistentes con el conjunto de entrenamiento, limitando así la capacidad de generalización del algoritmo.
+Como podemos observar en el algoritmo \ref{algo:AQ genera estrella}, al momento de generar la estrella, el algoritmo AQ sólo considera especializaciones que excluyen un ejemplo negativo en particular mientras que, al mismo tiempo, se busca cubrir la semilla. Como se señala en \cite{CN2-Clark1989}, este tipo de búsqueda se limita al espacio de complejos que son consistentes con el conjunto de entrenamiento, limitando así la capacidad de generalización del algoritmo.
 
-En cambio, el algoritmo CN2 remueve esta dependencia en ejemplos específicos y extiende el espacio de búsqueda al examinar todas las especializaciones posibles de un complejo.
+El algoritmo CN2 remueve esta dependencia en ejemplos específicos y extiende el espacio de búsqueda al examinar todas las especializaciones posibles de un complejo.
 
 Para encontrar el mejor complejo, el algoritmo CN2 utiliza dos heurísticas para guiar el proceso de creación de la estrella. La primera de ellas utiliza la entropía para medir la calidad de los complejos (entre menor entropía mejor es el complejo), así, dado un conjunto de ejemplos, $E$, cubiertos por el complejo $c$, si $p_i$ denota la probabilidad de la clase $i$ dentro de los ejemplos en $E$, entonces la entropía del complejo $c$ está dada por:
 
@@ -559,8 +559,7 @@ entrop(c) = - \sum_{i} p_i log_{2}(p_{i})
 
 La segunda heurística se utiliza para detectar complejos que son estadísticamente significativos. Dada una clase de ejemplos, $E$, cubiertos por un complejo $c$, esta heurística compara la distribución observada de las clases entre los ejemplos en $E$ y la distribución esperada de las clases en una muestra del mismo tamaño de $E$.
 
-Si $f_i$ es la frecuencia observada de la clase $i$ dentro de los ejemplos en $E$, $e_{i}$ es la frecuencia esperada de la clase $i$ para una muestra de tamaño $N=\vert E \vert$, es decir $e_i = N \times Prob\left[ Clase = i \right]$+
-63 y $k$ es el número de clases, entonces probamos la significancia del complejo $c$ utilizando la estadística dada en la ecuación\footnote{Esta estadística tiene una distribución $\chi^2$ con $k-1$ grados de libertad } (\ref{eqn:cn2 estadistica sig})
+De esta manera, si $f_i$ es la frecuencia observada para la clase $i$ dentro de los ejemplos en $E$, $e_{i}$ es la frecuencia esperada de la clase $i$ para una muestra de tamaño $M=\vert E \vert$, es decir $e_i = M \times Prob\left[ Clase = i \right]$ y $k$ es el número de clases, entonces probamos la significancia del complejo $c$ utilizando la estadística dada en la ecuación\footnote{Esta estadística tiene una distribución $\chi^2$ con $k-1$ grados de libertad } (\ref{eqn:cn2 estadistica sig})
 
 \begin{equation} \label{eqn:cn2 estadistica sig}
 2 \sum_{i=1}^{k} f_{i} log\left(\frac{f_{i}} {e_{i}} \right)
