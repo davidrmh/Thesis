@@ -151,29 +151,28 @@ Una de las principales contribuciones es el análisis del mercado accionario mex
 %orden cronológico
 %Tabla con referencia, mercado, metodologia
 %Tabla con referencia, vence bh, considera costos de transacción
-Uno de los primeros artículos en los cuales se utilizan técnicas relacionadas al aprendizaje de reglas es \cite{Allen1999}, en este trabajo se utiliza una metodología basada en programación genética, obteniéndose de esta manera un conjunto de reglas \textit{si...entonces}, para operar en el mercado. Los autores analizan el mercado accionario de Estados Unidos utilizando la información del índice accionario S\&P 500 (ver sección \ref{seccion:indices accionarios}) y comparándose contra la estrategia \textit{compra y espera} (ver sección \ref{seccion:buy and hold}) obteniendo resultados poco favorecedores.
+Al analizar el estado del arte, se puede observar que las heurísticas evolutivas juegan un papel esencial para obtener las reglas con las cuales se opera en el mercado. Además, los atributos utilizados en la mayoría de los trabajos son un conjunto de indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
 
-En \cite{Leigh2002}, se utiliza un enfoque basado en emparejamiento de patrones (template match) a partir del cual se obtienen un conjunto de reglas \textit{si...entonces}. Esta metodología se basa en detectar patrones en las gráficas de los precios, concretamente, se busca el patrón llamado \textit{bull flag} el cual es considerado como un patrón que indica el inicio de una tendencia a la alza en los precios. Este artículo utiliza la estrategia \textit{compra y espera} como estrategia de referencia, obteniendo mayores ganancias que esta, sin embargo, cabe señalar que no se consideran costos de transacción, haciendo que la metodología se vuelva poco realista. El mercado analizado es el mercado de Estados Unidos a través del índice accionario NYSE Composite.
+Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceBH} muestran un resumen del estado del arte recolectado para este trabajo, como se puede observar existen resultados mixtos respecto a la estrategia \textit{compra y espera}, que comúnmente es utilizada como estrategia de referencia.
+
+Uno de los primeros artículos en donde se utilizan técnicas relacionadas al aprendizaje de reglas es \cite{Allen1999}, en este trabajo se utiliza una metodología basada en programación genética, obteniéndose de esta manera un conjunto de reglas \textit{si...entonces}, para operar en el mercado. Los autores analizan el mercado accionario de Estados Unidos utilizando la información del índice accionario S\&P 500 (ver sección \ref{seccion:indices accionarios}) y comparándose contra la estrategia \textit{compra y espera} (ver sección \ref{seccion:buy and hold}) obteniendo resultados poco favorables.
+
+En \cite{Leigh2002}, se utiliza un enfoque basado en empate de patrones (template match) a partir del cual se obtienen un conjunto de reglas \textit{si...entonces}. Esta metodología se basa en detectar patrones en las gráficas de los precios, concretamente, se busca el patrón llamado \textit{bull flag} el cual es considerado como un patrón que indica el inicio de una tendencia a la alza en los precios. Este artículo utiliza la estrategia \textit{compra y espera} como referencia, obteniendo mayores ganancias que ésta, sin embargo, cabe señalar que no se consideran costos de transacción\footnote{Se entiende por costos de transacción, a las comisiones que se cobran por realizar una compra o una venta.}, por lo que la metodología se vuelve poco realista. El mercado analizado es el mercado de Estados Unidos a través del índice accionario NYSE Composite.
 
 Los autores en \cite{Potvin2004}, retoman el trabajo de \cite{Allen1999} modificando la forma en que se crean los árboles y considerando $14$ compañías canadienses que forman parte del índice accionario TSE $300$. A pesar de que vencen a la estrategia \textit{compra y espera} en $9$ de las $14$ compañías, no se consideran costos de transacción.
 
-En \cite{Parracho2010}, se retoma el trabajo de \cite{Leigh2002} introduciendo un algoritmo genético para realizar un proceso de optimización sobre parámetros que antes se consideraban fijos. Se obtienen resultados favorecedores pero sin considerar costos de transacción.
+En \cite{Parracho2010}, se retoma el trabajo de \cite{Leigh2002} introduciendo un algoritmo genético para realizar un proceso de optimización sobre parámetros que antes se consideraban fijos. Se obtienen resultados favorables pero sin considerar costos de transacción.
 
 Una línea totalmente distinta a los artículos anteriores es el trabajo de \cite{Kaucic2010}. En este, no se busca obtener un conjunto de reglas \textit{si...entonces}, si no que busca encontrar, a través de un aprendizaje evolutivo, la mejor combinación de indicadores técnicos (ver sección \ref{seccion:analisisTecnico}) con la cual se busca determinar los momentos adecuados para comprar o vender. Únicamente se logra vencer a la estrategia \textit{compra y espera} en mercados a la baja o estables (considerando costos de transacción). Se analiza el mercado accionario de Estados Unidos.
 
-Los trabajos \cite{Allen1999} y \cite{Potvin2004}, se retoman en \cite{Lohpetch2010}, en donde no sólo se usan precios diarios, si no que también se utilizan precios semanales y mensuales, además, en el proceso evolutivo que crea los árboles, se utiliza una función de aptitud que penaliza la complejidad de estos, evitando así un sobre ajuste en los datos de entrenamiento. En este trabajo se logra vencer a la estrategia \textit{compra y espera} aún considerando costos de transacción.
+Los trabajos \cite{Allen1999} y \cite{Potvin2004}, se retoman en \cite{Lohpetch2010}, en donde no sólo se usan precios diarios, si no que también se utilizan precios semanales y mensuales, además, en el proceso evolutivo que crea los árboles, se utiliza una función de aptitud que penaliza la complejidad de estos, evitando así un sobre ajuste en los datos de entrenamiento. En este trabajo se logra vencer a la estrategia \textit{compra y espera} (utilizando el exceso de ganancia como medida de desempeño, ver sección \ref{subseccion:exceso de ganancia}) aún considerando costos de transacción.
 
 En \cite{Teixeira2010}, se logra vencer a la estrategia \textit{compra y espera} (considerando costos de transacción) utilizando una metodología basada en el algoritmo \textit{k nearest neighbors} (K-NN). Se analizan $15$ series accionarias pertenecientes al mercado brasileño. Una propuesta interesante de este artículo, es el uso de límites que capturan el perfil de riesgo de los inversionistas\footnote{En finanzas estos límites son llamados stop loss y take profits} (ver sección \ref{seccion:limites ventas}).
 
+La serie de artículos \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016}; desarrolla una metodología en la cual se busca reducir la dimensión de la serie de tiempo al identificar los llamados "puntos perceptualmente importantes" (perceptually important points, PIPs). Una vez identificados estos puntos, se calcula la variación porcentual entre ellos y de acuerdo a esta cantidad la serie de tiempo es convertida en una cadena de símbolos. Estos símbolos son comparados con un patrón base obtenido a través de un algoritmo genético y de acuerdo a esta comparación se obtienen las señales de compra. Se vence a la estrategia \textit{compra y espera} pero no se consideran costos de transacción.
 
+En \cite{Hu2015-XCS}, se utiliza aprendizaje por reforzamiento junto con un algoritmo evolutivo para obtener un conjunto de reglas \textit{si..entonces}.\footnote{Extended Classifier System, XCS} Estas reglas son aplicadas para operar en el mercado de índices accionarios de la bolsa de Shangai, se vence a la estrategia \textit{compra y espera} aún considerando costos de transacción.
 
-La serie de artículos \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016}; desarrolla una metodología en la cual se busca reducir la dimensión de la serie de tiempo al identificar los llamados "puntos perceptualmente importantes" (perceptually important points, PIPs), una vez identificados estos puntos se calcula la variación porcentual entre ellos y de acuerdo a esta cantidad la serie de tiempo es convertida a cadena de símbolos. Estos símbolos son comparados con un patrón base obtenido a través de un algoritmo genético y de acuerdo a esta comparación se obtienen las señales de compra. Se vence a la estrategia \textit{compra y espera} pero no se consideran costos de transacción.
-
-En \cite{Hu2015-XCS}, se utiliza aprendizaje reforzado junto con un algoritmo evolutivo para obtener un conjunto de reglas \textit{si..entonces}.\footnote{Extended Classifier System, XCS} Estas reglas son aplicadas para operar en el mercado de índices accionarios de la bolsa de Shangai, se vence a la estrategia \textit{compra y espera} aún considerando costos de transacción.
-
-Al analizar el estado del arte, se puede observar que las heurísticas evolutivas juegan un papel esencial para obtener las reglas con las cuales se opera en el mercado. Se observa además, que los atributos utilizados en la mayoría de los trabajos, son un conjunto de indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
-
-Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceBH} muestran un resumen del estado del arte recolectado para este trabajo, como se puede observar existen resultados mixtos respecto a la estrategia \textit{compra y espera}, que comúnmente es utilizada como estrategia de referencia.
 \begin{center}
 \begin{table}[htbp]
 \centering
@@ -232,11 +231,9 @@ Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceB
 \cite{Alimoradi2018} & Si & Si\\
 \hline
 \end{tabular}
-\caption{\label{tabla:referencia-venceBH} Comparativo del estado del arte por desempeño respecto a \textit{compra y espera}}
+\caption{\label{tabla:referencia-venceBH} Comparativo del estado del arte por desempeño respecto a la estrategia \textit{compra y espera}}
 \end{table}
 \end{center}
-
-
 
 
 %=============== Marco teórico ================= %
