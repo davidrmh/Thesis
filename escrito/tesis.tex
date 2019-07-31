@@ -468,19 +468,19 @@ Su cálculo está dado por la ecuación (\ref{eqn:williams R})
 Williams \%R_t = -100 \times \dfrac{HH - C_t}{HH - LL}
 \end{equation}
 
-en donde $HH$ es el máximo entre los precios máximos de cada periodo que comprende la ventana de tiempo, de manera similar $LL$ es el mínimo de los precios mínimos de cada periodo en la ventana de tiempo y $C_t$ es el precio de cierre en el tiempo $t$.
+en donde $HH$ es el máximo entre los precios máximos de cada período que comprende la ventana de tiempo, de manera similar $LL$ es el mínimo de los precios mínimos de cada período en la ventana de tiempo y $C_t$ es el precio de cierre en el tiempo $t$.
 
 Se considera típicamente que si este indicador se encuentra entre $0$ y $-20$, es un momento apropiado para vender, mientras que si se encuentra dentro del rango de $-80$ a $-100$, es un momento adecuado para comprar.
 
 \subsubsection{Commodity channel index (CCI)}
 \label{subsubseccion:cci}
-Este indicador mide la diferencia entre el precio promedio en el periodo $t$ (como se define en la ecuación (\ref{eqn:precio tipico})) y un promedio móvil de este mismo precio utilizando una ventana de tiempo de tamaño $n$. La ecuación (\ref{eqn:CCI}) muestra el cálculo del indicador CCI:
+Este indicador mide la diferencia entre el precio promedio en el período $t$ (como se define en la ecuación (\ref{eqn:precio tipico})) y un promedio móvil de este mismo precio utilizando una ventana de tiempo de tamaño $n$. La ecuación (\ref{eqn:CCI}) muestra el cálculo del indicador CCI:
 
 \begin{equation} \label{eqn:CCI}
 CCI_t = \dfrac{ Prom_t - \overline{Prom_{t:n}} }{ 0.015 D_{t:n}}
 \end{equation}
 
-En donde $Prom_t$ está dado por la ecuación (\ref{eqn:precio tipico}), $\overline{Prom_{t:n}}$ es el promedio de $Prom_t$, considerando los periodos $t, t-1, \ldots, t-n +1$, finalmente el término $D$ es el promedio de las diferencias absolutas $\left|Prom_t - \overline{Prom_{t:n}}  \right|$.
+En donde $Prom_t$ está dado por la ecuación (\ref{eqn:precio tipico}), $\overline{Prom_{t:n}}$ es el promedio de $Prom_t$, considerando los períodos $t, t-1, \ldots, t-n +1$, finalmente el término $D$ es el promedio de las diferencias absolutas $\left|Prom_t - \overline{Prom_{t:n}}  \right|$.
 
 Las señales de compra y venta del indicador CCI se basan en la hipótesis de que los precios presentan un comportamiento de reversión a la media, por lo tanto y en la práctica, valores mayores a $200$ en el CCI, son considerados como señales de venta (el precio tendrá una reversión a la media, por lo tanto disminuirá), mientras que valores menores a $-100$, son considerados señales de compra (el precio revierte a la media al aumentar su valor).
 
