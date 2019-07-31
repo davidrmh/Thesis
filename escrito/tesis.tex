@@ -25,7 +25,7 @@
 \newtheoremstyle{break}
 {2ex} %above space
 {2ex} %below space
-{\itshape} %Body font)
+{} %Body font \itshape)
 {} %indent amount
 {\bfseries} %head font
 {:} %post head puncuation
@@ -243,9 +243,29 @@ En \cite{Hu2015-XCS}, se utiliza aprendizaje por reforzamiento junto con un algo
 \section{Mercado de índices accionarios}
 \label{seccion:indices accionarios}
 
-Debido a la diversidad de los tipos de mercados financieros (, deuda, tipo de cambio, derivados, etc.) así como al funcionamiento particular de cada uno de ellos, fue necesario restringir este estudio a un mercado en particular. Siendo concretos, este trabajo únicamente analiza el mercado de índices .
+Se inicia esta sección con algunas definiciones básicas \cite{CFA2019-market-org}.
 
-Un índice accionario, busca representar el comportamiento de un segmento específico del mercado accionario, por ejemplo un sector o un área geográfica en particular \cite{CFA2019-market-index}.
+\begin{definicion}[Mercado]
+\label{definicion:mercado}
+Un mercado es un lugar en donde dos partes se reúnen para realizar el intercambio de bienes o servicios.
+\end{definicion}
+
+\begin{definicion}[Acciones]
+\label{definicion:instrumento-financiero}
+Un \textbf{instrumento financiero} es un contrato monetario entre dos partes. Si este contrato da derechos de propiedad sobre los activos de una compañía, entonces recibe el nombre de \textbf{acción}.
+\end{definicion}
+
+\begin{definicion}[Mercado financiero]
+\label{definicion:mercado-financiero}
+Un mercado financiero es un mercado en el cual se intercambian instrumentos financieros, por ejemplo acciones.
+\end{definicion}
+
+Debido a la diversidad de los tipos de mercados financieros (accionario, deuda, tipo de cambio, derivados, etc.) así como al funcionamiento particular de cada uno de ellos, fue necesario restringir este estudio a un mercado en particular. Siendo concretos, este trabajo únicamente analiza el mercado de índices accionarios.
+
+\begin{definicion}[Índice accionario]
+\label{definicion:indice-accionario}
+Un índice accionario, busca representar el comportamiento de un segmento específico del mercado financiero accionario, por ejemplo un sector o un área geográfica en particular \cite{CFA2019-market-index}.
+\end{definicion}
 
 Así pues, el propósito principal de este tipo de índices es representar la opinión colectiva que se tiene respecto a un conjunto de acciones.
 
@@ -256,12 +276,12 @@ En este trabajo consideraremos lo siguientes índices :
 \item Índice Standard and Poors 500 (S\&P 500)
 \end{itemize}
 
-El índice de precios y cotizaciones es el principal indicador del mercado accionario mexicano. Este índice busca medir el desempeño de las acciones listadas en la Bolsa Mexicana de Valores utilizando una muestra con las 35 series accionarias de mayor tamaño y liquidez listadas en dicha bolsa.\footnote{https://espanol.spindices.com/indices/equity/sp-bmv-ipc}
+El índice de precios y cotizaciones es el principal indicador del mercado accionario mexicano. Este índice busca medir el desempeño de las acciones listadas en la Bolsa Mexicana de Valores utilizando una muestra con las 35 series accionarias de mayor tamaño y liquidez listadas en dicha bolsa\footnote{https://espanol.spindices.com/indices/equity/sp-bmv-ipc}.
 
 Por otro lado, el índice Standard and Poors 500 es considerado como el mejor indicador para el mercado accionario de Estados Unidos. Este índice está compuesto por las 500 empresas de mayor capitalización las cuales capturan alrededor del $80\%$ de la capitalización del mercado\footnote{https://us.spindices.com/indices/equity/sp-500}
 
 \begin{nota} \label{nota:ETF}
-En la práctica los inversionistas no pueden comprar los índices accionarios, en cambio, los instrumentos negociados reciben el nombre de Títulos Referenciados a Acciones (TRACS\footnote{En inglés Exchange Traded Funds o ETF}). Estos instrumentos buscan replicar el comportamiento de las acciones o portafolio al que están referenciados.
+En la práctica los inversionistas no pueden comprar los índices accionarios, en cambio, los instrumentos negociados reciben el nombre de Títulos Referenciados a Acciones (TRACS\footnote{En inglés Exchange Traded Funds o ETF}). Estos instrumentos buscan replicar el comportamiento del índice al que están relacionados.
 
 En nuestro caso, el instrumento que busca replicar el índice de precios y cotizaciones recibe el nombre de iShares NAFTRAC (o simplemente NAFTRAC), mientras que para el índice Standard and Poors 500 el instrumento relacionado es el SPDR S\&P 500.
 \end{nota}
