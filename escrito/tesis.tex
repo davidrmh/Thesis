@@ -414,33 +414,33 @@ Este indicador busca predecir la tendencia en los precios analizando el promedio
 RSI = 100 - \left( \frac{100}{1 + RS} \right)
 \end{equation}
 
-en donde 
+en donde:
 
 \begin{equation} \label{eqn:RSI RS}
 RS = \frac{Ganancia\,promedio\,en\,n\,periodos}{P\acute{e}rdida\,promedio\,en\,n\,periodos}
 \end{equation}
 
-Típicamente, en la literatura financiera (\cite{technicalAnalysisKirkPatrick}, \cite{encycoplediaTechnicalIndicators}) una señal de venta se genera cuando $RSI > 70$; por otra parte, una señal de compra se genera si $RSI < 30$.
+Típicamente, de acuerdo a la literatura financiera (\cite{technicalAnalysisKirkPatrick}, \cite{encycoplediaTechnicalIndicators}) una señal de venta se genera cuando $RSI > 70$; por otra parte, una señal de compra se genera si $RSI < 30$.
 
 \subsubsection{Money flow index (MFI)}
 \label{subsubseccion:money flow index}
-Este indicador es similar al RSI. Considera el número de periodos en los que se han presentado ganancias o pérdidas tomando en cuenta tanto los precios como el volumen del periodo (en comparación con el RSI que sólo considera los precios).
+Este indicador es similar al RSI. Considera el número de períodos en los que se han presentado ganancias o pérdidas tomando en cuenta tanto los precios como el volumen del período (en comparación con el RSI que sólo considera los precios).
 
-Para el cálculo del MFI se necesita primero calcular el precio promedio del periodo $t$, el cual está dado por la ecuación (\ref{eqn:precio tipico})
+Para el cálculo del MFI se necesita primero calcular el precio promedio del período $t$, el cual está dado por la ecuación (\ref{eqn:precio tipico})
 
 \begin{equation} \label{eqn:precio tipico}
 Precio\, \, promedio_t = \dfrac{H_{t} + L_{t} + C_{t}}{3}
 \end{equation}
 
-en donde $H_{t}, L_t, C_t$ representan, respectivamente, el precio máximo, mínimo y de cierre en el periodo $t$.
+en donde $H_{t}, L_t, C_t$ representan, respectivamente, el precio máximo, mínimo y de cierre en el período $t$.
 
-Una vez calculado el precio promedio, se calcula el flujo de efectivo del periodo, como se muestra en la ecuación (\ref{eqn:flujo de efectivo})
+Una vez calculado el precio promedio, se calcula el flujo de efectivo del período, como se muestra en la ecuación (\ref{eqn:flujo de efectivo})
 
 \begin{equation} \label{eqn:flujo de efectivo}
 MF_t = Precio\, \, promedio_t \times Volumen_t \times F_t
 \end{equation}
 
-en donde $F_t = 1$, si el precio promedio del periodo $t$ es mayor al precio promedio del periodo $t-1$, y $F_t = -1$ en el caso contrario.
+en donde $F_t = 1$, si el precio promedio del período $t$ es mayor al precio promedio del período $t-1$, y $F_t = -1$ en el caso contrario.
 
 Así, dada una ventana de tiempo de tamaño $n$, el MFI se calcula de acuerdo a la ecuación (\ref{eqn:MFI})
 
@@ -454,7 +454,7 @@ en donde $MFR$ está dado por
 MFR = \dfrac{\sum_{MF_t > 0} MF_t  }{\sum_{MF_t < 0} MF_t}
 \end{equation}
 
-con $t$ dentro del periodo de la ventana $n$.
+con $t$ dentro del período de la ventana $n$.
 
 En la práctica, es común considerar que una señal de venta se da cuando $MFI > 80$, mientras que una señal de compra se da cuando $MFI < 20$.
 
