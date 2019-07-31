@@ -375,9 +375,9 @@ Los tres supuestos en los que se basa este tipo de análisis son los siguientes:
 
 \subsection{Indicadores técnicos}
 \label{subseccion:indicadores tecnicos}
-Para realizar el pronóstico de las tendencias, el análisis técnico se vale del uso de indicadores técnicos. Estos indicadores son transformaciones aplicadas a la información histórica para una ventana (deslizante) de tiempo determinada \cite{murphy1999technical}, \cite{technicalAnalysisKirkPatrick}, \cite{encycoplediaTechnicalIndicators}.
+Para realizar el pronóstico de las tendencias, el análisis técnico se auxilia de indicadores técnicos. Estos indicadores son transformaciones aplicadas a la información histórica para una ventana (deslizante) de tiempo determinada \cite{murphy1999technical}, \cite{technicalAnalysisKirkPatrick}, \cite{encycoplediaTechnicalIndicators}.
 
-Los indicadores técnicos utilizados en este trabajo, serán\footnote{Aunque en las fórmulas no se indica, cada indicador se calcula en cada periodo $t$ utilizando la información en el intervalo $\left[t-n + 1, t\right]$, es decir, la información contenida en una ventana deslizante de tamaño $n$. }:
+Los indicadores técnicos utilizados en este trabajo, son\footnote{Aunque en las fórmulas no se indica, cada indicador se calcula en cada período $t$ utilizando la información en el intervalo $\left[t-n + 1, t\right]$, es decir, la información contenida en una ventana deslizante de tamaño $n$. }:
 
 \begin{itemize}
 \item Oscilador aroon.
@@ -394,15 +394,17 @@ Los indicadores técnicos utilizados en este trabajo, serán\footnote{Aunque en 
 
 \subsubsection{Oscilador aroon}
 \label{subsubseccion:Oscilador Aroon}
-Este indicador mide el número de periodos, dentro de una ventana de tiempo de tamaño $n$, que han transcurrido desde el máximo y el mínimo más reciente. El cálculo de este indicador está dado en la ecuación (\ref{eqn:oscilador aroon})
+Este indicador mide el número de períodos, dentro de una ventana de tiempo de tamaño $n$, que han transcurrido desde el precio máximo y el precio mínimo más reciente. El cálculo de este indicador está dado en la ecuación (\ref{eqn:oscilador aroon})
 
 \begin{equation} \label{eqn:oscilador aroon}
 OsAroon = 100 \left( \dfrac{  n - T_H  } { n } - \dfrac{  n - T_L  } { n } \right)
 \end{equation}
 
-en donde $n$ es el número de periodos que comprende la ventana de tiempo, $T_H$ es el número de periodos transcurridos desde el último máximo registrado dentro de la ventana de tamaño $n$ y $T_L$ es el número de periodos transcurridos desde el último mínimo registrado dentro de la ventana de tamaño $n$.
+en donde $n$ es el número de períodos que comprende la ventana de tiempo, $T_H$ es el número de períodos transcurridos desde el último precio máximo registrado dentro de la ventana de tamaño $n$ y $T_L$ es el número de períodos transcurridos desde el último precio mínimo registrado dentro de la ventana de tamaño $n$.
 
-Vemos entonces que, de acuerdo a la ecuación (\ref{eqn:oscilador aroon}), si $OsAroon$ es un número positivo, los precios muestran una tendencia a la alza (debemos de prepararnos para comprar). En cambio cuando $OsAroon$ es un número negativo, los precios muestran una tendencia a la baja (debemos de prepararnos para vender).
+La intuición de este indicador es la siguiente:
+
+De acuerdo a la ecuación (\ref{eqn:oscilador aroon}), si $OsAroon$ es un número positivo, se tiene que $T_{H} < T_{L}$, es decir, ha transcurrido menos tiempo desde el último precio máximo (en la ventana de tiempo dada) que desde el último precio mínimo y por lo tanto los precios muestran una tendencia a la alza (debemos de prepararnos para comprar). En cambio cuando $OsAroon$ es un número negativo, se tiene que $T_{H} > T_{L}$, es decir, ha transcurrido menos tiempo desde el último precio mínimo que desde el último precio máximo y por lo tanto los precios muestran una tendencia a la baja (debemos de prepararnos para vender).
 
 \subsubsection{Relative strength index (RSI)}
 \label{subsubseccion:RSI}
