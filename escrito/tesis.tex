@@ -335,13 +335,15 @@ La figura \ref{imagen:buy hold alza} ejemplifica la estrategia \textit{compra y 
 \caption{\label{imagen:buy hold alza} Estrategia \textit{compra y espera} en un mercado a la alza}
 \end{figure}
 
-\subsection{Exceso de ganancia sobre buy-and-hold}
+\subsection{Exceso de ganancia sobre compra y espera}
 \label{subseccion:exceso de ganancia}
 
-Para comparar las estrategias propuestas en este trabajo contra la estrategia \textit{compra y espera}, estaremos utilizando como métrica de desempeño el exceso de ganancia (porcentual).
+Para comparar las estrategias propuestas en este trabajo contra la estrategia \textit{compra y espera}, se utiliza como métrica de desempeño el exceso de ganancia (porcentual).
 
 Esta métrica compara la ganancia obtenida por una estrategia, $S$, con aquella obtenida por la estrategia \textit{compra y espera}.
 
+\begin{definicion}[Exceso de ganancia]
+\label{definicion:exceso de ganancia}
 Para un plazo fijo, $\left[T_{I}, T_{F}\right]$, el exceso de ganancia de una estrategia $S$, sobre la estrategia \textit{compra y espera}, está dado por la ecuación (\ref{eqn:Exceso de ganancia})
 
 \begin{equation} \label{eqn:Exceso de ganancia}
@@ -353,7 +355,7 @@ en donde la ganancia $G_{\left[T_{I}, T_{F}\right]} (BH)$, está dada por la ecu
 \begin{equation} \label{eqn:Ganancia estrategia S}
 G_{\left[T_{I}, T_{F}\right]}(S) = \dfrac{Capital_{T_F}}{Capital_{T_I} } - 1 
 \end{equation}
-
+\end{definicion}
 Claramente buscamos que $ExG_{\left[T_{I}, T_{F}\right]}$ sea un número positivo.
 
 \section{Análisis técnico}
