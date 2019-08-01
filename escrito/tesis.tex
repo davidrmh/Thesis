@@ -632,17 +632,18 @@ Utilizando esta metodología, se obtienen 15 conjuntos de entrenamiento y 15 con
 
 \section{Proceso de etiquetado}
 \label{seccion:proceso etiquetado}
-Ya que los datos de entrenamiento no están etiquetados, se utiliza un algoritmo evolutivo para obtener un conjunto de etiquetas que permita entrenar cada modelo. La idea detrás del etiquetado se basa en encontrar las combinaciones de compras y ventas que nos generen la mayor ganancia una vez conocida toda la historia del periodo de entrenamiento. Las etiquetas utilizadas son:
+Ya que los datos de entrenamiento no están etiquetados, se utiliza un algoritmo evolutivo para obtener un conjunto de etiquetas que permita entrenar cada modelo. La idea detrás del etiquetado, se basa en encontrar las combinaciones de compras y ventas que generen el mayor exceso de ganancia, una vez conocida toda la historia del periodo de entrenamiento.
 
+Las etiquetas utilizadas son:
 \begin{itemize}
-\item $-1 \rightarrow$ Venta.
+\item Venta, representada con $-1$.
 
-\item $0 \rightarrow$ Espera.
+\item Espera, representada con $0$.
 
-\item $1 \rightarrow$ Compra.
+\item Compra, representada con $1$ .
 \end{itemize}
 
-Este algoritmo evolutivo pertenece a la clase de algoritmos para la estimación de distribución (EDA por sus siglas en inglés \cite{simon2013evolutionary}). Cada individuo en la población representa una estrategia de inversión para un periodo de entrenamiento dado. Esta estrategia se representa a través de un vector $\mathbf{x} = (x_1, x_2, \ldots, x_t)$ cuya componente $x_i$ representan la acción a tomar en el día $i$, $x_i \in \{-1,0,1\}$, en donde $-1$ representa una señal de venta, $0$ una señal de espera y $1$ una señal de compra. La función de aptitud utilizada es el exceso de ganancia sobre la estrategia \textit{compra y espera} (ver sección \ref{subseccion:exceso de ganancia}). Así, cada vector $\mathbf{x} = (x_1, x_2, \ldots, x_t)$, tiene relacionado un exceso de ganancia, de acuerdo a las compras y ventas que determinan sus componentes $x_i.$
+Este algoritmo evolutivo pertenece a la clase de algoritmos para la estimación de distribución (EDA por sus siglas en inglés \cite{simon2013evolutionary}). Cada individuo en la población representa una estrategia de inversión para un periodo de entrenamiento dado. Esta estrategia se representa a través de un vector $\mathbf{x} = (x_1, x_2, \ldots, x_t)$ cuya componente $x_i$ representan la acción a tomar en el período $i$, $x_i \in \{-1,0,1\}.$ La función de aptitud utilizada es el exceso de ganancia sobre la estrategia \textit{compra y espera} (ver sección \ref{subseccion:exceso de ganancia}). Así, cada vector $\mathbf{x} = (x_1, x_2, \ldots, x_t)$, tiene relacionado un exceso de ganancia, de acuerdo a las compras y ventas que determinan sus componentes $x_i$ y se busca aquel con mayor exceso de ganancia entre la población, este vector representa la mejor combinación de compras y ventas para el conjunto de datos dado.
 
 En la figura \ref{imagen:etiquetado} se observa que el proceso de etiquetado es capaz de localizar los mínimos y máximos locales presentes en el conjunto de entrenamiento.
 
