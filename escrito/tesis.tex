@@ -759,26 +759,26 @@ La imagen \ref{imagen:aprendizaje_incremental} muestra el esquema del aprendizaj
 \end{figure}
 
 
-\section{Límites para las señales de venta}
+\section{Bandas para las señales de venta}
 \label{seccion:limites ventas}
-Además de las reglas inducidas por cada algoritmo, utilizamos dos reglas adicionales las cuales buscan capturar el perfil de riesgo de los inversionistas.
+Además de las reglas inducidas por cada algoritmo, se utilizan dos reglas adicionales que tienen el objetivo de capturar el perfil de riesgo de los inversionistas.
 
-Estas nuevas reglas establecen un límite superior (mercados a la alza) y un límite inferior (mercados a la baja) relativos a la última compra realizada. El primero de estos límites (límite superior) puede ser interpretado como el nivel de codicia o conformidad que tiene un inversionista, mientras que el segundo (límite inferior) se interpreta como el nivel de aversión al riesgo.
+Estas nuevas reglas establecen dos bandas horizontales relativas a la última compra realizada, una banda superior (mercados a la alza) y una banda inferior (mercados a la baja). La primera de estas bandas (banda superior) puede ser interpretada como el nivel de codicia o conformidad que tiene un inversionista, mientras que la segunda (banda inferior) se interpreta como el nivel de aversión al riesgo.
 
-Utilizando estos límites y las reglas inducidas por cada algoritmo, una venta se ejecuta en dos etapas, llamaremos a la primera de ellas la etapa de la señal y a la segunda la etapa de confirmación.
+Utilizando estas bandas y las reglas inducidas por cada algoritmo, una venta se ejecuta en dos etapas, a la primera de ellas se le llama la etapa de la señal y a la segunda la etapa de confirmación.
 
-En la etapa de la señal, para cada día $t$ (después del cierre del mercado), revisamos las reglas de venta en busca de una señal de venta de acuerdo a la información generada en este día. Si alguna regla nos dice que es un momento adecuado para vender, entonces pasamos a la etapa de confirmación.
+En la etapa de la señal, para cada día $t$ (después del cierre del mercado), se revisan las reglas de venta. Si alguna regla indica dice se debe de vender, entonces se continua con la etapa de confirmación.
 
-En la etapa de confirmación, a lo largo del día de ejecución, $t_{ejec}$ (ver los supuestos de la sección \ref{sec:supuestos del mercado}), verificamos si la variación porcentual entre algún precio generado en este día, $P_{t_{ejec}}$ y el último precio al que compramos, $P_{C}^{ult}$, rebasa alguno de los límites establecidos.
+En la etapa de confirmación, a lo largo del día de ejecución, $t_{ejec}$ (ver los supuestos de la sección \ref{sec:supuestos del mercado}), se revisa si la variación porcentual entre algún precio generado en este día, $P_{t_{ejec}}$ y el último precio al que se compró, $P_{C}^{ult}$, rebasa alguna de las bandas horizontales.
 
-Así pues, a través de estas dos etapas, se ejecuta una venta en el día $t_{ejec}$ si alguna de las siguientes condiciones se cumple:
+Con estas dos etapas, se ejecuta una venta en el día $t_{ejec}$ si alguna de las siguientes condiciones se cumple:
 
 \begin{align}
-R_{venta}(t) \wedge (Var(t_{ejec}, P_{t_{ejec}}, P_{C}^{ult} ) > LS) \label{eqn:Venta limite sup}\\
-R_{venta}(t) \wedge (Var(t_{ejec}, P_{t_{ejec}}, P_{C}^{ult} ) < LI) \label{eqn:Venta limite inf}
+R_{venta}(t) \wedge (Var(t_{ejec}, P_{t_{ejec}}, P_{C}^{ult} ) > BS) \label{eqn:Venta limite sup}\\
+R_{venta}(t) \wedge (Var(t_{ejec}, P_{t_{ejec}}, P_{C}^{ult} ) < BI) \label{eqn:Venta limite inf}
 \end{align}
 
-en donde $R_{venta}(t)$ representa una regla de venta inducida por los algoritmos AQ o CN2, la cual es aplicada a la información del día $t$, $LS>0$ es el límite superior expresado como un porcentaje relativo al último precio de compra, $LI<0$ es el límite inferior expresado como un porcentaje relativo al último precio de compra y $Var(t_{ejec}, P_{t_{ejec}}, P_{C}^{ult} )$ representa la variación porcentual entre los precios generados a lo largo del día $t_{ejec}$, $P_{t_{ejec}}$, respecto al último precio de compra, $P_{C}^{ult}$, como se muestra en la ecuación (\ref{eqn:variacion bandas})
+en donde $R_{venta}(t)$ representa una regla de venta, la cual se generó con la información del día $t < t_{ejec}$. $BS>0$, es el nivel de la banda superior, expresado como un porcentaje relativo al último precio de compra (por ejemplo $1\%$ por encima del precio de compra). $BI<0$ es el nivel de la banda inferior expresad0 como un porcentaje relativo al último precio de compra (por ejemplo $-1\%$ por debajo del precio de compra) y $Var(t_{ejec}, P_{t_{ejec}}, P_{C}^{ult} )$ representa la variación porcentual entre los precios generados a lo largo del día $t_{ejec}$, $P_{t_{ejec}}$, respecto al último precio de compra, $P_{C}^{ult}$. Esta variación se calcula de acuerdo a la ecuación (\ref{eqn:variacion bandas})
 
 \begin{equation} \label{eqn:variacion bandas}
 Var(t_{ejec}, P_{t_{ejec}}, P_{C}^{ult} ) = \dfrac{P_{t_{ejec}}} {P_{C}^{ult}} - 1
