@@ -833,14 +833,14 @@ acciones, en donde $\Bigl\lfloor x \Bigr\rfloor$ es la función piso.
 \label{capitulo:resultados experimentales}
 Utilizando la metodología descrita en el capítulo \ref{capitulo:solucion propuesta}, para cada TRAC (ver sección \ref{seccion:indices accionarios}) se realizaron cuatro experimentos distintos. Estos experimentos exploran dos alternativas distintas para discretizar los atributos continuos, \cite{dataMiningUsingR}, así como el tipo de aprendizaje aplicado (incremental o no incremental).
 
-El primero de los métodos de discretización (al cual denotaremos como DI), se basa en crear intervalos con el mismo tamaño, sin importar la distribución de los valores de cada atributo; por otro lado, el segundo método (denotado como DC) utiliza los cuantiles de cada atributo con el fin de crear intervalos equiprobables.
+El primero de los métodos de discretización (discretización por intervalos, denotado como DI), se basa en crear intervalos con el mismo tamaño, sin importar la distribución de los valores de cada atributo. El segundo de los métodos (discretización por cuantiles, denotado como DC) utiliza los cuantiles de cada atributo con el fin de crear intervalos equiprobables.
 
 Así pues, tenemos los siguiente experimentos:
 
 \begin{itemize}
-\item Aprendizaje incremental con discretización por intervalos de mismo tamaño (AI-DI).
+\item Aprendizaje incremental con discretización por intervalos (AI-DI).
 
-\item Aprendizaje no incremental con discretización por intervalos de mismo tamaño (AN-DI).
+\item Aprendizaje no incremental con discretización por intervalos (AN-DI).
 
 \item Aprendizaje incremental con discretización por cuantiles (AI-DC).
 
@@ -903,7 +903,7 @@ Por otro lado, como se muestra en la tabla \ref{tabla:CN2-SP500}, el algoritmo C
 \caption{\label{imagen:sp500-2008-05-12} Gráfica del precio del SPDR S\&P 500, 2008/05/12 - 2008/09/17}
 \end{figure}
 
-Es importante señalar que estamos considerando dos periodos correspondientes a la crisis financiera de 2008\footnote{Crisis hipotecaria en Estados Unidos}, como se ilustra en las imágenes \ref{imagen:sp500-2008-05-12} y \ref{imagen:sp500-2008-09-18}, durante estos periodos el precio mostró una fuerte tendencia a la baja, en consecuencia, superar la ganancia de la estrategia \textit{compra y espera} no implica reto alguno como se puede constatar analizando las tablas \ref{tabla:AQ-SP500-2008} y \ref{tabla:CN2-SP500-2008}. Con estas tablas y las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, podemos comprobar que, en la mayoría de los casos, el exceso de ganancia máximo corresponde precisamente a estos periodos.
+Es importante señalar que se consideran dos periodos correspondientes a la crisis financiera de 2008\footnote{Crisis hipotecaria en Estados Unidos.}, como se ilustra en las figuras \ref{imagen:sp500-2008-05-12} y \ref{imagen:sp500-2008-09-18}, durante estos periodos el precio mostró una fuerte tendencia a la baja, en consecuencia, superar la ganancia de la estrategia \textit{compra y espera} es más fácil en este tipo de escenarios, como se puede constatar analizando las tablas \ref{tabla:AQ-SP500-2008} y \ref{tabla:CN2-SP500-2008}. Con estas tablas y las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, se comprueba que, en la mayoría de los casos, el exceso de ganancia máximo corresponde precisamente a estos periodos.
 
 \begin{figure}[htbp]
 \centering
@@ -941,7 +941,7 @@ $2008/09/18$ - $2009/01/27$ & $15.69\%$ & $12.32\%$ & $11.81\%$ & $-0.62\%$  \\
 \end{table*}
 \end{center}
 
-Así pues, como se señala en \cite{Lohpetch2010}, el verdadero desafío se encuentra en superar a la estrategia \textit{compra y espera} en mercados con una tendencia alcista en los precios. Por lo tanto, calculamos el desempeño de cada algoritmo únicamente en periodos en donde se hace presente este tipo de tendencia. En total se detectaron 16 periodos con tendencia a la alza, los resultados se muestran en las tablas \ref{tabla:AQ-SP500-alza} y \ref{tabla:CN2-SP500-alza}.
+Así pues, como se señala en \cite{Lohpetch2010}, el verdadero desafío se encuentra en superar a la estrategia \textit{compra y espera} en mercados con una tendencia a la alza. Por lo tanto, se calcula el desempeño de cada algoritmo únicamente en periodos en donde se hace presente este tipo de tendencia. En total se detectan 16 periodos con tendencia a la alza, los resultados se muestran en las tablas \ref{tabla:AQ-SP500-alza} y \ref{tabla:CN2-SP500-alza}.
 
 \begin{center}
 \begin{table}[htbp]
