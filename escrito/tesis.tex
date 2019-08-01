@@ -589,9 +589,9 @@ De esta manera, si $f_i$ es la frecuencia observada para la clase $i$ dentro de 
 \label{seccion:separacion de datos}
 En este trabajo se utilizan precios diarios\footnote{Obtenidos de Yahoo Finance. https://finance.yahoo.com} de los instrumentos NAFTRAC y SPDR S\&P 500 (ver sección \ref{seccion:indices accionarios}).
 
-Para el NAFTRAC, la información inicia el día 15 de febrero de 2013 y termina el 21 de enero de 2019. Para el SPDR S\&P 500 el periodo de tiempo abarcado es del 2 de enero de 2008 hasta  el 3 de marzo de 2019.
+Para el NAFTRAC, la información inicia el día 15 de febrero de 2013 y termina el 21 de enero de 2019. Para el SPDR S\&P 500 el período de tiempo abarcado es del 2 de enero de 2008 hasta  el 3 de marzo de 2019. Se tienen períodos de tiempo distintos debido a la calidad en los datos, en el caso del mercado mexicano se observó un gran número de datos no disponibles para los años de $2008$ y $2012$.
 
-La tabla \ref{tabla:Ejemplo datos diarios NAFTRAC} muestra la estructura de los datos para el NAFTRAC, es importante señalar que los datos no incluyen días festivos ni fines de semana.
+La tabla \ref{tabla:Ejemplo datos diarios NAFTRAC} muestra la estructura de los datos para el NAFTRAC, es importante señalar que para ambos conjuntos de datos, no se incluyen fines de semana o días festivos (relativos a cada país, por ejemplo, la información del 15 de septiembre no se incluye en el conjunto de datos del NAFTRAC, pero sí en el conjunto de datos del SPDR S\&P).
 
 \begin{table}[h]
 \centering
@@ -608,9 +608,9 @@ La tabla \ref{tabla:Ejemplo datos diarios NAFTRAC} muestra la estructura de los 
 \caption{\label{tabla:Ejemplo datos diarios NAFTRAC} Datos diarios NAFTRAC}
 \end{table}
 
-Para crear nuestros conjuntos de entrenamiento y prueba, los datos se dividen utilizando una ventana deslizante de 90 días. Este criterio está fundamentado en el hecho de que, tanto en México como en Estados Unidos, las empresas con acciones listadas en alguna bolsa de valores, están obligadas a reportar los resultados de sus operaciones de manera trimestral, así pues, buscamos capturar la reacción de los inversionistas ante la publicación de esta información.
+Para crear los conjuntos de entrenamiento y prueba, los datos se dividen utilizando una ventana deslizante de 90 días. Este criterio está fundamentado en el hecho de que, tanto en México como en Estados Unidos, las empresas con acciones listadas en alguna bolsa de valores, están obligadas a reportar los resultados de sus operaciones de manera trimestral; así pues, se busca capturar la reacción de los inversionistas ante la publicación de esta información.
 
-La tabla \ref{tabla:data split SP500} muestra la separación de los datos del SPDR S\&P 500.
+La tabla \ref{tabla:data split SP500} muestra un ejemplo de la separación de los datos del SPDR S\&P 500.
 \begin{table}[h]
 \centering
 \begin{tabular}{cc}
@@ -626,9 +626,9 @@ La tabla \ref{tabla:data split SP500} muestra la separación de los datos del SP
 \caption{\label{tabla:data split SP500} Separación de datos}
 \end{table}
 
-Observemos que con esta forma de separar los datos, un conjunto de prueba se convierte en un nuevo conjunto de entrenamiento, esto nos permite capturar el comportamiento dinámico de los mercados, en particular, su comportamiento no estacionario.
+Con esta forma de separar los datos, un conjunto de prueba se convierte en un nuevo conjunto de entrenamiento. De esta manera, se ajustan los modelos utilizando la información más reciente.
 
-Utilizando esta metodología, se obtienen 15 conjuntos de entrenamiento y 15 conjuntos de prueba con la información del NAFTRAC, por otra parte, con los datos del SPDR S\&P 500 se obtienen 30 conjuntos de entrenamiento y 30 conjuntos de prueba.
+Utilizando esta metodología, se obtienen 15 conjuntos de entrenamiento y 15 conjuntos de prueba con la información del NAFTRAC. Por otra parte, con los datos del SPDR S\&P 500 se obtienen 30 conjuntos de entrenamiento y 30 conjuntos de prueba.
 
 
 \section{Proceso de etiquetado}
