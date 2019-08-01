@@ -784,39 +784,46 @@ en donde $R_{venta}(t)$ representa una regla de venta, la cual se generó con la
 Var(t_{ejec}, P_{t_{ejec}}, P_{C}^{ult} ) = \dfrac{P_{t_{ejec}}} {P_{C}^{ult}} - 1
 \end{equation}
 
-La imagen \ref{imagen:bandas horizontales} muestra un ejemplo de los límites relativos a una señal de compra.
+La figura \ref{imagen:bandas horizontales} muestra un ejemplo de las bandas horizontales relativas a una señal de compra.
 
 \begin{figure}[htbp]
 \centering
 \scalebox{0.8}{\includegraphics[width=1\linewidth]{imagenes/bandas_horizontales.jpeg}}
-\caption{\label{imagen:bandas horizontales} Límites para las señales de venta relativos a una señal de compra}
+\caption{\label{imagen:bandas horizontales}Bandas horizontales para las señales de venta relativas a una señal de compra}
 \end{figure}
 
-\section{Supuestos del mercado}
+\section{Supuestos con los que se trabaja}
 \label{sec:supuestos del mercado}
-Para cada experimento, se consideraron los siguientes supuestos:
+Para cada experimento, se consideran los siguientes supuestos:
 
 \begin{itemize}
-\item El precio de ejecución en el día $t$ será el promedio entre el precio máximo y el precio mínimo de ese día.
+\item El precio de compra o venta para un día $t_{ejec}$, es el promedio entre el precio máximo y el precio mínimo de ese día.
 
-\item Dada una señal de compra o venta en el día $t$, la acción se ejecuta en el día $t+1$ utilizando el precio de ejecución.
+\item Dada una señal de compra en el día $t$, la transacción se ejecuta en el día $t+1$ utilizando el precio de ejecución.
 
-\item El costo de cada transacción se fija en $0.25\%$. Así para cada compra con precio de ejecución $P_{C}$ terminamos pagando un total de 
+\item El costo de cada transacción se fija en $0.25\%$. Así para cada compra con precio de ejecución $P_{C}$ se paga un total de 
 $$P_{C}(1 + 0.0025)$$
-por cada acción comprada.
+por cada acción comprada, es decir, si se compran $N$ acciones se paga:
 
-De la misma forma, por cada acción que vendemos a un precio $P_{V}$, recibimos 
-$$P_{V}(1 - 0.0025)$$
+$$N \times P_{C}(1 + 0.0025).$$
 
-\item En cada señal de compra, compramos tantas acciones podamos comprar con nuestro capital disponible (considerando el costo de transacción).
+De la misma forma, por cada acción que se vende a un precio $P_{V}$, se recibe un total de 
+$$P_{V}(1 - 0.0025).$$
+o si se venden $N$ acciones, se recibe
 
-\item Para cada señal de venta, vendemos todas las acciones que poseemos.
+$$N \times P_{V}(1 - 0.0025).$$
 
-\item Sólo podemos vender cuando tenemos acciones en nuestra posesión, es decir, no se permiten ventas en corto.
+\item En cada señal de compra, se compran las acciones que sean posible comprar utilizando todo el capital disponible (considerando el costo de la transacción). Es decir, si el precio de compra es $P_{C}$ y se cuenta con un capital $M$, entonces se pueden comprar
 
-\item El límite superior para las señales de venta, $LS$, se fija con un valor de $0.035$ o $3.5\%$ relativo al último precio de compra.
+$$ N = \Bigl\lfloor \dfrac{M}{ P_{C} \left(1 + 0.0025 \right) } \Bigr\rfloor$$
+acciones, en donde $\Bigl\lfloor x \Bigr\rfloor$ es la función piso.
+\item Para cada señal de venta, se venden todas las acciones que se tengan.
 
-\item El límite inferior para las señales de venta, $LI$, se fija con un valor de $-0.03$ o $-3.0\%$ relativo al último precio de compra.
+\item Sólo se puede vender cuando se tienen acciones, es decir, siempre ocurre primero una compra antes de una venta.
+
+\item La banda superior para las señales de venta, $BS$, se fija con un valor de $0.035$ o $3.5\%$ relativo al último precio de compra.
+
+\item La banda inferior para las señales de venta, $BI$, se fija con un valor de $-0.03$ o $-3.0\%$ relativo al último precio de compra.
 
 \item El capital inicial es de $\$100,000$ unidades monetarias (pesos en el caso del NAFTRAC y dólares de Estados Unidos para el SPDR S\&P 500).
 \end{itemize}
