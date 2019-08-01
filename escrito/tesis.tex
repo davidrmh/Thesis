@@ -630,14 +630,21 @@ Con esta forma de separar los datos, un conjunto de prueba se convierte en un nu
 
 Utilizando esta metodología, se obtienen 15 conjuntos de entrenamiento y 15 conjuntos de prueba con la información del NAFTRAC. Por otra parte, con los datos del SPDR S\&P 500 se obtienen 30 conjuntos de entrenamiento y 30 conjuntos de prueba.
 
-
 \section{Proceso de etiquetado}
 \label{seccion:proceso etiquetado}
-Ya que nuestros datos de entrenamiento no están etiquetados, utilizamos un algoritmo evolutivo para obtener un conjunto de etiquetas que nos permita entrenar cada modelo. La idea detrás del etiquetado se basa en encontrar las combinaciones de compras y ventas que nos generen la mayor ganancia una vez conocida toda la historia del periodo de entrenamiento.
+Ya que los datos de entrenamiento no están etiquetados, se utiliza un algoritmo evolutivo para obtener un conjunto de etiquetas que permita entrenar cada modelo. La idea detrás del etiquetado se basa en encontrar las combinaciones de compras y ventas que nos generen la mayor ganancia una vez conocida toda la historia del periodo de entrenamiento. Las etiquetas utilizadas son:
 
-Este algoritmo evolutivo pertenece a la clase de algoritmos para la estimación de distribución (EDA por sus siglas en inglés \cite{simon2013evolutionary}). Cada individuo en la población representa una estrategia de inversión para un periodo de entrenamiento dado. Esta estrategia se representa a través de un vector $\mathbf{x} = (x_1, x_2, \ldots, x_t)$ cuya componente $x_i$ representan la acción a tomar en el día $i$, $x_i \in \{-1,0,1\}$, en donde $-1$ representa una señal de venta, $0$ una señal de espera y $1$ una señal de compra. La función de aptitud utilizada fue el exceso de ganancia sobre la estrategia \textit{compra y espera} (ver sección \ref{subseccion:exceso de ganancia}).
+\begin{itemize}
+\item $-1 \rightarrow$ Venta.
 
-En la imagen \ref{imagen:etiquetado} podemos observar que el proceso de etiquetado es capaz de localizar los mínimos y máximos locales presentes en el conjunto de entrenamiento.
+\item $0 \rightarrow$ Espera.
+
+\item $1 \rightarrow$ Compra.
+\end{itemize}
+
+Este algoritmo evolutivo pertenece a la clase de algoritmos para la estimación de distribución (EDA por sus siglas en inglés \cite{simon2013evolutionary}). Cada individuo en la población representa una estrategia de inversión para un periodo de entrenamiento dado. Esta estrategia se representa a través de un vector $\mathbf{x} = (x_1, x_2, \ldots, x_t)$ cuya componente $x_i$ representan la acción a tomar en el día $i$, $x_i \in \{-1,0,1\}$, en donde $-1$ representa una señal de venta, $0$ una señal de espera y $1$ una señal de compra. La función de aptitud utilizada es el exceso de ganancia sobre la estrategia \textit{compra y espera} (ver sección \ref{subseccion:exceso de ganancia}). Así, cada vector $\mathbf{x} = (x_1, x_2, \ldots, x_t)$, tiene relacionado un exceso de ganancia, de acuerdo a las compras y ventas que determinan sus componentes $x_i.$
+
+En la figura \ref{imagen:etiquetado} se observa que el proceso de etiquetado es capaz de localizar los mínimos y máximos locales presentes en el conjunto de entrenamiento.
 
 \begin{figure}[ht]
 \centering
@@ -645,9 +652,11 @@ En la imagen \ref{imagen:etiquetado} podemos observar que el proceso de etiqueta
 \caption{\label{imagen:etiquetado} Resultado del proceso de etiquetado}
 \end{figure}
 
-\section{Atributos utilizados}
+
+
+\section{Atributos}
 \label{seccion:atributos}
-Los atributos utilizados en cada uno de los experimentos, son el conjunto de indicadores técnicos descritos en la sección \ref{subseccion:indicadores tecnicos}. Los parámetros utilizados para cada uno de ellos se describen a continuación, estos parámetros son los recomendados en la literatura del análisis técnico \cite{encycoplediaTechnicalIndicators}, \cite{technicalAnalysisKirkPatrick}.
+Los atributos usados en cada uno de los experimentos, son el conjunto de indicadores técnicos descritos en la sección \ref{subseccion:indicadores tecnicos}. Los parámetros para cada uno de ellos se describen a continuación, estos parámetros son los recomendados en la literatura del análisis técnico \cite{encycoplediaTechnicalIndicators}, \cite{technicalAnalysisKirkPatrick}.
 
 
 \begin{itemize}
