@@ -42,6 +42,9 @@
 %Notas importantes
 \newtheorem{nota}{Nota}[chapter]
 
+%Ejemplos
+\newtheorem{ejemplo}{Ejemplo}[chapter]
+
 %Algoritmo (Utiliza el ambiente tabbing)
 \theoremstyle{break}
 \newtheorem{algoritmo}{Algoritmo}[chapter]
@@ -675,21 +678,26 @@ Los atributos usados en cada uno de los experimentos, son el conjunto de indicad
 
 \section{Aprendizaje incremental}
 \label{seccion:aprendizaje incremental}
-Tanto como para el algoritmo AQ como para el algoritmo CN2 se realizaron dos tipos de experimentos. El primero de ellos está basado en un enfoque de \textit{aprender-aplicar-descartar}, en el cual, dado un conjunto de entrenamiento, se induce un conjunto de reglas las cuales se aplican al conjunto de prueba más cercano. Después de esto, las reglas aprendidas se descartan (mecanismo de olvido).
+Tanto como para el algoritmo AQ como para el algoritmo CN2 se realizan dos tipos de experimentos. El primero de ellos está basado en un enfoque de \textit{aprender-aplicar-descartar}, en el cual, dado un conjunto de entrenamiento, se induce un conjunto de reglas las cuales se aplican al conjunto de prueba más cercano. Después de esto, las reglas aprendidas se descartan (mecanismo de olvido).
 
-El otro experimento se basa en un \textit{aprendizaje incremental}, en este caso, aprendemos un conjunto de reglas y en lugar de descartarlas, las ordenamos de acuerdo a su desempeño sobre el conjunto de entrenamiento del cual fueron inducidas por primera vez, así como su desempeño sobre los conjuntos de prueba en los cuales han sido aplicadas. En este enfoque mantenemos un conjunto de $k$-mejores reglas de compra y $k$-mejores reglas de venta.
+El otro experimento se basa en un \textit{aprendizaje incremental}, en este caso, se aprende un conjunto de reglas y en lugar de descartarlas, se ordenan de acuerdo a su desempeño sobre el conjunto de entrenamiento del cual fueron inducidas por primera vez, así como su desempeño sobre los conjuntos de prueba en los cuales han sido aplicadas. En este enfoque se mantiene un conjunto de $k$-mejores reglas de compra y $k$-mejores reglas de venta.
 
-Para medir el desempeño de las reglas sobre los conjuntos de entrenamiento de los cuales se inducen por primera vez, utilizamos la suma de su \textit{soporte} y su \textit{exactitud de Laplace}.
+Para medir el desempeño de las reglas sobre los conjuntos de entrenamiento de los cuales se inducen por primera vez, se usa la suma de su \textit{soporte} y su \textit{exactitud de Laplace}.
 
-Por soporte, nos referimos al número de ejemplos de la clase positiva que cubre una regla, mientras que la exactitud de Laplace está dada por la ecuación (\ref{eqn:exactitud laplace})
+El soporte de una regla se refiere al número de ejemplos cubiertos y que pertenecen a la clase positiva.
+
+La exactitud de Laplace está dada por la ecuación (\ref{eqn:exactitud laplace})
 
 \begin{equation}\label{eqn:exactitud laplace}
 Exactitud\,de\,Laplace = \dfrac{ n_{c} + 1 }{ n_{tot} + k }
 \end{equation}
 
-en donde $n_c$ es el número de ejemplos de la clase $c$ que son cubiertos por la regla para esta misma clase, $n_{tot}$ es el número de ejemplos cubiertos por la regla y $k$ es el número de clases\footnote{Observemos que si una regla es consistente, entonces $n_c = n_{tot}$}.
+en donde $n_c$ es el número de ejemplos de la clase $c$, que son cubiertos por la regla para esta misma clase, $n_{tot}$ es el número de ejemplos cubiertos por la regla y $k$ es el número de clases\footnote{Si una regla es consistente, entonces $n_c = n_{tot}$}.
 
-Como se señala en \cite{CN2Improvements}, la exactitud de Laplace favorece el uso de reglas más generales sobre aquellas que son más específicas (elegidas al utilizar la exactitud clásica, $n_{c} / n_{tot} $). Consideremos el siguiente ejemplo para el caso con sólo dos clases:
+Como se señala en \cite{CN2Improvements}, la exactitud de Laplace favorece el uso de reglas más generales sobre aquellas que son más específicas (elegidas al utilizar la exactitud clásica, $n_{c} / n_{tot} $). El siguiente ejemplo aclara lo anterior para el caso con sólo dos clases:
+
+\begin{ejemplo}
+Se tienen dos reglas, $R1$ y $R2$, tales que:
 
 \begin{itemize} 
 \item Regla $R1$ cubre $1000$ ejemplos de la clase $C1$ y $1$ de la clase $C2$.
@@ -697,11 +705,31 @@ Como se señala en \cite{CN2Improvements}, la exactitud de Laplace favorece el u
 \item Regla $R2$ cubre $5$ ejemplos de la clase $C1$ y $0$ de la clase $C2$.
 \end{itemize}
 
-En este caso, la exactitud clásica de la regla $R2$ es igual a $100\%$, contra un $99\%$ de la regla $R1$, por lo tanto, a pesar de que esta última regla es más general que la primera, no le daríamos la preferencia que se le debería de dar. En cambio, utilizando la ecuación (\ref{eqn:exactitud laplace}), tenemos que la exactitud de Laplace para la regla $R1$  es aproximadamente $86\%$, mientras que para la regla $R2$ es de $99.8 \%$, con lo que capturamos el hecho de que esta última regla es más general.
+Para la regla $R1$, se tiene que la exactitud clásica, en la clase $C1$ es:
 
-Por otra parte, para medir el desempeño de las reglas sobre los conjuntos de prueba, primero las agrupamos en pares de \textit{compra-venta}. Estos pares de reglas se forman a partir de las señales de compra y venta generadas durante el periodo de prueba y son recompensadas (penalizadas) de acuerdo a la ganancia (pérdida) que generan.
+$$ \dfrac{n_{C1}}{n_{tot}} = \dfrac{1000}{1001} = 0.99 = 99\%.$$
 
-Por ejemplo, consideremos un caso en el cual la regla de compra, $R_{C}$, nos indica que en el tiempo $t_1$ se debe de comprar, esta compra tendrá un precio de ejecución $P_{C}$. Conforme avanza el tiempo, notamos que la regla de venta, $R_{V}$, nos indica que en el tiempo $t_2 > t_1$, se debe de vender, esta venta tendrá precio de ejecución $P_{V}$. La recompensa (penalización) que se le asigna a cada regla en el par $\left(R_C, R_V\right)$ está dada por su ganancia (pérdida) porcentual, es decir:
+Para la regla $R2$, esta misma cantidad es:
+
+$$ \dfrac{n_{C1}}{n_{tot}} = \dfrac{5}{5} = 1 = 100\%.$$
+
+en este caso, se da preferencia a la regla $R2$, a pesar de que la regla $R1$ es más general para determinar la clase $C1$.
+
+En cambio, con la ecuación (\ref{eqn:exactitud laplace}) se tiene para la regla $R1$:
+
+$$ \dfrac{n_{C1} + 1}{n_{tot} + k} = \dfrac{1000 + 1}{1001 + 2} = 0.99 = 99\%.$$
+
+mientras que para la regla $R2$:
+
+$$ \dfrac{n_{C1} + 1}{n_{tot} + k} = \dfrac{5 + 1}{5 + 2} = 0.86 = 86\%.$$
+
+y por lo tanto, se elige la regla $R1$ como una regla para determinar la clase $C1$.
+
+\end{ejemplo}
+
+Para medir el desempeño de las reglas sobre los conjuntos de prueba, primero se agrupan en pares de \textit{compra-venta}. Estos pares de reglas se forman a partir de las señales de compra y venta generadas durante el periodo de prueba y son recompensadas (penalizadas) de acuerdo a la ganancia (pérdida) que generan.
+
+Por ejemplo, en un caso en el cual la regla de compra, $R_{C}$, indica que en el período $t_1$ se debe de comprar, esta compra tendrá un precio de ejecución $P_{C}$. Con el transcurso del tiempo, la regla de venta, $R_{V}$, indica que en el período $t_2 > t_1$, se debe de vender; esta venta tendrá precio de ejecución $P_{V}$. Estas dos reglas forman un par \textit{compra-venta} y la recompensa (o penalización) que se le asigna a cada regla en el par $\left(R_C, R_V\right)$ está dada por su ganancia (o pérdida) porcentual, es decir:
 
 \begin{equation}\label{eqn:recompensa reglas}
 Recompensa(R_C, R_V) = \dfrac{P_V (1 - c)}{P_C (1 + c) } - 1
@@ -709,7 +737,7 @@ Recompensa(R_C, R_V) = \dfrac{P_V (1 - c)}{P_C (1 + c) } - 1
 
 en donde $c$ es el costo de transacción.
 
-Finalmente, cada regla que no aparece en el conjunto de prueba que se está evaluando, se penaliza con la pérdida promedio que se tiene sobre este mismo conjunto de prueba; esto se utiliza como un mecanismo para ir descartando reglas debido al paso del tiempo.
+Finalmente, cada regla que no aparece en el conjunto de prueba que se está evaluando, se penaliza con la pérdida promedio sobre este mismo conjunto de prueba; esto se utiliza como un mecanismo para ir descartando reglas debido al paso del tiempo.
 
 De acuerdo a lo anterior, el puntaje de una regla $R$, antes de evaluar el conjunto de prueba $M$, está dado por:
 
@@ -719,7 +747,7 @@ puntaje_{-M}(R) = soporte(R) + Laplace(R) + \sum Recompensas
 
 en la ecuación (\ref{eqn:puntaje de una regla}), el término $ \sum Recompensas$ hace referencia a la suma de recompensas o penalizaciones que ha obtenido la regla $R$ para cada conjunto de prueba anterior al conjunto $M$.
 
-De esta manera, ahora somos capaces de ordenar las reglas y por lo tanto acumular el aprendizaje así como identificar reglas útiles y descartar aquellas que no han funcionado.
+Con los elementos anteriores, es posible ordenar las reglas y por lo tanto acumular el aprendizaje, así como identificar reglas útiles y descartar aquellas que no han funcionado.
 
 La imagen \ref{imagen:aprendizaje_incremental} muestra el esquema del aprendizaje incremental que se propone en este trabajo.
 
