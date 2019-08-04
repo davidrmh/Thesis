@@ -148,6 +148,8 @@ Para finalizar, la sección \ref{capitulo:conclusiones} trata las conclusiones o
 \label{seccion:contribuciones}
 Una de las principales contribuciones es el análisis del mercado accionario mexicano desde una enfoque basado en reglas. El análisis del estado del arte indica que esta es la primera vez que se analiza este mercado utilizando dicho enfoque.
 
+Una segunda contribución de este trabajo, es la propuesta de un método de etiquetado para las series de tiempo utilizadas, esta metodología utiliza un algoritmo evolutivo con el fin de obtener la clase correspondiente a la que pertenece cada observación del conjunto de entrenamiento.
+
 %=============== Antecedentes ================= %
 \chapter[Capítulo \thechapter: Revisión del estado del arte]{Revisión del estado del arte}
 \label{capitulo:antecedentes}
@@ -156,7 +158,7 @@ Una de las principales contribuciones es el análisis del mercado accionario mex
 %Tabla con referencia, vence bh, considera costos de transacción
 Al analizar el estado del arte, se puede observar que las heurísticas evolutivas juegan un papel esencial para obtener las reglas con las cuales se opera en el mercado. Además, los atributos utilizados en la mayoría de los trabajos son un conjunto de indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
 
-Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceBH} muestran un resumen del estado del arte recolectado para este trabajo, como se puede observar existen resultados mixtos respecto a la estrategia \textit{compra y espera}, que comúnmente es utilizada como estrategia de referencia.
+Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceBH} muestran un resumen de las referencias recolectadas para este trabajo, como se puede observar existen resultados mixtos respecto a la estrategia \textit{compra y espera}, que comúnmente es utilizada como estrategia de referencia.
 
 Uno de los primeros artículos en donde se utilizan técnicas relacionadas al aprendizaje de reglas es \cite{Allen1999}, en este trabajo se utiliza una metodología basada en programación genética, obteniéndose de esta manera un conjunto de reglas \textit{si...entonces}, para operar en el mercado. Los autores analizan el mercado accionario de Estados Unidos utilizando la información del índice accionario S\&P 500 (ver sección \ref{seccion:indices accionarios}) y comparándose contra la estrategia \textit{compra y espera} (ver sección \ref{seccion:buy and hold}) obteniendo resultados poco favorables.
 
@@ -488,16 +490,56 @@ En donde $Prom_t$ está dado por la ecuación (\ref{eqn:precio tipico}), $\overl
 Las señales de compra y venta del indicador CCI se basan en la hipótesis de que los precios presentan un comportamiento de reversión a la media, por lo tanto y en la práctica, valores mayores a $200$ en el CCI, son considerados como señales de venta (el precio tendrá una reversión a la media, por lo tanto disminuirá), mientras que valores menores a $-100$, son considerados señales de compra (el precio revierte a la media al aumentar su valor).
 
 %=============== AQ y CN2 ================= %
-\section{Algoritmos AQ y CN2}
+\section{Algoritmos de aprendizaje de reglas}
+\label{seccion:algoritmos-aprendizaje-reglas}
+Esta sección sigue muy de cerca lo que se expone en \cite{foundations-rule}.
+
+El aprendizaje de máquina es una área encargada de descubrir modelos, patrones y otras regularidades en un conjunto de datos. Esta área, se puede categorizar en tres grandes enfoques:
+
+\begin{enumerate}
+\item \textbf{Estadístico}: Aquí se encuentran métodos estadísticos y de reconocimiento de patrones, tales como: k-vecinos más cercanos, clasificadores bayesianos y máquinas de soporte vectorial.
+
+\item \textbf{Conexionista}: En este enfoque se engloba el aprendizaje realizado por medio de redes neuronales.
+
+\item \textbf{Simbólico}: Se incluye el aprendizaje inductivo de descripciones simbólicas, tales como reglas, árboles de decisión o representaciones lógicas.
+\end{enumerate}
+
+Este trabajo utiliza algoritmos que entran dentro del enfoque simbólico. Concretamente, los algoritmos utilizados inducen un conjunto de reglas de la forma \textit{si...entonces}. Cada regla tiene un antecedente formado por la conjunción de condiciones, cada una de estas condiciones involucra un atributo en particular. Como consecuente, la regla tiene una etiqueta de clase. El lenguaje utilizado para describir los datos, es el lenguaje de atributo-valor.
+
+En un enfoque basado en reglas, se dice que una regla \textbf{cubre} un ejemplo, si los valores de los atributos de este ejemplo cumplen las condiciones del antecedente de la regla. Se dice que una regla \textbf{cubre correctamente} un ejemplo, si además de cubrirlo, la clase del ejemplo corresponde a la clase en el consecuente de la regla.
+
+Dado un conjunto de ejemplos (ejemplos positivos) que pertenecen a una misma clase (la clase objetivo o clase positiva) y un conjunto de ejemplos que no pertenecen a ella (ejemplos negativos), los algoritmos de inducción de reglas obtienen un conjunto de reglas (este conjunto es llamado hipótesis para la clase positiva) con las cuales se busca cubrir correctamente los ejemplos positivos, se dice entonces que estos algoritmos aprenden el concepto de la clase objetivo.
+
+\begin{definicion}[Conjunto de reglas completo]
+\label{definicion:reglas-completas}
+Si un conjunto de reglas (hipótesis) para una clase objetivo (clase positiva) cubre correctamente todos los ejemplos positivos, entonces se dice que este conjunto de reglas es \textbf{completo}.
+\end{definicion}
+
+\begin{definicion}[Conjunto de reglas consistente]
+\label{definicion:reglas-consistentes}
+Si un conjunto de reglas (hipótesis) para una clase objetivo (clase positiva) no cubre ejemplo negativo alguno, se dice que es un conjunto de reglas \textbf{consistente}.
+\end{definicion}
+
+Para finalizar, se distinguen entre dos tipos de tareas de aprendizaje:
+
+\begin{enumerate}
+\item \textbf{Aprendizaje supervisado}: Los ejemplos de entrenamiento están clasificados de acuerdo a la clase a la que pertenecen.
+
+\item \textbf{No supervisado}: Los ejemplos de entrenamiento no se encuentran clasificados.
+\end{enumerate}
+
+En este trabajo se utiliza un aprendizaje supervisado.
+
+\subsection{Algoritmos AQ y CN2}
 %Falta alguna división
 %Marco sobre algoritmos de aprendizaje automático
 \label{seccion:algoritmos aq cn2}
 
-\subsection{Algoritmo AQ}
+\subsubsection{Algoritmo AQ}
 \label{subseccion:algoritmo aq}
 El algoritmo cuasi-óptimo (AQ), es un algoritmo de aprendizaje supervisado, que induce un conjunto de reglas del tipo \textit{si...entonces} (ver \cite{AQCervone2010}, \cite{AQMichalski1991} y \cite{AQWojtusiak2012} para un estudio detallado). 
 
-Dado un conjunto (descrito en el lenguaje atributo-valor), $P$, con $n$ observaciones, $P_1, P_2, \ldots, P_n$ (ejemplos de la clase positiva)  y un conjunto, $N$, con $m$ observaciones, $Q_1, Q_2, \ldots, Q_m$, (ejemplos de la clase negativa) el algoritmo AQ encuentra un conjunto de reglas que son completas (cubren todos los ejemplos de la clase positiva) y consistentes (no cubren ejemplo alguno de la clase negativa).
+Dado un conjunto (descrito en el lenguaje atributo-valor), $P$, con $n$ observaciones, $P_1, P_2, \ldots, P_n$ (ejemplos de la clase positiva)  y un conjunto, $N$, con $m$ observaciones, $Q_1, Q_2, \ldots, Q_m$, (ejemplos de la clase negativa) el algoritmo AQ encuentra un conjunto de reglas que son completas y consistentes.
 
 Las reglas toman la forma descrita en la expresión (\ref{eqn:reglas AQ})
 
@@ -548,7 +590,7 @@ El algoritmo AQ inicia su proceso de inducción seleccionando un ejemplo (la sem
 \label{algo:AQ genera estrella}
 \end{algoritmo}
 
-\subsection{Algoritmo CN2}
+\subsubsection{Algoritmo CN2}
 \label{subseccion:algoritmo cn2}
 Como podemos observar en el algoritmo \ref{algo:AQ genera estrella}, al momento de generar la estrella, el algoritmo AQ sólo considera especializaciones que excluyen un ejemplo negativo en particular mientras que, al mismo tiempo, se busca cubrir la semilla. Como se señala en \cite{CN2-Clark1989}, este tipo de búsqueda se limita al espacio de complejos que son consistentes con el conjunto de entrenamiento, limitando así la capacidad de generalización del algoritmo.
 
