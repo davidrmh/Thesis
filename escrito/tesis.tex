@@ -9,8 +9,7 @@
 \usepackage{graphicx}
 \usepackage[square,sort,comma,numbers]{natbib}
 \usepackage{url}
-%\usepackage{titlesec}
-%\usepackage{float}
+\usepackage{pdfpages} %para incluir la portada
 
 \bibliographystyle{elsarticle-harv}
 
@@ -56,15 +55,15 @@
 
 \begin{document}
 \sloppy %Para justificar correctamente (tiene que ver con \usepackage[none]{hyphenat})
-\maketitle
+\includepdf{portada/portada.pdf}
+%\maketitle
 \pagenumbering{Roman} %numeración romana con mayúsculas
 
 \chapter*{Dedicatoria}
 A mis padres y amigos.
 
 \chapter*{Agradecimientos}
-Agradezco a mi director de tesis el doctor Salvador Godoy Calderón por su apoyo en la realización de este trabajo.
-
+Agradezco a mi director de tesis el doctor Salvador Godoy Calderón por su apoyo en la realización de este trabajo.\newline
 Agradezco también a cada uno de los miembros de mi comité tutorial por sus valiosas observaciones.
 
 \renewcommand{\contentsname}{Contenido}
