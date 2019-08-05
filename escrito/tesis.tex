@@ -634,9 +634,9 @@ De esta manera, si $f_i$ es la frecuencia observada para la clase $i$ dentro de 
 \label{seccion:separacion de datos}
 En este trabajo se utilizan precios diarios\footnote{Obtenidos de Yahoo Finance. https://finance.yahoo.com} de los instrumentos NAFTRAC y SPDR S\&P 500 (ver sección \ref{seccion:indices accionarios}).
 
-Para el NAFTRAC, la información inicia el día 15 de febrero de 2013 y termina el 21 de enero de 2019. Para el SPDR S\&P 500 el período de tiempo abarcado es del 2 de enero de 2008 hasta  el 3 de marzo de 2019. Se tienen períodos de tiempo distintos debido a la calidad en los datos, en el caso del mercado mexicano se observó un gran número de datos no disponibles para los años de $2008$ y $2012$.
+Para el NAFTRAC, la información inicia el día 15 de febrero de 2013 y termina el 21 de enero de 2019. Para el SPDR S\&P 500 el período de tiempo abarcado es del 2 de enero de 2008 hasta  el 3 de marzo de 2019. Se tienen períodos de tiempo distintos debido a la calidad en los datos, en el caso del mercado mexicano se tiene un gran número de datos no disponibles para los años de $2008$ y $2012$.
 
-La tabla \ref{tabla:Ejemplo datos diarios NAFTRAC} muestra la estructura de los datos para el NAFTRAC, es importante señalar que para ambos conjuntos de datos, no se incluyen fines de semana o días festivos (relativos a cada país, por ejemplo, la información del 15 de septiembre no se incluye en el conjunto de datos del NAFTRAC, pero sí en el conjunto de datos del SPDR S\&P).
+La tabla \ref{tabla:Ejemplo datos diarios NAFTRAC} muestra la estructura de los datos para el NAFTRAC, es importante señalar que para ambos conjuntos de datos no se incluyen fines de semana o días festivos (relativos a cada país, por ejemplo, la información del 15 de septiembre no se incluye en el conjunto de datos del NAFTRAC, pero sí en el conjunto de datos del SPDR S\&P).
 
 \begin{table}[h]
 \centering
@@ -650,7 +650,7 @@ La tabla \ref{tabla:Ejemplo datos diarios NAFTRAC} muestra la estructura de los 
 \vdots & \vdots & \vdots & \vdots  & \vdots & \vdots \\
 \hline
 \end{tabular}
-\caption{\label{tabla:Ejemplo datos diarios NAFTRAC} Datos diarios NAFTRAC}
+\caption{\label{tabla:Ejemplo datos diarios NAFTRAC} Muestra de los datos diarios del NAFTRAC}
 \end{table}
 
 Para crear los conjuntos de entrenamiento y prueba, los datos se dividen utilizando una ventana deslizante de 90 días. Este criterio está fundamentado en el hecho de que, tanto en México como en Estados Unidos, las empresas con acciones listadas en alguna bolsa de valores, están obligadas a reportar los resultados de sus operaciones de manera trimestral; así pues, se busca capturar la reacción de los inversionistas ante la publicación de esta información.
@@ -677,7 +677,7 @@ Utilizando esta metodología, se obtienen 15 conjuntos de entrenamiento y 15 con
 
 \section{Proceso de etiquetado}
 \label{seccion:proceso etiquetado}
-Ya que los datos de entrenamiento no están etiquetados, se utiliza un algoritmo evolutivo para obtener un conjunto de etiquetas que permita entrenar cada modelo. La idea detrás del etiquetado, se basa en encontrar las combinaciones de compras y ventas que generen el mayor exceso de ganancia, una vez conocida toda la historia del periodo de entrenamiento.
+Ya que los datos de entrenamiento no están etiquetados, se utiliza un algoritmo evolutivo para obtener un conjunto de etiquetas que permita entrenar cada modelo. La idea detrás del etiquetado se basa en, una vez conocida toda la historia del período de entrenamiento, encontrar las combinaciones de compras y ventas que generen el mayor exceso de ganancia.
 
 Las etiquetas utilizadas son:
 \begin{itemize}
@@ -688,7 +688,52 @@ Las etiquetas utilizadas son:
 \item Compra, representada con $1$ .
 \end{itemize}
 
-Este algoritmo evolutivo pertenece a la clase de algoritmos para la estimación de distribución (EDA por sus siglas en inglés \cite{simon2013evolutionary}). Cada individuo en la población representa una estrategia de inversión para un periodo de entrenamiento dado. Esta estrategia se representa a través de un vector $\mathbf{x} = (x_1, x_2, \ldots, x_t)$ cuya componente $x_i$ representan la acción a tomar en el período $i$, $x_i \in \{-1,0,1\}.$ La función de aptitud utilizada es el exceso de ganancia sobre la estrategia \textit{compra y espera} (ver sección \ref{subseccion:exceso de ganancia}). Así, cada vector $\mathbf{x} = (x_1, x_2, \ldots, x_t)$, tiene relacionado un exceso de ganancia, de acuerdo a las compras y ventas que determinan sus componentes $x_i$ y se busca aquel con mayor exceso de ganancia entre la población, este vector representa la mejor combinación de compras y ventas para el conjunto de datos dado.
+Este algoritmo evolutivo pertenece a la clase de algoritmos para la estimación de la distribución (EDA por sus siglas en inglés \cite{simon2013evolutionary}). Cada individuo en la población representa una estrategia de inversión para un periodo de entrenamiento dado. Esta estrategia se representa a través de un vector $\mathbf{x} = (a_1, a_2, \ldots, a_t)$ cuya componente $a_i$ representan la acción a tomar en el período $i$, $a_i \in \{-1,0,1\}.$ La función de aptitud utilizada es el exceso de ganancia sobre la estrategia \textit{compra y espera} (ver sección \ref{subseccion:exceso de ganancia}). Así, cada vector $\mathbf{x} = (a_1, a_2, \ldots, a_t)$, tiene asociado su respectivo exceso de ganancia de acuerdo a las compras y ventas que determinan sus componentes $a_i$; se busca aquel vector, $\mathbf{x}$, con mayor exceso de ganancia entre la población, este vector representa la mejor combinación de compras y ventas para el conjunto de datos dado.
+
+Para generar las poblaciones de cada generación, este etiquetado utiliza lo que se conocen como estadísticas de primer orden, en particular, se utiliza la probabilidad de que cada componente $i$ tome un valor dentro del conjunto $\{-1, 0, 1\}$. A continuación se muestra un ejemplo.
+
+\begin{ejemplo}
+Para un período de 5 días, dados los mejores $5$ individuos de la generación $n$
+
+$$
+\begin{array}{ccc}
+\mathbf{x}_1 & = & (1, 0, 0, -1, 0) \\
+\mathbf{x}_2 & = & (0, 1, -1, 0, 0) \\ 
+\mathbf{x}_3 & = & (0, 0, 0, 1, -1) \\
+\mathbf{x}_4 & = & (0, 1, 0, 0, -1) \\
+\mathbf{x}_5 & = & (0, 1, 0, -1, 0)
+\end{array}
+$$
+
+es posible obtener las probabilidades $P\left[a_{i} = k \right]$ para $k \in \{-1, 0, 1\}$, basta calcular las frecuencias relativas de cada entrada. Así, en este caso, para las tres primeras entradas se tiene:
+
+$$
+\begin{array}{lcr}
+P[a_1 = -1] = 0, & P[a_1 = 0] = \tfrac{4}{5}, & P[a_1 = 1] = \tfrac{1}{5}. \\ \\
+P[a_2 = -1] = 0, & P[a_2 = 0] = \tfrac{2}{5}, & P[a_2 = 1] = \tfrac{3}{5}. \\ \\
+P[a_3 = -1] = \tfrac{1}{4}, & P[a_3 = 0] = \tfrac{4}{5}, & P[a_3 = 1] = 0.
+\end{array}
+$$
+
+Con estas probabilidades, es posible generar la población para la generación $n + 1.$
+\end{ejemplo}
+
+El algoritmo \ref{algo:etiquetado}, muestra el proceso para crear una nueva generación para el etiquetado de los datos.
+
+\begin{algoritmo}[Algoritmo para etiquetado de datos]
+\begin{tabbing}
+\\ Sea $T$ el número de períodos en el conjunto de entrenamiento.
+\\1. Inicializar la población $\{\mathbf{x}_i\}$ de tamaño $N$, cada $\mathbf{x}_i \in \{-1, 0, 1\}^{T}$. \\
+2. \=Mientras no se cumpla criterio de paro: \\
+ \>3. Seleccionar los mejores $M =\lfloor \tfrac{N}{2} \rfloor$ individuos.\\
+ \>4. Con los $M$ individuos calcular $P[a_i = k]$ para $k \in \{-1, 0, 1\}$. \\
+ \>5. \= Para $j = 1$ hasta $N$:\\
+ \>\>6. Crear el individuo $\mathbf{x_j}$ de acuerdo a las probabilidades $P[a_i = k]$. \\
+
+7. Regresa la nueva población. 
+\end{tabbing}
+\label{algo:etiquetado}
+\end{algoritmo}
 
 En la figura \ref{imagen:etiquetado} se observa que el proceso de etiquetado es capaz de localizar los mínimos y máximos locales presentes en el conjunto de entrenamiento.
 
