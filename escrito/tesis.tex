@@ -115,10 +115,14 @@ El incremento en el poder de cómputo, la digitalización de los mercados financ
 
 A pesar de que la idea básica es comprar barato y vender caro, la incertidumbre y complejidad de los mercados financieros han dado lugar al uso de herramientas computacionales con el fin de guiar la toma de decisiones, concretamente, técnicas relacionadas al aprendizaje de máquina han ganado notoriedad \cite{AdvancesMLFinance}.
 
+\section{Objetivo general}
+\label{seccion:objetivo general}
 El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas \textit{si...entonces}. Estas reglas se utilizarán para obtener estrategias de inversión cuya ganancia, buscamos, sea superior a la ganancia generada por la estrategia de \textit{compra y espera}, la cual es usada comúnmente como una estrategia de referencia (ver sección \ref{seccion:mercado eficiente}).
 
 Además, la metodología propuesta busca obtener un modelo interpretable, contrastando con la tendencia actual que se caracteriza por el uso de las llamadas \textit{cajas negras}, por ejemplo redes neuronales (ver sección \ref{capitulo:antecedentes}).
 
+\section{Objetivos particulares}
+\label{seccion:Objetivos particulares}
 Los objetivos particulares de este trabajo son:
 \begin{itemize}
 
@@ -131,11 +135,12 @@ Los objetivos particulares de este trabajo son:
 \item Proponer una metodología para aplicar un aprendizaje incremental. Esta metodología permitirá que el modelo aprenda de los errores cometidos.
 \end{itemize}
 
+\section{Estructura del trabajo}
+\label{seccion:estructura del trabajo}
 La estructura de este trabajo es la siguiente:
-
 En la sección \ref{capitulo:antecedentes}, se dan los antecedentes del problema y se exploran las distintas metodologías que han sido empleadas con el fin de generar estrategias de inversión. Se hace un análisis comparativo entre los enfoques utilizados así como los tipo de mercado analizados.
 
-En la sección \ref{capitulo:marco teorico}, se da un panorama general sobre el funcionamiento de los mercados de índices accionarios, se explica la hipótesis del mercado eficiente así como sus posibles versiones y el tipo de información relacionada a cada una de ellas. Se explica la estrategia \textit{compra y espera} y la métrica de desempeño que se utilizará para evaluar nuestras estrategias. En la sección \ref{subseccion:indicadores tecnicos} se explican los atributos que se utilizarán y en la sección \ref{seccion:algoritmos aq cn2} los algoritmos de inducción de reglas utilizados.
+En la sección \ref{capitulo:marco teorico}, se da un panorama general sobre el funcionamiento de los mercados de índices accionarios, se explica la hipótesis del mercado eficiente así como sus posibles versiones y el tipo de información relacionada a cada una de ellas. Se explica la estrategia \textit{compra y espera} y la métrica de desempeño que se utilizará para evaluar nuestras estrategias. En la sección \ref{subseccion:indicadores tecnicos} se explican los atributos que se utilizarán y en las sección \ref{seccion:algoritmos-aprendizaje-reglas} los algoritmos de inducción de reglas utilizados.
 
 En la sección \ref{capitulo:solucion propuesta}, se explican los datos utilizados y la metodología propuesta, se establece además, la metodología de etiquetado y la forma de separar los conjuntos de entrenamiento y prueba. Finalmente se explica la forma en que se realiza el aprendizaje incremental propuesto, así como los supuestos bajo los cuales se trabajó.
 
@@ -155,7 +160,7 @@ Una segunda contribución de este trabajo, es la propuesta de un método de etiq
 %orden cronológico
 %Tabla con referencia, mercado, metodologia
 %Tabla con referencia, vence bh, considera costos de transacción
-Al analizar el estado del arte, se puede observar que las heurísticas evolutivas juegan un papel esencial para obtener las reglas con las cuales se opera en el mercado. Además, los atributos utilizados en la mayoría de los trabajos son un conjunto de indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
+Al analizar el estado del arte, se puede observar que las heurísticas evolutivas han jugado un papel esencial para obtener las reglas con las cuales se opera en el mercado. Además, los atributos utilizados en la mayoría de los trabajos son un conjunto de indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
 
 Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceBH} muestran un resumen de las referencias recolectadas para este trabajo, como se puede observar existen resultados mixtos respecto a la estrategia \textit{compra y espera}, que comúnmente es utilizada como estrategia de referencia.
 
@@ -474,7 +479,7 @@ Williams \%R_t = -100 \times \dfrac{HH - C_t}{HH - LL}
 
 en donde $HH$ es el máximo entre los precios máximos de cada período que comprende la ventana de tiempo, de manera similar $LL$ es el mínimo de los precios mínimos de cada período en la ventana de tiempo y $C_t$ es el precio de cierre en el tiempo $t$.
 
-Se considera típicamente que si este indicador se encuentra entre $0$ y $-20$, es un momento apropiado para vender, mientras que si se encuentra dentro del rango de $-80$ a $-100$, es un momento adecuado para comprar.
+Se considera típicamente que si este indicador se encuentra entre $-20$ y $0$, es un momento apropiado para vender, mientras que si se encuentra dentro del rango de $-100$ a $-80$, es un momento adecuado para comprar.
 
 \subsubsection{Commodity channel index (CCI)}
 \label{subsubseccion:cci}
@@ -488,12 +493,31 @@ En donde $Prom_t$ está dado por la ecuación (\ref{eqn:precio tipico}), $\overl
 
 Las señales de compra y venta del indicador CCI se basan en la hipótesis de que los precios presentan un comportamiento de reversión a la media, por lo tanto y en la práctica, valores mayores a $200$ en el CCI, son considerados como señales de venta (el precio tendrá una reversión a la media, por lo tanto disminuirá), mientras que valores menores a $-100$, son considerados señales de compra (el precio revierte a la media al aumentar su valor).
 
+La tabla \ref{tabla:resumen reglas indicadores} muestra un resumen de las reglas de compra y venta para cada indicador técnico.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ccc}
+\hline
+\textbf{Indicador} & \textbf{Regla de compra} & \textbf{Regla de  venta} \\
+\hline
+OsAroon & $OsAroon>0$ & $OsAroon<0$ \\
+RSI & $RSI < 30$ & $RSI > 70$ \\
+MFI & $MFI < 20$ & $MFI > 80$ \\
+Williams \%R & $-100 \leq Williams \%R \leq -80 $ & $-20 \leq Williams \%R \leq 0$ \\
+CCI & $CCI < -100$ & $CCI > 200$ \\
+
+\hline
+\end{tabular}
+\caption{\label{tabla:resumen reglas indicadores} Reglas de compra y venta de los indicadores técnicos.}
+\end{table}
+
 %=============== AQ y CN2 ================= %
-\section{Algoritmos de aprendizaje de reglas}
+\section{Algoritmos para aprendizaje de reglas}
 \label{seccion:algoritmos-aprendizaje-reglas}
 Esta sección sigue muy de cerca lo que se expone en \cite{foundations-rule}.
 
-El aprendizaje de máquina es una área encargada de descubrir modelos, patrones y otras regularidades en un conjunto de datos. Esta área, se puede categorizar en tres grandes enfoques:
+El aprendizaje de máquina es una área que estudia la forma de descubrir modelos, patrones y otras regularidades en un conjunto de datos. Esta área, se puede categorizar en tres grandes enfoques:
 
 \begin{enumerate}
 \item \textbf{Estadístico}: Aquí se encuentran métodos estadísticos y de reconocimiento de patrones, tales como: k-vecinos más cercanos, clasificadores bayesianos y máquinas de soporte vectorial.
@@ -529,14 +553,14 @@ Para finalizar, se distinguen entre dos tipos de tareas de aprendizaje:
 
 En este trabajo se utiliza un aprendizaje supervisado.
 
-\subsection{Algoritmos AQ y CN2}
+%\subsection{Algoritmos AQ y CN2}
 %Falta alguna división
 %Marco sobre algoritmos de aprendizaje automático
-\label{seccion:algoritmos aq cn2}
+%\label{seccion:algoritmos aq cn2}
 
-\subsubsection{Algoritmo AQ}
+\subsection{Algoritmo AQ}
 \label{subseccion:algoritmo aq}
-El algoritmo cuasi-óptimo (AQ), es un algoritmo de aprendizaje supervisado, que induce un conjunto de reglas del tipo \textit{si...entonces} (ver \cite{AQCervone2010}, \cite{AQMichalski1991} y \cite{AQWojtusiak2012} para un estudio detallado). 
+El algoritmo AQ, es un algoritmo de aprendizaje supervisado, que induce un conjunto de reglas del tipo \textit{si...entonces} (ver \cite{AQCervone2010}, \cite{AQMichalski1991} y \cite{AQWojtusiak2012} para un estudio detallado). 
 
 Dado un conjunto (descrito en el lenguaje atributo-valor), $P$, con $n$ observaciones, $P_1, P_2, \ldots, P_n$ (ejemplos de la clase positiva)  y un conjunto, $N$, con $m$ observaciones, $Q_1, Q_2, \ldots, Q_m$, (ejemplos de la clase negativa) el algoritmo AQ encuentra un conjunto de reglas que son completas y consistentes.
 
@@ -589,7 +613,7 @@ El algoritmo AQ inicia su proceso de inducción seleccionando un ejemplo (la sem
 \label{algo:AQ genera estrella}
 \end{algoritmo}
 
-\subsubsection{Algoritmo CN2}
+\subsection{Algoritmo CN2}
 \label{subseccion:algoritmo cn2}
 Como podemos observar en el algoritmo \ref{algo:AQ genera estrella}, al momento de generar la estrella, el algoritmo AQ sólo considera especializaciones que excluyen un ejemplo negativo en particular mientras que, al mismo tiempo, se busca cubrir la semilla. Como se señala en \cite{CN2-Clark1989}, este tipo de búsqueda se limita al espacio de complejos que son consistentes con el conjunto de entrenamiento, limitando así la capacidad de generalización del algoritmo.
 
@@ -633,7 +657,7 @@ De esta manera, si $f_i$ es la frecuencia observada para la clase $i$ dentro de 
 \label{seccion:separacion de datos}
 En este trabajo se utilizan precios diarios\footnote{Obtenidos de Yahoo Finance. https://finance.yahoo.com} de los instrumentos NAFTRAC y SPDR S\&P 500 (ver sección \ref{seccion:indices accionarios}).
 
-Para el NAFTRAC, la información inicia el día 15 de febrero de 2013 y termina el 21 de enero de 2019. Para el SPDR S\&P 500 el período de tiempo abarcado es del 2 de enero de 2008 hasta  el 3 de marzo de 2019. Se tienen períodos de tiempo distintos debido a la calidad en los datos, en el caso del mercado mexicano se tiene un gran número de datos no disponibles para los años de $2008$ y $2012$.
+Para el NAFTRAC, la información inicia el día 15 de febrero de 2013 y termina el 21 de enero de 2019. Para el SPDR S\&P 500 el período de tiempo abarcado es del 2 de enero de 2008 hasta  el 3 de marzo de 2019. Se tienen períodos de tiempo distintos debido a la calidad en los datos, en el caso del mercado mexicano se tienen un gran número de datos no disponibles para ciertos meses de los años $2008$ y $2012$.
 
 La tabla \ref{tabla:Ejemplo datos diarios NAFTRAC} muestra la estructura de los datos para el NAFTRAC, es importante señalar que para ambos conjuntos de datos no se incluyen fines de semana o días festivos (relativos a cada país, por ejemplo, la información del 15 de septiembre no se incluye en el conjunto de datos del NAFTRAC, pero sí en el conjunto de datos del SPDR S\&P).
 
@@ -878,9 +902,9 @@ La figura \ref{imagen:bandas horizontales} muestra un ejemplo de las bandas hori
 \caption{\label{imagen:bandas horizontales}Bandas horizontales para las señales de venta relativas a una señal de compra}
 \end{figure}
 
-\section{Supuestos con los que se trabaja}
+\section{Supuestos para operar en el mercado}
 \label{sec:supuestos del mercado}
-Para cada experimento, se consideran los siguientes supuestos:
+Para cada experimento, se consideran los siguientes supuestos del mercado:
 
 \begin{itemize}
 \item El precio de compra o venta para un día $t_{ejec}$, es el promedio entre el precio máximo y el precio mínimo de ese día.
@@ -917,7 +941,7 @@ acciones, en donde $\Bigl\lfloor x \Bigr\rfloor$ es la función piso.
 %=============== Resultados ================= %
 \chapter[Capítulo \thechapter: Resultados experimentales]{Resultados experimentales}
 \label{capitulo:resultados experimentales}
-Utilizando la metodología descrita en el capítulo \ref{capitulo:solucion propuesta}, para cada TRAC (ver sección \ref{seccion:indices accionarios}) se realizaron cuatro experimentos distintos. Estos experimentos exploran dos alternativas distintas para discretizar los atributos continuos, \cite{dataMiningUsingR}, así como el tipo de aprendizaje aplicado (incremental o no incremental).
+Utilizando la metodología descrita en el capítulo \ref{capitulo:solucion propuesta}, para cada TRAC (ver sección \ref{seccion:indices accionarios}) se realizan cuatro experimentos distintos. Estos experimentos exploran dos alternativas distintas para discretizar los atributos continuos, \cite{dataMiningUsingR}, así como dos alternativas para el tipo de aprendizaje aplicado (incremental o no incremental).
 
 El primero de los métodos de discretización (discretización por intervalos, denotado como DI), se basa en crear intervalos con el mismo tamaño, sin importar la distribución de los valores de cada atributo. El segundo de los métodos (discretización por cuantiles, denotado como DC) utiliza los cuantiles de cada atributo con el fin de crear intervalos equiprobables.
 
@@ -1163,11 +1187,13 @@ Ganancia monetaria promedio & $\$4,605.01$ & $\$6,079.97$ & $\$5,294.73$ & $\$5,
 %Aprendizaje incremental no es apropiado para CN2 pero si para AQ
 \section{Conclusiones}
 \label{seccion:conclusiones}
-De acuerdo a los resultados de la sección \ref{capitulo:resultados experimentales}, tanto como para el mercado mexicano como para el estadounidense, el algoritmo AQ con aprendizaje incremental, es superior a cualquier versión del algoritmo CN2. Más aún, para el caso del mercado mexicano, este algoritmo logra vencer (en promedio) a la estrategia \textit{compra y espera} aún en mercados que presentan una tendencia a la alza. 
+De acuerdo a los resultados de la sección \ref{capitulo:resultados experimentales}, tanto para el mercado mexicano como para el estadounidense, el algoritmo AQ con aprendizaje incremental, presenta mejores resultados que cualquier experimento utilizando el algoritmo CN2. Más aún, para el caso del mercado mexicano, este algoritmo logra vencer (en promedio) a la estrategia \textit{compra y espera}, aún en mercados que presentan una tendencia a la alza. 
 
 Es importante señalar que, a pesar de que no siempre se vence a la estrategia \textit{compra y espera}, únicamente en un caso se obtiene una ganancia monetaria promedio negativa (algoritmo CN2 experimento AI-DI, tabla \ref{tabla:CN2-NAFTRAC}), en el resto de los experimentos, en promedio, no se pierde dinero, una característica claramente deseable para cualquier algoritmo de inversión.
 
-Finalmente, desde el punto de vista de la teoría económica, los resultados experimentales indican que el mercado mexicano es menos eficiente que el mercado estadounidense. Esto está en línea con lo que se expone en \cite{CFA2019}, en donde se señala que uno de los factores que contribuye a la eficiencia del mercado, es el número de participantes que hay en este (a mayor número de participantes, mayor eficiencia hay).
+Desde el punto de vista de la teoría económica, los resultados experimentales indican que el mercado mexicano es menos eficiente que el mercado estadounidense. Esto está en línea con lo que se expone en \cite{CFA2019}, en donde se señala que uno de los factores que contribuye a la eficiencia del mercado, es el número de participantes que hay en este (a mayor número de participantes, mayor eficiencia hay).
+
+
 
 \section{Trabajo futuro}
 \label{seccion:trabajo futuro}
