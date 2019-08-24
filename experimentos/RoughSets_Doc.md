@@ -18,8 +18,9 @@ En la tesis se utilizaron los métodos ```D.discretize.quantiles.RST.```(discret
 La función ```SF.applyDecTable``` requiere de un objeto del tipo **DecisionTable** (ver función ```SF.asDecisionTable```) que contiene los datos sin discretizar y los cut values correspondientes a estos datos (ver función ```D.discretization.RST```). Como resultado, se obtiene una nueva **DecisionTable** que contiene la discretización de los atributos de la tabla original de acuerdo a los cut values.
 
 Un ejemplo de la forma de la tabla resultante es:
-|**Atributo 1**|**Atributo 2**|**Atributo 3**| 
-| (13.5, Inf] | (1.67, 2.55] | (2.28,2.48] |
+
+|**Atributo 1**|**Atributo 2**|**Atributo 3**|
 |-------------|--------------|-------------|
+| (13.5, Inf] | (1.67, 2.55] | (2.28,2.48] |
 | (12.5,13.5] | (1.67,2.55]  | [-Inf,2.28] |
 | (12.5,13.5] | (1.67,2.55]  | (2.48, Inf] |
