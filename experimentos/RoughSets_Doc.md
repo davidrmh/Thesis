@@ -220,7 +220,7 @@ Una aproximación inferior para una clase $i$, es el conjunto de observaciones q
 	```
 
 	2. Magia negra :confused: :tired_face: :sob:
-	Pero al parecer ya que la variable ```support``` cumple que 
+	Pero al parecer está bien ya que la variable ```support``` cumple que 
 	```
 	all(decision.table[support, idx_target] == concept)
 	```
