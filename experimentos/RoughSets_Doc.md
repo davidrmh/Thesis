@@ -42,7 +42,75 @@ El código se encuentra en esta [liga](https://github.com/janusza/RoughSets/blob
 4. 
 ```
   INDrelation = BC.IND.relation.RST(decision.table, (1:ncol(decision.table))[-decIdx])
+  approximations = BC.LU.approximation.RST(decision.table, INDrelation)
+	lowerApproximations = approximations$lower.approximation
+	rm(INDrelation, approximations)
 ```
+5. La variable ```descriptorList``` es una lista que contiene los valores únicos de la **Decision.Table** ya discretizada. Es similar a aplicar la función ```unique``` para cada columna de la tabla.
+```
+	descriptorsList = attr(decision.table, "desc.attrs")[-decIdx]
+```
+
+6. 
+```
+	descriptorsList = attr(decision.table, "desc.attrs")[-decIdx]
+	descriptorCandidates = list()
+	for (i in 1:length(descriptorsList)) {
+		tmpDescriptors = lapply(descriptorsList[[i]],
+                            function(v, x) return(list(idx = x, values = v)), i)
+		tmpDescriptors = lapply(tmpDescriptors, laplaceEstimate,
+		                        decision.table[,-decIdx], clsVec, uniqueCls)
+		names(tmpDescriptors) = descriptorsList[[i]]
+		descriptorCandidates[[length(descriptorCandidates) + 1]] = tmpDescriptors
+	}
+```
+La variable ```descriptorCandidates``` es una lista que contiene el soporte, la exactitud de Laplace así como la clase mayoritaria (consecuente) de cada elemento en ```descriptorList```. Por ejemplo:
+
+```
+$`[-Inf,12.5]`
+$`[-Inf,12.5]`$idx
+[1] 1
+
+$`[-Inf,12.5]`$values
+[1] "[-Inf,12.5]"
+
+$`[-Inf,12.5]`$consequent
+[1] "2"
+
+$`[-Inf,12.5]`$support
+ [1]  45  48  49  51  52  54  56  57  59  61  62  64  65  66  67  68  70  71  72
+[20]  73  74  75  77  78  79  80  81  82  83  84  85  86  88  89  90  91  92  93
+[39]  94  95  99 101 108 135 137 138 140 153 154 155 157 158 159 160 161 162 164
+[58] 167 172 177
+
+$`[-Inf,12.5]`$laplace
+        2 
+0.8730159 
+```
+Nos dice que para el atributo con índice (idx) $1$, el valor ```[-Inf,12.5]``` se observa en mayor medida para la clase ```"2"```. Se podría pensar que esta lista guarda la información de un **selector**.
+
+El código de la función ```laplaceEstimate``` se encuentra [aquí](https://github.com/janusza/RoughSets/blob/master/R/RuleInduction.OtherFuncCollections.R)
+
+7. Calcula las reglas para cada clase. ```lowerApproximations[[i]]``` corresponde a las observaciones de la clase $i$, es decir, el concepto que se quiere aprender.
+```
+for(i in 1:length(lowerApproximations)) {
+		rules[[i]] = computeAQcovering(as.integer(lowerApproximations[[i]]),
+                                   descriptorCandidates,
+		                               decision.table[,-decIdx],
+                                   epsilon = 1 - confidence, K = timesCovered)
+	}
+
+```
+El resultado es una lista cuyo elemento ```rules[[i]]``` es una lista que representa el conjunto de reglas para la clase $i$. Hasta este punto, el único referente al consecuente de cada regla es el índice $i$, que se relaciona con ```names(lowerApproximations)```.
+
+8. 
+```
+rules = unlist(rules, recursive = FALSE)
+	rules = lapply(rules, function(x) laplaceEstimate(list(idx = x$idx, values = x$values),
+	                                                  decision.table, clsVec, uniqueCls, suppIdx = x$support))
+```
+Calcula la exactitud de Laplace para cada regla e incluye dentro de cada una de ellas el consecuente. Este consecuente corresponde a la clase que cada regla cubre con mayor frecuencia.
+
 
 ### BC.IND.relation.RST
 El código de esta función está en [liga](https://github.com/janusza/RoughSets/blob/master/R/BasicRoughSets.R).
@@ -129,3 +197,46 @@ Una aproximación inferior para una clase $i$, es el conjunto de observaciones q
 		colnames(upper.appr[[i]]) <- NULL
 	}
  ```
+ ### computeAQcovering
+ ```
+# Computation of a covering of a lower approximation of a concept by decision rules using the AQ algorithm.
+
+ computeAQcovering <- function(concept, attributeValuePairs, dataTab, epsilon = 0.05, K = 2)
+ ```
+  * ```Concept``` es un vector de enteros ```as.integer(lowerApproximations[[i]])```. Esto determina la **clase positiva**.
+
+	* ```attributeValuePairs <- descriptorCandidates```
+
+	* ```dataTab <- decision.table[,-decIdx]```
+
+  * ```epsilon = 1 - confidence, K = timesCovered```
+
+	1. Obtiene la semilla. La lista ```selectedAttributeValuePairs``` contiene el soporte y el consecuente de cada atributo en la semilla. Utilizando el lenguaje del aprendizaje de reglas, esta lista contiene la información de cada **selector** en la semilla (que observaciones cubre así como la clase mayoritaria, es decir, el consecuente)
+	```
+	  seedIdx = sample(uncoveredConcept, 1)
+    selectedAttributeValuePairs = mapply(function(avps, v) avps[[as.character(v)]],
+                                         attributeValuePairs, dataTab[seedIdx,],
+                                         SIMPLIFY = FALSE)
+	```
+
+	2. Magia negra :confused: :tired_face: :sob:
+	Paro al parecer ya que la variable ```support``` cumple que 
+	```
+	all(decision.table[support, idx_target] == concept)
+	```
+	es decir, el soporte sólo contiene observaciones que pertenece al concepto que se está aprendiendo.
+
+	 attrOrdering = sample(1:length(selectedAttributeValuePairs))
+    suppList = suppList[attrOrdering]
+    selectedAttributeValuePairs = selectedAttributeValuePairs[attrOrdering]
+
+    for(i in length(attrOrdering):1)  {
+      tmpSupport = Reduce(intersect, suppList[-i])
+      if(length(tmpSupport) > 0 && sum(tmpSupport %in% concept)/length(tmpSupport) >= 1-epsilon) {
+        support = tmpSupport
+        suppList = suppList[-i]
+        selectedAttributeValuePairs = selectedAttributeValuePairs[-i]
+      }
+    }
+	```
+	El resto del código se encarga de cubrir los ejemplos (de la clase positiva) restantes, así como asegurar que las reglas cumplan el parámetro ```timesCovered```.
