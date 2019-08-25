@@ -225,7 +225,7 @@ Una aproximación inferior para una clase $i$, es el conjunto de observaciones q
 	all(decision.table[support, idx_target] == concept)
 	```
 	es decir, el soporte sólo contiene observaciones que pertenece al concepto que se está aprendiendo.
-
+```
 	 attrOrdering = sample(1:length(selectedAttributeValuePairs))
     suppList = suppList[attrOrdering]
     selectedAttributeValuePairs = selectedAttributeValuePairs[attrOrdering]
