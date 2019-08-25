@@ -225,6 +225,7 @@ Una aproximación inferior para una clase $i$, es el conjunto de observaciones q
 	all(decision.table[support, idx_target] == concept)
 	```
 	es decir, el soporte sólo contiene observaciones que pertenece al concepto que se está aprendiendo.
+
 ```
 	 attrOrdering = sample(1:length(selectedAttributeValuePairs))
     suppList = suppList[attrOrdering]
@@ -238,5 +239,6 @@ Una aproximación inferior para una clase $i$, es el conjunto de observaciones q
         selectedAttributeValuePairs = selectedAttributeValuePairs[-i]
       }
     }
-	```
-	El resto del código se encarga de cubrir los ejemplos (de la clase positiva) restantes, así como asegurar que las reglas cumplan el parámetro ```timesCovered```.
+```
+
+El resto del código se encarga de cubrir los ejemplos (de la clase positiva)restantes, así como asegurar que las reglas cumplan el parámetro ```timesCovered```.
