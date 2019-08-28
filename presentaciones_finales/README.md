@@ -12,6 +12,7 @@
 ### Objetivos
     * Objetivo General.
     * Objetivos particulares.
+### Contribuciones    
 ### Estado del arte    
     * Análisis del estado del arte (hacer énfasis en aquellos trabajos que se basan en reglas).
 ### Metodología    
