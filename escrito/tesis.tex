@@ -111,15 +111,15 @@ Added to this, from the point of view of economic theory, this work investigates
 %Motivación y ¿qué es lo que se busca con este trabajo?
 %Objetivo general y objetivos particulares.
 %Estructura del trabajo.
-El incremento en el poder de cómputo, la digitalización de los mercados financieros y la oportunidad de obtener grandes ganancias, son algunos de los factores que han motivado la investigación y desarrollo de algoritmos computacionales enfocados a guiar la toma de decisiones de inversión, en particular, determinar los momentos adecuados para realizar compras o ventas de instrumentos financieros.
+Un mercado es un lugar (no necesariamente físico) en el cual se reúnen compradores y vendedores con el fin de intercambiar algún producto. En particular, en el mercado accionario se intercambian acciones de compañías (ver definición \ref{definicion:instrumento-financiero}). Hablando someramente, alguien que compra una acción cree que, en el futuro, el valor de esta va a incrementar y por lo tanto, obtendrá una ganancia futura si compra el día de hoy. Por otra parte, las personas que venden acciones, tienen la creencia de que el precio de estas va a disminuir y como consecuencia, prefieren vender el día de hoy y no en el futuro.
 
-A pesar de que la idea básica es comprar barato y vender caro, la incertidumbre y complejidad de los mercados financieros han dado lugar al uso de herramientas computacionales con el fin de guiar la toma de decisiones, concretamente, técnicas relacionadas al aprendizaje de máquina han ganado notoriedad \cite{AdvancesMLFinance}.
+Dado lo anterior, contar con herramientas que ayuden a determinar los momentos correctos de compra y venta es claramente de gran utilidad. A pesar de que la idea básica es comprar barato y vender caro, la incertidumbre y complejidad de los mercados financieros, así como el incremento en el poder de cómputo y la digitalización de los mercados, han dado lugar al uso de herramientas computacionales enfocadas a guiar la toma de decisiones, concretamente, técnicas relacionadas al aprendizaje de máquina han ganado notoriedad \cite{AdvancesMLFinance}.
 
 \section{Objetivo general}
 \label{seccion:objetivo general}
-El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas \textit{si...entonces}. Estas reglas se utilizarán para obtener estrategias de inversión cuya ganancia, buscamos, sea superior a la ganancia generada por la estrategia de \textit{compra y espera}, la cual es usada comúnmente como una estrategia de referencia (ver sección \ref{seccion:mercado eficiente}).
+El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas. Estas reglas se utilizarán para dirigir estrategias de inversión, las cuales tendrán una ganancia superior a la ganancia generada por la estrategia de \textit{compra y espera}, la cual es usada comúnmente como una estrategia de referencia (ver sección \ref{seccion:mercado eficiente}).
 
-Además, la metodología propuesta busca obtener un modelo interpretable, contrastando con la tendencia actual que se caracteriza por el uso de las llamadas \textit{cajas negras}, por ejemplo redes neuronales (ver sección \ref{capitulo:antecedentes}).
+Además, la metodología propuesta busca obtener un modelo interpretable, contrastando así con la tendencia actual que se caracteriza por el uso de las llamadas \textit{cajas negras}, por ejemplo redes neuronales (ver sección \ref{capitulo:antecedentes}).
 
 \section{Objetivos particulares}
 \label{seccion:Objetivos particulares}
@@ -269,7 +269,7 @@ Un \textbf{instrumento financiero} es un contrato monetario entre dos partes. Si
 Un mercado financiero es un mercado en el cual se intercambian instrumentos financieros, por ejemplo acciones.
 \end{definicion}
 
-Debido a la diversidad de los tipos de mercados financieros (accionario, deuda, tipo de cambio, derivados, etc.) así como al funcionamiento particular de cada uno de ellos, fue necesario restringir este estudio a un mercado en particular. Siendo concretos, este trabajo únicamente analiza el mercado de índices accionarios.
+Debido a la diversidad de los tipos de mercados financieros (accionario, deuda, tipo de cambio, derivados, etc.) así como al funcionamiento particular de cada uno de ellos, es necesario restringir este estudio a un mercado en particular. Siendo concretos, este trabajo únicamente analiza el mercado de índices accionarios.
 
 \begin{definicion}[Índice accionario]
 \label{definicion:indice-accionario}
@@ -287,7 +287,7 @@ En este trabajo consideraremos lo siguientes índices :
 
 El índice de precios y cotizaciones es el principal indicador del mercado accionario mexicano. Este índice busca medir el desempeño de las acciones listadas en la Bolsa Mexicana de Valores utilizando una muestra con las 35 series accionarias de mayor tamaño y liquidez listadas en dicha bolsa\footnote{https://espanol.spindices.com/indices/equity/sp-bmv-ipc}.
 
-Por otro lado, el índice Standard and Poors 500 es considerado como el mejor indicador para el mercado accionario de Estados Unidos. Este índice está compuesto por las 500 empresas de mayor capitalización las cuales capturan alrededor del $80\%$ de la capitalización del mercado\footnote{https://us.spindices.com/indices/equity/sp-500}
+Por otro lado, el índice Standard and Poors 500 es considerado como el mejor indicador para el mercado accionario de Estados Unidos. Este índice está compuesto por las 500 empresas de mayor capitalización, las cuales capturan alrededor del $80\%$ de la capitalización del mercado estadounidense.\footnote{https://us.spindices.com/indices/equity/sp-500}
 
 \begin{nota} \label{nota:ETF}
 En la práctica los inversionistas no pueden comprar los índices accionarios, en cambio, los instrumentos negociados reciben el nombre de Títulos Referenciados a Acciones (TRACS\footnote{En inglés Exchange Traded Funds o ETF}). Estos instrumentos buscan replicar el comportamiento del índice al que están relacionados.
