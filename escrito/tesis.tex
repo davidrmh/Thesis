@@ -162,9 +162,10 @@ Una segunda contribución de este trabajo, es la propuesta de un método de etiq
 %orden cronológico
 %Tabla con referencia, mercado, metodologia
 %Tabla con referencia, vence bh, considera costos de transacción
-Al analizar el estado del arte, se puede observar que las heurísticas evolutivas han jugado un papel esencial para obtener las reglas con las cuales se opera en el mercado. Además, los atributos utilizados en la mayoría de los trabajos son un conjunto de indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
 
-Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceBH} muestran un resumen de las referencias recolectadas para este trabajo, como se puede observar existen resultados mixtos respecto a la estrategia \textit{compra y espera}, que comúnmente es utilizada como estrategia de referencia.
+Al analizar el estado del arte, se puede observar que las heurísticas evolutivas han jugado un papel esencial para obtener un conjunto de reglas para guiar las decisiones de compra y venta \cite{Allen1999}, \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016}, \cite{Potvin2004}, \cite{Kampouridis2017}. Además, los atributos utilizados en la mayoría de los trabajos son un conjunto de indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
+
+Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceBH} muestran un resumen de las referencias recolectadas para este trabajo, como se puede observar existen resultados mixtos en cuanto a obtener mejores ganancias que la estrategia \textit{compra y espera}, la cual es comúnmente  utilizada como la estrategia de referencia. Por otra parte, se observa que las técnicas de aprendizaje utilizadas, pertenecen al paradigma subsimbólico o al conexionista (ver sección \ref{seccion:algoritmos-aprendizaje-reglas}). En este trabajo se propone una metodología simbólica para aprender el conjunto de reglas de interés (ver sección \ref{subseccion:algoritmo aq}).
 
 Uno de los primeros artículos en donde se utilizan técnicas relacionadas al aprendizaje de reglas es \cite{Allen1999}, en este trabajo se utiliza una metodología basada en programación genética, obteniéndose de esta manera un conjunto de reglas \textit{si...entonces}, para operar en el mercado. Los autores analizan el mercado accionario de Estados Unidos utilizando la información del índice accionario S\&P 500 (ver sección \ref{seccion:indices accionarios}) y comparándose contra la estrategia \textit{compra y espera} (ver sección \ref{seccion:buy and hold}) obteniendo resultados poco favorables.
 
@@ -522,11 +523,11 @@ Esta sección sigue muy de cerca lo que se expone en \cite{foundations-rule}.
 El aprendizaje de máquina es una área que estudia la forma de descubrir modelos, patrones y otras regularidades en un conjunto de datos. Esta área, se puede categorizar en tres grandes enfoques:
 
 \begin{enumerate}
-\item \textbf{Estadístico}: Aquí se encuentran métodos estadísticos y de reconocimiento de patrones, tales como: k-vecinos más cercanos, clasificadores bayesianos y máquinas de soporte vectorial.
+\item \textbf{Simbólico}: Se incluye el aprendizaje inductivo de descripciones simbólicas, tales como reglas, árboles de decisión o representaciones lógicas.
+
+\item \textbf{Subsimbólico}: Aquí se encuentran métodos estadísticos y de reconocimiento de patrones, tales como: k-vecinos más cercanos, clasificadores bayesianos y máquinas de soporte vectorial.
 
 \item \textbf{Conexionista}: En este enfoque se engloba el aprendizaje realizado por medio de redes neuronales.
-
-\item \textbf{Simbólico}: Se incluye el aprendizaje inductivo de descripciones simbólicas, tales como reglas, árboles de decisión o representaciones lógicas.
 \end{enumerate}
 
 Este trabajo utiliza algoritmos que entran dentro del enfoque simbólico. Concretamente, los algoritmos utilizados inducen un conjunto de reglas de la forma \textit{si...entonces}. Cada regla tiene un antecedente formado por la conjunción de condiciones, cada una de estas condiciones involucra un atributo en particular. Como consecuente, la regla tiene una etiqueta de clase. El lenguaje utilizado para describir los datos, es el lenguaje de atributo-valor.

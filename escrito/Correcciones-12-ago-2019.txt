@@ -1,0 +1,108 @@
+ 
+PORTADA (TODO CORREGIDO)
+
+1) Abajo de Centro de Investigación... poner Laboratorio de Inteligencia Artificial.
+
+2) No extender la palabra TESIS
+
+3) "Que para obtener el GRADO de:"
+
+4) "MAESTRÍA en Ciencias de la Computación"
+
+5) En lugar de TUTOR, poner DIRECTOR...
+
+6) Hasta abajo, la fecha corta: mes y año.
+
+
+INTRODUCCIÓN
+
+7) Separar como epígrafes, Objetivos: donde colocas el objetivo general como los objetivos particulares, y Estructura del texto: donde anticipas, a grandes rasgos, qué temas se tratarán en cada capítulo...
+(LISTO)
+
+8) Algo que no encuentro es la descripción o definición del problema. Mencionar el objetivo del trabajo no es suficiente para ubicar al lector (pensando en un lector de computación). En el marco teórico se hace una buena descripción del entorno del mercado accionario, pero en la introducción, hace falta definir el "problema" que se estudia y resuelve...
+=> Ejemplo de como podría ponerlo? (explicar que es un mercado, el problema a resolver) (LISTO)
+
+C2-REVISIÓN DEL ESTADO DEL ARTE
+
+9) Al analizar el estado del arte (REFERENCIAS), se puede observar que las heurísticas evolutivas HAN JUGADO un papel...
+=> REFERENCIAS se dan en la tabla 2.1 y se explican en el texto.(Poner las más relevantes)
+
+10) Tampoco encuentro en este capítulo, la muy importante explicación de lo simbólico, lo subsimbólico y lo conexionista...
+=>Mi búsqueda se sesgó hacia artículos dentro del paradigma subsimbólico (realmente no hay una referencia puramente simbólica)
+=>Ubicar al lector sobre los paradigmas
+(Hago una mención breve sobre los paradigmas de aprendizaje
+ en la parte de marco teórico)
+
+11) 2o párrafo: ...para este trabajo. Como se puede observar (EN (REFERENCIAS)), 
+=>Hago referencia a las tablas 2.1 y 2.2 (en dichas tablas)
+
+12) Epígrafe 3.4 se debe titular "Algoritmos PARA aprendizaje de reglas"...
+=> LISTO
+
+13) Pág.17 primer párrafo. El aprendizaje de máquina es UN área QUE ESTUDIA la forma de descubrir modelos...
+=> LISTO
+
+14) Sección 3.4.1. ¿Por qué se llama algoritmo cuasi-óptimo? ¿Por qué consideraste describir los algoritmos AQ y CN2 en la misma sección?  Explicar ésto al inicio de la sección, dando un poco de la "taxonomía" de los algoritmos...
+=> No sé porque se llama cuasi-optimo (creo que en un artículo lo explican, creo que tiene que ver con la forma de generar la estrella)
+=> Están en subsecciones distintas pero el paquete de latex que utilizo ya no enumera este nivel (cambié la estructura)
+=> Explicar más sobre los algoritmos
+
+
+SOLUCIÓN PROPUESTA
+
+15) Final del 2o párrafo: ¿no querrás decir los años DEL 2008 AL 2012? Aclarar...
+=>No es para todo ese rango, sólo para ciertos meses de esos años.
+
+16) ¿Usas algún tipo de validación para el etiquetado? ¿Cómo se podría hacer? ¿Qué tanta influencia tiene esa evaluación en los resultados subsequentes?
+=> La única validación que se hizo fue a través de la función de aptitud (exceso de ganancia sobre la estrategia compra y espera)
+Para cada generación, se monitorea el exceso de ganancia, siempre resultó positivo y mayor a 0.20 (20%)
+=> Explicarlo (más de una línea)
+
+17) Conviene algún diagrama que ilustre el deslizamiento de ventanas para el aprendizaje incremental, así como las "bandas". Por cierto, siempre me he preguntado la razón por la que lo mencionas en plural, yo sólo entiendo una banda (ver Figura 4.3)...
+=> Banda superior y banda inferior (bandas) (cambiar gráfica, sombrear banda, poner etiqueta)
+=> El deslizamiento no sólo es para el aprendizaje incremental, es deslizamiento busca capturar la información más reciente
+y ajustar los modelos utilizando dicha información (tabla 4.2 pag 23)
+
+18) Epígrafe 4.6.  Supuestos (¿de qué tipo?) con los que ¿quién? ¿trabaja?... Reescribir
+=> Supuestos del mercado (Límite inferior de la banda y límite inferior)
+
+19) Figura 4.2.  Es necesario distinguir los símbolos que representan procesos de los que representan resultados.  Rediseñar el diagrama...
+=> Pendiente (no es diagrama de flujo, es sólo una cadena de estados)
+
+
+RESULTADOS EXPERIMENTALES
+
+20) Dos alternativas para discretizar ¿los atributos continuos y el tipo de aprendizaje? Redactar de nuevo esa oración...
+=>Corregido
+
+21) Al inicio del capítulo mencionas los cuatro experimentos realizados, sin embargo, después los epígrafes hacen referencia sólo al índice que se usa pero no indica el experimento...
+=> En las tablas resumen los 4 experimentos ¿Que más podría agregar?
+=> Resultados con los datos del ...
+
+22) Agrega observaciones y análisis de cada experimento...
+=> En las tablas resumen los 4 experimentos ¿Que más podría agregar?
+=> Observaciones sobre las reglas en cada experimento
+
+
+CONCLUSIONES Y TRABAJO FUTURO
+
+23) Primer párrafo. "... tanto PARA el mercado mexicano, como para el estadounidense...".
+=>Quitar el primer como (LISTO)
+
+24) El algoritmo AQ NO ES SUPERIOR al CN2, sólo sus resultados para ésos experimentos son mejores...
+=> El algoritmo AQ presenta mejores resultados (LISTO)
+
+25) ¿Realmente es lo único que puedes concluir?  Las conclusiones están pobres, puedes decir mucho acerca de los métodos simbólicos y los subsimbólicos mejóralas...
+
+Verificar que el experimento esté claro, el desarrollo.
+
+Tramitar puerta cerrada y puerte abierta en el mismo FUTE
+Límite 18 de Agosto
+Barrón y René
+
+Después de autorizar enviar borrador de tesis.
+Estado del arte Redes vs evolutivos.
+Comparación con redes neuronales (redes => regresión, evolutivos => clasificación, interpretación)
+Plantear pros y contras de conexionista y subsimbólico.
+Explicar los métodos de discretización (ventajas y desventajas)
+Explicar con diagramas los métodos de discretización.
