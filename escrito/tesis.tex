@@ -769,12 +769,9 @@ En la figura \ref{imagen:etiquetado} se observa que el proceso de etiquetado es 
 \caption{\label{imagen:etiquetado} Resultado del proceso de etiquetado}
 \end{figure}
 
-
-
 \section{Atributos}
 \label{seccion:atributos}
 Los atributos usados en cada uno de los experimentos, son el conjunto de indicadores técnicos descritos en la sección \ref{subseccion:indicadores tecnicos}. Los parámetros para cada uno de ellos se describen a continuación, estos parámetros son los recomendados en la literatura del análisis técnico \cite{encycoplediaTechnicalIndicators}, \cite{technicalAnalysisKirkPatrick}.
-
 
 \begin{itemize}
 \item Oscilador Aroon con una ventana de tiempo de 25 días.
@@ -787,6 +784,66 @@ Los atributos usados en cada uno de los experimentos, son el conjunto de indicad
 
 \item CCI con una ventana de tiempo de 20 días.
 \end{itemize}
+
+\subsection{Discretización de los atributos}
+\label{subseccion:discretizacion de atributos}
+Ya que los algoritmos AQ y CN2 únicamente pueden trabajar con atributos discretos, es necesario emplear algún esquema de discretización para los indicadores técnicos utilizados.
+
+De acuerdo a \cite{dataMiningUsingR}, un esquema de discretización para una variable $x$, determina (utilizando los datos de un conjunto de entrenamiento) un conjunto de puntos de corte, $b_1, b_2, \ldots, b_{k- 1}$ tales que:
+
+$$
+a(x) = 
+\begin{cases}
+v_1 & \mbox{Si } x \in (-\infty, b_1] \\
+v_2 & \mbox{Si } x \in (b_1, b_2] \\
+\ldots \\
+v_{k - 1} & \mbox{Si } x \in (b_{k - 2}, b_{k -1}]\\
+v_k & \mbox{Si } x \in (b_{k - 1}, \infty)\\
+\end{cases}
+$$
+en donde $a$ es el atributo discretizado y los valores $v_i$ son los posibles valores que se asignan a este atributo.
+
+Los esquemas de discretización explorados en este trabajo son:
+
+\begin{itemize}
+\item Discretización por intervalos con la misma longitud.
+\item Discretización por cuantiles.
+\end{itemize}
+
+\subsubsection{Discretización por intervalos con la misma longitud}
+Como su nombre lo señala, este tipo de discretización crea intervalos con una longitud constante. Para calcular cada intervalo, es necesario determinar el valor máximo ($M$) y el valor mínimo ($m$) que el atributo $x$ toma sobre el conjunto de entrenamiento $T$. A partir de estos valores es posible determinar el rango del atributo, definido como:
+
+$$
+\Delta_{T}^{k}(x) = \dfrac{M-m}{k}
+$$
+en donde $k$ es un entero que indica el número de intervalos deseados. El $i-$ésimo punto de corte está dado por
+$$
+b_i = m + i \Delta_{T}^{k}(x)
+$$
+para $i \in \{1, 2, \ldots, k - 1 \}$.
+
+\subsubsection{Discretización por cuantiles}
+Una de las principales deficiencias en la discretización por intervalos con la misma longitud, es que este esquema ignora la distribución de los valores del atributo, la cual puede ser no uniforme o incluso asimétrica.
+
+Con el fin de considerar la distribución de los valores de un atributo, el esquema de discretización por cuantiles utiliza los cuantiles de la distribución de $x$ sobre el conjunto de entrenamiento. Así, si $k$ denota el número de intervalos deseados, entonces los puntos de corte están dados por
+$$
+b_i = q_{x}^{T} \left(\frac{i}{k} \right)
+$$
+en donde $i \in \{1, 2, \ldots, k - 1 \}$ y $q_{x}^{T} \left(y \right)$ es el cuantil $y$ de la distribución de los datos de la variable $x$ sobre el conjunto de entrenamiento $T$.
+
+De esta manera, cada intervalo tendrá la misma área (probabilidad). Las figuras \ref{imagen:discretizacion intervalos} y \ref{imagen:discretizacion cuantiles} ejemplifican los esquemas de discretización para el caso $k = 8$.
+
+\begin{figure}[ht]
+\centering
+\scalebox{0.7}{\includegraphics[width=1\linewidth]{imagenes/discretizacion-intervalos.png}}
+\caption{\label{imagen:discretizacion intervalos} Ejemplo de la discretización por intervalos con la misma longitud}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\scalebox{0.7}{\includegraphics[width=1\linewidth]{imagenes/discretizacion-cuantiles.png}}
+\caption{\label{imagen:discretizacion cuantiles} Ejemplo de la discretización por cuantiles}
+\end{figure}
 
 
 \section{Aprendizaje incremental}
