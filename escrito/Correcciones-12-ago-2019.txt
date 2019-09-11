@@ -92,7 +92,10 @@ CONCLUSIONES Y TRABAJO FUTURO
 24) El algoritmo AQ NO ES SUPERIOR al CN2, sólo sus resultados para ésos experimentos son mejores...
 => El algoritmo AQ presenta mejores resultados (LISTO)
 
-25) ¿Realmente es lo único que puedes concluir?  Las conclusiones están pobres, puedes decir mucho acerca de los métodos simbólicos y los subsimbólicos mejóralas...
+25) ¿Realmente es lo único que puedes concluir?  Las conclusiones están pobres, 
+puedes decir mucho acerca de los métodos simbólicos y los subsimbólicos mejóralas...
+=> ¿Qué puedo decir? no es mi objetivo destacar el uso de métodos simbólicos,
+sólo expongo una manera de obtener un modelo con un buen nivel de interpretabilidad
 
 Verificar que el experimento esté claro, el desarrollo.
 
@@ -102,7 +105,24 @@ Barrón y René
 
 Después de autorizar enviar borrador de tesis.
 Estado del arte Redes vs evolutivos.
-Comparación con redes neuronales (redes => regresión, evolutivos => clasificación, interpretación)
-Plantear pros y contras de conexionista y subsimbólico.
-Explicar los métodos de discretización (ventajas y desventajas)
-Explicar con diagramas los métodos de discretización.
+Plantear pros y contras de conexionista y subsimbólico (no es mi objetivo)
+Explicar los métodos de discretización (ventajas y desventajas) (LISTO)
+Explicar con diagramas los métodos de discretización.(LISTO)
+
+Para los experimentos del NAFTRAC se observan dos reglas que aparecen en la mayoría
+de los experiementos, en particular, en aquellos conjuntos de prueba en donde se 
+obtiene el mayor exceso de ganancia en períodos a la alza.
+
+IF Comm.Chan.20.0.015 is (-23, Inf] THEN  is -1
+IF Adj.Close.RSI.14 is [-Inf,53.7] THEN  is 1
+
+Es interesante que estas reglas tienen sentido financiero (Tabla reglas de compra y venta)
+Desafortunadamente, no todas las reglas gozan de interpretación financiera.
+
+Si el antecedente de las reglas está compuesto por varias condiciones, la interpretación puede llevar a
+una ambigüedad, financieramente hablando.
+
+Regla del archivo 3-naftrac-reglas-acum
+IF MFI.14 is (68.4, Inf] and Williams.R.14 is (-109,-92.1] THEN  is -1; (supportSize=2; laplace=0.75)
+
+MFI nos dice Vender, Williams nos dice comprar !!!
