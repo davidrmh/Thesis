@@ -967,11 +967,11 @@ La figura \ref{imagen:bandas horizontales} muestra un ejemplo de las bandas hori
 
 \begin{figure}[htbp]
 \centering
-\scalebox{0.8}{\includegraphics[width=1\linewidth]{imagenes/bandas_horizontales.jpeg}}
+\scalebox{0.79}{\includegraphics[width=1\linewidth]{imagenes/bandas_horizontales.jpeg}}
 \caption{\label{imagen:bandas horizontales}Bandas horizontales para las señales de venta relativas a una señal de compra}
 \end{figure}
 
-\section{Supuestos para operar en el mercado}
+\section{Supuestos con los que se opera en el mercado}
 \label{sec:supuestos del mercado}
 Para cada experimento, se consideran los siguientes supuestos del mercado:
 
@@ -1013,7 +1013,6 @@ acciones, en donde $\Bigl\lfloor x \Bigr\rfloor$ es la función piso.
 Utilizando la metodología descrita en el capítulo \ref{capitulo:solucion propuesta}, para cada TRAC (ver sección \ref{seccion:indices accionarios}) se realizan cuatro experimentos distintos. Estos experimentos exploran las dos alternativas distintas para discretizar los atributos continuos, así como las dos alternativas para el tipo de aprendizaje aplicado (incremental o no incremental).
 
 Por lo tanto, tenemos los siguientes experimentos:
-
 \begin{itemize}
 \item Aprendizaje incremental con discretización por intervalos (AI-DI).
 
@@ -1022,8 +1021,8 @@ Por lo tanto, tenemos los siguientes experimentos:
 \item Aprendizaje incremental con discretización por cuantiles (AI-DC).
 
 \item Aprendizaje no incremental con discretización por cuantiles (AN-DC).
-
 \end{itemize}
+Finalmente, para cada experimento que involucra aprendizaje incremental, se seleccionan las mejores 5 reglas de compra y las mejores 5 reglas de venta.
 
 \section{Resultados para el SPDR S\&P 500}
 \label{seccion:resultados sp500}
@@ -1158,7 +1157,11 @@ Ganancia monetaria promedio & $\$5,346.94$ & $\$6,059.76$ & $\$6,624.75$ & $\$5,
 
 \section{Resultados para el NAFTRAC}
 \label{seccion:resultados NAFTRAC}
-Con los 15 conjuntos de prueba que contienen la información del NAFTRAC se obtienen los resultados de las tablas  \ref{tabla:AQ-NAFTRAC} y \ref{tabla:CN2-NAFTRAC}.
+Con los 15 conjuntos de prueba que contienen la información del NAFTRAC, se obtienen los resultados de las tablas  \ref{tabla:AQ-NAFTRAC} y \ref{tabla:CN2-NAFTRAC}.
+
+De la misma forma que en los experimentos anteriores, el algoritmo AQ con aprendizaje incremental obtiene los mejores resultados para cada método de discretización, mientras que el algoritmo CN2 nuevamente presenta un desempeño pobre.
+
+Si se analizan sólo los periodos a la alza (hay un total de 7 periodos con esta tendencia), de acuerdo a las tablas \ref{tabla:AQ-NAFTRAC-alza} y \ref{tabla:CN2-NAFTRAC-alza}, ambos algoritmos fueron capaces de vencer a la estrategia \textit{compra y espera} en 3 de 4 experimentos, obteniéndose el mejor resultado con el algoritmo AQ utilizando un aprendizaje incremental y una discretización basada en cuantiles.
 
 \begin{center}
 \begin{table}[h]
@@ -1198,10 +1201,6 @@ Ganancia monetaria promedio & $\$-273.29$ & $\$578.85$ & $\$602.01$ & $\$461.66$
 \end{table}
 \end{center}
 
-De la misma forma que en los experimentos anteriores, el algoritmo AQ con aprendizaje incremental obtiene los mejores resultados para cada método de discretización, mientras que el algoritmo CN2 nuevamente presenta un desempeño pobre.
-
-Si se analizan sólo los periodos a la alza (se tiene un total de 7 periodos con esta tendencia), como se muestra en las tablas \ref{tabla:AQ-NAFTRAC-alza} y \ref{tabla:CN2-NAFTRAC-alza} ambos algoritmos fueron capaces de vencer a la estrategia \textit{compra y espera} en 3 de 4 experimentos, obteniéndose el mejor resultado con el algoritmo AQ utilizando un aprendizaje incremental y una discretización basada en cuantiles.
-
 \begin{center}
 \begin{table}[h]
 \centering
@@ -1240,7 +1239,24 @@ Ganancia monetaria promedio & $\$4,605.01$ & $\$6,079.97$ & $\$5,294.73$ & $\$5,
 \end{table}
 \end{center}
 
+\section{Sentido financiero de las reglas}
+\label{seccion:sentido financiero de las reglas}
+Al analizar el conjunto de reglas obtenidas, se observa que las reglas inducidas cuyo antecedente está formado por una sola condición, tienen sentido financiero. Estas reglas pueden considerarse como un refinamiento a aquellas reglas presentadas en la tabla \ref{tabla:resumen reglas indicadores}, la única diferencia es el umbral de decisión utilizado. 
 
+Particularmente, resulta interesante el siguiente par de reglas:
+$$
+\mbox{Si } RSI \in \left(\infty, 53.7\right], \mbox{ entonces compra}
+$$
+$$
+\mbox{Si } CCI \in \left(-23, \infty \right], \mbox{ entonces vende}
+$$
+estas reglas, actuando de manera conjunta, generaron el mayor exceso de ganancia para los experimentos del NAFTRAC en períodos en donde el mercado presentó una tendencia a la alza. Además, estas reglas pertenecieron al top $5$ de las mejores reglas en $13$ de los $15$ conjuntos de prueba del NAFTRAC.
+
+Por otra parte, se observa que conforme el antecedente de las reglas contiene un mayor número de condiciones, se presenta una ambigüedad (financieramente hablando), por ejemplo, para la regla
+$$
+\mbox{Si } MFI \in \left(68.4. \infty\right) \mbox{ y } \mbox{ Williams \%R} \in \left(-109, -92.1 \right], \mbox{ entonces vende}
+$$
+de acuerdo a la interpretación financiera, $MFI \in \left(68.4. \infty\right)$ es una señal de venta, en cambio $\mbox{ Williams \%R} \in \left(-109, -92.1 \right]$ se interpreta como una señal de compra, en consecuencia, este tipo de reglas tiene una semántica financiera poco clara.
 
 %=============== Conclusión ================= %
 \chapter[Capítulo \thechapter: Conclusiones y trabajo futuro]{Conclusiones y trabajo futuro}
