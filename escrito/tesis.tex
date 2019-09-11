@@ -1010,9 +1010,9 @@ acciones, en donde $\Bigl\lfloor x \Bigr\rfloor$ es la función piso.
 %=============== Resultados ================= %
 \chapter[Capítulo \thechapter: Resultados experimentales]{Resultados experimentales}
 \label{capitulo:resultados experimentales}
-Utilizando la metodología descrita en el capítulo \ref{capitulo:solucion propuesta}, para cada TRAC (ver sección \ref{seccion:indices accionarios}) se realizan cuatro experimentos distintos. Estos experimentos exploran las dos alternativas distintas para discretizar los atributos continuos, así como dos alternativas para el tipo de aprendizaje aplicado (incremental o no incremental).
+Utilizando la metodología descrita en el capítulo \ref{capitulo:solucion propuesta}, para cada TRAC (ver sección \ref{seccion:indices accionarios}) se realizan cuatro experimentos distintos. Estos experimentos exploran las dos alternativas distintas para discretizar los atributos continuos, así como las dos alternativas para el tipo de aprendizaje aplicado (incremental o no incremental).
 
-Así pues, tenemos los siguiente experimentos:
+Por lo tanto, tenemos los siguientes experimentos:
 
 \begin{itemize}
 \item Aprendizaje incremental con discretización por intervalos (AI-DI).
@@ -1028,8 +1028,7 @@ Así pues, tenemos los siguiente experimentos:
 \section{Resultados para el SPDR S\&P 500}
 \label{seccion:resultados sp500}
 Las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, muestran un resumen de los resultados obtenidos en los $30$ conjuntos de prueba con la información del SPDR S\&P 500.
-
-
+Como se observa en la tabla \ref{tabla:AQ-SP500}, para el algortimo AQ, el aprendizaje incremental resulta superior al no incremental en ambos métodos de discretización, obteniendo un exceso de ganancia promedio positivo (aunque muy pequeño).
 \begin{center}
 \begin{table}[htbp]
 \centering
@@ -1069,9 +1068,6 @@ Ganancia monetaria promedio & $\$792.43$ & $\$946.07$ & $\$1,475.04$ & $\$ 604.9
 \caption{\label{tabla:CN2-SP500}Resultados del algoritmo CN2 para el SPDR S\&P 500}
 \end{table}
 \end{center}
-
-Como se observa en la tabla \ref{tabla:AQ-SP500}, para el algortimo AQ, el aprendizaje incremental resulta superior al no incremental en ambos métodos de discretización, obteniendo un exceso de ganancia promedio positivo (aunque muy pequeño).
-
 Por otro lado, como se muestra en la tabla \ref{tabla:CN2-SP500}, el algoritmo CN2 se desempeña pobremente en todos los experimentos, aunque se obtiene el mejor resultado utilizando un algoritmo de aprendizaje incremental.
 
 \begin{figure}[htbp]
@@ -1080,8 +1076,11 @@ Por otro lado, como se muestra en la tabla \ref{tabla:CN2-SP500}, el algoritmo C
 \caption{\label{imagen:sp500-2008-05-12} Gráfica del precio del SPDR S\&P 500, 2008/05/12 - 2008/09/17}
 \end{figure}
 
-Es importante señalar que se consideran dos periodos correspondientes a la crisis financiera de 2008\footnote{Crisis hipotecaria en Estados Unidos de 2008.}, como se ilustra en las figuras \ref{imagen:sp500-2008-05-12} y \ref{imagen:sp500-2008-09-18}, durante estos periodos el precio mostró una fuerte tendencia a la baja, en consecuencia, superar la ganancia de la estrategia \textit{compra y espera} es más fácil en este tipo de escenarios, como se puede constatar analizando las tablas \ref{tabla:AQ-SP500-2008} y \ref{tabla:CN2-SP500-2008}. Con estas tablas y las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, se comprueba que, en la mayoría de los casos, el exceso de ganancia máximo corresponde precisamente a estos periodos.
+Es importante señalar que se consideran dos periodos correspondientes a la crisis financiera de 2008\footnote{Crisis hipotecaria en Estados Unidos de 2008.}. Como se ilustra en las figuras \ref{imagen:sp500-2008-05-12} y \ref{imagen:sp500-2008-09-18}, durante estos periodos el precio mostró una fuerte tendencia a la baja, en consecuencia, superar la ganancia de la estrategia \textit{compra y espera} es más fácil en este tipo de escenarios, como se puede constatar analizando las tablas \ref{tabla:AQ-SP500-2008} y \ref{tabla:CN2-SP500-2008}. Con estas tablas y las tablas \ref{tabla:AQ-SP500} y \ref{tabla:CN2-SP500}, se comprueba que, en la mayoría de los casos, el exceso de ganancia máximo corresponde precisamente a estos periodos.
 
+Así pues, como se señala en \cite{Lohpetch2010}, el verdadero desafío se encuentra en superar a la estrategia \textit{compra y espera} en mercados con una tendencia a la alza. Por lo tanto, se calcula el desempeño de cada algoritmo únicamente en periodos en donde se tiene una tendencia creciente en los precios. En total se detectan 16 periodos de prueba con dicha característica, los resultados se muestran en las tablas \ref{tabla:AQ-SP500-alza} y \ref{tabla:CN2-SP500-alza}.
+
+De acuerdo a estas tablas, en ningún caso los algoritmos fueron capaces de vencer a la estrategia \textit{compra y espera}. Sin embargo, nuevamente para el algoritmo AQ los mejores resultados se obtienen con un aprendizaje incremental.
 \begin{figure}[htbp]
 \centering
 \scalebox{0.8}{\includegraphics[width=1\linewidth]{imagenes/sp500-2008-09-18.jpeg}}
@@ -1117,8 +1116,6 @@ $2008/09/18$ - $2009/01/27$ & $15.69\%$ & $12.32\%$ & $11.81\%$ & $-0.62\%$  \\
 \caption{\label{tabla:CN2-SP500-2008} Exceso de ganancia del algoritmo CN2 en la crisis financiera de 2008}
 \end{table*}
 \end{center}
-
-Así pues, como se señala en \cite{Lohpetch2010}, el verdadero desafío se encuentra en superar a la estrategia \textit{compra y espera} en mercados con una tendencia a la alza. Por lo tanto, se calcula el desempeño de cada algoritmo únicamente en periodos en donde se hace presente este tipo de tendencia. En total se detectan 16 periodos con tendencia a la alza, los resultados se muestran en las tablas \ref{tabla:AQ-SP500-alza} y \ref{tabla:CN2-SP500-alza}.
 
 \begin{center}
 \begin{table}[htbp]
@@ -1158,8 +1155,6 @@ Ganancia monetaria promedio & $\$5,346.94$ & $\$6,059.76$ & $\$6,624.75$ & $\$5,
 \caption{\label{tabla:CN2-SP500-alza}Resultados del algoritmo CN2 para el SPDR S\&P 500 en periodos a la alza}
 \end{table}
 \end{center}
-
-De acuerdo a estas tablas, en ningún caso los algoritmos fueron capaces de vencer a la estrategia \textit{compra y espera}. Sin embargo, nuevamente para el algoritmo AQ los mejores resultados se obtienen con un aprendizaje incremental.
 
 \section{Resultados para el NAFTRAC}
 \label{seccion:resultados NAFTRAC}
