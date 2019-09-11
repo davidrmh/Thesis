@@ -848,7 +848,14 @@ De esta manera, cada intervalo tendrá la misma área (probabilidad). Las figura
 
 \section{Aprendizaje incremental}
 \label{seccion:aprendizaje incremental}
-Tanto como para el algoritmo AQ como para el algoritmo CN2 se realizan dos tipos de experimentos. El primero de ellos está basado en un enfoque de \textit{aprender-aplicar-descartar}, en el cual, dado un conjunto de entrenamiento, se induce un conjunto de reglas las cuales se aplican al conjunto de prueba más cercano. Después de esto, las reglas aprendidas se descartan (mecanismo de olvido).
+Tanto como para el algoritmo AQ como para el algoritmo CN2 se realizan dos tipos de experimentos. El primero de ellos está basado en un enfoque de \textit{aprender-aplicar-descartar}, en el cual, dado un conjunto de entrenamiento, se induce un conjunto de reglas las cuales se aplican al conjunto de prueba más cercano (el cual se convertirá en un nuevo conjunto de prueba). Después de esto, las reglas aprendidas se descartan (mecanismo de olvido).
+
+La figura \ref{imagen:aprendizaje no incremental} ilustra este tipo de aprendizaje.
+\begin{figure}[ht]
+\centering
+\scalebox{0.9}{\includegraphics[width=1\linewidth]{imagenes/aprendizaje-no-incremental.png}}
+\caption{\label{imagen:aprendizaje no incremental} Aprendizaje no incremental}
+\end{figure}
 
 El otro experimento se basa en un \textit{aprendizaje incremental}, en este caso, se aprende un conjunto de reglas y en lugar de descartarlas, se ordenan de acuerdo a su desempeño sobre el conjunto de entrenamiento del cual fueron inducidas por primera vez, así como su desempeño sobre los conjuntos de prueba en los cuales han sido aplicadas. En este enfoque se mantiene un conjunto de $k$-mejores reglas de compra y $k$-mejores reglas de venta.
 
@@ -924,7 +931,7 @@ La imagen \ref{imagen:aprendizaje_incremental} muestra el esquema del aprendizaj
 
 \begin{figure}[ht]
 \centering
-\scalebox{1.0}{\includegraphics[width=1\linewidth]{imagenes/aprendizaje-incremental.jpg}}
+\scalebox{0.9}{\includegraphics[width=1\linewidth]{imagenes/aprendizaje-incremental-ver2.png}}
 \caption{\label{imagen:aprendizaje_incremental} Aprendizaje incremental}
 \end{figure}
 
