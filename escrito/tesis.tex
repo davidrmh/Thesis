@@ -111,13 +111,14 @@ Added to this, from the point of view of economic theory, this work investigates
 %Motivación y ¿qué es lo que se busca con este trabajo?
 %Objetivo general y objetivos particulares.
 %Estructura del trabajo.
-Un mercado es un lugar (no necesariamente físico) en el cual se reúnen compradores y vendedores con el fin de intercambiar algún producto. En particular, en el mercado accionario se intercambian acciones de compañías (ver definición \ref{definicion:instrumento-financiero}). Hablando someramente, alguien que compra una acción cree que, en el futuro, el valor de esta va a incrementar y por lo tanto, obtendrá una ganancia futura si compra el día de hoy. Por otra parte, las personas que venden acciones, tienen la creencia de que el precio de estas va a disminuir y como consecuencia, prefieren vender el día de hoy y no en el futuro.
+Un mercado es un entorno (no necesariamente físico) en el cual se reúnen compradores y vendedores con el fin de intercambiar bienes y/o servicios. En particular, en el mercado accionario se intercambian acciones de compañías (ver definición \ref{definicion:instrumento-financiero}). Hablando someramente, los compradores de acciones están motivados por su pronóstico de que dichas acciones incrementarán su valor en un futuro próximo; de forma que compran en el presente y esperan vender en el futuro
+con el fin de obtener una ganancia. Por otra parte, los vendedores de acciones están motivados por su pronóstico de que el valor de dichas acciones disminuirá a corto plazo, por lo que prefieren vender en el presente, antes de que el precio caiga.
 
 Dado lo anterior, contar con herramientas que ayuden a determinar los momentos correctos de compra y venta es claramente de gran utilidad. A pesar de que la idea básica es comprar barato y vender caro, la incertidumbre y complejidad de los mercados financieros, así como el incremento en el poder de cómputo y la digitalización de los mercados, han dado lugar al uso de herramientas computacionales enfocadas a guiar la toma de decisiones, concretamente, técnicas relacionadas al aprendizaje de máquina han ganado notoriedad \cite{AdvancesMLFinance}.
 
 \section{Objetivo general}
 \label{seccion:objetivo general}
-El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas. Estas reglas se utilizarán para dirigir estrategias de inversión, las cuales tendrán una ganancia superior a la ganancia generada por la estrategia de \textit{compra y espera}, la cual es usada comúnmente como una estrategia de referencia (ver sección \ref{seccion:mercado eficiente}).
+El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas. Estas reglas se utilizan para dirigir estrategias de inversión, las cuales tendrán una ganancia superior a la ganancia generada por la estrategia de \textit{compra y espera}, la cual es usada comúnmente como una estrategia de referencia (ver sección \ref{seccion:mercado eficiente}).
 
 Además, la metodología propuesta busca obtener un modelo interpretable, contrastando así con la tendencia actual que se caracteriza por el uso de las llamadas \textit{cajas negras}, por ejemplo redes neuronales (ver sección \ref{capitulo:antecedentes}).
 
@@ -152,9 +153,9 @@ Para finalizar, la sección \ref{capitulo:conclusiones} trata las conclusiones o
 
 \section{Contribuciones}
 \label{seccion:contribuciones}
-Una de las principales contribuciones es el análisis del mercado accionario mexicano desde una enfoque basado en reglas. El análisis del estado del arte indica que esta es la primera vez que se analiza este mercado utilizando dicho enfoque.
+Una de las principales contribuciones de este trabajo, es el análisis del comportamiento del mercado accionario mexicano desde un enfoque basado en reglas. Después de analizar exhaustivamente el estado del arte, no se encontró evidencia de otras investigaciones que utilicen el enfoque de reglas para analizar el mercado accionario mexicano, por lo que se asume que este trabajo es pionero en ese aspecto.
 
-Una segunda contribución de este trabajo, es la propuesta de un método de etiquetado para las series de tiempo utilizadas, esta metodología utiliza un algoritmo evolutivo con el fin de obtener la clase correspondiente a la que pertenece cada observación del conjunto de entrenamiento.
+Otra contribución de este trabajo, radica en el método propuesto para etiquetado de las series de tiempo analizadas. En esta metodología se hace uso de un algoritmo evolutivo, que también es una propuesta original en este trabajo, para etiquetar cada observación y proporcionar una referencia a los posteriores algoritmos de aprendizaje.
 
 %=============== Antecedentes ================= %
 \chapter[Capítulo \thechapter: Revisión del estado del arte]{Revisión del estado del arte}
@@ -181,7 +182,7 @@ Los trabajos \cite{Allen1999} y \cite{Potvin2004}, se retoman en \cite{Lohpetch2
 
 En \cite{Teixeira2010}, se logra vencer a la estrategia \textit{compra y espera} (considerando costos de transacción) utilizando una metodología basada en el algoritmo \textit{k nearest neighbors} (K-NN). Se analizan $15$ series accionarias pertenecientes al mercado brasileño. Una propuesta interesante de este artículo, es el uso de límites que capturan el perfil de riesgo de los inversionistas\footnote{En finanzas estos límites son llamados stop loss y take profits} (ver sección \ref{seccion:limites ventas}).
 
-La serie de artículos \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016}; desarrolla una metodología en la cual se busca reducir la dimensión de la serie de tiempo al identificar los llamados "puntos perceptualmente importantes" (perceptually important points, PIPs). Una vez identificados estos puntos, se calcula la variación porcentual entre ellos y de acuerdo a esta cantidad la serie de tiempo es convertida en una cadena de símbolos. Estos símbolos son comparados con un patrón base obtenido a través de un algoritmo genético y de acuerdo a esta comparación se obtienen las señales de compra. Se vence a la estrategia \textit{compra y espera} pero no se consideran costos de transacción.
+La serie de artículos \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016} desarrolla una metodología en la cual se busca reducir la dimensión de la serie de tiempo al identificar los llamados \textit{puntos perceptualmente importantes} (perceptually important points, PIPs). Una vez identificados estos puntos, se calcula la variación porcentual entre ellos y de acuerdo a esta cantidad la serie de tiempo es convertida en una cadena de símbolos. Estos símbolos son comparados con un patrón base obtenido a través de un algoritmo genético y de acuerdo a esta comparación se obtienen las señales de compra. Se vence a la estrategia \textit{compra y espera} pero no se consideran costos de transacción.
 
 En \cite{Hu2015-XCS}, se utiliza aprendizaje por reforzamiento junto con un algoritmo evolutivo para obtener un conjunto de reglas \textit{si..entonces}.\footnote{Extended Classifier System, XCS} Estas reglas son aplicadas para operar en el mercado de índices accionarios de la bolsa de Shangai, se vence a la estrategia \textit{compra y espera} aún considerando costos de transacción.
 
@@ -259,7 +260,7 @@ Se inicia esta sección con algunas definiciones básicas \cite{CFA2019-market-o
 
 \begin{definicion}[Mercado]
 \label{definicion:mercado}
-Un mercado es un lugar en donde dos partes se reúnen para realizar el intercambio de bienes o servicios.
+Un mercado es un entorno en donde dos partes se reúnen para realizar el intercambio de bienes o servicios.
 \end{definicion}
 
 \begin{definicion}[Acciones]
