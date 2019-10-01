@@ -155,7 +155,7 @@ Para finalizar, la sección \ref{capitulo:conclusiones} trata las conclusiones o
 \label{seccion:contribuciones}
 Una de las principales contribuciones de este trabajo, es el análisis del comportamiento del mercado accionario mexicano desde un enfoque basado en reglas. Después de analizar exhaustivamente el estado del arte, no se encontró evidencia de otras investigaciones que utilicen el enfoque de reglas para analizar el mercado accionario mexicano, por lo que se asume que este trabajo es pionero en ese aspecto.
 
-Otra contribución de este trabajo, radica en el método propuesto para etiquetado de las series de tiempo analizadas. En esta metodología se hace uso de un algoritmo evolutivo, que también es una propuesta original en este trabajo, para etiquetar cada observación y proporcionar una referencia a los posteriores algoritmos de aprendizaje.
+Otra contribución de este trabajo, radica en el método propuesto para etiquetado de las series de tiempo analizadas. En esta metodología se hace uso de un algoritmo evolutivo, que también es una propuesta original, para etiquetar cada observación y proporcionar una referencia a los posteriores algoritmos de aprendizaje.
 
 %=============== Antecedentes ================= %
 \chapter[Capítulo \thechapter: Revisión del estado del arte]{Revisión del estado del arte}
@@ -164,28 +164,60 @@ Otra contribución de este trabajo, radica en el método propuesto para etiqueta
 %Tabla con referencia, mercado, metodologia
 %Tabla con referencia, vence bh, considera costos de transacción
 
-Al analizar el estado del arte, se puede observar que las heurísticas evolutivas han jugado un papel esencial para obtener un conjunto de reglas para guiar las decisiones de compra y venta \cite{Allen1999}, \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016}, \cite{Potvin2004}, \cite{Kampouridis2017}. Además, los atributos utilizados en la mayoría de los trabajos son un conjunto de indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
+Al analizar el estado del arte, se puede observar que las heurísticas evolutivas han jugado un papel esencial para obtener un conjunto de reglas cuyo fin es guiar las decisiones de compra y venta de acciones \cite{Allen1999}, \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016}, \cite{Potvin2004}, \cite{Kampouridis2017}. Además, los atributos utilizados en la mayoría de los trabajos son un conjunto de indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
 
-Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceBH} muestran un resumen de las referencias recolectadas para este trabajo, como se puede observar existen resultados mixtos en cuanto a obtener mejores ganancias que la estrategia \textit{compra y espera}, la cual es comúnmente  utilizada como la estrategia de referencia. Por otra parte, se observa que las técnicas de aprendizaje utilizadas, pertenecen al paradigma subsimbólico o al conexionista (ver sección \ref{seccion:algoritmos-aprendizaje-reglas}). En este trabajo se propone una metodología simbólica para aprender el conjunto de reglas de interés (ver sección \ref{subseccion:algoritmo aq}).
+Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceBH} muestran un resumen de las referencias recolectadas para este trabajo, como se puede observar existen resultados mixtos en cuanto a obtener mejores ganancias que la estrategia \textit{compra y espera} (ver sección \ref{seccion:buy and hold}), la cual es comúnmente  utilizada como la estrategia de referencia. Por otra parte, se observa que las técnicas de aprendizaje utilizadas, pertenecen, principalmente, al paradigma subsimbólico (ver sección \ref{seccion:algoritmos-aprendizaje-reglas}). En este trabajo se propone una metodología simbólica para aprender el conjunto de reglas de interés (ver sección \ref{subseccion:algoritmo aq}).
 
-Uno de los primeros artículos en donde se utilizan técnicas relacionadas al aprendizaje de reglas es \cite{Allen1999}, en este trabajo se utiliza una metodología basada en programación genética, obteniéndose de esta manera un conjunto de reglas \textit{si...entonces}, para operar en el mercado. Los autores analizan el mercado accionario de Estados Unidos utilizando la información del índice accionario S\&P 500 (ver sección \ref{seccion:indices accionarios}) y comparándose contra la estrategia \textit{compra y espera} (ver sección \ref{seccion:buy and hold}) obteniendo resultados poco favorables.
+\section{Programación genética}
+De acuerdo a \cite{simon2013evolutionary}, la programación genética es un intento de generalizar los algoritmos evolutivos, buscando no solamente encontrar la solución óptima de un problema, si no que, además, se busca la estructura óptima para este. En otras palabras, la programación genética evoluciona programas que computan soluciones óptimas.
 
-En \cite{Leigh2002}, se utiliza un enfoque basado en empate de patrones (template match) a partir del cual se obtienen un conjunto de reglas \textit{si...entonces}. Esta metodología se basa en detectar patrones en las gráficas de los precios, concretamente, se busca el patrón llamado \textit{bull flag} el cual es considerado como un patrón que indica el inicio de una tendencia a la alza en los precios. Este artículo utiliza la estrategia \textit{compra y espera} como referencia, obteniendo mayores ganancias que ésta, sin embargo, cabe señalar que no se consideran costos de transacción\footnote{Se entiende por costos de transacción, a las comisiones que se cobran por realizar una compra o una venta.}, por lo que la metodología se vuelve poco realista. El mercado analizado es el mercado de Estados Unidos a través del índice accionario NYSE Composite.
+Uno de los primeros artículos en donde se utilizan técnicas relacionadas al aprendizaje de reglas es \cite{Allen1999}, en este trabajo se utiliza una metodología basada en programación genética, obteniéndose de esta manera un conjunto de reglas \textit{si...entonces}, para operar en el mercado. Los autores analizan el mercado accionario de Estados Unidos utilizando la información del índice accionario S\&P 500 (ver sección \ref{seccion:indices accionarios}) y comparándose contra la estrategia \textit{compra y espera} (ver sección \ref{seccion:buy and hold}) obteniendo resultados poco favorables. 
 
-Los autores en \cite{Potvin2004}, retoman el trabajo de \cite{Allen1999} modificando la forma en que se crean los árboles y considerando $14$ compañías canadienses que forman parte del índice accionario TSE $300$. A pesar de que vencen a la estrategia \textit{compra y espera} en $9$ de las $14$ compañías, no se consideran costos de transacción.
+En la figura \ref{imagen:progracion genetica}, se ilustra un ejemplo de regla aprendida utilizando programación genética. En este caso si el precio promedio de $50$ días es menor al precio actual, entonces se ejecuta una señal de compra, en el caso contrario se ejecuta una señal de venta. Es importante señalar que \cite{Allen1999} no considera una señal de no hacer ni compra ni venta (señal de espera).
 
-En \cite{Parracho2010}, se retoma el trabajo de \cite{Leigh2002} introduciendo un algoritmo genético para realizar un proceso de optimización sobre parámetros que antes se consideraban fijos. Se obtienen resultados favorables pero sin considerar costos de transacción.
+\begin{figure}[ht]
+\centering
+\scalebox{0.6}{\includegraphics[width=.8\linewidth]{imagenes/programacion_genetica.png}}
+\caption{\label{imagen:progracion genetica} Ejemplo de una regla para operar en el mercado, obtenida a través de programación genética}
+\end{figure}
 
+Los autores en \cite{Potvin2004}, retoman el trabajo de \cite{Allen1999} modificando la forma en que se crean los árboles y considerando $14$ compañías canadienses que forman parte del índice accionario TSE $300$. A pesar de que se vence a la estrategia \textit{compra y espera} en $9$ de las $14$ compañías, no se consideran costos de transacción\footnote{Se entiende por costos de transacción, a las comisiones que son cobradas por realizar una compra o una venta.}, limitando con esto la aplicación práctica de la metodología. 
+
+Los trabajos \cite{Allen1999} y \cite{Potvin2004}, se retoman en \cite{Lohpetch2010}, en donde no sólo se usan precios diarios, si no que también se utilizan precios semanales y mensuales, además, en el proceso evolutivo que crea los árboles, se utiliza una función de aptitud que penaliza la complejidad de estos, evitando así un sobre ajuste en los datos de entrenamiento. En este trabajo se logra vencer a la estrategia \textit{compra y espera} aún considerando costos de transacción.
+
+\section{Emparejamiento de patrones}
+En \cite{Leigh2002}, se utiliza un enfoque basado en empate de patrones (en inglés, template match). Esta metodología se basa en detectar patrones en las gráficas de los precios, concretamente, se busca el patrón llamado \textit{bull flag}, el cual es considerado como un patrón que indica el inicio de una tendencia a la alza en los precios (ver figura \ref{imagen:bull flag}). Una vez detectado dicho patrón, se realiza la compra de acciones, las cuales son vendidas $100$ días después de su compra. Este artículo utiliza la estrategia \textit{compra y espera} como referencia, obteniendo mayores ganancias que ésta, sin embargo, cabe señalar que no se consideran costos de transacción, por lo que la metodología se vuelve poco realista. El mercado analizado es el mercado de Estados Unidos a través del índice accionario NYSE Composite.
+
+\begin{figure}[ht]
+\centering
+\scalebox{0.6}{\includegraphics[width=.8\linewidth]{imagenes/bull-flag.png} }
+\caption{\label{imagen:bull flag} Patrón \textit{bull flag} que señala una futura tendencia a la alza en los precios.}
+\end{figure}
+
+En \cite{Parracho2010}, se retoma el trabajo de \cite{Leigh2002} introduciendo un algoritmo genético para realizar un proceso de optimización sobre parámetros que antes se consideraban fijos. Se obtienen resultados favorables pero sin considerar nuevamente costos de transacción, además se sigue considerando únicamente el patrón \textit{bull flag} y no se exploran otro tipo de patrones.
+
+\section{PIP's y SAX}
+En la  serie de artículos \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016} se desarrolla una metodología en la cual se busca reducir la dimensión de la serie de tiempo al identificar los llamados \textit{puntos perceptualmente importantes} (perceptually important points, PIPs). Una vez identificados estos puntos, se calcula la variación porcentual entre ellos y de acuerdo a esta cantidad la serie de tiempo es convertida en una cadena de símbolos (symbolic aggregate approximation, SAX). Estos símbolos son comparados con un patrón base obtenido a través de un algoritmo genético y de acuerdo a esta comparación se obtienen las señales de compra. Se vence a la estrategia \textit{compra y espera} pero no se consideran costos de transacción. La figura \ref{imagen:pip sax} ilustra esta metodología.
+
+\begin{figure}[ht]
+\centering
+\scalebox{1.0}{\includegraphics[width=.8\linewidth]{imagenes/pip-sax.png} }
+\caption{\label{imagen:pip sax} Ilustración de la metodología PIP / SAX.}
+\end{figure}
+
+
+\section{Otras metodologías}
 Una línea totalmente distinta a los artículos anteriores es el trabajo de \cite{Kaucic2010}. En este, no se busca obtener un conjunto de reglas \textit{si...entonces}, si no que busca encontrar, a través de un aprendizaje evolutivo, la mejor combinación de indicadores técnicos (ver sección \ref{seccion:analisisTecnico}) con la cual se busca determinar los momentos adecuados para comprar o vender. Únicamente se logra vencer a la estrategia \textit{compra y espera} en mercados a la baja o estables (considerando costos de transacción). Se analiza el mercado accionario de Estados Unidos.
-
-Los trabajos \cite{Allen1999} y \cite{Potvin2004}, se retoman en \cite{Lohpetch2010}, en donde no sólo se usan precios diarios, si no que también se utilizan precios semanales y mensuales, además, en el proceso evolutivo que crea los árboles, se utiliza una función de aptitud que penaliza la complejidad de estos, evitando así un sobre ajuste en los datos de entrenamiento. En este trabajo se logra vencer a la estrategia \textit{compra y espera} (utilizando el exceso de ganancia como medida de desempeño, ver sección \ref{subseccion:exceso de ganancia}) aún considerando costos de transacción.
 
 En \cite{Teixeira2010}, se logra vencer a la estrategia \textit{compra y espera} (considerando costos de transacción) utilizando una metodología basada en el algoritmo \textit{k nearest neighbors} (K-NN). Se analizan $15$ series accionarias pertenecientes al mercado brasileño. Una propuesta interesante de este artículo, es el uso de límites que capturan el perfil de riesgo de los inversionistas\footnote{En finanzas estos límites son llamados stop loss y take profits} (ver sección \ref{seccion:limites ventas}).
 
-La serie de artículos \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016} desarrolla una metodología en la cual se busca reducir la dimensión de la serie de tiempo al identificar los llamados \textit{puntos perceptualmente importantes} (perceptually important points, PIPs). Una vez identificados estos puntos, se calcula la variación porcentual entre ellos y de acuerdo a esta cantidad la serie de tiempo es convertida en una cadena de símbolos. Estos símbolos son comparados con un patrón base obtenido a través de un algoritmo genético y de acuerdo a esta comparación se obtienen las señales de compra. Se vence a la estrategia \textit{compra y espera} pero no se consideran costos de transacción.
-
 En \cite{Hu2015-XCS}, se utiliza aprendizaje por reforzamiento junto con un algoritmo evolutivo para obtener un conjunto de reglas \textit{si..entonces}.\footnote{Extended Classifier System, XCS} Estas reglas son aplicadas para operar en el mercado de índices accionarios de la bolsa de Shangai, se vence a la estrategia \textit{compra y espera} aún considerando costos de transacción.
 
+Dentro del paradigma conexionista, en \cite{Sezer2017}, se utiliza una red neuronal con el fin de obtener las decisiones de compra y venta. Como atributos se seleccionan un conjunto de indicadores técnicos. Se consideran costos de transacción y se obtienen resultados mixtos cuando las estrategias obtenidas se comparan con las estrategia \textit{compra y espera}. 
+
+\section{Etiquetado de datos}
+Para finalizar este capítulo, es importante resaltar que dentro de las metodologías que aplican un aprendizaje supervisado, no se puede observar una explicación clara sobre la forma en que se asignan etiquetas a los datos. En este trabajo se propone un etiquetado basado en una heurística evolutiva (ver sección \ref{seccion:proceso etiquetado}) la cual busca encontrar, una vez observada la historia del periodo bajo análisis, la mejor combinación de compras y ventas que habrían generado la mayor ganancia.
+ 
 \begin{center}
 \begin{table}[htbp]
 \centering
