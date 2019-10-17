@@ -118,7 +118,7 @@ Dado lo anterior, contar con herramientas que ayuden a determinar los momentos c
 
 \section{Objetivo general}
 \label{seccion:objetivo general}
-El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas. Estas reglas se utilizan para dirigir estrategias de inversión, las cuales tendrán una ganancia superior a la ganancia generada por la estrategia de \textit{compra y espera}, la cual es usada comúnmente como una estrategia de referencia (ver sección \ref{seccion:mercado eficiente}).
+El objetivo general de este trabajo es proponer una metodología para aprender, de manera automática, un conjunto de reglas. Estas reglas se utilizan para dirigir estrategias de inversión, las cuales tendrán una ganancia superior a la ganancia generada por la estrategia de \textit{compra y espera}, estrategia que es usada comúnmente como un marco de referencia (ver sección \ref{seccion:mercado eficiente}).
 
 Además, la metodología propuesta busca obtener un modelo interpretable, contrastando así con la tendencia actual que se caracteriza por el uso de las llamadas \textit{cajas negras}, por ejemplo redes neuronales (ver sección \ref{capitulo:antecedentes}).
 
@@ -127,7 +127,7 @@ Además, la metodología propuesta busca obtener un modelo interpretable, contra
 Los objetivos particulares de este trabajo son:
 \begin{itemize}
 
-\item Selección de las fuentes de datos.
+\item Seleccionar la fuente de datos.
 
 \item Proponer una metodología para etiquetar los datos y así poder aplicar algoritmos de aprendizaje supervisado.
 
@@ -135,15 +135,15 @@ Los objetivos particulares de este trabajo son:
 
 \item Proponer una metodología para aplicar un aprendizaje incremental. Esta metodología permitirá que el modelo aprenda de los errores cometidos.
 
-\item Validar los resultados obtenidos comparando con el exceso de ganancia sobre la estrategia compra y espera.
+\item Validar los resultados obtenidos, comparando con el exceso de ganancia sobre la estrategia compra y espera.
 \end{itemize}
 
 \section{Estructura del trabajo}
 \label{seccion:estructura del trabajo}
 La estructura de este trabajo es la siguiente:
-En la sección \ref{capitulo:antecedentes}, se dan los antecedentes del problema y se exploran las distintas metodologías que han sido empleadas con el fin de generar estrategias de inversión. Se hace un análisis comparativo entre los enfoques utilizados así como los tipo de mercado analizados.
+En la sección \ref{capitulo:antecedentes}, se dan los antecedentes del problema y se exploran las distintas metodologías que han sido empleadas con el fin de generar estrategias de inversión. Se hace un análisis comparativo entre los enfoques utilizados así como los tipos de mercado analizados.
 
-En la sección \ref{capitulo:marco teorico}, se da un panorama general sobre el funcionamiento de los mercados de índices accionarios, se explica la hipótesis del mercado eficiente así como sus posibles versiones y el tipo de información relacionada a cada una de ellas. Se explica la estrategia \textit{compra y espera} y la métrica de desempeño que se utilizará para evaluar nuestras estrategias. En la sección \ref{subseccion:indicadores tecnicos} se explican los atributos que se utilizarán y en las sección \ref{seccion:algoritmos-aprendizaje-reglas} los algoritmos de inducción de reglas utilizados.
+En la sección \ref{capitulo:marco teorico}, se da un panorama general sobre el funcionamiento de los mercados de índices accionarios, se explica la hipótesis del mercado eficiente así como sus posibles versiones y el tipo de información relacionada a cada una de ellas. Se explica la estrategia \textit{compra y espera} y la métrica de desempeño que se utiliza para evaluar las estrategias aprendidas. En la sección \ref{subseccion:indicadores tecnicos} se explican los atributos que se utilizan y en las sección \ref{seccion:algoritmos-aprendizaje-reglas} los algoritmos de inducción de reglas utilizados.
 
 En la sección \ref{capitulo:solucion propuesta}, se explican los datos utilizados y la metodología propuesta, se establece además, la metodología de etiquetado y la forma de separar los conjuntos de entrenamiento y prueba. Finalmente se explica la forma en que se realiza el aprendizaje incremental propuesto, así como los supuestos bajo los cuales se trabajó.
 
@@ -153,7 +153,7 @@ Para finalizar, la sección \ref{capitulo:conclusiones} trata las conclusiones o
 
 \section{Contribuciones}
 \label{seccion:contribuciones}
-Una de las principales contribuciones de este trabajo, es el análisis del comportamiento del mercado accionario mexicano desde un enfoque basado en reglas. Después de analizar exhaustivamente el estado del arte, no se encontró evidencia de otras investigaciones que utilicen el enfoque de reglas para analizar el mercado accionario mexicano, por lo que se asume que este trabajo es pionero en ese aspecto.
+Una de las principales contribuciones de este trabajo, es el análisis del comportamiento del mercado accionario mexicano desde un enfoque basado en reglas. Después de analizar exhaustivamente el estado del arte, no se encontró evidencia alguna de otras investigaciones que utilicen el enfoque de reglas para analizar el mercado accionario mexicano, por lo que se asume que este trabajo es pionero en ese aspecto.
 
 Otra contribución de este trabajo, radica en el método propuesto para etiquetado de las series de tiempo analizadas. En esta metodología se hace uso de un algoritmo evolutivo, que también es una propuesta original, para etiquetar cada observación y proporcionar una referencia a los posteriores algoritmos de aprendizaje.
 
