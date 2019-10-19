@@ -164,7 +164,7 @@ Otra contribución de este trabajo, radica en el método propuesto para etiqueta
 %Tabla con referencia, mercado, metodologia
 %Tabla con referencia, vence bh, considera costos de transacción
 
-Al analizar el estado del arte, se puede observar que las heurísticas evolutivas han jugado un papel esencial para obtener un conjunto de reglas cuyo fin es guiar las decisiones de compra y venta de acciones \cite{Allen1999}, \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016}, \cite{Potvin2004}, \cite{Kampouridis2017}. Además, los atributos utilizados en la mayoría de los trabajos son un conjunto de indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
+Al analizar el estado del arte, se puede observar que las heurísticas evolutivas han jugado un papel esencial para obtener un conjunto de reglas cuyo fin es guiar las decisiones de compra y venta de acciones \cite{Allen1999}, \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016}, \cite{Potvin2004}, \cite{Kampouridis2017}. Además, los atributos utilizados en la mayoría de los trabajos, son un conjunto de indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
 
 Las tablas \ref{tabla:referencia-mercado-tecnica} y \ref{tabla:referencia-venceBH} muestran un resumen de las referencias recolectadas para este trabajo, como se puede observar existen resultados mixtos en cuanto a obtener mejores ganancias que la estrategia \textit{compra y espera} (ver sección \ref{seccion:buy and hold}), la cual es comúnmente  utilizada como la estrategia de referencia. Por otra parte, se observa que las técnicas de aprendizaje utilizadas, pertenecen, principalmente, al paradigma subsimbólico (ver sección \ref{seccion:algoritmos-aprendizaje-reglas}). En este trabajo se propone una metodología simbólica para aprender el conjunto de reglas de interés (ver sección \ref{subseccion:algoritmo aq}).
 
@@ -173,7 +173,7 @@ De acuerdo a \cite{simon2013evolutionary}, la programación genética es un inte
 
 Uno de los primeros artículos en donde se utilizan técnicas relacionadas al aprendizaje de reglas es \cite{Allen1999}, en este trabajo se utiliza una metodología basada en programación genética, obteniéndose de esta manera un conjunto de reglas \textit{si...entonces}, para operar en el mercado. Los autores analizan el mercado accionario de Estados Unidos utilizando la información del índice accionario S\&P 500 (ver sección \ref{seccion:indices accionarios}) y comparándose contra la estrategia \textit{compra y espera} (ver sección \ref{seccion:buy and hold}) obteniendo resultados poco favorables. 
 
-En la figura \ref{imagen:progracion genetica}, se ilustra un ejemplo de regla aprendida utilizando programación genética. En este caso si el precio promedio de $50$ días es menor al precio actual, entonces se ejecuta una señal de compra, en el caso contrario se ejecuta una señal de venta. Es importante señalar que \cite{Allen1999} no considera una señal de no hacer ni compra ni venta (señal de espera).
+En la figura \ref{imagen:progracion genetica}, se ilustra un ejemplo de regla aprendida utilizando programación genética. En este caso, si el precio promedio de $50$ días es menor al precio actual, entonces se ejecuta una señal de compra, en el caso contrario se ejecuta una señal de venta. Es importante señalar que en \cite{Allen1999} no se consideran señales de espera, es decir, señales que indican que no se hace una compra ni venta.
 
 \begin{figure}[ht]
 \centering
@@ -185,8 +185,8 @@ Los autores en \cite{Potvin2004}, retoman el trabajo de \cite{Allen1999} modific
 
 Los trabajos \cite{Allen1999} y \cite{Potvin2004}, se retoman en \cite{Lohpetch2010}, en donde no sólo se usan precios diarios, si no que también se utilizan precios semanales y mensuales, además, en el proceso evolutivo que crea los árboles, se utiliza una función de aptitud que penaliza la complejidad de estos, evitando así un sobre ajuste en los datos de entrenamiento. En este trabajo se logra vencer a la estrategia \textit{compra y espera} aún considerando costos de transacción.
 
-\section{Emparejamiento de patrones}
-En \cite{Leigh2002}, se utiliza un enfoque basado en empate de patrones (en inglés, template match). Esta metodología se basa en detectar patrones en las gráficas de los precios, concretamente, se busca el patrón llamado \textit{bull flag}, el cual es considerado como un patrón que indica el inicio de una tendencia a la alza en los precios (ver figura \ref{imagen:bull flag}). Una vez detectado dicho patrón, se realiza la compra de acciones, las cuales son vendidas $100$ días después de su compra. Este artículo utiliza la estrategia \textit{compra y espera} como referencia, obteniendo mayores ganancias que ésta, sin embargo, cabe señalar que no se consideran costos de transacción, por lo que la metodología se vuelve poco realista. El mercado analizado es el mercado de Estados Unidos a través del índice accionario NYSE Composite.
+\section{Empate de patrones}
+En \cite{Leigh2002}, se utiliza un enfoque basado en empate de patrones (en inglés, template match). Esta metodología se basa en detectar patrones en las gráficas de los precios, concretamente, se busca el patrón llamado \textit{bull flag}, el cual es considerado como un patrón que indica el inicio de una tendencia a la alza en los precios (ver figura \ref{imagen:bull flag}). Una vez detectado dicho patrón, se realiza la compra de acciones, las cuales son vendidas $100$ días después de su compra. Este artículo utiliza la estrategia \textit{compra y espera} como referencia, obteniendo mayores ganancias que ésta, sin embargo, no se consideran costos de transacción, por lo que la metodología se vuelve poco realista. El mercado analizado es el mercado de Estados Unidos a través del índice accionario NYSE Composite.
 
 \begin{figure}[ht]
 \centering
@@ -194,10 +194,16 @@ En \cite{Leigh2002}, se utiliza un enfoque basado en empate de patrones (en ingl
 \caption{\label{imagen:bull flag} Patrón \textit{bull flag} que señala una futura tendencia a la alza en los precios.}
 \end{figure}
 
-En \cite{Parracho2010}, se retoma el trabajo de \cite{Leigh2002} introduciendo un algoritmo genético para realizar un proceso de optimización sobre parámetros que antes se consideraban fijos. Se obtienen resultados favorables pero sin considerar nuevamente costos de transacción, además se sigue considerando únicamente el patrón \textit{bull flag} y no se exploran otro tipo de patrones.
+En \cite{Parracho2010}, se retoma el trabajo de \cite{Leigh2002} introduciendo un algoritmo genético para realizar un proceso de optimización sobre parámetros que antes se consideraban fijos. Se obtienen resultados favorables pero sin considerar costos de transacción, el patrón \textit{bull flag} es nuevamente el único patrón considerado.
 
 \section{PIP's y SAX}
-En la  serie de artículos \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016} se desarrolla una metodología en la cual se busca reducir la dimensión de la serie de tiempo al identificar los llamados \textit{puntos perceptualmente importantes} (perceptually important points, PIPs). Una vez identificados estos puntos, se calcula la variación porcentual entre ellos y de acuerdo a esta cantidad la serie de tiempo es convertida en una cadena de símbolos (symbolic aggregate approximation, SAX). Estos símbolos son comparados con un patrón base obtenido a través de un algoritmo genético y de acuerdo a esta comparación se obtienen las señales de compra. Se vence a la estrategia \textit{compra y espera} pero no se consideran costos de transacción. La figura \ref{imagen:pip sax} ilustra esta metodología.
+En la  serie de artículos \cite{Canelas2012-gecco}, \cite{Canelas2013-gecco}, \cite{Canelas2013-journal}, \cite{Leitao2016} se desarrolla una metodología en la cual se busca reducir la dimensión de la serie de tiempo a través de la detección de los \textit{puntos perceptualmente importantes} (perceptually important points, PIPs). Una vez identificados estos puntos, se calcula la variación porcentual entre ellos y de acuerdo a esta cantidad la serie de tiempo es convertida en una cadena de símbolos (symbolic aggregate approximation, SAX). Estos símbolos son comparados con un patrón base, el cual se obtiene a través de una heurística evolutiva. De acuerdo a esta comparación, las señales de compra son generadas. Para realizar una venta, se consideran tres criterios:
+\begin{enumerate}
+\item Tiempo: Se vende si han transcurrido un determinado número de días después de la compra.
+\item Precio: Se vende si el precio a alcanzado un nivel objetivo.
+\item Patrón: Se vende si se detecta un patrón de venta (de la misma forma que el patrón de compra, el patrón de venta se obtiene a través de una heurística evolutiva).
+\end{enumerate}
+ Se vence a la estrategia \textit{compra y espera} pero no se consideran costos de transacción. La figura \ref{imagen:pip sax} ilustra esta metodología.
 
 \begin{figure}[ht]
 \centering
@@ -292,24 +298,26 @@ Se inicia esta sección con algunas definiciones básicas \cite{CFA2019-market-o
 
 \begin{definicion}[Mercado]
 \label{definicion:mercado}
-Un mercado es un entorno en donde dos partes se reúnen para realizar el intercambio de bienes o servicios.
+Un \textbf{mercado} es un entorno (no necesariamente físico) en donde dos partes se reúnen para realizar el intercambio de bienes o servicios.
 \end{definicion}
 
-\begin{definicion}[Acciones]
+\begin{definicion}[Instrumento financiero y acciones]
 \label{definicion:instrumento-financiero}
 Un \textbf{instrumento financiero} es un contrato monetario entre dos partes. Si este contrato da derecho a poseer una proporción de los activos y ganancias de la compañía, entonces recibe el nombre de \textbf{acción}.
 \end{definicion}
 
+Las empresas que requieren fondos para financiar sus proyectos, pueden recurrir a la emisión de acciones con el fin de obtener los recursos necesarios. Por otra parte, los inversionistas que proyectan un crecimiento futuro de la empresa (y por lo tanto un crecimiento en el precio de sus acciones), son los proveedores de dichos fondos, así pues, existe un intercambio de acciones por dinero.
+
 \begin{definicion}[Mercado financiero]
 \label{definicion:mercado-financiero}
-Un mercado financiero es un mercado en el cual se intercambian instrumentos financieros, por ejemplo acciones.
+Un \textbf{mercado financiero} es un mercado en el cual se intercambian instrumentos financieros, en particular, acciones de compañías.
 \end{definicion}
 
-Debido a la diversidad de los tipos de mercados financieros (accionario, deuda, tipo de cambio, derivados, etc.) así como al funcionamiento particular de cada uno de ellos, es necesario restringir este estudio a un mercado en particular. Siendo concretos, este trabajo únicamente analiza el mercado de índices accionarios.
+Debido a la diversidad de los tipos de mercados financieros (accionario, deuda, tipo de cambio, derivados, etc.) así como al funcionamiento particular de cada uno de ellos, este trabajo  únicamente analiza el mercado de índices accionarios.
 
 \begin{definicion}[Índice accionario]
 \label{definicion:indice-accionario}
-Un índice accionario, es un indicador que busca representar el comportamiento de un segmento específico del mercado financiero accionario, por ejemplo un sector o un área geográfica en particular \cite{CFA2019-market-index}.
+Un \textbf{índice accionario}, es un indicador que busca representar el comportamiento de un segmento específico del mercado financiero accionario, por ejemplo un sector o un área geográfica en particular \cite{CFA2019-market-index}.
 \end{definicion}
 
 Así pues, el propósito principal de este tipo de índices es representar la opinión colectiva que se tiene respecto a un conjunto de acciones.
@@ -333,19 +341,19 @@ El instrumento que busca replicar el índice de precios y cotizaciones recibe el
 
 \section{Mercado eficiente}
 \label{seccion:mercado eficiente}
-El concepto de mercado eficiente, hace a un mercado que es capaz de capturar, de forma rápida y precisa, la información\footnote{Información relacionada a la economía en general.} disponible más reciente. Esta información es reflejada en los precios de los instrumentos financieros y como consecuencia, en un mercado eficiente, los precios son informativos, lo que permite lograr una colocación eficiente de los recursos (ver \cite{Fama1965} y \cite{CFA2019}).
+El concepto de mercado eficiente, hace referencia a un mercado que es capaz de capturar, de forma rápida y precisa, la información\footnote{Información relacionada a la economía en general.} disponible más reciente. Esta información es reflejada en los precios de los instrumentos financieros y como consecuencia, en un mercado eficiente, los precios son informativos, lo que permite lograr una colocación eficiente de los recursos (ver \cite{Fama1965} y \cite{CFA2019}).
 
 \subsection{Versiones de eficiencia en el mercado}
 \label{subseccion:versiones emh}
 Eugene Fama describe tres formas de eficiencia de un mercado: débil, semifuerte y fuerte \cite{Fama1965}.
 
-En la versión débil, los precios actuales reflejan toda la información histórica del mercado, es decir, la información del pasado relativa a precios y al volumen negociado. En consecuencia, bajo esta versión de eficiencia, no es posible utilizar datos históricos con el fin de predecir la tendencia futura de los precios (ver sección \ref{seccion:analisisTecnico}).
+En la versión débil, los precios actuales reflejan toda la información histórica del mercado, esta información hace referencia a los precios y volúmenes negociados en el pasado. En consecuencia, bajo esta versión de eficiencia, no es posible utilizar precios y volúmenes históricos con el fin de predecir la tendencia futura de los precios (ver sección \ref{seccion:analisisTecnico}).
 
 La versión semifuerte incluye la versión débil y añade que, además de reflejar la información histórica del mercado, los precios actuales reflejan toda la información pública. La información pública es aquella a la cual el público inversionista puede acceder, por ejemplo, noticias económicas o financieras, estados de resultados de las empresas, reportes anuales o trimestrales de las mismas, indicadores macroeconómicos etc. De acuerdo a esta versión, no es posible utilizar dicha información con el fin de predecir la tendencia futura de los precios.
 
 Finalmente, la versión fuerte de la eficiencia de un mercado, nos dice que los precios actuales reflejan totalmente tanto la información pública como la información privada, es decir, aquella que solamente algunas personas poseen. Por lo tanto, bajo esta versión, incluso tomando en cuenta la información privada, no es posible predecir la tendencia futura de los precios.
 
-Por lo tanto, la eficiencia de un mercado debe ser interpretada relativa al tipo de información que los inversionistas utilizan. Además, como se señala en \cite{CFA2019}, la eficiencia cae en un espectro continuo, que varía a través del tiempo, regiones geográficas y tipo de mercado.
+De acuerdo a lo anterior, la eficiencia de un mercado debe ser interpretada relativa al tipo de información que los inversionistas utilizan. Además, como se señala en \cite{CFA2019}, la eficiencia cae en un espectro continuo, que varía a través del tiempo, regiones geográficas y tipo de mercado.
 
 La figura \ref{imagen:versiones emh} ilustra las distintas versiones de la eficiencia de un mercado.
 
@@ -370,7 +378,7 @@ Dado un plazo de tiempo fijo, $\left[T_{I}, T_{F}\right]$, la ganancia de la est
 G_{\left[T_{I}, T_{F}\right]} (BH) = \dfrac{P_{T_F} (1 - c) } { P_{T_I} (1 + c) } - 1
 \end{equation}
 
-en donde $P_{T_F}$ es el precio de ejecución al final del plazo, $P_{T_I}$ es el precio de ejecución al inicio de este y $c$ es el costo (porcentual) de cada transacción, es decir, la comisión que se debe de pagar por ejecutar la transacción (ver sección \ref{sec:supuestos del mercado}). 
+en donde $P_{T_F}$ es el precio de ejecución al final del plazo, $P_{T_I}$ es el precio de ejecución al inicio de este y $c$ es el costo (porcentual) de cada transacción, es decir, la comisión que se debe de pagar por ejecutar cada transacción (ver sección \ref{sec:supuestos del mercado}). 
 
 La figura \ref{imagen:buy hold alza} ejemplifica la estrategia \textit{compra y espera} en un periodo en el cual el mercado presenta una tendencia a la alza. Como se puede observar, vencer esta estrategia cuando se presenta este tipo de tendencia es todo un reto, esto se debe a que sólo se involucran dos operaciones, lo que implica un ahorro en costos de transacción.
 
@@ -395,7 +403,7 @@ Para un plazo fijo, $\left[T_{I}, T_{F}\right]$, el exceso de ganancia de una es
 ExG_{\left[T_{I}, T_{F}\right]} = G_{\left[T_{I}, T_{F}\right]} (S) - G_{\left[T_{I}, T_{F}\right]} (BH)
 \end{equation}
 
-en donde la ganancia $G_{\left[T_{I}, T_{F}\right]} (BH)$, está dada por la ecuación (\ref{eqn:ganancia BH}) y la ganancia $G_{\left[T_{I}, T_{F}\right]} (S)$ es simplemente la variación porcentual entre el capital inicial disponible en el momento $T_{I}$ y el capital con el que se cuenta en el momento $T_{F}$.
+en donde la ganancia $G_{\left[T_{I}, T_{F}\right]} (BH)$, está dada por la ecuación (\ref{eqn:ganancia BH}) y la ganancia $G_{\left[T_{I}, T_{F}\right]} (S)$ es simplemente la variación porcentual entre el capital inicial disponible en el momento $T_{I}$ y el capital con el que se cuenta en el momento $T_{F}$, este capital se obtiene al ejecutar una serie de compras y ventas dentro del intervalo $\left[T_{I}, T_{F}\right]$.
 
 \begin{equation} \label{eqn:Ganancia estrategia S}
 G_{\left[T_{I}, T_{F}\right]}(S) = \dfrac{Capital_{T_F}}{Capital_{T_I} } - 1 
@@ -405,7 +413,7 @@ Claramente buscamos que $ExG_{\left[T_{I}, T_{F}\right]}$ sea un número positiv
 
 \section{Análisis técnico}
 \label{seccion:analisisTecnico}
-Contrario a lo que establece la hipótesis del mercado eficiente (sección \ref{seccion:mercado eficiente}), el análisis técnico busca predecir la tendencia futura en los precios utilizando la información histórica del mercado (precios y volumen) \cite{murphy1999technical}.
+Contrario a lo que establece la hipótesis del mercado eficiente (sección \ref{seccion:mercado eficiente}), el análisis técnico busca predecir la tendencia futura de los precios, utilizando la información histórica del mercado (precios y volumen) \cite{murphy1999technical}.
 
 Los tres supuestos en los que se basa este tipo de análisis son los siguientes:
 
@@ -420,10 +428,9 @@ Los tres supuestos en los que se basa este tipo de análisis son los siguientes:
 
 \subsection{Indicadores técnicos}
 \label{subseccion:indicadores tecnicos}
-Para realizar el pronóstico de las tendencias, el análisis técnico se auxilia de indicadores técnicos. Estos indicadores son transformaciones aplicadas a la información histórica para una ventana (deslizante) de tiempo determinada \cite{murphy1999technical}, \cite{technicalAnalysisKirkPatrick}, \cite{encycoplediaTechnicalIndicators}.
+Para realizar el pronóstico de las tendencias, el análisis técnico se auxilia de los llamados indicadores técnicos. Estos indicadores, son transformaciones aplicadas a los precios y volúmenes históricos utilizando una ventana (deslizante) de tiempo determinada \cite{murphy1999technical}, \cite{technicalAnalysisKirkPatrick}, \cite{encycoplediaTechnicalIndicators}.
 
 Los indicadores técnicos utilizados en este trabajo, son\footnote{Aunque en las fórmulas no se indica, cada indicador se calcula en cada período $t$ utilizando la información en el intervalo $\left[t-n + 1, t\right]$, es decir, la información contenida en una ventana deslizante de tamaño $n$. }:
-
 \begin{itemize}
 \item Oscilador aroon.
 
@@ -529,8 +536,7 @@ En donde $Prom_t$ está dado por la ecuación (\ref{eqn:precio tipico}), $\overl
 
 Las señales de compra y venta del indicador CCI se basan en la hipótesis de que los precios presentan un comportamiento de reversión a la media, por lo tanto y en la práctica, valores mayores a $200$ en el CCI, son considerados como señales de venta (el precio tendrá una reversión a la media, por lo tanto disminuirá), mientras que valores menores a $-100$, son considerados señales de compra (el precio revierte a la media al aumentar su valor).
 
-La tabla \ref{tabla:resumen reglas indicadores} muestra un resumen de las reglas de compra y venta para cada indicador técnico.
-
+La tabla \ref{tabla:resumen reglas indicadores} muestra un resumen de las reglas de compra y venta para cada indicador técnico. Es importante señalar que los umbrales de cada decisión mostrada en la tabla, son determinados de forma empírica y no hay un sustento formal detrás de sus valores.
 \begin{table}[h]
 \centering
 \begin{tabular}{ccc}
@@ -563,7 +569,7 @@ El aprendizaje de máquina es una área que estudia la forma de descubrir modelo
 \item \textbf{Conexionista}: En este enfoque se engloba el aprendizaje realizado por medio de redes neuronales.
 \end{enumerate}
 
-Este trabajo utiliza algoritmos que entran dentro del enfoque simbólico. Concretamente, los algoritmos utilizados inducen un conjunto de reglas de la forma \textit{si...entonces}. Cada regla tiene un antecedente formado por la conjunción de condiciones, cada una de estas condiciones involucra un atributo en particular. Como consecuente, la regla tiene una etiqueta de clase. El lenguaje utilizado para describir los datos, es el lenguaje de atributo-valor.
+Este trabajo utiliza algoritmos que entran dentro del enfoque simbólico. Concretamente, los algoritmos utilizados inducen un conjunto de reglas de la forma \textit{si...entonces}. Cada regla tiene un antecedente formado por la conjunción de condiciones, cada una de estas condiciones involucra un atributo en particular. Como consecuente, la regla tiene una etiqueta de clase. El lenguaje utilizado para describir los datos es el lenguaje de atributo-valor.
 
 En un enfoque basado en reglas, se dice que una regla \textbf{cubre} un ejemplo, si los valores de los atributos de este ejemplo cumplen las condiciones del antecedente de la regla. Se dice que una regla \textbf{cubre correctamente} un ejemplo, si además de cubrirlo, la clase del ejemplo corresponde a la clase en el consecuente de la regla.
 
