@@ -695,7 +695,7 @@ De esta manera, si $f_i$ es la frecuencia observada para la clase $i$ dentro de 
 \label{seccion:separacion de datos}
 En este trabajo se utilizan precios diarios\footnote{Obtenidos de Yahoo Finance. https://finance.yahoo.com} de los instrumentos NAFTRAC y SPDR S\&P 500 (ver sección \ref{seccion:indices accionarios}).
 
-Para el NAFTRAC, la información inicia el día 15 de febrero de 2013 y termina el 21 de enero de 2019. Para el SPDR S\&P 500 el período de tiempo abarcado es del 2 de enero de 2008 hasta  el 3 de marzo de 2019. Se tienen períodos de tiempo distintos debido a la calidad en los datos, en el caso del mercado mexicano se tienen un gran número de datos no disponibles para ciertos meses de los años $2008$ y $2012$.
+Para el NAFTRAC, la información inicia el día 15 de febrero de 2013 y termina el 21 de enero de 2019. Para el SPDR S\&P 500 el período de tiempo abarcado es del 2 de enero de 2008 hasta  el 3 de marzo de 2019. Se tienen períodos de tiempo distintos debido a la calidad en los datos, en el caso del mercado mexicano se tienen un gran número de datos no disponibles para ciertos meses de los años $2008$ y $2012$, lo que impide el cálculo de los indicadores técnicos (ver sección \ref{subseccion:indicadores tecnicos}).
 
 La tabla \ref{tabla:Ejemplo datos diarios NAFTRAC} muestra la estructura de los datos para el NAFTRAC, es importante señalar que para ambos conjuntos de datos no se incluyen fines de semana o días festivos (relativos a cada país, por ejemplo, la información del 15 de septiembre no se incluye en el conjunto de datos del NAFTRAC, pero sí en el conjunto de datos del SPDR S\&P).
 
@@ -732,9 +732,9 @@ La tabla \ref{tabla:data split SP500} muestra un ejemplo de la separación de lo
 \caption{\label{tabla:data split SP500} Separación de datos}
 \end{table}
 
-Con esta forma de separar los datos, un conjunto de prueba se convierte en un nuevo conjunto de entrenamiento. De esta manera, se ajustan los modelos utilizando la información más reciente.
+Utilizando esta forma de separar los datos, un conjunto de prueba se convierte en un nuevo conjunto de entrenamiento. De esta manera, los modelos son entrenados utilizando la información disponible más reciente.
 
-Utilizando esta metodología, se obtienen 15 conjuntos de entrenamiento y 15 conjuntos de prueba con la información del NAFTRAC. Por otra parte, con los datos del SPDR S\&P 500 se obtienen 30 conjuntos de entrenamiento y 30 conjuntos de prueba.
+ esta metodología, se obtienen 15 conjuntos de entrenamiento y 15 conjuntos de prueba con la información del NAFTRAC. Por otra parte, con los datos del SPDR S\&P 500 se obtienen 30 conjuntos de entrenamiento y 30 conjuntos de prueba.
 
 \section{Proceso de etiquetado}
 \label{seccion:proceso etiquetado}
@@ -749,9 +749,9 @@ Las etiquetas utilizadas son:
 \item Compra, representada con $1$ .
 \end{itemize}
 
-Este algoritmo evolutivo pertenece a la clase de algoritmos para la estimación de la distribución (EDA por sus siglas en inglés \cite{simon2013evolutionary}). Cada individuo en la población representa una estrategia de inversión para un periodo de entrenamiento dado. Esta estrategia se representa a través de un vector $\mathbf{x} = (a_1, a_2, \ldots, a_t)$ cuya componente $a_i$ representan la acción a tomar en el período $i$, $a_i \in \{-1,0,1\}.$ La función de aptitud utilizada es el exceso de ganancia sobre la estrategia \textit{compra y espera} (ver sección \ref{subseccion:exceso de ganancia}). Así, cada vector $\mathbf{x} = (a_1, a_2, \ldots, a_t)$, tiene asociado su respectivo exceso de ganancia de acuerdo a las compras y ventas que determinan sus componentes $a_i$; se busca aquel vector, $\mathbf{x}$, con mayor exceso de ganancia entre la población, este vector representa la mejor combinación de compras y ventas para el conjunto de datos dado.
+Este algoritmo evolutivo pertenece a la clase de algoritmos para la estimación de la distribución (EDA por sus siglas en inglés \cite{simon2013evolutionary}). Cada individuo en la población representa una estrategia de inversión para un periodo de entrenamiento dado. Esta estrategia se representa a través de un vector $\mathbf{x} = (a_1, a_2, \ldots, a_T)$ cuya componente $a_i$ representan la acción a tomar en el período $i$, $a_i \in \{-1,0,1\}.$ La función de aptitud utilizada es el exceso de ganancia sobre la estrategia \textit{compra y espera} (ver sección \ref{subseccion:exceso de ganancia}). Así, cada vector $\mathbf{x} = (a_1, a_2, \ldots, a_T)$, tiene asociado su respectivo exceso de ganancia de acuerdo a las compras y ventas que determinan sus componentes $a_i$; se busca aquel vector, $\mathbf{x}$, con mayor exceso de ganancia entre la población, este vector representa la mejor combinación de compras y ventas para el conjunto de datos dado.
 
-Para generar las poblaciones de cada generación, este etiquetado utiliza lo que se conocen como estadísticas de primer orden, en particular, se utiliza la probabilidad de que cada componente $i$ tome un valor dentro del conjunto $\{-1, 0, 1\}$. A continuación se muestra un ejemplo.
+Para generar las poblaciones de cada generación, este etiquetado utiliza lo que se conocen como estadísticas de primer orden, en particular, se utiliza la probabilidad de que cada componente $a_i$ tome un valor dentro del conjunto $\{-1, 0, 1\}$. A continuación se muestra un ejemplo.
 
 \begin{ejemplo}
 Para un período de 5 días, dados los mejores $5$ individuos de la generación $n$
@@ -765,17 +765,15 @@ $$
 \mathbf{x}_5 & = & (0, 1, 0, -1, 0)
 \end{array}
 $$
-
-es posible obtener las probabilidades $P\left[a_{i} = k \right]$ para $k \in \{-1, 0, 1\}$, basta calcular las frecuencias relativas de cada entrada. Así, en este caso, para las tres primeras entradas se tiene:
+es posible obtener las probabilidades, $\mathbb{P}\left[a_{i} = k \right],$ para $k \in \{-1, 0, 1\}$; basta calcular las frecuencias relativas de cada entrada. Así, en este caso, para las tres primeras entradas se tiene:
 
 $$
 \begin{array}{lcr}
-P[a_1 = -1] = 0, & P[a_1 = 0] = \tfrac{4}{5}, & P[a_1 = 1] = \tfrac{1}{5}. \\ \\
-P[a_2 = -1] = 0, & P[a_2 = 0] = \tfrac{2}{5}, & P[a_2 = 1] = \tfrac{3}{5}. \\ \\
-P[a_3 = -1] = \tfrac{1}{4}, & P[a_3 = 0] = \tfrac{4}{5}, & P[a_3 = 1] = 0.
+\mathbb{P}[a_1 = -1] = 0, & \mathbb{P}[a_1 = 0] = \tfrac{4}{5}, & \mathbb{P}[a_1 = 1] = \tfrac{1}{5}. \\ \\
+\mathbb{P}[a_2 = -1] = 0, & \mathbb{P}[a_2 = 0] = \tfrac{2}{5}, & \mathbb{P}[a_2 = 1] = \tfrac{3}{5}. \\ \\
+\mathbb{P}[a_3 = -1] = \tfrac{1}{4}, & \mathbb{P}[a_3 = 0] = \tfrac{4}{5}, & \mathbb{P}[a_3 = 1] = 0.
 \end{array}
 $$
-
 Con estas probabilidades, es posible generar la población para la generación $n + 1.$
 \end{ejemplo}
 
@@ -787,15 +785,14 @@ El algoritmo \ref{algo:etiquetado}, muestra el proceso para crear una nueva gene
 \\1. Inicializar la población $\{\mathbf{x}_i\}$ de tamaño $N$, cada $\mathbf{x}_i \in \{-1, 0, 1\}^{T}$. \\
 2. \=Mientras no se cumpla criterio de paro: \\
  \>3. Seleccionar los mejores $M =\lfloor \tfrac{N}{2} \rfloor$ individuos.\\
- \>4. Con los $M$ individuos calcular $P[a_i = k]$ para $k \in \{-1, 0, 1\}$. \\
+ \>4. Con los $M$ individuos calcular $\mathbb{P}[a_i = k]$ para $k \in \{-1, 0, 1\}$. \\
  \>5. \= Para $j = 1$ hasta $N$:\\
- \>\>6. Crear el individuo $\mathbf{x_j}$ de acuerdo a las probabilidades $P[a_i = k]$. \\
+ \>\>6. Crear el nuevo individuo $\mathbf{x_j}$ de acuerdo a las probabilidades $\mathbb{P}[a_i = k]$. \\
 
 7. Regresa la nueva población. 
 \end{tabbing}
 \label{algo:etiquetado}
 \end{algoritmo}
-
 En la figura \ref{imagen:etiquetado} se observa que el proceso de etiquetado es capaz de localizar los mínimos y máximos locales presentes en el conjunto de entrenamiento.
 
 \begin{figure}[ht]
@@ -846,25 +843,25 @@ Los esquemas de discretización explorados en este trabajo son:
 \end{itemize}
 
 \subsubsection{Discretización por intervalos con la misma longitud}
-Como su nombre lo señala, este tipo de discretización crea intervalos con una longitud constante. Para calcular cada intervalo, es necesario determinar el valor máximo ($M$) y el valor mínimo ($m$) que el atributo $x$ toma sobre el conjunto de entrenamiento $T$. A partir de estos valores es posible determinar el rango del atributo, definido como:
+Como su nombre lo señala, este tipo de discretización crea intervalos con una longitud constante. Para calcular cada intervalo, es necesario determinar el valor máximo, $M$, y el valor mínimo, $m$, que el atributo, $x$, toma sobre el conjunto de entrenamiento $E$. A partir de estos valores es posible determinar el rango del atributo, definido como:
 
 $$
-\Delta_{T}^{k}(x) = \dfrac{M-m}{k}
+\Delta_{E}^{k}(x) = \dfrac{M-m}{k}
 $$
 en donde $k$ es un entero que indica el número de intervalos deseados. El $i-$ésimo punto de corte está dado por
 $$
-b_i = m + i \Delta_{T}^{k}(x)
+b_i = m + i \Delta_{E}^{k}(x)
 $$
 para $i \in \{1, 2, \ldots, k - 1 \}$.
 
 \subsubsection{Discretización por cuantiles}
-Una de las principales deficiencias en la discretización por intervalos con la misma longitud, es que este esquema ignora la distribución de los valores del atributo, la cual puede ser no uniforme o incluso asimétrica.
+Una de las principales deficiencias en la discretización por intervalos con la misma longitud, es que este esquema ignora la distribución probabilística de los valores del atributo, la cual puede ser no uniforme o incluso asimétrica.
 
 Con el fin de considerar la distribución de los valores de un atributo, el esquema de discretización por cuantiles utiliza los cuantiles de la distribución de $x$ sobre el conjunto de entrenamiento. Así, si $k$ denota el número de intervalos deseados, entonces los puntos de corte están dados por
 $$
-b_i = q_{x}^{T} \left(\frac{i}{k} \right)
+b_i = q_{x}^{E} \left(\frac{i}{k} \right)
 $$
-en donde $i \in \{1, 2, \ldots, k - 1 \}$ y $q_{x}^{T} \left(y \right)$ es el cuantil $y$ de la distribución de los datos de la variable $x$ sobre el conjunto de entrenamiento $T$.
+en donde $i \in \{1, 2, \ldots, k - 1 \}$ y $q_{x}^{E} \left(y \right)$ es el cuantil $y$ de la distribución de los datos de la variable $x$, sobre el conjunto de entrenamiento $E$.
 
 De esta manera, cada intervalo tendrá la misma área (probabilidad). Las figuras \ref{imagen:discretizacion intervalos} y \ref{imagen:discretizacion cuantiles} ejemplifican los esquemas de discretización para el caso $k = 8$.
 
@@ -884,7 +881,6 @@ De esta manera, cada intervalo tendrá la misma área (probabilidad). Las figura
 \section{Aprendizaje incremental}
 \label{seccion:aprendizaje incremental}
 Tanto como para el algoritmo AQ como para el algoritmo CN2 se realizan dos tipos de experimentos. El primero de ellos está basado en un enfoque de \textit{aprender-aplicar-descartar}, en el cual, dado un conjunto de entrenamiento, se induce un conjunto de reglas las cuales se aplican al conjunto de prueba más cercano (el cual se convertirá en un nuevo conjunto de prueba). Después de esto, las reglas aprendidas se descartan (mecanismo de olvido).
-
 La figura \ref{imagen:aprendizaje no incremental} ilustra este tipo de aprendizaje.
 \begin{figure}[ht]
 \centering
@@ -896,7 +892,7 @@ El otro experimento se basa en un \textit{aprendizaje incremental}, en este caso
 
 Para medir el desempeño de las reglas sobre los conjuntos de entrenamiento de los cuales se inducen por primera vez, se usa la suma de su \textit{soporte} y su \textit{exactitud de Laplace}.
 
-El soporte de una regla se refiere al número de ejemplos cubiertos y que pertenecen a la clase positiva.
+El soporte de una regla se refiere al número de ejemplos cubiertos y que pertenecen a la clase que señala la regla, es decir, el número de ejemplo cubiertos correctamente por la regla.
 
 La exactitud de Laplace está dada por la ecuación (\ref{eqn:exactitud laplace})
 
@@ -904,7 +900,7 @@ La exactitud de Laplace está dada por la ecuación (\ref{eqn:exactitud laplace}
 Exactitud\,de\,Laplace = \dfrac{ n_{c} + 1 }{ n_{tot} + k }
 \end{equation}
 
-en donde $n_c$ es el número de ejemplos de la clase $c$, que son cubiertos por la regla para esta misma clase, $n_{tot}$ es el número de ejemplos cubiertos por la regla y $k$ es el número de clases\footnote{Si una regla es consistente, entonces $n_c = n_{tot}$}.
+en donde $n_c$ es el número de ejemplos de la clase $c$, que son cubiertos correctamente por la regla, $n_{tot}$ es el número de ejemplos cubiertos por la regla y $k$ es el número de clases\footnote{Si una regla es consistente, entonces $n_c = n_{tot}$}.
 
 Como se señala en \cite{CN2Improvements}, la exactitud de Laplace favorece el uso de reglas más generales sobre aquellas que son más específicas (elegidas al utilizar la exactitud clásica, $n_{c} / n_{tot} $). El siguiente ejemplo aclara lo anterior para el caso con sólo dos clases:
 
@@ -924,17 +920,14 @@ $$ \dfrac{n_{C1}}{n_{tot}} = \dfrac{1000}{1001} = 0.99 = 99\%.$$
 Para la regla $R2$, esta misma cantidad es:
 
 $$ \dfrac{n_{C1}}{n_{tot}} = \dfrac{5}{5} = 1 = 100\%.$$
-
 en este caso, se da preferencia a la regla $R2$, a pesar de que la regla $R1$ es más general para determinar la clase $C1$.
 
-En cambio, con la ecuación (\ref{eqn:exactitud laplace}) se tiene para la regla $R1$:
+En cambio, con la ecuación (\ref{eqn:exactitud laplace}) la exactitud de Laplace para la regla $R1$ es:
 
 $$ \dfrac{n_{C1} + 1}{n_{tot} + k} = \dfrac{1000 + 1}{1001 + 2} = 0.99 = 99\%.$$
-
 mientras que para la regla $R2$:
 
 $$ \dfrac{n_{C1} + 1}{n_{tot} + k} = \dfrac{5 + 1}{5 + 2} = 0.86 = 86\%.$$
-
 y por lo tanto, se elige la regla $R1$ como una regla para determinar la clase $C1$.
 
 \end{ejemplo}
